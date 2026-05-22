@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[38475,["/_next/static/chunks/0qv00c1gz-344.js","/_next/static/chunks/0ncxxb1-81o-v.js"],"ViewportBoundary"]
+3:I[38475,["/_next/static/chunks/0qv00c1gz-344.js","/_next/static/chunks/0ncxxb1-81o-v.js"],"MetadataBoundary"]
+4:"$Sreact.suspense"
+5:I[22296,["/_next/static/chunks/0qv00c1gz-344.js","/_next/static/chunks/0ncxxb1-81o-v.js"],"IconMark"]
+0:{"rsc":["$","$1","h",{"children":[null,["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"How to Choose the Right Gabion Box Size for Your Project | Paiqi Wire Mesh"}],["$","meta","1",{"name":"description","content":"\n## Why Gabion Box Size Matters\n\nChoosing the correct gabion box size is critical for structural integrity, cost efficiency, and project longevity. This guide c"}],["$","link","2",{"rel":"icon","href":"/favicon.ico?favicon.0x3dzn~oxb6tn.ico","sizes":"256x256","type":"image/x-icon"}],["$","$L5","3",{}]]}]}]}],null]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"dZze9UdfZbB0yb7NL-hKw"}
