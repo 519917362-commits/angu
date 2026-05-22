@@ -41,7 +41,7 @@ __turbopack_context__.s([
     ()=>LanguageSwitcher
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/client/app-dir/link.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-ssr] (ecmascript)");
 'use client';
 ;
@@ -50,173 +50,51 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navi
 const languages = [
     {
         code: 'en',
-        label: 'English',
+        label: 'EN',
         flag: '🇺🇸'
     },
     {
         code: 'zh',
         label: '中文',
         flag: '🇨🇳'
-    },
-    {
-        code: 'ar',
-        label: 'العربية',
-        flag: '🇸🇦'
-    },
-    {
-        code: 'ja',
-        label: '日本語',
-        flag: '🇯🇵'
-    },
-    {
-        code: 'ko',
-        label: '한국어',
-        flag: '🇰🇷'
-    },
-    {
-        code: 'id',
-        label: 'Bahasa',
-        flag: '🇮🇩'
-    },
-    {
-        code: 'vi',
-        label: 'Tiếng Việt',
-        flag: '🇻🇳'
-    },
-    {
-        code: 'es',
-        label: 'Español',
-        flag: '🇪🇸'
-    },
-    {
-        code: 'fr',
-        label: 'Français',
-        flag: '🇫🇷'
-    },
-    {
-        code: 'de',
-        label: 'Deutsch',
-        flag: '🇩🇪'
-    },
-    {
-        code: 'pt',
-        label: 'Português',
-        flag: '🇵🇹'
-    },
-    {
-        code: 'th',
-        label: 'ไทย',
-        flag: '🇹🇭'
     }
 ];
 function LanguageSwitcher({ locale }) {
-    const [open, setOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
-    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
     const pathname = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["usePathname"])();
-    const current = languages.find((l)=>l.code === locale) || languages[0];
-    function switchLanguage(newLocale) {
-        if (!pathname) return;
-        const newPath = pathname.replace(/^\/(en|zh|ar|ja|ko|id|vi|es|fr|de|pt|th)/, `/${newLocale}`);
-        router.replace(newPath);
-        setOpen(false);
+    function getNewPath(newLocale) {
+        if (!pathname) return `/${newLocale}`;
+        return pathname.replace(/^\/(en|zh|ar|ja|ko|id|vi|es|fr|de|pt|th)/, `/${newLocale}`);
     }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "relative",
-        children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                onClick: ()=>setOpen(!open),
-                className: "flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-colors",
+        className: "flex items-center gap-1",
+        children: languages.map((lang)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                href: getNewPath(lang.code),
+                className: `px-3 py-1.5 text-sm font-medium rounded-lg transition-all ${lang.code === locale ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-blue-600'}`,
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                        className: "text-base",
-                        children: current.flag
+                        children: lang.flag
                     }, void 0, false, {
                         fileName: "[project]/src/components/layout/LanguageSwitcher.tsx",
-                        lineNumber: 44,
-                        columnNumber: 9
+                        lineNumber: 35,
+                        columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                        className: "hidden sm:inline",
-                        children: current.label
+                        className: "ml-1 hidden sm:inline",
+                        children: lang.label
                     }, void 0, false, {
                         fileName: "[project]/src/components/layout/LanguageSwitcher.tsx",
-                        lineNumber: 45,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                        className: `w-4 h-4 transition-transform ${open ? 'rotate-180' : ''}`,
-                        fill: "none",
-                        viewBox: "0 0 24 24",
-                        stroke: "currentColor",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                            strokeLinecap: "round",
-                            strokeLinejoin: "round",
-                            strokeWidth: 2,
-                            d: "M19 9l-7 7-7-7"
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/layout/LanguageSwitcher.tsx",
-                            lineNumber: 47,
-                            columnNumber: 11
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/src/components/layout/LanguageSwitcher.tsx",
-                        lineNumber: 46,
-                        columnNumber: 9
+                        lineNumber: 36,
+                        columnNumber: 11
                     }, this)
                 ]
-            }, void 0, true, {
+            }, lang.code, true, {
                 fileName: "[project]/src/components/layout/LanguageSwitcher.tsx",
-                lineNumber: 40,
-                columnNumber: 7
-            }, this),
-            open && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "fixed inset-0 z-40",
-                        onClick: ()=>setOpen(false)
-                    }, void 0, false, {
-                        fileName: "[project]/src/components/layout/LanguageSwitcher.tsx",
-                        lineNumber: 53,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "absolute top-full end-0 mt-1 w-48 bg-white rounded-xl shadow-xl border border-slate-100 py-2 z-50 max-h-80 overflow-y-auto",
-                        children: languages.map((lang)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                onClick: ()=>switchLanguage(lang.code),
-                                className: `flex items-center gap-2 w-full px-4 py-2 text-sm transition-colors ${lang.code === locale ? 'bg-blue-50 text-blue-600 font-medium' : 'text-slate-600 hover:bg-slate-50'}`,
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: "text-base",
-                                        children: lang.flag
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/layout/LanguageSwitcher.tsx",
-                                        lineNumber: 65,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        children: lang.label
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/layout/LanguageSwitcher.tsx",
-                                        lineNumber: 66,
-                                        columnNumber: 17
-                                    }, this)
-                                ]
-                            }, lang.code, true, {
-                                fileName: "[project]/src/components/layout/LanguageSwitcher.tsx",
-                                lineNumber: 56,
-                                columnNumber: 15
-                            }, this))
-                    }, void 0, false, {
-                        fileName: "[project]/src/components/layout/LanguageSwitcher.tsx",
-                        lineNumber: 54,
-                        columnNumber: 11
-                    }, this)
-                ]
-            }, void 0, true)
-        ]
-    }, void 0, true, {
+                lineNumber: 26,
+                columnNumber: 9
+            }, this))
+    }, void 0, false, {
         fileName: "[project]/src/components/layout/LanguageSwitcher.tsx",
-        lineNumber: 39,
+        lineNumber: 24,
         columnNumber: 5
     }, this);
 }
