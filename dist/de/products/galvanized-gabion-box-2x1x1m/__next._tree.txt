@@ -1,5 +1,5 @@
-:HL["/_next/static/chunks/01_olet5racte.css","style"]
-:HL["https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200","image"]
-:HL["https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200","image"]
-:HL["https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":24,"slots":{"children":{"name":"locale","param":{"type":"d","key":"de","siblings":null},"prefetchHints":8,"slots":{"children":{"name":"products","param":null,"prefetchHints":12,"slots":{"children":{"name":"slug","param":{"type":"d","key":"galvanized-gabion-box-2x1x1m","siblings":null},"prefetchHints":4,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"dZze9UdfZbB0yb7NL-hKw"}
+:HL["/_next/static/chunks/0-cs449j.zfdi.css","style"]
+:HL["https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=hot%20dipped%20galvanized%20gabion%20box%202x1x1m%20industrial%20product%20photo%20white%20background&image_size=landscape_16_9","image"]
+:HL["https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=galvanized%20gabion%20wire%20mesh%20cage%20construction%20material&image_size=landscape_16_9","image"]
+:HL["https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=stone%20filled%20gabion%20box%20retaining%20wall%20application&image_size=landscape_16_9","image"]
+0:{"tree":{"name":"","param":null,"prefetchHints":24,"slots":{"children":{"name":"locale","param":{"type":"d","key":"de","siblings":null},"prefetchHints":8,"slots":{"children":{"name":"products","param":null,"prefetchHints":12,"slots":{"children":{"name":"slug","param":{"type":"d","key":"galvanized-gabion-box-2x1x1m","siblings":null},"prefetchHints":4,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"nKM8o_HpF9DlvGHhO8cr2"}

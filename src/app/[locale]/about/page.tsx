@@ -140,7 +140,7 @@ export default async function AboutPage({params}: {params: Promise<{locale: stri
                 </div>
                 <h3 className="font-bold text-slate-900 mb-1">{member.name}</h3>
                 <p className="text-sm text-blue-600 font-medium mb-3">{member.role}</p>
-                <p className="text-xs text-slate-500 leading-relaxed">{member.bio}</p>
+                <p className="text-xs text-slate-500 leading-relaxed">{member.bio.replace('15+', '11+')}</p>
               </div>
             ))}
           </div>

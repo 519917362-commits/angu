@@ -71,7 +71,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {[
-                {num: '15+', label: 'Years Experience'},
+                {num: '11+', label: 'Years Experience'},
                 {num: '30+', label: 'Countries Exported'},
                 {num: '500+', label: 'Happy Clients'},
                 {num: '50+', label: 'Product Types'},

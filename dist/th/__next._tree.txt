@@ -1,7 +1,7 @@
-:HL["/_next/static/chunks/01_olet5racte.css","style"]
-:HL["https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920","image"]
-:HL["https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800","image"]
-:HL["https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800","image"]
-:HL["https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800","image"]
-:HL["https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"locale","param":{"type":"d","key":"th","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"dZze9UdfZbB0yb7NL-hKw"}
+:HL["/_next/static/chunks/0-cs449j.zfdi.css","style"]
+:HL["https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=modern%20wire%20mesh%20factory%20industrial%20building%20panoramic%20view&image_size=landscape_16_9","image"]
+:HL["https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=galvanized%20gabion%20box%20wire%20mesh%20cage%20industrial%20product%20photo%20white%20background&image_size=square_hd","image"]
+:HL["https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=rockfall%20protection%20net%20steel%20wire%20mesh%20barrier%20industrial%20product%20photo&image_size=square_hd","image"]
+:HL["https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=hexagonal%20wire%20mesh%20chicken%20wire%20fencing%20industrial%20product%20photo%20white%20background&image_size=square_hd","image"]
+:HL["https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=chain%20link%20fence%20wire%20mesh%20roll%20industrial%20product%20photo%20white%20background&image_size=square_hd","image"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"locale","param":{"type":"d","key":"th","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"nKM8o_HpF9DlvGHhO8cr2"}

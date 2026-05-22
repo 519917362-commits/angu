@@ -38,7 +38,7 @@ export function ProductCard({product, locale}: ProductCardProps) {
           <p className="text-sm text-slate-600 line-clamp-2 mb-3 flex-1">{shortDesc}</p>
           <div className="flex items-center justify-between mt-auto pt-2 border-t border-slate-50">
             {product.priceUsd ? (
-              <span className="text-blue-600 font-bold text-sm">${product.priceUsd}</span>
+              <span className="text-blue-600 font-bold text-sm">${product.priceUsd} / {product.priceUnit || 'unit'}</span>
             ) : (
               <span className="text-slate-400 text-xs">Price on request</span>
             )}

@@ -26,6 +26,7 @@ export interface Product {
   images: string[];
   moq: number;
   priceUsd?: number;
+  priceUnit?: string;
   priceRemark?: string;
   isFeatured: boolean;
   createdAt: string;

@@ -24,7 +24,7 @@ export const categories: Category[] = [
       ja: '浸食制御と擁壁用の高品質な石籠金網製品。',
       ko: '침식 방지 및 옹벽용 고품질 가비언 메시 제품.',
     },
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800',
+    image: 'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=galvanized%20gabion%20box%20wire%20mesh%20cage%20industrial%20product%20photo%20white%20background&image_size=square_hd',
     productCount: 8,
   },
   {
@@ -50,7 +50,7 @@ export const categories: Category[] = [
       ja: '鉱山や斜面のための能動・受動落石防護システム。',
       ko: '광산 및 사면용 능동/수동 낙石 방지 시스템.',
     },
-    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800',
+    image: 'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=rockfall%20protection%20net%20steel%20wire%20mesh%20barrier%20industrial%20product%20photo&image_size=square_hd',
     productCount: 6,
   },
   {
@@ -74,7 +74,7 @@ export const categories: Category[] = [
       en: 'Standard hexagonal wire mesh for fencing, decoration and protection.',
       zh: '用于围栏、装饰和防护的标准六角网。',
     },
-    image: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800',
+    image: 'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=hexagonal%20wire%20mesh%20chicken%20wire%20fencing%20industrial%20product%20photo%20white%20background&image_size=square_hd',
     productCount: 4,
   },
   {
@@ -98,7 +98,7 @@ export const categories: Category[] = [
       en: 'Heavy duty chain link fence mesh for security and boundary applications.',
       zh: '用于安全和边界应用的重型勾花网围栏。',
     },
-    image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800',
+    image: 'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=chain%20link%20fence%20wire%20mesh%20roll%20industrial%20product%20photo%20white%20background&image_size=square_hd',
     productCount: 3,
   },
 ];
@@ -153,12 +153,13 @@ export const products: Product[] = [
     },
     applications: ['River protection', 'Slope stabilization', 'Erosion control', 'Coastal protection'],
     images: [
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200',
-      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200',
-      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=hot%20dipped%20galvanized%20gabion%20box%202x1x1m%20industrial%20product%20photo%20white%20background&image_size=landscape_16_9',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=galvanized%20gabion%20wire%20mesh%20cage%20construction%20material&image_size=landscape_16_9',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=stone%20filled%20gabion%20box%20retaining%20wall%20application&image_size=landscape_16_9',
     ],
     moq: 100,
     priceUsd: 45,
+    priceUnit: '套',
     priceRemark: 'FOB Tianjin',
     isFeatured: true,
     createdAt: '2025-01-01',
@@ -203,11 +204,12 @@ export const products: Product[] = [
     },
     applications: ['Retaining walls', 'Breakwater', 'Bridge protection', 'Large-scale erosion control'],
     images: [
-      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=large%20hot%20dipped%20galvanized%20gabion%20box%203x1x1m%20industrial%20product&image_size=landscape_16_9',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=galvanized%20gabion%20wire%20mesh%20cage%20industrial&image_size=landscape_16_9',
     ],
     moq: 100,
     priceUsd: 58,
+    priceUnit: '套',
     priceRemark: 'FOB Tianjin',
     isFeatured: true,
     createdAt: '2025-01-01',
@@ -254,11 +256,12 @@ export const products: Product[] = [
     },
     applications: ['Marine protection', 'Chemical environments', 'Landscaping', 'Coastal engineering'],
     images: [
-      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200',
-      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=green%20PVC%20coated%20gabion%20box%202x1x1m%20industrial%20product%20white%20background&image_size=landscape_16_9',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=PVC%20coated%20wire%20mesh%20gabion%20cage&image_size=landscape_16_9',
     ],
     moq: 100,
     priceUsd: 65,
+    priceUnit: '套',
     priceRemark: 'FOB Tianjin',
     isFeatured: true,
     createdAt: '2025-01-02',
@@ -303,10 +306,11 @@ export const products: Product[] = [
     },
     applications: ['Riverbed lining', 'Channel protection', 'Scour protection', 'Drainage'],
     images: [
-      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=reno%20mattress%20gabion%20mat%206x2x0.3m%20industrial%20product&image_size=landscape_16_9',
     ],
     moq: 50,
     priceUsd: 55,
+    priceUnit: '套',
     priceRemark: 'FOB Tianjin',
     isFeatured: false,
     createdAt: '2025-01-03',
@@ -333,7 +337,7 @@ export const products: Product[] = [
 
 **Product Features:**
 - Model: DNS50 (50kJ energy absorption)
-- Mesh Type:菱形 high-tensile steel wire mesh
+- Mesh Type: Diamond high-tensile steel wire mesh
 - Wire Diameter: 3.0mm
 - Mesh Size: 300×300mm
 - Rope: 8mm high-tensile steel rope
@@ -361,11 +365,12 @@ export const products: Product[] = [
     },
     applications: ['Mountain highways', 'Open-pit mines', 'Railway protection', 'Steep slopes'],
     images: [
-      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=active%20rockfall%20protection%20net%20system%20steel%20wire%20mesh%20slope&image_size=landscape_16_9',
     ],
     moq: 500,
     priceUsd: 85,
-    priceRemark: 'FOB Tianjin, price per m²',
+    priceUnit: '㎡',
+    priceRemark: 'FOB Tianjin',
     isFeatured: true,
     createdAt: '2025-01-04',
   },
@@ -416,11 +421,12 @@ export const products: Product[] = [
     },
     applications: ['Highway protection', 'Railway protection', 'Industrial sites', 'Residential areas'],
     images: [
-      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=passive%20rockfall%20protection%20barrier%20GL-100%20steel%20wire%20mesh&image_size=landscape_16_9',
     ],
     moq: 200,
     priceUsd: 120,
-    priceRemark: 'FOB Tianjin, price per linear meter',
+    priceUnit: 'm',
+    priceRemark: 'FOB Tianjin, per linear meter',
     isFeatured: true,
     createdAt: '2025-01-05',
   },
@@ -468,10 +474,11 @@ export const products: Product[] = [
     },
     applications: ['Plastering reinforcement', 'Animal cages', 'Decoration', 'Gardening'],
     images: [
-      'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=1200',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=hexagonal%20wire%20mesh%2013mm%20chicken%20wire%20roll%20industrial&image_size=landscape_16_9',
     ],
     moq: 50,
     priceUsd: 35,
+    priceUnit: '卷',
     priceRemark: 'FOB Tianjin, per roll',
     isFeatured: false,
     createdAt: '2025-01-06',
@@ -516,10 +523,11 @@ export const products: Product[] = [
     },
     applications: ['Small gabion baskets', 'Fencing', 'Agricultural enclosures', 'Drainage'],
     images: [
-      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=hexagonal%20wire%20mesh%2025mm%20heavy%20duty%20wire%20mesh%20roll&image_size=landscape_16_9',
     ],
     moq: 50,
     priceUsd: 45,
+    priceUnit: '卷',
     priceRemark: 'FOB Tianjin, per roll',
     isFeatured: false,
     createdAt: '2025-01-07',
@@ -566,10 +574,11 @@ export const products: Product[] = [
     },
     applications: ['Sports fields', 'Construction sites', 'Industrial security', 'Property boundaries'],
     images: [
-      'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=1200',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=chain%20link%20fence%2050mm%20galvanized%20wire%20mesh%20roll%20industrial&image_size=landscape_16_9',
     ],
     moq: 50,
     priceUsd: 25,
+    priceUnit: '卷',
     priceRemark: 'FOB Tianjin, per roll',
     isFeatured: false,
     createdAt: '2025-01-08',
@@ -614,10 +623,11 @@ export const products: Product[] = [
     },
     applications: ['Residential', 'Gardens', 'Playgrounds', 'Landscaping'],
     images: [
-      'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=1200',
+      'https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=green%20PVC%20coated%20chain%20link%20fence%2050mm%20wire%20mesh&image_size=landscape_16_9',
     ],
     moq: 50,
     priceUsd: 38,
+    priceUnit: '卷',
     priceRemark: 'FOB Tianjin, per roll',
     isFeatured: true,
     createdAt: '2025-01-09',

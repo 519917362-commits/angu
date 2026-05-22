@@ -196,7 +196,7 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
                   <div className="text-sm text-blue-600 mb-1">{isZh ? 'FOB价格' : 'FOB Price'}</div>
                   <div className="text-3xl font-bold text-blue-700">
                     ${product.priceUsd}
-                    <span className="text-base font-normal text-blue-500">/{isZh ? '件' : 'unit'}</span>
+                    <span className="text-base font-normal text-blue-500">/{product.priceUnit || (isZh ? '件' : 'unit')}</span>
                   </div>
                 </div>
               )}
