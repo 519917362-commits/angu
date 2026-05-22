@@ -1,5 +1,6 @@
 export const LANGUAGE_FLAGS: Record<string, {flag: string; name: string; nativeName: string}> = {
   en: {flag: '🇺🇸', name: 'English', nativeName: 'English'},
+  zh: {flag: '🇨🇳', name: 'Chinese', nativeName: '中文'},
   ar: {flag: '🇸🇦', name: 'Arabic', nativeName: 'العربية'},
   ja: {flag: '🇯🇵', name: 'Japanese', nativeName: '日本語'},
   ko: {flag: '🇰🇷', name: 'Korean', nativeName: '한국어'},
