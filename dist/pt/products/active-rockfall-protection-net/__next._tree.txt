@@ -1,3 +1,0 @@
-:HL["/_next/static/chunks/0-cs449j.zfdi.css","style"]
-:HL["https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=active%20rockfall%20protection%20net%20system%20steel%20wire%20mesh%20slope&image_size=landscape_16_9","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":24,"slots":{"children":{"name":"locale","param":{"type":"d","key":"pt","siblings":null},"prefetchHints":8,"slots":{"children":{"name":"products","param":null,"prefetchHints":12,"slots":{"children":{"name":"slug","param":{"type":"d","key":"active-rockfall-protection-net","siblings":null},"prefetchHints":4,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"nKM8o_HpF9DlvGHhO8cr2"}

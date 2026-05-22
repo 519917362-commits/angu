@@ -1,3 +1,0 @@
-:HL["/_next/static/chunks/0-cs449j.zfdi.css","style"]
-:HL["https://paiqi-copilot.bytedance.net/api/text_to_image?prompt=passive%20rockfall%20protection%20barrier%20GL-100%20steel%20wire%20mesh&image_size=landscape_16_9","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":24,"slots":{"children":{"name":"locale","param":{"type":"d","key":"es","siblings":null},"prefetchHints":8,"slots":{"children":{"name":"products","param":null,"prefetchHints":12,"slots":{"children":{"name":"slug","param":{"type":"d","key":"passive-rockfall-protection-barrier","siblings":null},"prefetchHints":4,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"nKM8o_HpF9DlvGHhO8cr2"}

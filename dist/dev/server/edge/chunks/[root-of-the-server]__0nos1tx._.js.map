@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 16, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/middleware.ts"],"sourcesContent":["// Middleware disabled for static export\n// All routing is handled by the [locale] dynamic segment\n\nimport {NextResponse} from 'next/server';\nimport type {NextRequest} from 'next/server';\n\nexport function middleware(request: NextRequest) {\n  // For static export, we don't need locale redirection\n  // The [locale] segment handles all routing\n  return NextResponse.next();\n}\n\nexport const config = {\n  matcher: []\n};\n"],"names":["middleware","request","next","config","matcher"],"mappings":";;;;;;AAAA,wCAAwC;AACxC,yDAAyD;AAEzD;AAAA;;AAGO,SAASA,WAAWC,OAAoB;IAC7C,sDAAsD;IACtD,2CAA2C;IAC3C,OAAO,6MAAY,CAACC,IAAI;AAC1B;AAEO,MAAMC,SAAS;IACpBC,SAAS,EAAE;AACb"}}]
+}
