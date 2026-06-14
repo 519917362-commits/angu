@@ -1,0 +1,45 @@
+# Angu Wire Mesh — robots.txt
+# Allowing AI crawlers + search engines to index public pages
+
+# ─── AI Crawlers (explicitly allowed) ───
+User-agent: GPTBot
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+User-agent: PerplexityBot
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+User-agent: anthropic-ai
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+User-agent: CCBot
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+User-agent: Google-Extended
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+# ─── Search Engines ───
+User-agent: Googlebot
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+User-agent: Bingbot
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://www.anguwiremesh.com/sitemap.xml

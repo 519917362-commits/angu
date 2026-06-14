@@ -1,3 +1,0 @@
-:HL["/_next/static/chunks/01_olet5racte.css","style"]
-:HL["https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":24,"slots":{"children":{"name":"locale","param":{"type":"d","key":"de","siblings":null},"prefetchHints":8,"slots":{"children":{"name":"products","param":null,"prefetchHints":12,"slots":{"children":{"name":"slug","param":{"type":"d","key":"active-rockfall-protection-net","siblings":null},"prefetchHints":4,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"dZze9UdfZbB0yb7NL-hKw"}

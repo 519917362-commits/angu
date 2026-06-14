@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "=== Paiqi Wire Mesh Backend Deployment ==="
+echo "=== Angu Wire Mesh Backend Deployment ==="
 
 # Colors
 RED='\033[0;31m'
