@@ -6,6 +6,7 @@ import {usePathname} from 'next/navigation';
 import {LanguageSwitcher} from './LanguageSwitcher';
 import {MobileNav} from './MobileNav';
 import {MessageCircle} from 'lucide-react';
+import {categories} from '@/lib/data';
 
 interface HeaderProps {
   locale: string;
@@ -23,25 +24,6 @@ export function Header({locale}: HeaderProps) {
     window.addEventListener('scroll', handleScroll, {passive: true});
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const isRTL = locale === 'ar';
-
-  const navItems = [
-    {
-      key: 'products',
-      hasDropdown: true,
-      dropdown: [
-        {label: 'Gabion Mesh', href: `/${locale}/products?category=gabion-mesh`, desc: 'Gabion Box, PVC Gabion, Reno Mattress'},
-        {label: 'Protection Net', href: `/${locale}/products?category=protection-net`, desc: 'Active/Passive Rockfall Net'},
-        {label: 'Hexagonal Wire Mesh', href: `/${locale}/products/hexagonal-wire-mesh`, desc: 'Standard hexagonal mesh'},
-        {label: 'Chain Link Fence', href: `/${locale}/products/chain-link-fence`, desc: 'Heavy duty fence mesh'},
-      ],
-    },
-    {key: 'aboutUs', href: `/${locale}/about`},
-    {key: 'services', href: `/${locale}/service`},
-    {key: 'blog', href: `/${locale}/blog`},
-    {key: 'contactUs', href: `/${locale}/contact`},
-  ];
 
   return (
     <header
@@ -62,7 +44,7 @@ export function Header({locale}: HeaderProps) {
               <span className="text-white font-bold text-lg">PQ</span>
             </div>
             <div className="hidden sm:block">
-              <div className="font-bold text-lg text-slate-900 leading-tight">Paiqi Wire Mesh</div>
+              <div className="font-bold text-lg text-slate-900 leading-tight">Angu Wire Mesh</div>
               <div className="text-xs text-slate-500 leading-tight">Gabion & Protection Net</div>
             </div>
           </Link>
@@ -102,20 +84,14 @@ export function Header({locale}: HeaderProps) {
               </Link>
 
               {isProductsOpen && (
-                <div className="absolute top-full start-0 mt-1 w-72 bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden">
-                  {[
-                    {label: 'Gabion Mesh', href: `/${locale}/products?category=gabion-mesh`, desc: 'Gabion Box, PVC Gabion, Reno Mattress'},
-                    {label: 'Protection Net', href: `/${locale}/products?category=protection-net`, desc: 'Active/Passive Rockfall Net'},
-                    {label: 'Hexagonal Wire Mesh', href: `/${locale}/products?category=hexagonal-mesh`, desc: 'Standard hexagonal mesh'},
-                    {label: 'Chain Link Fence', href: `/${locale}/products?category=chain-link-fence`, desc: 'Heavy duty fence mesh'},
-                  ].map((item) => (
+                <div className="absolute top-full start-0 mt-1 w-80 bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden max-h-[70vh] overflow-y-auto">
+                  {categories.map((cat) => (
                     <Link
-                      key={item.href}
-                      href={item.href}
-                      className="flex flex-col px-4 py-3 hover:bg-blue-50 transition-colors border-b border-slate-50 last:border-0"
+                      key={cat.slug}
+                      href={`/${locale}/products?category=${cat.slug}`}
+                      className="block px-4 py-2.5 text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-colors border-b border-slate-50 last:border-0"
                     >
-                      <span className="font-medium text-slate-900 text-sm">{item.label}</span>
-                      <span className="text-xs text-slate-500 mt-0.5">{item.desc}</span>
+                      {cat.names[locale] || cat.names.en}
                     </Link>
                   ))}
                   <Link
@@ -128,21 +104,65 @@ export function Header({locale}: HeaderProps) {
               )}
             </div>
 
-            {/* Other nav items */}
-            {[
-              {key: 'aboutUs', href: `/${locale}/about`, label: locale === 'zh' ? '关于我们' : 'About Us'},
-              {key: 'services', href: `/${locale}/service`, label: locale === 'zh' ? '服务' : 'Services'},
-              {key: 'blog', href: `/${locale}/blog`, label: locale === 'zh' ? '博客' : 'Blog'},
-              {key: 'contactUs', href: `/${locale}/contact`, label: locale === 'zh' ? '联系我们' : 'Contact Us'},
-            ].map((item) => (
-              <Link
-                key={item.key}
-                href={item.href}
-                className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {/* Solutions */}
+            <Link
+              href={`/${locale}/solutions`}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                pathname?.includes('/solutions')
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50'
+              }`}
+            >
+              {locale === 'zh' ? '解决方案' : 'Solutions'}
+            </Link>
+
+            {/* About Us */}
+            <Link
+              href={`/${locale}/about`}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                pathname?.includes('/about')
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50'
+              }`}
+            >
+              {locale === 'zh' ? '关于我们' : 'About Us'}
+            </Link>
+
+            {/* Services */}
+            <Link
+              href={`/${locale}/service`}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                pathname?.includes('/service')
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50'
+              }`}
+            >
+              {locale === 'zh' ? '服务' : 'Services'}
+            </Link>
+
+            {/* Blog */}
+            <Link
+              href={`/${locale}/blog`}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                pathname?.includes('/blog')
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50'
+              }`}
+            >
+              {locale === 'zh' ? '博客' : 'Blog'}
+            </Link>
+
+            {/* Contact Us */}
+            <Link
+              href={`/${locale}/contact`}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                pathname?.includes('/contact')
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50'
+              }`}
+            >
+              {locale === 'zh' ? '联系我们' : 'Contact Us'}
+            </Link>
           </nav>
 
           {/* Right Section */}

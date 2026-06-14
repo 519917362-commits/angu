@@ -5,16 +5,11 @@ import {ProductCard} from '@/components/products/ProductCard';
 export default async function HomePage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
   
-  // Static import of messages for static export compatibility
   const messages = (await import(`../../messages/${locale}.json`)).default;
   const t = (key: string) => messages.home?.[key] || key;
-  const tCommon = (key: string) => messages.common?.[key] || key;
-  const tNav = (key: string) => messages.nav?.[key] || key;
 
   const featuredProducts = products.filter((p) => p.isFeatured).slice(0, 8);
   const activeBanner = banners[0];
-  const bannerTitle = activeBanner.titles[locale] || activeBanner.titles.en || '';
-  const bannerSubtitle = activeBanner.subtitles[locale] || activeBanner.subtitles.en || '';
   const bannerCta = activeBanner.ctaText[locale] || activeBanner.ctaText.en || 'Get a Quote';
   const bannerImage = activeBanner.images[locale] || activeBanner.images.en || '';
 
@@ -31,9 +26,9 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
 
   return (
     <>
-      {/* ─── Hero Section ─── */}
+      {/* ─── Hero — Conclusion-First for AI Snippet Extraction ─── */}
       <section className="relative h-[580px] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/85 to-slate-900/40 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-slate-900/40 z-10" />
         <img
           src={bannerImage}
           alt="Gabion wire mesh products"
@@ -41,16 +36,37 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
         />
         <div className="relative z-20 flex items-center h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-blue-600/80 text-white text-xs px-3 py-1.5 rounded-full mb-6 backdrop-blur-sm">
-              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              {locale === 'zh' ? 'ISO 9001 认证制造商' : locale === 'ja' ? 'ISO 9001 認証メーカー' : locale === 'ar' ? 'مصنع معتمد من ISO 9001' : 'ISO 9001 Certified Manufacturer'}
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-bold text-white leading-tight mb-6">
-              {bannerTitle}
+            {/* Conclusion-first H1 — extractable value proposition */}
+            <h1 className="text-3xl md:text-4xl lg:text-[3rem] font-bold text-white leading-tight mb-4">
+              {locale === 'zh'
+                ? '石笼网箱及防护网厂家直销 — 15年经验，出口30+国家'
+                : locale === 'ja'
+                ? '石籠ボックス・防護網を工場直送 — 15年の実績、30カ国以上へ輸出'
+                : locale === 'ar'
+                ? 'صناديق الجابيون وشبكات الحماية بسعر المصنع — 15 عامًا من الخبرة، التصدير إلى أكثر من 30 دولة'
+                : 'Factory‑Direct Gabion Boxes & Rockfall Nets — 15 Years, 30+ Countries'}
             </h1>
-            <p className="text-lg md:text-xl text-white/90 mb-10 leading-relaxed">
-              {bannerSubtitle}
+            {/* Supporting identity paragraph */}
+            <p className="text-lg text-white/85 mb-2">
+              {locale === 'zh'
+                ? 'ISO 9001 & CE 认证制造商，位于中国丝网之都——安平。50+产品类型，低起订量，快速全球交付。'
+                : locale === 'ja'
+                ? 'ISO 9001・CE認証取得。中国金網の中心地・安平に拠点を置き、50種類以上の製品を低MOQ・迅速なグローバル配送で提供。'
+                : locale === 'ar'
+                ? 'مصنع معتمد ISO 9001 و CE مقره في آنبينغ، عاصمة شبكات الأسلاك في الصين. أكثر من 50 نوع منتج، حد أدنى منخفض للطلب، توصيل سريع عالميًا.'
+                : 'ISO 9001 & CE certified manufacturer based in Anping, China\'s wire mesh capital. 50+ product types, low MOQ, fast global delivery.'}
             </p>
+            {/* Trust signal badge */}
+            <div className="inline-flex items-center gap-2 bg-green-600/80 text-white text-xs px-3 py-1.5 rounded-full mb-6 backdrop-blur-sm">
+              <span className="w-2 h-2 bg-green-300 rounded-full animate-pulse" />
+              {locale === 'zh'
+                ? '500+全球客户信赖'
+                : locale === 'ja'
+                ? '世界500社以上が信頼'
+                : locale === 'ar'
+                ? 'موثوق من 500+ عميل عالمي'
+                : 'Trusted by 500+ Global Clients'}
+            </div>
             <div className="flex flex-wrap gap-4">
               <Link href={`/${locale}/contact`}>
                 <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-base transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
@@ -71,10 +87,10 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {[
-                {num: '15+', label: 'Years Experience'},
-                {num: '30+', label: 'Countries Exported'},
-                {num: '500+', label: 'Happy Clients'},
-                {num: '50+', label: 'Product Types'},
+                {num: '15+', label: locale === 'zh' ? '年行业经验' : locale === 'ja' ? '年の経験' : locale === 'ar' ? 'عامًا من الخبرة' : 'Years Experience'},
+                {num: '30+', label: locale === 'zh' ? '出口国家' : locale === 'ja' ? '輸出国' : locale === 'ar' ? 'دولة تصدير' : 'Countries Exported'},
+                {num: '500+', label: locale === 'zh' ? '满意客户' : locale === 'ja' ? '満足顧客' : locale === 'ar' ? 'عميل سعيد' : 'Happy Clients'},
+                {num: '50+', label: locale === 'zh' ? '产品类型' : locale === 'ja' ? '製品タイプ' : locale === 'ar' ? 'نوع منتج' : 'Product Types'},
               ].map((stat) => (
                 <div key={stat.label}>
                   <div className="text-2xl md:text-3xl font-bold text-blue-600">{stat.num}</div>

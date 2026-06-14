@@ -21,14 +21,14 @@ export function Footer({locale}: FooterProps) {
                 <span className="text-white font-bold text-lg">PQ</span>
               </div>
               <div>
-                <div className="font-bold text-white leading-tight">Paiqi Wire Mesh</div>
+                <div className="font-bold text-white leading-tight">Angu Wire Mesh</div>
                 <div className="text-xs text-slate-500 leading-tight">Gabion & Protection Net</div>
               </div>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed mb-5">
               {isZh
                 ? '河北派琦丝网制品有限公司是一家专业制造商，专注于石笼网箱、防护网、六角网和勾花网围栏产品。'
-                : 'Hebei Paiqi Wire Mesh Products Co., Ltd. is a professional manufacturer specializing in gabion boxes, protection nets, hexagonal mesh, and chain link fence products.'}
+                : 'Hebei Angu Wire Mesh Products Co., Ltd. is a professional manufacturer specializing in gabion boxes, protection nets, hexagonal mesh, and chain link fence products.'}
             </p>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm">
@@ -41,7 +41,7 @@ export function Footer({locale}: FooterProps) {
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Mail className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                <a href="mailto:sales@paiqiwiremesh.com" className="hover:text-white transition-colors">sales@paiqiwiremesh.com</a>
+                <a href="mailto:sales@anguwiremesh.com" className="hover:text-white transition-colors">sales@anguwiremesh.com</a>
               </div>
             </div>
           </div>
@@ -107,7 +107,7 @@ export function Footer({locale}: FooterProps) {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-slate-500">
-            © 2025 Hebei Paiqi Wire Mesh Products Co., Ltd. All rights reserved.
+            © 2025 Hebei Angu Wire Mesh Products Co., Ltd. All rights reserved.
           </p>
           <div className="flex items-center gap-4 text-sm text-slate-500">
             <Link href={`/${locale}/download`} className="hover:text-white transition-colors">{isZh ? '下载中心' : 'Downloads'}</Link>

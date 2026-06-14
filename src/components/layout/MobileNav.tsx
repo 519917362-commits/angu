@@ -23,6 +23,7 @@ export function MobileNav({locale}: MobileNavProps) {
   const navItems = [
     {key: 'home', href: `/${locale}`, label: isZh ? '首页' : 'Home'},
     {key: 'products', href: `/${locale}/products`, label: isZh ? '产品' : 'Products'},
+    {key: 'solutions', href: `/${locale}/solutions`, label: isZh ? '解决方案' : 'Solutions'},
     {key: 'aboutUs', href: `/${locale}/about`, label: isZh ? '关于我们' : 'About Us'},
     {key: 'services', href: `/${locale}/service`, label: isZh ? '服务' : 'Services'},
     {key: 'blog', href: `/${locale}/blog`, label: isZh ? '博客' : 'Blog'},

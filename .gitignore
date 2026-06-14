@@ -33,7 +33,17 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
-# vercel
+# backend
+backend/node_modules/
+backend/*.db
+backend/uploads/
+backend/package-lock.json
+
+# dist (legacy build output)
+/dist
+
+# deploy artifacts
+/deploy.tar.gz
 .vercel
 
 # typescript

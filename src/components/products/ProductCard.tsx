@@ -12,7 +12,7 @@ export function ProductCard({product, locale}: ProductCardProps) {
 
   return (
     <Link href={`/${locale}/products/${product.slug}`}>
-      <article className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-100 h-full flex flex-col">
+      <article className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-100 h-full flex flex-col isolate">
         <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 flex-shrink-0">
           <img
             src={product.images[0]}

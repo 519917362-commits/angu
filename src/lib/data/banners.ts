@@ -11,17 +11,17 @@ export const banners: Banner[] = [
   {
     id: 'banner-1',
     images: {
-      en: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920',
-      ar: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920',
-      ja: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920',
-      ko: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920',
-      id: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920',
-      vi: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920',
-      es: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920',
-      fr: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920',
-      de: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920',
-      pt: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920',
-      th: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920',
+      en: '/images/banners/banner1.jpg',
+      ar: '/images/banners/banner1.jpg',
+      ja: '/images/banners/banner1.jpg',
+      ko: '/images/banners/banner1.jpg',
+      id: '/images/banners/banner1.jpg',
+      vi: '/images/banners/banner1.jpg',
+      es: '/images/banners/banner1.jpg',
+      fr: '/images/banners/banner1.jpg',
+      de: '/images/banners/banner1.jpg',
+      pt: '/images/banners/banner1.jpg',
+      th: '/images/banners/banner1.jpg',
     },
     titles: {
       en: 'Professional Gabion Box & Rockfall Protection Net Manufacturer',
@@ -70,8 +70,8 @@ export const banners: Banner[] = [
   {
     id: 'banner-2',
     images: {
-      en: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920',
-      ja: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920',
+      en: '/images/banners/banner2.jpg',
+      ja: '/images/banners/banner2.jpg',
     },
     titles: {
       en: 'ISO 9001 Certified — Premium Quality Rockfall Protection Systems',
@@ -90,8 +90,8 @@ export const banners: Banner[] = [
   {
     id: 'banner-3',
     images: {
-      en: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1920',
-      ja: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1920',
+      en: '/images/banners/banner3.jpg',
+      ja: '/images/banners/banner3.jpg',
     },
     titles: {
       en: 'Factory Direct Pricing — Low MOQ, Fast Delivery Worldwide',

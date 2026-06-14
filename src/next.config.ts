@@ -3,6 +3,7 @@ import type {NextConfig} from 'next';
 const nextConfig: NextConfig = {
   // Static export disabled to support dynamic admin routes
   // output: 'export',  // ⚠️ Commented out — re-enable before static build
+  distDir: 'dist',
   turbopack: {
     root: __dirname,
   },

@@ -1,6 +1,7 @@
 'use client';
 
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
+import {createPortal} from 'react-dom';
 import {X, MessageCircle} from 'lucide-react';
 import {cn} from '@/lib/utils';
 
@@ -22,11 +23,32 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
     company: '',
     country: '',
     quantity: '',
-    message: '',
+    message: productName
+      ? (isZh
+          ? `我对以下产品感兴趣，请提供报价：\n产品名称：${productName}\n产品型号：${productSlug || '-'}\n\n请提供详细规格、价格、交货期等信息。`
+          : `I am interested in the following product. Please provide a quotation:\nProduct Name: ${productName}\nProduct SKU: ${productSlug || '-'}\n\nPlease provide detailed specifications, pricing, and delivery time.`)
+      : '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const portalRef = useRef<HTMLDivElement | null>(null);
+
+  // Create portal container on mount (render to <body> to escape stacking context)
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      const el = document.createElement('div');
+      el.setAttribute('data-inquiry-portal', '');
+      document.body.appendChild(el);
+      portalRef.current = el;
+    }
+    return () => {
+      if (portalRef.current) {
+        portalRef.current.remove();
+        portalRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -63,10 +85,13 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
     }
   }
 
-  if (!isOpen) return null;
+  if (!isOpen || !portalRef.current) return null;
+
+  const stopPropagation = (e: React.MouseEvent) => e.stopPropagation();
 
   const t = {
     quickInquiry: isZh ? '快速询盘' : 'Quick Inquiry',
+    productInfo: isZh ? '询盘产品' : 'Product of Interest',
     yourName: isZh ? '您的姓名' : 'Your Name',
     yourEmail: isZh ? '电子邮箱' : 'Email Address',
     phoneWhatsApp: isZh ? '电话 / WhatsApp' : 'Phone / WhatsApp',
@@ -79,15 +104,15 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
     submitSuccess: isZh ? '提交成功！' : 'Submitted Successfully!',
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" onClick={onClose}>
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg z-[10000]" onClick={stopPropagation}>
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
+        <div className="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between rounded-t-2xl" style={{zIndex: 10}}>
           <div>
             <h2 className="text-xl font-bold text-slate-900">{t.quickInquiry}</h2>
             {productName && <p className="text-sm text-slate-500 mt-0.5 line-clamp-1">{productName}</p>}
@@ -199,6 +224,16 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
                 />
               </div>
 
+              {productName && (
+                <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
+                  <label className="block text-sm font-medium text-blue-700 mb-1">
+                    {t.productInfo}
+                  </label>
+                  <div className="text-sm text-blue-900 font-medium">{productName}</div>
+                  {productSlug && <div className="text-xs text-blue-600 mt-0.5">SKU: {productSlug}</div>}
+                </div>
+              )}
+
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
                   {t.message} <span className="text-red-500">*</span>
@@ -246,6 +281,7 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
           )}
         </form>
       </div>
-    </div>
+    </div>,
+    portalRef.current
   );
 }

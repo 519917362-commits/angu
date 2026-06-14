@@ -1,16 +1,45 @@
 'use client';
 
-import {use, useState} from 'react';
-import {MessageCircle, Mail, Phone, MapPin} from 'lucide-react';
+import {use, useState, FormEvent} from 'react';
+import {MessageCircle, Mail, Phone, MapPin, Loader2} from 'lucide-react';
 
 export default function ContactPage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = use(params);
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', company: '', country: '', message: '',
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const isZh = locale === 'zh';
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setStatus('sending');
+    setErrorMsg('');
+
+    try {
+      const res = await fetch('/api/inquiry', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          ...formData,
+          locale,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || (isZh ? '提交失败，请稍后重试。' : 'Submission failed. Please try again.'));
+      }
+
+      setStatus('success');
+    } catch (err) {
+      setStatus('error');
+      setErrorMsg(err instanceof Error ? err.message : (isZh ? '网络错误，请检查连接。' : 'Network error. Please check your connection.'));
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -31,7 +60,7 @@ export default function ContactPage({params}: {params: Promise<{locale: string}>
               <div className="space-y-5">
                 {[
                   {icon: Phone, label: isZh ? '电话 / WhatsApp' : 'Phone / WhatsApp', value: '+86 138-1234-5678', href: 'tel:+8613812345678'},
-                  {icon: Mail, label: isZh ? '邮箱' : 'Email', value: 'sales@paiqiwiremesh.com', href: 'mailto:sales@paiqiwiremesh.com'},
+                  {icon: Mail, label: isZh ? '邮箱' : 'Email', value: 'sales@anguwiremesh.com', href: 'mailto:sales@anguwiremesh.com'},
                   {icon: MapPin, label: isZh ? '工厂地址' : 'Factory Address', value: isZh ? '中国河北省衡水市安平县 053600' : 'Anping County, Hengshui, Hebei, China 053600', href: null},
                 ].map((item) => (
                   <div key={item.label} className="flex gap-4">
@@ -77,20 +106,29 @@ export default function ContactPage({params}: {params: Promise<{locale: string}>
               <h2 className="text-2xl font-bold text-slate-900 mb-2">{isZh ? '给我们留言' : 'Send Us a Message'}</h2>
               <p className="text-slate-500 text-sm mb-8">{isZh ? '我们通常在24小时内回复。' : 'We typically respond within 24 hours.'}</p>
 
-              {submitted ? (
+              {status === 'success' ? (
                 <div className="text-center py-12">
                   <div className="text-5xl mb-4">✅</div>
                   <p className="text-lg font-semibold text-slate-900 mb-2">{isZh ? '消息已发送！' : 'Message Sent!'}</p>
                   <p className="text-slate-500">{isZh ? '我们将在24小时内回复您。' : 'We will get back to you within 24 hours.'}</p>
+                  <button
+                    onClick={() => {
+                      setStatus('idle');
+                      setFormData({name: '', email: '', phone: '', company: '', country: '', message: ''});
+                    }}
+                    className="mt-6 text-blue-600 hover:text-blue-700 font-medium text-sm"
+                  >
+                    {isZh ? '发送另一条消息' : 'Send Another Message'}
+                  </button>
                 </div>
               ) : (
-                <form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    setSubmitted(true);
-                  }}
-                  className="space-y-5"
-                >
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  {status === 'error' && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                      {errorMsg}
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -170,9 +208,17 @@ export default function ContactPage({params}: {params: Promise<{locale: string}>
 
                   <button
                     type="submit"
-                    className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl"
+                    disabled={status === 'sending'}
+                    className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
                   >
-                    {isZh ? '发送消息' : 'Send Message'}
+                    {status === 'sending' ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        {isZh ? '发送中...' : 'Sending...'}
+                      </>
+                    ) : (
+                      isZh ? '发送消息' : 'Send Message'
+                    )}
                   </button>
                 </form>
               )}
