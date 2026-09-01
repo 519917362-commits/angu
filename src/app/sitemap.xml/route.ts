@@ -68,7 +68,7 @@ export async function GET() {
   }
 
   // lastmod for static pages — use the date of the last significant site update
-  const SITE_LASTMOD = '2026-08-13';
+  const SITE_LASTMOD = '2026-09-01';
   const pages: [string, string, string][] = [
     ['', 'weekly', '1.0'],
     ['/products', 'daily', '0.9'],
