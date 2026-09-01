@@ -8,8 +8,17 @@ export const T = {
     categories: '产品分类 Categories',
     'blog-categories': '博客分类 Blog Cats',
     blogs: '博客 Blog',
+    'site-general': '站点综合 Site General',
     logs: '日志 Logs',
     users: '用户 Users',
+    about: '关于页面 About Page',
+    homepage: '首页配置 Home',
+    'products-page': '产品页 Products',
+    'blog-page': '博客页 Blog',
+    'service-page': '服务页 Service',
+    'contact-page': '联系页 Contact',
+    'solutions-page': '方案页 Solutions',
+    'noise-barrier': '声屏障落地页 Noise Barrier',
     backToSite: '← 返回站点 Back to Site',
     logout: '退出登录 Logout',
     brand: 'Angu Admin',
@@ -92,6 +101,8 @@ export const T = {
     title: '产品分类 Categories',
     add: '+ 新增分类 + Add Category',
     name: '分类名称 Name',
+    name_en: '英文名 English Name',
+    name_zh: '中文名 Chinese Name',
     slug: '别名 Slug',
     sortWeight: '排序 Sort',
     status: '状态 Status',
@@ -130,6 +141,8 @@ export const T = {
     title: '博客分类 Blog Categories',
     add: '+ 新增分类 + Add Category',
     name: '分类名称 Name',
+    name_en: '英文名 English Name',
+    name_zh: '中文名 Chinese Name',
     slug: '别名 Slug',
     saveSuccess: '博客分类已保存 Blog category saved',
   },
@@ -202,4 +215,4 @@ export const T = {
   },
 } as const;
 
-export type TabKey = 'inquiries' | 'products' | 'categories' | 'blog-categories' | 'blogs' | 'logs' | 'users';
+export type TabKey = 'inquiries' | 'products' | 'categories' | 'blog-categories' | 'blogs' | 'about' | 'homepage' | 'products-page' | 'blog-page' | 'service-page' | 'contact-page' | 'solutions-page' | 'noise-barrier' | 'site-general' | 'logs' | 'users';

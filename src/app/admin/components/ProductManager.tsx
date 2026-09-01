@@ -8,9 +8,18 @@ interface Product {
   id: number;
   slug: string;
   category_slug: string;
-  name: string;
-  short_description: string;
-  description: string;
+  name_en: string;
+  name_zh: string;
+  name_vi: string;
+  name_th: string;
+  short_description_en: string;
+  short_description_zh: string;
+  short_description_vi: string;
+  short_description_th: string;
+  description_en: string;
+  description_zh: string;
+  description_vi: string;
+  description_th: string;
   price: number;
   unit: string;
   moq: number;
@@ -18,32 +27,45 @@ interface Product {
   status: string;
   is_featured: number;
   images: string;
-  specifications: string;
-  applications: string;
-  seo_title: string;
-  seo_keywords: string;
-  seo_description: string;
-  locale: string;
-  category_name?: string;
+  specifications_en: string;
+  specifications_zh: string;
+  specifications_vi: string;
+  specifications_th: string;
+  applications_en: string;
+  applications_zh: string;
+  applications_vi: string;
+  applications_th: string;
+  seo_title_en: string;
+  seo_title_zh: string;
+  seo_title_vi: string;
+  seo_title_th: string;
+  seo_keywords_en: string;
+  seo_keywords_zh: string;
+  seo_keywords_vi: string;
+  seo_keywords_th: string;
+  seo_description_en: string;
+  seo_description_zh: string;
+  seo_description_vi: string;
+  seo_description_th: string;
+  faq_en: string;
+  faq_zh: string;
+  faq_vi: string;
+  faq_th: string;
+  category_name_en?: string;
+  category_name_zh?: string;
 }
 
 interface Props {
   token: string;
+  onLogout: () => void;
 }
-
-const localeLabels: Record<string, string> = {
-  en: 'EN', zh: '中文', ar: 'عربي', ja: '日本語',
-  ko: '한국어', id: 'Bahasa', vi: 'Tiếng Việt',
-  es: 'Español', fr: 'Français', de: 'Deutsch',
-  pt: 'Português', th: 'ไทย',
-};
 
 const statusConfig: Record<string, { label: string; cls: string }> = {
   published: { label: '已发布', cls: 'bg-emerald-50 text-emerald-700 border border-emerald-200' },
   draft: { label: '草稿', cls: 'bg-slate-100 text-slate-600 border border-slate-200' },
 };
 
-export default function ProductManager({ token }: Props) {
+export default function ProductManager({ token, onLogout }: Props) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<number | null>(null);
@@ -53,13 +75,14 @@ export default function ProductManager({ token }: Props) {
   const pageSize = 10;
   const router = useRouter();
 
-  useEffect(() => { fetchProducts(); }, []);
+  useEffect(() => { fetchProducts(); }, [token]);
 
   const fetchProducts = async () => {
     try {
       const res = await fetch('/api/admin/products?limit=200', {
         headers: { Authorization: `Bearer ${token}` },
       });
+      if (res.status === 401) { onLogout(); return; }
       const data = await res.json();
       if (data.products) setProducts(data.products);
     } catch {
@@ -83,7 +106,7 @@ export default function ProductManager({ token }: Props) {
   };
 
   const filtered = products.filter(p => {
-    const matchSearch = !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.slug.toLowerCase().includes(search.toLowerCase());
+    const matchSearch = !search || p.name_en.toLowerCase().includes(search.toLowerCase()) || p.name_zh.toLowerCase().includes(search.toLowerCase()) || p.name_vi.toLowerCase().includes(search.toLowerCase()) || p.name_th.toLowerCase().includes(search.toLowerCase()) || p.slug.toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === 'all' || p.status === statusFilter;
     return matchSearch && matchStatus;
   });
@@ -92,13 +115,13 @@ export default function ProductManager({ token }: Props) {
   const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const tableHead = [
-    { label: '', w: 'w-10' },
-    { label: T.products.name, w: 'min-w-[320px] w-[35%]' },
-    { label: T.products.category, w: 'w-24' },
-    { label: T.products.price, w: 'w-28' },
-    { label: T.products.sortWeight, w: 'w-20' },
-    { label: T.products.status, w: 'w-40' },
-    { label: T.actions.view, w: 'w-28' },
+    { label: '', subLabel: '', w: 'w-10' },
+    { label: '名称', subLabel: 'NAME', w: 'min-w-[320px] w-[35%]' },
+    { label: '分类', subLabel: 'CATEGORY', w: 'w-24' },
+    { label: '价格', subLabel: 'PRICE', w: 'w-28' },
+    { label: '排序权重', subLabel: 'SORT WEIGHT', w: 'w-20' },
+    { label: '状态', subLabel: 'STATUS', w: 'w-40' },
+    { label: '操作', subLabel: 'ACTIONS', w: 'w-28' },
   ];
 
   return (
@@ -106,14 +129,14 @@ export default function ProductManager({ token }: Props) {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-slate-800">{T.products.title}</h2>
-          <p className="text-slate-500 text-sm mt-0.5">{T.products.total.replace('{count}', String(filtered.length))}</p>
+          <h2 className="text-xl font-bold text-slate-800 leading-tight">产品</h2>
+          <p className="text-xs text-slate-400 mt-0.5">Products</p>
         </div>
         <button
           onClick={() => router.push('/admin/products/new')}
           className="inline-flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium shadow-sm transition-colors"
         >
-          <span>+</span> {T.products.add}
+          <span>+</span> 新增产品
         </button>
       </div>
 
@@ -150,8 +173,9 @@ export default function ProductManager({ token }: Props) {
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200">
                   {tableHead.map(h => (
-                    <th key={h.label} className={`px-5 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap ${h.w}`}>
-                      {h.label}
+                    <th key={h.label + h.subLabel} className={`px-5 py-3 text-left whitespace-nowrap ${h.w}`}>
+                      <div className="text-xs font-semibold text-slate-700">{h.label}</div>
+                      {h.subLabel && <div className="text-[10px] text-slate-400 uppercase tracking-wide">{h.subLabel}</div>}
                     </th>
                   ))}
                 </tr>
@@ -170,12 +194,15 @@ export default function ProductManager({ token }: Props) {
                             {expandedId === p.id ? '▲' : '▼'}
                           </button>
                         </td>
-                        <td className="px-5 py-4">
-                          <div className="font-semibold text-slate-800 text-sm">{p.name}</div>
+                      <td className="px-5 py-4">
+                          <div className="font-semibold text-slate-800 text-sm">{p.name_en}</div>
+                          <div className="text-slate-500 text-sm mt-0.5">{p.name_zh}</div>
+                          <div className="text-slate-400 text-xs mt-0.5">{p.name_vi || '—'} · {p.name_th || '—'}</div>
                           <div className="text-slate-400 text-xs font-mono mt-0.5">/{p.slug}</div>
                         </td>
                         <td className="px-5 py-4">
-                          <span className="text-sm text-slate-600">{p.category_name || p.category_slug}</span>
+                          <div className="text-sm text-slate-700">{p.category_name_en}</div>
+                          <div className="text-xs text-slate-400">{p.category_name_zh}</div>
                         </td>
                         <td className="px-5 py-4">
                           <span className="text-sm font-medium text-slate-800">
@@ -195,26 +222,25 @@ export default function ProductManager({ token }: Props) {
                                 ⭐ Hot
                               </span>
                             )}
-                            <span className="inline-flex px-1.5 py-0.5 text-xs rounded border border-slate-200 text-slate-500 font-mono">
-                              {localeLabels[p.locale] || p.locale}
-                            </span>
                           </div>
                         </td>
                         <td className="px-5 py-4">
-                          <div className="flex items-center gap-4">
-                            <button
-                              onClick={() => router.push(`/admin/products/${p.id}`)}
-                              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                            >
-                              {T.actions.edit}
-                            </button>
-                            <button
-                              onClick={() => handleDelete(p.id)}
-                              className="text-red-500 hover:text-red-700 text-sm"
-                            >
-                              {T.actions.delete}
-                            </button>
-                          </div>
+                          <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => router.push(`/admin/products/${p.id}`)}
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                            title="编辑"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                          </button>
+                          <button
+                            onClick={() => handleDelete(p.id)}
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                            title="删除"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                          </button>
+                        </div>
                         </td>
                       </tr>
 
@@ -223,30 +249,44 @@ export default function ProductManager({ token }: Props) {
                         <tr key={`${p.id}-detail`} className="bg-blue-50/20">
                           <td colSpan={7} className="px-8 py-5">
                             <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm">
-                              {p.short_description && (
+                              {p.short_description_en && (
                                 <div>
-                                  <span className="text-slate-500 font-medium">{T.products.shortDesc}:</span>
-                                  <p className="text-slate-700 mt-0.5">{p.short_description}</p>
+                                  <span className="text-slate-500 font-medium">{T.products.shortDesc} EN:</span>
+                                  <p className="text-slate-700 mt-0.5">{p.short_description_en}</p>
                                 </div>
                               )}
-                              {p.description && (
+                              {p.short_description_zh && (
                                 <div>
-                                  <span className="text-slate-500 font-medium">{T.products.description}:</span>
-                                  <p className="text-slate-700 mt-0.5 line-clamp-2">{p.description}</p>
+                                  <span className="text-slate-500 font-medium">{T.products.shortDesc} ZH:</span>
+                                  <p className="text-slate-700 mt-0.5">{p.short_description_zh}</p>
                                 </div>
                               )}
-                              {p.specifications && p.specifications !== '{}' && (
+                              {p.specifications_en && p.specifications_en !== '{}' && (
                                 <div>
-                                  <span className="text-slate-500 font-medium">{T.products.specs}:</span>
+                                  <span className="text-slate-500 font-medium">{T.products.specs} EN:</span>
                                   <code className="block mt-0.5 text-xs bg-white border rounded p-1.5 text-slate-700 overflow-x-auto">
-                                    {p.specifications}
+                                    {p.specifications_en}
                                   </code>
                                 </div>
                               )}
-                              {p.applications && (
+                              {p.specifications_zh && p.specifications_zh !== '{}' && (
                                 <div>
-                                  <span className="text-slate-500 font-medium">{T.products.applications}:</span>
-                                  <p className="text-slate-700 mt-0.5">{p.applications}</p>
+                                  <span className="text-slate-500 font-medium">{T.products.specs} ZH:</span>
+                                  <code className="block mt-0.5 text-xs bg-white border rounded p-1.5 text-slate-700 overflow-x-auto">
+                                    {p.specifications_zh}
+                                  </code>
+                                </div>
+                              )}
+                              {p.applications_en && (
+                                <div>
+                                  <span className="text-slate-500 font-medium">{T.products.applications} EN:</span>
+                                  <p className="text-slate-700 mt-0.5">{p.applications_en}</p>
+                                </div>
+                              )}
+                              {p.applications_zh && (
+                                <div>
+                                  <span className="text-slate-500 font-medium">{T.products.applications} ZH:</span>
+                                  <p className="text-slate-700 mt-0.5">{p.applications_zh}</p>
                                 </div>
                               )}
                               {p.images && (

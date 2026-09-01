@@ -1,5 +1,6 @@
 import {Product} from '@/types/product';
 import Link from 'next/link';
+import { tLabel } from '@/lib/i18n';
 
 interface ProductCardProps {
   product: Product;
@@ -19,15 +20,17 @@ export function ProductCard({product, locale}: ProductCardProps) {
             alt={name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
+            width={400}
+            height={300}
           />
           {product.moq && (
             <span className="absolute top-3 start-3 bg-blue-600 text-white text-xs px-2 py-1 rounded-md">
-              MOQ: {product.moq}
+              {locale === 'zh' ? `起订量: ${product.moq}` : locale === 'vi' ? `SL tối thiểu: ${product.moq}` : locale === 'th' ? `ขั้นต่ำ: ${product.moq}` : `MOQ: ${product.moq}`}
             </span>
           )}
           {product.isFeatured && (
             <span className="absolute top-3 end-3 bg-yellow-500 text-white text-xs px-2 py-1 rounded-md">
-              ★ Featured
+              {tLabel('★ 精选', '★ Featured', locale)}
             </span>
           )}
         </div>
@@ -40,10 +43,10 @@ export function ProductCard({product, locale}: ProductCardProps) {
             {product.priceUsd ? (
               <span className="text-blue-600 font-bold text-sm">${product.priceUsd}</span>
             ) : (
-              <span className="text-slate-400 text-xs">Price on request</span>
+              <span className="text-slate-400 text-xs">{tLabel('价格面议', 'Price on request', locale)}</span>
             )}
             <span className="text-sm text-blue-600 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 font-medium">
-              Details →
+              {tLabel('详情 →', 'Details →', locale)}
             </span>
           </div>
         </div>

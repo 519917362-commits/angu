@@ -383,7 +383,7 @@ export const products: Product[] = [
     moq: 50,
     priceUsd: 22,
     priceRemark: 'FOB Tianjin, per roll',
-    isFeatured: false,
+    isFeatured: true,
     createdAt: '2025-01-03',
   },
   // 1.4 荷兰网
@@ -585,7 +585,7 @@ export const products: Product[] = [
     moq: 200,
     priceUsd: 35,
     priceRemark: 'FOB Tianjin, per m²',
-    isFeatured: true,
+    isFeatured: false,
     createdAt: '2025-01-07',
   },
   // 2.2 隔离围网
@@ -686,7 +686,7 @@ export const products: Product[] = [
     moq: 100,
     priceUsd: 45,
     priceRemark: 'FOB Tianjin, per meter',
-    isFeatured: true,
+    isFeatured: false,
     createdAt: '2025-01-09',
   },
   // 2.4 防爆护栏
@@ -841,7 +841,7 @@ export const products: Product[] = [
     moq: 50,
     priceUsd: 18,
     priceRemark: 'FOB Tianjin, per coil',
-    isFeatured: true,
+    isFeatured: false,
     createdAt: '2025-01-12',
   },
   // 3.2 钢丝刺绳
@@ -952,7 +952,7 @@ export const products: Product[] = [
     moq: 500,
     priceUsd: 85,
     priceRemark: 'FOB Tianjin, per m²',
-    isFeatured: true,
+    isFeatured: false,
     createdAt: '2025-01-14',
   },
   // 4.2 被动边坡防护网
@@ -1010,7 +1010,7 @@ export const products: Product[] = [
     moq: 200,
     priceUsd: 120,
     priceRemark: 'FOB Tianjin, per linear meter',
-    isFeatured: true,
+    isFeatured: false,
     createdAt: '2025-01-15',
   },
 
@@ -1064,7 +1064,7 @@ export const products: Product[] = [
     moq: 100,
     priceUsd: 45,
     priceRemark: 'FOB Tianjin, per unit',
-    isFeatured: true,
+    isFeatured: false,
     createdAt: '2025-01-16',
   },
   // 5.2 防爆墙
@@ -1265,7 +1265,7 @@ export const products: Product[] = [
     moq: 100,
     priceUsd: 65,
     priceRemark: 'FOB Tianjin, per unit',
-    isFeatured: true,
+    isFeatured: false,
     createdAt: '2025-01-20',
   },
   // 6.4 加筋石笼网
@@ -1367,7 +1367,7 @@ export const products: Product[] = [
     moq: 10,
     priceUsd: 120,
     priceRemark: 'FOB Tianjin, per m²',
-    isFeatured: true,
+    isFeatured: false,
     createdAt: '2025-01-22',
   },
   // 7.2 不锈钢绳网（动物园专用）
@@ -1418,7 +1418,7 @@ export const products: Product[] = [
     moq: 10,
     priceUsd: 180,
     priceRemark: 'FOB Tianjin, per m²',
-    isFeatured: true,
+    isFeatured: false,
     createdAt: '2025-01-23',
   },
 
@@ -1473,7 +1473,7 @@ export const products: Product[] = [
     moq: 20,
     priceUsd: 280,
     priceRemark: 'FOB Tianjin, per meter',
-    isFeatured: true,
+    isFeatured: false,
     createdAt: '2025-01-24',
   },
   // 8.2 演唱会护栏（已在护栏网类中）
@@ -1579,7 +1579,7 @@ export const products: Product[] = [
     moq: 100,
     priceUsd: 85,
     priceRemark: 'FOB Tianjin, per m²',
-    isFeatured: true,
+    isFeatured: false,
     createdAt: '2025-01-26',
   },
   // 9.2 设备声屏障
@@ -1684,7 +1684,7 @@ export const products: Product[] = [
     moq: 100,
     priceUsd: 150,
     priceRemark: 'FOB Tianjin, per m²',
-    isFeatured: true,
+    isFeatured: false,
     createdAt: '2025-01-28',
   },
 ];

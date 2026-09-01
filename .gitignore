@@ -36,8 +36,20 @@ yarn-error.log*
 # backend
 backend/node_modules/
 backend/*.db
+backend/*.db.bak
+backend/*.db.pre-translate
+backend/*.db.bak_hero
 backend/uploads/
 backend/package-lock.json
+
+# database files (anywhere — contain customer inquiry data)
+*.db
+*.db.bak
+*.db.backup
+*.db.pre-translate
+*.db.bak_hero
+*.sqlite
+*.sqlite3
 
 # dist (legacy build output)
 /dist

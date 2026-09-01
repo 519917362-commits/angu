@@ -1,19 +1,21 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { T } from '@/lib/admin-i18n';
 
 interface Category {
   id: number;
   slug: string;
-  name: string;
+  name_en: string;
+  name_zh: string;
+  name_vi: string;
+  name_th: string;
   sort_weight: number;
   status: string;
-  locale: string;
 }
 
 interface Props {
   token: string;
+  onLogout: () => void;
 }
 
 const statusConfig: Record<string, { label: string; cls: string }> = {
@@ -21,24 +23,28 @@ const statusConfig: Record<string, { label: string; cls: string }> = {
   draft:     { label: '草稿', cls: 'bg-slate-100 text-slate-600 border border-slate-200' },
 };
 
-export default function BlogCategoryManager({ token }: Props) {
-  const [cats, setCats] = useState<Category[]>([]);
+const inputCls = 'w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white';
+const labelCls = 'block text-sm font-medium text-slate-700 mb-1';
+
+export default function BlogCategoryManager({ token, onLogout }: Props) {
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Category | null>(null);
-  const [form, setForm] = useState({ slug: '', name: '', sort_weight: '0', status: 'published', locale: 'en' });
+  const [form, setForm] = useState({ slug: '', name_en: '', name_zh: '', name_vi: '', name_th: '', sort_weight: '0', status: 'published' });
   const [msg, setMsg] = useState('');
 
-  useEffect(() => { fetchCats(); }, []);
+  useEffect(() => { fetchCategories(); }, [token]);
 
-  const fetchCats = async () => {
+  const fetchCategories = async () => {
     try {
       const res = await fetch('/api/admin/blog-categories', {
         headers: { Authorization: `Bearer ${token}` },
       });
+      if (res.status === 401) { onLogout(); return; }
       const data = await res.json();
-      if (data.categories) setCats(data.categories);
-      else if (Array.isArray(data)) setCats(data);
+      if (data.categories) setCategories(data.categories);
+      else if (Array.isArray(data)) setCategories(data);
     } catch { console.error('Failed to load'); }
     finally { setLoading(false); }
   };
@@ -55,11 +61,11 @@ export default function BlogCategoryManager({ token }: Props) {
         body: JSON.stringify(payload),
       });
       if (res.ok) {
-        setMsg(T.blogCats.saveSuccess);
+        setMsg('保存成功');
         setShowForm(false);
         setEditing(null);
-        setForm({ slug: '', name: '', sort_weight: '0', status: 'published', locale: 'en' });
-        fetchCats();
+        setForm({ slug: '', name_en: '', name_zh: '', name_vi: '', name_th: '', sort_weight: '0', status: 'published' });
+        fetchCategories();
         setTimeout(() => setMsg(''), 3000);
       }
     } catch { console.error('Save failed'); }
@@ -67,26 +73,37 @@ export default function BlogCategoryManager({ token }: Props) {
 
   const handleEdit = (cat: Category) => {
     setEditing(cat);
-    setForm({ slug: cat.slug, name: cat.name, sort_weight: cat.sort_weight?.toString() || '0', status: cat.status, locale: cat.locale });
+    setForm({
+      slug: cat.slug,
+      name_en: cat.name_en || '',
+      name_zh: cat.name_zh || '',
+      name_vi: cat.name_vi || '',
+      name_th: cat.name_th || '',
+      sort_weight: cat.sort_weight?.toString() || '0',
+      status: cat.status,
+    });
     setShowForm(true);
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('确认删除？ Confirm delete?')) return;
+    if (!confirm('确认删除此分类？ Confirm delete this category?')) return;
     await fetch(`/api/admin/blog-categories/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
-    fetchCats();
+    fetchCategories();
   };
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-5">
+    <div className="p-8">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-slate-800">{T.blogCats.title}</h2>
-          <p className="text-slate-500 text-sm mt-0.5">共 {cats.length} 个</p>
+          <h2 className="text-xl font-bold text-slate-800 leading-tight">博客分类</h2>
+          <p className="text-xs text-slate-400 mt-0.5">Blog Categories · 共 {categories.length} 个</p>
         </div>
-        <button onClick={() => { setEditing(null); setForm({ slug: '', name: '', sort_weight: '0', status: 'published', locale: 'en' }); setShowForm(true); }}
-          className="inline-flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium shadow-sm">
-          + {T.blogCats.add}
+        <button
+          onClick={() => { setEditing(null); setForm({ slug: '', name_en: '', name_zh: '', name_vi: '', name_th: '', sort_weight: '0', status: 'published' }); setShowForm(true); }}
+          className="inline-flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium shadow-sm transition-colors"
+        >
+          <span>+</span> 新增分类
         </button>
       </div>
 
@@ -97,68 +114,98 @@ export default function BlogCategoryManager({ token }: Props) {
           <h3 className="text-base font-semibold text-slate-800 mb-4">{editing ? '编辑分类 Edit Category' : '新增分类 New Category'}</h3>
           <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Slug</label>
-              <input value={form.slug} onChange={e => setForm({ ...form, slug: e.target.value })} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required disabled={!!editing} />
+              <label className={labelCls}>标识 Slug</label>
+              <input value={form.slug} onChange={e => setForm({ ...form, slug: e.target.value })} className={inputCls} placeholder="e.g. gabion-knowledge" required disabled={!!editing} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Name</label>
-              <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+              <label className={labelCls}>排序权重 Sort</label>
+              <input type="number" value={form.sort_weight} onChange={e => setForm({ ...form, sort_weight: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Sort</label>
-              <input type="number" value={form.sort_weight} onChange={e => setForm({ ...form, sort_weight: e.target.value })} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <label className={labelCls}>英文名称 Name EN</label>
+              <input value={form.name_en} onChange={e => setForm({ ...form, name_en: e.target.value })} className={inputCls} placeholder="e.g. Gabion Knowledge" required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
-              <select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })} className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+              <label className={labelCls}>中文名称 Name ZH</label>
+              <input value={form.name_zh} onChange={e => setForm({ ...form, name_zh: e.target.value })} className={inputCls} placeholder="e.g. 石笼网知识" required />
+            </div>
+            <div>
+              <label className={labelCls}>越南语名称 Name VI</label>
+              <input value={form.name_vi} onChange={e => setForm({ ...form, name_vi: e.target.value })} className={inputCls} placeholder="vd: Kiến thức lưới đá" />
+            </div>
+            <div>
+              <label className={labelCls}>泰语名称 Name TH</label>
+              <input value={form.name_th} onChange={e => setForm({ ...form, name_th: e.target.value })} className={inputCls} placeholder="เช่น ความรู้ตะแกรง" />
+            </div>
+            <div>
+              <label className={labelCls}>状态 Status</label>
+              <select value={form.status} onChange={e => setForm({ ...form, status: e.target.value })} className={inputCls}>
                 <option value="published">已发布 Published</option>
                 <option value="draft">草稿 Draft</option>
               </select>
             </div>
-            <div className="col-span-2 flex gap-3">
-              <button type="submit" className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium">{T.actions.save}</button>
-              <button type="button" onClick={() => setShowForm(false)} className="bg-slate-100 text-slate-700 px-5 py-2 rounded-lg hover:bg-slate-200 text-sm">{T.actions.cancel}</button>
+            <div className="flex items-end gap-3">
+              <button type="submit" className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium">保存</button>
+              <button type="button" onClick={() => setShowForm(false)} className="bg-slate-100 text-slate-700 px-5 py-2 rounded-lg hover:bg-slate-200 text-sm">取消</button>
             </div>
           </form>
         </div>
       )}
 
+      {/* Table */}
       {loading ? (
-        <div className="text-center py-16 text-slate-400 text-sm">{T.empty.loading}</div>
+        <div className="text-center py-16 text-slate-400 text-sm">Loading...</div>
       ) : (
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Name</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-40">Slug</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-20">Sort</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-28">Status</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-28">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {cats.map(cat => {
-                const sc = statusConfig[cat.status] || { label: cat.status, cls: 'bg-slate-100 text-slate-600' };
-                return (
-                  <tr key={cat.id} className="hover:bg-blue-50/20 transition-colors">
-                    <td className="px-4 py-3 text-sm font-semibold text-slate-800">{cat.name}</td>
-                    <td className="px-4 py-3 text-sm text-slate-500 font-mono">/{cat.slug}</td>
-                    <td className="px-4 py-3 text-sm text-slate-500 font-mono">{cat.sort_weight}</td>
-                    <td className="px-4 py-3"><span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${sc.cls}`}>{sc.label}</span></td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <button onClick={() => handleEdit(cat)} className="text-blue-600 hover:text-blue-800 text-sm font-medium">{T.actions.edit}</button>
-                        <button onClick={() => handleDelete(cat.id)} className="text-red-500 hover:text-red-700 text-sm">{T.actions.delete}</button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          {cats.length === 0 && (
-            <div className="text-center py-14"><div className="text-4xl mb-2">📁</div><p className="text-slate-500 text-sm">暂无分类 No categories</p></div>
+          <div className="overflow-x-auto">
+            <table className="w-full table-fixed">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200">
+                  {[
+                    { label: '名称', subLabel: 'NAME', w: 'min-w-[240px] w-[40%]' },
+                    { label: '标识', subLabel: 'SLUG', w: 'w-44' },
+                    { label: '排序', subLabel: 'SORT', w: 'w-20 whitespace-nowrap' },
+                    { label: '状态', subLabel: 'STATUS', w: 'w-28 whitespace-nowrap' },
+                    { label: '操作', subLabel: 'ACTIONS', w: 'w-28 whitespace-nowrap' },
+                  ].map(h => (
+                    <th key={h.label + h.subLabel} className={`px-5 py-3 text-left ${h.w}`}>
+                      <div className="text-xs font-semibold text-slate-700">{h.label}</div>
+                      <div className="text-[10px] text-slate-400 uppercase tracking-wide">{h.subLabel}</div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {categories.map(cat => {
+                  const sc = statusConfig[cat.status] || { label: cat.status, cls: 'bg-slate-100 text-slate-600' };
+                  return (
+                    <tr key={cat.id} className="hover:bg-blue-50/30 transition-colors">
+                      <td className="px-5 py-4">
+                        <div className="font-semibold text-slate-800 text-sm truncate">{cat.name_en}</div>
+                        <div className="text-slate-500 text-sm mt-0.5 truncate">{cat.name_zh}</div>
+                        <div className="text-slate-400 text-xs mt-0.5 truncate">{cat.name_vi || '—'} · {cat.name_th || '—'}</div>
+                      </td>
+                      <td className="px-5 py-4 text-sm text-slate-500 font-mono truncate">/{cat.slug}</td>
+                      <td className="px-5 py-4 text-sm text-slate-500 font-mono">{cat.sort_weight}</td>
+                      <td className="px-5 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full whitespace-nowrap ${sc.cls}`}>
+                          {sc.label}
+                        </span>
+                      </td>
+                      <td className="px-5 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-1">
+                          <button onClick={() => handleEdit(cat)} className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors" title="编辑"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button>
+                          <button onClick={() => handleDelete(cat.id)} className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors" title="删除"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          {categories.length === 0 && (
+            <div className="text-center py-14"><div className="text-4xl mb-2">📁</div><p className="text-slate-500 text-sm">暂无分类</p></div>
           )}
         </div>
       )}

@@ -1,11 +1,17 @@
 'use client';
 
+import {usePathname} from 'next/navigation';
 import {MessageCircle} from 'lucide-react';
 
 export function InquiryButton() {
+  const pathname = usePathname();
+  const isLanding = pathname?.includes('/noise-barrier');
+
+  if (isLanding) return null;
+
   return (
     <a
-      href="https://wa.me/8613812345678?text=Hello, I'm interested in your gabion box and protection net products."
+      href="https://wa.me/8618803189797?text=Hello, I'm interested in your gabion box and protection net products."
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all group"

@@ -10,15 +10,7 @@ interface LanguageSwitcherProps {
 const languages = [
   {code: 'en', label: 'English', flag: '🇺🇸'},
   {code: 'zh', label: '中文', flag: '🇨🇳'},
-  {code: 'ar', label: 'العربية', flag: '🇸🇦'},
-  {code: 'ja', label: '日本語', flag: '🇯🇵'},
-  {code: 'ko', label: '한국어', flag: '🇰🇷'},
-  {code: 'id', label: 'Bahasa', flag: '🇮🇩'},
   {code: 'vi', label: 'Tiếng Việt', flag: '🇻🇳'},
-  {code: 'es', label: 'Español', flag: '🇪🇸'},
-  {code: 'fr', label: 'Français', flag: '🇫🇷'},
-  {code: 'de', label: 'Deutsch', flag: '🇩🇪'},
-  {code: 'pt', label: 'Português', flag: '🇵🇹'},
   {code: 'th', label: 'ไทย', flag: '🇹🇭'},
 ];
 
@@ -30,7 +22,7 @@ export function LanguageSwitcher({locale}: LanguageSwitcherProps) {
 
   function switchLanguage(newLocale: string) {
     if (!pathname) return;
-    const newPath = pathname.replace(/^\/(en|zh|ar|ja|ko|id|vi|es|fr|de|pt|th)/, `/${newLocale}`);
+    const newPath = pathname.replace(/^\/(en|zh|vi|th)/, `/${newLocale}`);
     router.replace(newPath);
     setOpen(false);
   }

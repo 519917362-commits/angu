@@ -1,24 +1,28 @@
 'use client';
 
 import {useEffect, useState} from 'react';
+import {usePathname} from 'next/navigation';
 import {ChevronUp} from 'lucide-react';
 
 export function BackToTop() {
   const [visible, setVisible] = useState(false);
+  const pathname = usePathname();
+  const isLanding = pathname?.includes('/noise-barrier');
 
   useEffect(() => {
+    if (isLanding) return;
     function handleScroll() {
       setVisible(window.scrollY > 600);
     }
     window.addEventListener('scroll', handleScroll, {passive: true});
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isLanding]);
 
   function scrollToTop() {
     window.scrollTo({top: 0, behavior: 'smooth'});
   }
 
-  if (!visible) return null;
+  if (isLanding || !visible) return null;
 
   return (
     <button

@@ -6,6 +6,7 @@
     "services": "Services",
     "blog": "Blog",
     "contact": "Contact Us",
+    "solutions": "Solutions",
     "inquiry": "Quick Inquiry",
     "submit": "Submit",
     "submitNow": "Submit Now",
@@ -39,22 +40,39 @@
     "products": "Products",
     "aboutUs": "About Us",
     "services": "Services",
+    "solutions": "Solutions",
     "blog": "Blog",
     "contactUs": "Contact Us"
   },
   "home": {
     "hero": {
-      "title": "Professional Gabion Box & Rockfall Protection Net Manufacturer",
-      "subtitle": "From Anping, China — Trusted by 500+ clients across 30+ countries",
-      "cta": "Get a Free Quote"
+      "title": "Angu Wire Mesh — Gabion · Protection Net · Fence, Factory-Direct Worldwide",
+      "subtitle": "ISO 9001 / CE Certified · 15 Years Experience · 30+ Countries · Low MOQ",
+      "cta": "Get a Free Quote",
+      "whatsapp": "Chat on WhatsApp"
     },
+    "stats": {
+      "yearsLabel": "Years Experience",
+      "productsLabel": "Product SKUs",
+      "countriesLabel": "Countries Exported",
+      "inspectionLabel": "Pre-Shipment Inspection"
+    },
+    "categoriesTitle": "9 Product Lines, One-Stop Procurement",
+    "categoriesSubtitle": "From gabion boxes to noise barriers — everything you need for your project.",
+    "trustTitle": "Why 500+ Clients Choose Angu",
+    "trustSubtitle": "15 years of manufacturing excellence, trusted by contractors and distributors worldwide.",
+    "applicationsTitle": "Covering 9 Application Scenarios",
+    "applicationsSubtitle": "Click any scenario to explore the right products for your industry.",
     "featuredProducts": "Featured Products",
-    "whyChooseUs": "Why Choose Us",
-    "globalProjects": "Global Projects",
+    "whyChooseUs": "Why Choose Angu",
     "applicationFields": "Application Fields",
-    "newsBlog": "News & Blog",
-    "viewMore": "View More",
-    "viewProducts": "View All Products"
+    "featuredSubtitle": "Our most popular product lines, ready for immediate quotation.",
+    "viewAllProducts": "View All 28 Products →",
+    "ctaTitle": "Ready to Get Your Free Quote?",
+    "ctaDescr": "Send us your specifications and we'll provide a detailed quotation within 24 hours. No obligation, factory-direct pricing.",
+    "ctaButton": "Get Free Quote",
+    "whatsappButton": "Chat on WhatsApp",
+    "categories": "Product Categories"
   },
   "product": {
     "specifications": "Product Specifications",

@@ -16,6 +16,7 @@ interface Log {
 
 interface Props {
   token: string;
+  onLogout: () => void;
 }
 
 const actionConfig: Record<string, { label: string; cls: string }> = {
@@ -25,11 +26,11 @@ const actionConfig: Record<string, { label: string; cls: string }> = {
   login:  { label: '登录', cls: 'bg-purple-50 text-purple-700 border border-purple-200' },
 };
 
-export default function LogViewer({ token }: Props) {
+export default function LogViewer({ token, onLogout }: Props) {
   const [logs, setLogs] = useState<Log[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => { fetchLogs(); }, []);
+  useEffect(() => { fetchLogs(); }, [token]);
 
   const fetchLogs = async () => {
     setLoading(true);
@@ -37,6 +38,7 @@ export default function LogViewer({ token }: Props) {
       const res = await fetch('/api/admin/logs?limit=100', {
         headers: { Authorization: `Bearer ${token}` },
       });
+      if (res.status === 401) { onLogout(); return; }
       const data = await res.json();
       if (Array.isArray(data)) setLogs(data);
     } catch { console.error('Failed to load logs'); }

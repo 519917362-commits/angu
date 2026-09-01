@@ -1,212 +1,212 @@
+import type {Metadata} from 'next';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
+import {getBlogPost, getBlogPosts} from '@/lib/api';
+import { tLabel } from '@/lib/i18n';
+import {generatePageMeta} from '@/lib/seo-utils';
+import {renderMarkdown} from '@/lib/markdown';
 
-// Blog post data (in production, this would come from CMS/database)
-const blogPosts: Record<string, {
-  title: string;
-  date: string;
-  image: string;
-  category: string;
-  content: string;
-}> = {
-  'how-to-choose-right-gabion-box-size': {
-    title: 'How to Choose the Right Gabion Box Size for Your Project',
-    date: '2025-12-15',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200',
-    category: 'Guide',
-    content: `
-## Why Gabion Box Size Matters
-
-Choosing the correct gabion box size is critical for structural integrity, cost efficiency, and project longevity. This guide covers everything you need to make an informed decision.
-
-## Standard Gabion Box Sizes
-
-The most commonly used gabion box dimensions are:
-
-| Size (m) | Typical Use | Fill Material |
-|----------|-------------|---------------|
-| 2×1×1 | Retaining walls, erosion control | Rock 100-200mm |
-| 1.5×1×1 | Garden walls, landscaping | Rock 75-150mm |
-| 2×1×0.5 | Low walls, decorative | Rock 75-125mm |
-| 3×1×1 | Large retaining structures | Rock 150-250mm |
-| 4×1×1 | Marine/coastal applications | Heavy rock 200-300mm |
-
-## Key Selection Factors
-
-### 1. Load Requirements
-Higher loads require larger boxes with thicker wire (4.0–4.5mm diameter). For highway and railway projects, we recommend a minimum of 2×1×1m with 4.5mm wire.
-
-### 2. Site Conditions
-- **Sloped terrain**: Use deeper boxes (1.5m or 2m length) for better interlocking
-- **Limited space**: Narrower boxes (0.5m or 1m width) may be necessary
-- **Soft soil**: Larger base area distributes load more effectively
-
-### 3. Aesthetic Considerations
-For visible applications like garden walls, smaller boxes (1×1×0.5m to 1.5×1×1m) provide a more refined appearance.
-
-### 4. Budget Constraints
-Standard sizes (2×1×1m) offer the best value — they're produced in volume and cost 15-20% less than custom sizes.
-
-## When to Go Custom
-
-Custom sizes are recommended when:
-- Your engineering design specifies exact dimensions
-- You need non-standard heights for stepped structures
-- Space constraints prevent standard sizing
-- The application requires specific hydraulic characteristics
-
-Our custom manufacturing lead time is 15-25 days for custom-sized gabions.
-
-## Conclusion
-
-When in doubt, consult with our engineering team. We provide free technical support including size recommendations, structural calculations, and installation guidance for all qualified inquiries.
-    `,
-  },
-};
-
-// Default content for posts not yet written
-const defaultContent = `
-## Article Content
-
-This article provides detailed technical information about this topic. Full content will be available soon.
-
-In the meantime, feel free to contact us for detailed specifications, technical drawings, or consultation on your project.
-
-## Need More Information?
-
-Our engineering team can provide:
-- Custom calculations and designs
-- Installation guidelines
-- Technical drawings (CAD/DXF)
-- On-site consultation
-
-**Contact us today for a free consultation!**
-`;
-
-export async function generateStaticParams() {
-  const slugs = Object.keys(blogPosts);
-  const params: {locale: string; slug: string}[] = [];
-  const locales = ['en', 'zh', 'ar', 'ja', 'ko', 'id', 'vi', 'es', 'fr', 'de', 'pt', 'th'];
-  for (const locale of locales) {
-    for (const slug of slugs) {
-      params.push({locale, slug});
-    }
-  }
-  return params;
+interface Props {
+  params: Promise<{locale: string; slug: string}>;
 }
 
-export async function generateMetadata({params}: {params: Promise<{locale: string; slug: string}>}): Promise<import('next').Metadata> {
-  const {slug} = await params;
-  const post = blogPosts[slug];
-  return {
-    title: post?.title || 'Blog Post' + ' | Paiqi Wire Mesh',
-    description: post?.content.slice(0, 160) || 'Industry insights on gabion construction and rockfall protection.',
-  };
-}
-
-export default async function BlogPostPage({params}: {params: Promise<{locale: string; slug: string}>}) {
+export async function generateMetadata({params}: Props): Promise<Metadata> {
   const {locale, slug} = await params;
-  const post = blogPosts[slug];
+  const post = await getBlogPost(slug);
+  if (!post) return {title: tLabel('文章未找到', 'Post Not Found', locale)};
+  const title = locale === 'zh' ? post.title_zh : locale === 'vi' ? (post.title_vi || post.title_en) : locale === 'th' ? (post.title_th || post.title_en) : post.title_en;
+  const abstract = locale === 'zh' ? post.abstract_zh : locale === 'vi' ? (post.abstract_vi || post.abstract_en) : locale === 'th' ? (post.abstract_th || post.abstract_en) : post.abstract_en;
+  const description = abstract
+    ?.replace(/[#*`\[\]\|\-]/g, '')
+    .replace(/\n+/g, ' ')
+    .trim()
+    .slice(0, 160) || 'Industry insights on wire mesh, gabion construction, and rockfall protection.';
+  const seoTitle = locale === 'zh' ? post.seo_title_zh : locale === 'vi' ? (post.seo_title_vi || post.seo_title_en) : locale === 'th' ? (post.seo_title_th || post.seo_title_en) : post.seo_title_en;
+  return generatePageMeta('blog', locale, `/${locale}/blog/${slug}`, {
+    title: `${seoTitle || title || 'Blog Post'} | Angu Wire Mesh`,
+    description,
+    image: post.cover_image || undefined,
+  });
+}
+
+export default async function BlogDetailPage({params}: Props) {
+  const {locale, slug} = await params;
+  const post = await getBlogPost(slug);
 
   if (!post) notFound();
 
-  // Simple markdown-like rendering (line breaks → paragraphs, ## → h2)
-  const renderContent = (content: string) => {
-    return content.split('\n').map((line, i) => {
-      const trimmed = line.trim();
-      if (!trimmed) return null;
-      if (trimmed.startsWith('## ')) {
-        return <h2 key={i} className="text-xl font-bold text-slate-900 mt-10 mb-4">{trimmed.replace('## ', '')}</h2>;
-      }
-      if (trimmed.startsWith('|')) {
-        return <pre key={i} className="bg-slate-50 rounded-lg p-4 my-3 text-sm overflow-x-auto whitespace-pre-wrap font-mono text-slate-700">{trimmed}</pre>;
-      }
-      if (trimmed.startsWith('- **')) {
-        return (
-          <li key={i} className="text-slate-600 ml-6 mb-1">
-            <strong>{trimmed.split('**')[1]}</strong>
-            {trimmed.split('**')[2]?.replace(': ', ': ')}
-          </li>
-        );
-      }
-      if (trimmed.startsWith('- ')) {
-        return <li key={i} className="text-slate-600 ml-6 mb-1">{trimmed.replace('- ', '')}</li>;
-      }
-      if (trimmed.match(/^\d+\./)) {
-        return <li key={i} className="text-slate-600 ml-6 mb-1 list-decimal"><strong>{trimmed.split('.')[1]}</strong>{trimmed.substring(trimmed.indexOf('.') + 1)}</li>;
-      }
-      return <p key={i} className="text-slate-600 leading-relaxed mb-3">{trimmed}</p>;
-    }).filter(Boolean);
+const title = locale === 'zh' ? post.title_zh : locale === 'vi' ? (post.title_vi || post.title_en) : locale === 'th' ? (post.title_th || post.title_en) : post.title_en;
+const content = locale === 'zh' ? post.content_zh : locale === 'vi' ? (post.content_vi || post.content_en) : locale === 'th' ? (post.content_th || post.content_en) : post.content_en;
+const abstract = locale === 'zh' ? post.abstract_zh : locale === 'vi' ? (post.abstract_vi || post.abstract_en) : locale === 'th' ? (post.abstract_th || post.abstract_en) : post.abstract_en;
+  const publishDate = post.publish_time
+    ? new Date(post.publish_time).toLocaleDateString(tLabel('zh-CN', 'en-US', locale), {year: 'numeric', month: 'long', day: 'numeric'})
+    : '';
+  const seoTitle = locale === 'zh' ? post.seo_title_zh : locale === 'vi' ? (post.seo_title_vi || post.seo_title_en) : locale === 'th' ? (post.seo_title_th || post.seo_title_en) : post.seo_title_en;
+const seoDesc = locale === 'zh' ? post.seo_description_zh : locale === 'vi' ? (post.seo_description_vi || post.seo_description_en) : locale === 'th' ? (post.seo_description_th || post.seo_description_en) : post.seo_description_en;
+const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (post.seo_keywords_vi || post.seo_keywords_en) : locale === 'th' ? (post.seo_keywords_th || post.seo_keywords_en) : post.seo_keywords_en;
+  const canonicalUrl = `https://www.angumesh.com/${locale}/blog/${slug}`;
+
+  // 阅读时间估算（中英文均按字符数粗估）
+  const contentText = content || '';
+  const readingMinutes = Math.max(1, Math.ceil(contentText.length / (locale === 'zh' ? 400 : 800)));
+
+  // 相关文章（同语言、排除当前、最多 3 篇）
+  const allPosts = await getBlogPosts();
+  const related = allPosts.filter(p => p.id !== post.id && p.status === 'published').slice(0, 3);
+
+  // ── JSON-LD Structured Data ──
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {'@type': 'ListItem', position: 1, name: tLabel('首页', 'Home', locale), item: `https://www.angumesh.com/${locale}`},
+      {'@type': 'ListItem', position: 2, name: tLabel('博客', 'Blog', locale), item: `https://www.angumesh.com/${locale}/blog`},
+      {'@type': 'ListItem', position: 3, name: title, item: canonicalUrl},
+    ],
   };
 
-  const relatedPosts = Object.entries(blogPosts)
-    .filter(([s]) => s !== slug)
-    .slice(0, 3);
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: seoTitle || title,
+    description: seoDesc || abstract?.slice(0, 160) || '',
+    url: canonicalUrl,
+    datePublished: post.publish_time || undefined,
+    dateModified: (post as any).updated_at || post.publish_time || undefined,
+    ...(post.cover_image ? {image: post.cover_image} : {}),
+    author: {
+      '@type': 'Organization',
+      name: 'Angu Wire Mesh',
+      url: 'https://www.angumesh.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'An Gu Wire Mesh Products Co., Ltd.',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.angumesh.com/images/logo.png',
+      },
+    },
+    ...(keywords ? {keywords: keywords} : {}),
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
+    },
+  };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="relative overflow-hidden bg-blue-900 text-white py-16">
-        <div className="absolute inset-0 opacity-20">
-          <img src={post.image} alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-slate-900/70" />
-        </div>
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="text-sm text-blue-200 mb-6">
-            <Link href={`/${locale}`} className="hover:text-white transition-colors">Home</Link>
-            <span className="mx-2">/</span>
-            <Link href={`/${locale}/blog`} className="hover:text-white transition-colors">Blog</Link>
-            <span className="mx-2">/</span>
-            <span className="text-white truncate">{post.title}</span>
-          </nav>
-          <span className="inline-block bg-blue-500 text-xs font-bold px-3 py-1 rounded-full mb-4">{post.category}</span>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4">{post.title}</h1>
-          <time className="text-blue-200">{post.date}</time>
-        </div>
-      </div>
+    <>
+      {/* ========== Structured Data ========== */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(breadcrumbSchema)}} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(articleSchema)}} />
 
-      {/* Content */}
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-2xl p-8 md:p-12 shadow-sm border border-slate-100 prose-custom">
-          {renderContent(post.content || defaultContent)}
-
-          {/* Share & CTA */}
-          <div className="mt-12 pt-8 border-t border-slate-100">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="text-sm text-slate-500">
-                Have questions about this topic?
-              </div>
-              <Link href={`/${locale}/contact`}>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-semibold text-sm transition-all">
-                  Ask Our Experts
-                </button>
+      <div className="min-h-screen bg-slate-50">
+        {/* Breadcrumb */}
+        <div className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <nav className="text-sm text-slate-500 flex items-center gap-2">
+              <Link href={`/${locale}`} className="hover:text-blue-600 transition-colors">
+                {tLabel('首页', 'Home', locale)}
               </Link>
-            </div>
+              <span>/</span>
+              <Link href={`/${locale}/blog`} className="hover:text-blue-600 transition-colors">
+                {tLabel('博客', 'Blog', locale)}
+              </Link>
+              <span>/</span>
+              <span className="text-slate-900 truncate max-w-sm">{title}</span>
+            </nav>
           </div>
         </div>
 
-        {/* Related Posts */}
-        {relatedPosts.length > 0 && (
-          <div className="mt-16">
-            <h2 className="text-2xl font-bold text-slate-900 mb-8">Related Articles</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedPosts.map(([s, r]) => (
-                <Link key={s} href={`/${locale}/blog/${s}`}>
-                  <article className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-slate-100">
-                    <div className="aspect-[16/9] overflow-hidden bg-slate-100">
-                      <img src={r.image} alt={r.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                    </div>
-                    <div className="p-4">
-                      <span className="text-xs font-medium text-blue-600">{r.category}</span>
-                      <h3 className="font-semibold text-slate-900 mt-1 line-clamp-2 group-hover:text-blue-600 transition-colors text-sm">{r.title}</h3>
-                    </div>
-                  </article>
-                </Link>
+        {/* Article */}
+        <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          {/* Header */}
+          <div className="mb-10">
+            {publishDate && (
+              <div className="text-sm text-slate-400 mb-4 flex items-center gap-3">
+                <time dateTime={post.publish_time || undefined}>{publishDate}</time>
+                <span aria-hidden="true">·</span>
+                <span>{locale === 'zh' ? `${readingMinutes} 分钟阅读` : locale === 'vi' ? `${readingMinutes} phút đọc` : locale === 'th' ? `${readingMinutes} นาทีอ่าน` : `${readingMinutes} min read`}</span>
+              </div>
+            )}
+            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight mb-4">
+              {title}
+            </h1>
+            {seoDesc && (
+              <p className="text-lg text-slate-500 leading-relaxed">{seoDesc}</p>
+            )}
+          </div>
+
+          {/* Cover Image */}
+          {post.cover_image && (
+            <div className="aspect-[21/9] bg-slate-100 rounded-2xl overflow-hidden mb-10 shadow-sm">
+              <img
+                src={post.cover_image}
+                alt={title}
+                width={840}
+                height={360}
+                loading="eager"
+                fetchPriority="high"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="bg-white rounded-2xl shadow-sm p-8 sm:p-10">
+            <div className="prose prose-slate max-w-none">
+              {renderMarkdown(content)}
+            </div>
+          </div>
+
+          {/* Tags */}
+          {keywords && (
+            <div className="mt-8 flex flex-wrap gap-2">
+              {keywords.split(',').map((kw, i) => (
+                <span key={i} className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-medium">
+                  {kw.trim()}
+                </span>
               ))}
             </div>
+          )}
+
+          {/* Related Posts */}
+          {related.length > 0 && (
+            <div className="mt-12 pt-8 border-t border-slate-200">
+              <h3 className="text-lg font-bold text-slate-900 mb-6">{tLabel('相关文章', 'Related Posts', locale)}</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {related.map(rp => {
+                  const rTitle = locale === 'zh' ? rp.title_zh : locale === 'vi' ? (rp.title_vi || rp.title_en) : locale === 'th' ? (rp.title_th || rp.title_en) : rp.title_en;
+                  const rCover = rp.cover_image || '/images/products/gabion-box.jpg';
+                  return (
+                    <Link key={rp.id} href={`/${locale}/blog/${rp.slug}`} className="group block bg-white rounded-xl overflow-hidden border border-slate-100 hover:border-blue-200 shadow-sm hover:shadow-md transition-all">
+                      <div className="aspect-[16/9] overflow-hidden">
+                        <img src={rCover} alt={rTitle} width={300} height={169} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                      </div>
+                      <div className="p-4">
+                        <h4 className="font-semibold text-slate-800 text-sm group-hover:text-blue-600 line-clamp-2">{rTitle}</h4>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Back Link */}
+          <div className="mt-12 pt-8 border-t border-slate-200">
+            <Link
+              href={`/${locale}/blog`}
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              {tLabel('返回博客列表', 'Back to Blog', locale)}
+            </Link>
           </div>
-        )}
-      </article>
-    </div>
+        </article>
+      </div>
+    </>
   );
 }

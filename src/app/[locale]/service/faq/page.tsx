@@ -1,10 +1,16 @@
 import Link from 'next/link';
+import type {Metadata} from 'next';
+import { tLabel } from '@/lib/i18n';
+import {generatePageMeta} from '@/lib/seo-utils';
+
+export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
+  const {locale} = await params;
+  return generatePageMeta('faq', locale, `/${locale}/service/faq`);
+}
 
 export default async function FAQPage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
-  const isZh = locale === 'zh';
-
-  const faqs = isZh ? [
+  const faqs = locale === 'zh' ? [
     {q: '最小起订量（MOQ）是多少？', a: '不同产品类型MOQ不同。石笼网箱通常50件起订，落石防护网从100平方米起订。六角网和勾花网围栏首次订单可低至1卷。我们对新客户灵活处理，可协商试订单。'},
     {q: '生产交货期是多久？', a: '标准产品（现货或常规规格）：7-15个工作日。定制/OEM订单：15-30个工作日，视复杂程度和数量而定。加急订单可额外收取10-20%费用。我们总是在报价中提供准确的交货期。'},
     {q: '你们提供免费样品吗？多久能收到？', a: '是的！我们大多数产品提供免费样品。客户承担快递运费（通常DHL/FedEx/UPS $30-80）。样品配送约5-10天。首次批量下单后样品费用全额退还。'},
@@ -17,6 +23,32 @@ export default async function FAQPage({params}: {params: Promise<{locale: string
     {q: '你们的产品服务于哪些行业？', a: '我们的产品服务于广泛的行业：\n• 土木工程：挡土墙、侵蚀控制、渠道衬砌\n• 交通运输：公路和铁路边坡防护、桥梁防护\n• 矿业：落石屏障、尾矿坝加固\n• 水利工程：河岸防护、大坝建设\n• 军事与安全：屏障系统、周边围栏\n• 园林景观：花园墙、装饰性石笼结构\n• 海岸与海洋：防波堤、海岸线防护'},
     {q: '可以获取价格表或目录吗？', a: '可以！您可以从我们的下载页面获取最新产品目录，或直接联系我们，我们将在24小时内通过邮件发送。由于价格因规格、数量和当前材料成本而异，我们建议申请定制报价以获取准确价格。'},
     {q: '你们的销售团队会说哪些语言？', a: '我们的国际销售团队英语流利。我们还有可以用中文、阿拉伯语、西班牙语、俄语和法语沟通的员工。对于其他语言，我们使用专业翻译服务以确保沟通清晰。WhatsApp和邮件是我们的主要沟通渠道，24/7可用。'},
+  ] : locale === 'vi' ? [
+    {q: 'Số lượng đặt hàng tối thiểu (MOQ) là bao nhiêu?', a: 'MOQ khác nhau tùy theo loại sản phẩm. Rọ đá thường bắt đầu từ 50 chiếc, lưới chống rơi đá từ 100 m². Lưới thép lục giác và hàng rào lưới mắt cáo có thể đặt thấp tới 1 cuộn cho đơn hàng đầu tiên. Chúng tôi linh hoạt với khách hàng mới và có thể thảo luận đơn hàng dùng thử.'},
+    {q: 'Thời gian sản xuất là bao lâu?', a: 'Sản phẩm tiêu chuẩn (có sẵn hoặc thông số phổ biến): 7-15 ngày làm việc. Đơn hàng tùy chỉnh/OEM: 15-30 ngày làm việc tùy thuộc vào độ phức tạp và số lượng. Đơn hàng gấp có thể được xử lý với phụ phí thêm 10-20%. Chúng tôi luôn cung cấp thời gian giao hàng chính xác trong báo giá.'},
+    {q: 'Bạn có cung cấp mẫu miễn phí không? Mất bao lâu để nhận được?', a: 'Có! Chúng tôi cung cấp mẫu miễn phí cho hầu hết các dòng sản phẩm. Khách hàng chịu phí vận chuyển (thường $30-80 qua DHL/FedEx/UPS). Giao mẫu mất khoảng 5-10 ngày. Chi phí mẫu được hoàn trả khi bạn đặt đơn hàng số lượng lớn đầu tiên.'},
+    {q: 'Bạn chấp nhận phương thức thanh toán nào?', a: 'Chúng tôi cung cấp các tùy chọn thanh toán linh hoạt:\n• T/T (Chuyển tiền điện): 30% đặt cọc, 70% trước khi gửi hàng — phổ biến nhất\n• L/C trả tiền ngay: Cho đơn hàng trên $20,000\n• Western Union / PayPal: Cho số tiền nhỏ và phí mẫu\n• Alibaba Trade Assurance: Có sẵn để bảo đảm thêm'},
+    {q: 'Bạn có thể sản xuất kích thước và thông số tùy chỉnh không?', a: 'Tuyệt đối! Sản xuất tùy chỉnh là thế mạnh cốt lõi của chúng tôi. Đội ngũ kỹ thuật có thể làm việc theo bản vẽ hoặc thông số kỹ thuật của bạn. Chúng tôi hỗ trợ đường kính dây tùy chỉnh (2.0mm–4.5mm), kích thước mắt lưới, kích thước, xử lý bề mặt (mạ kẽm, phủ PVC, Galfan) và đóng gói. Chỉ cần gửi yêu cầu của bạn.'},
+    {q: 'Sản phẩm của bạn có chứng nhận gì?', a: 'Công ty chúng tôi được chứng nhận ISO 9001:2015. Lưới chống rơi đá được chứng nhận CE và kiểm nghiệm theo tiêu chuẩn châu Âu ETAG 027. Rọ đá tuân thủ tiêu chuẩn ASTM A975/A975M. Chúng tôi có thể cung cấp báo cáo kiểm tra bên thứ ba SGS, BV hoặc CCIC theo yêu cầu.'},
+    {q: 'Bạn kiểm soát chất lượng như thế nào?', a: 'Chất lượng là ưu tiên hàng đầu của chúng tôi. Mỗi lô sản phẩm đều trải qua:\n1. Kiểm tra nguyên vật liệu (đường kính dây, độ bền kéo)\n2. QC trong quá trình dệt/hàn/đóng gói\n3. Kiểm tra kích thước sản phẩm thành phẩm\n4. Xác minh xử lý bề mặt (kiểm tra trọng lượng lớp kẽm)\n5. Kiểm tra cuối cùng trước khi gửi hàng kèm ảnh và báo cáo\nChúng tôi duy trì tỷ lệ lỗi <1% trên tất cả các lô hàng.'},
+    {q: 'Bạn cung cấp phương thức vận chuyển nào? Có thể giao hàng tận nơi không?', a: 'Có, chúng tôi xử lý đầy đủ logistics xuất khẩu:\n• Vận tải biển: FOB, CIF, CFR — Cảng Tianjin/Xingang\n• Vận tải hàng không: Sân bay Thủ đô Bắc Kinh (đơn nhỏ gấp)\n• Chuyển phát nhanh: DHL, FedEx, UPS cho mẫu\n• Giao tận nơi: Có sẵn cho hầu hết các quốc gia qua đối tác forwarder\nThời gian vận chuyển: 15-35 ngày bằng đường biển, 5-10 ngày bằng đường hàng không.'},
+    {q: 'Bạn có tham dự triển lãm thương mại không? Tôi có thể tham quan nhà máy không?', a: 'Có! Chúng tôi thường xuyên tham dự các triển lãm thương mại quốc tế lớn như Hội chợ Quảng Châu, The Big 5 (Dubai), CONEXPO (Mỹ) và BAUMA (Đức). Rất hoan nghênh bạn ghé thăm nhà máy — chúng tôi nằm ở Huyện An Bình, cách sân bay Thạch Gia Trang 2.5 giờ hoặc Bắc Kinh 3 giờ. Chúng tôi có thể sắp xếp đón sân bay và đặt phòng khách sạn.'},
+    {q: 'Sản phẩm của bạn phục vụ những ngành nào?', a: 'Sản phẩm của chúng tôi phục vụ nhiều ngành đa dạng:\n• Xây dựng dân dụng: Tường chắn, kiểm soát xói mòn, lót kênh\n• Giao thông: Bảo vệ dốc đường cao tốc & đường sắt, bảo vệ cầu\n• Khai thác mỏ: Rào chắn rơi đá, gia cố đập tailings\n• Thủy lợi: Bảo vệ bờ sông, xây dựng đập\n• Quân sự & An ninh: Hệ thống rào chắn, rào chu vi\n• Cảnh quan: Tường vườn, cấu trúc rọ đá trang trí\n• Ven biển & Hàng hải: Kè sóng, bảo vệ đường bờ biển'},
+    {q: 'Tôi có thể lấy bảng giá hoặc danh mục không?', a: 'Có! Bạn có thể tải danh mục sản phẩm mới nhất từ trang Tải xuống, hoặc liên hệ trực tiếp với chúng tôi và chúng tôi sẽ gửi qua email trong vòng 24 giờ. Vì giá cả thay đổi tùy theo thông số, số lượng và chi phí vật liệu hiện tại, chúng tôi khuyến nghị yêu cầu báo giá tùy chỉnh để có giá chính xác.'},
+    {q: 'Đội ngũ kinh doanh của bạn nói ngôn ngữ nào?', a: 'Đội ngũ kinh doanh quốc tế của chúng tôi nói tiếng Anh lưu loát. Chúng tôi cũng có nhân viên có thể giao tiếp bằng tiếng Trung, tiếng Ả Rập, tiếng Tây Ban Nha, tiếng Nga và tiếng Pháp. Đối với các ngôn ngữ khác, chúng tôi sử dụng dịch vụ chuyên nghiệp để đảm bảo giao tiếp rõ ràng. WhatsApp và Email là kênh giao tiếp chính, có sẵn 24/7.'},
+  ] : locale === 'th' ? [
+    {q: 'จำนวนสั่งซื้อขั้นต่ำ (MOQ) คือเท่าไหร่?', a: 'MOQ แตกต่างกันตามประเภทสินค้า เกเบี้ยนมักเริ่มที่ 50 ชิ้น ตะแกรงป้องกันหินตกเริ่มที่ 100 ตร.ม. ตะแกรงลวดหกเหลี่ยมและรั้วตะแกรงถักสั่งได้ต่ำสุด 1 ม้วนสำหรับการสั่งซื้อครั้งแรก เรายืดหยุ่นกับลูกค้าใหม่และสามารถหารือเกี่ยวกับการสั่งซื้อทดลอง'},
+    {q: 'ระยะเวลาการผลิตนานเท่าใด?', a: 'สินค้ามาตรฐาน (มีสต็อกหรือขนาดทั่วไป): 7-15 วันทำการ คำสั่งซื้อแบบกำหนดเอง/OEM: 15-30 วันทำการ ขึ้นอยู่กับความซับซ้อนและปริมาณ คำสั่งด่วนสามารถเร่งได้โดยเพิ่มค่าใช้จ่าย 10-20% เรามักระบุระยะเวลาที่แม่นยำในใบเสนอราคาเสมอ'},
+    {q: 'คุณให้ตัวอย่างฟรีหรือไม่? ใช้เวลานานเท่าใดจึงจะได้รับ?', a: 'ใช่! เราให้ตัวอย่างฟรีสำหรับสินค้าส่วนใหญ่ ลูกค้ารับผิดชอบค่าขนส่ง (ปกติ $30-80 ผ่าน DHL/FedEx/UPS) การจัดส่งตัวอย่างใช้เวลาประมาณ 5-10 วัน ค่าตัวอย่างจะคืนให้เต็มจำนวนเมื่อสั่งซื้อจำนวนมากครั้งแรก'},
+    {q: 'คุณรับวิธีการชำระเงินแบบใด?', a: 'เรามีตัวเลือกการชำระเงินที่ยืดหยุ่น:\n• T/T (โอนเงินทางโทรเลข): วางมัดจำ 30% ชำระ 70% ก่อนส่งสินค้า — ใช้บ่อยที่สุด\n• เลตเตอร์ออฟเครดิต (L/C) เพื่อการชำระทันที: สำหรับคำสั่งซื้อมากกว่า $20,000\n• Western Union / PayPal: สำหรับจำนวนเงินน้อยและค่าตัวอย่าง\n• Alibaba Trade Assurance: มีให้เพื่อความปลอดภัยเพิ่มเติม'},
+    {q: 'คุณผลิตขนาดและข้อมูลจำเพาะแบบกำหนดเองได้หรือไม่?', a: 'แน่นอน! การผลิตแบบกำหนดเองคือจุดแข็งหลักของเรา ทีมวิศวกรของเราสามารถทำงานตามแบบร่างหรือข้อมูลจำเพาะของคุณ เรารองรับเส้นผ่านศูนย์กลางลวดแบบกำหนดเอง (2.0mm–4.5mm) ขนาดตาข่าย มิติ การเคลือบผิว (ชุบสังกะสี พัน PVC Galfan) และบรรจุภัณฑ์ เพียงส่งความต้องการของคุณมาให้เรา'},
+    {q: 'สินค้าของคุณมีการรับรองอะไรบ้าง?', a: 'บริษัทของเราได้รับการรับรอง ISO 9001:2015 ตะแกรงป้องกันหินตกได้รับการรับรอง CE และทดสอบตามมาตรฐานยุโรป ETAG 027 กล่องเกเบี้ยนเป็นไปตามมาตรฐาน ASTM A975/A975M เราสามารถให้รายงานการตรวจสอบโดยบุคคลที่สาม SGS, BV หรือ CCIC ตามคำขอได้'},
+    {q: 'คุณควบคุมคุณภาพอย่างไร?', a: 'คุณภาพคือความสำคัญสูงสุดของเรา ทุกชุดการผลิตจะผ่าน:\n1. การตรวจสอบวัตถุดิบ (เส้นผ่านศูนย์กลางลวด ความต้านทานแรงดึง)\n2. การควบคุมคุณภาพระหว่างการทอ/เชื่อม/บรรจุ\n3. การตรวจสอบขนาดสินค้าสำเร็จรูป\n4. การตรวจสอบการเคลือบผิว (การทดสอบน้ำหนักสังกะสี)\n5. การตรวจสอบสุดท้ายก่อนส่งมอบ พร้อมภาพถ่ายและรายงาน\nเรารักษาอัตราข้อบกพร่อง <1% ในทุกการส่งมอบ'},
+    {q: 'คุณมีตัวเลือกการขนส่งอะไรบ้าง? สามารถจัดส่งถึงบ้านได้หรือไม่?', a: 'ใช่ เราจัดการลอจิสติกส์การส่งออกครบวงจร:\n• ทางเรือ: FOB, CIF, CFR — ท่าเรือเทียนจิน/ซินกาง\n• ทางอากาศ: สนามบินหลวงปักกิ่ง (สำหรับคำสั่งเร่งด่วนขนาดเล็ก)\n• ส่งด่วน: DHL, FedEx, UPS สำหรับตัวอย่าง\n• ส่งถึงบ้าน: มีให้สำหรับหลายประเทศผ่านพันธมิตร forwarder\nระยะเวลาขนส่ง: 15-35 วันทางเรือ 5-10 วันทางอากาศ'},
+    {q: 'คุณเข้าร่วมงานแสดงสินค้าหรือไม่? ฉันเยี่ยมโรงงานได้ไหม?', a: 'ใช่! เราเข้าร่วมงานแสดงสินค้าระดับนานาชาติอย่างสม่ำเสมอ เช่น งานแคนตอน แฟร์ The Big 5 (ดูไบ) CONEXPO (สหรัฐ) และ BAUMA (เยอรมนี) ยินดีต้อนรับเยี่ยมโรงงาน — เราตั้งอยู่ที่เขตอันผิง ห่างจากสนามบินซื่อเจียจวง 2.5 ชม. หรือจากปักกิ่ง 3 ชม. เราสามารถจัดรถรับส่งสนามบินและจองโรงแรมให้'},
+    {q: 'สินค้าของคุณให้บริการในอุตสาหกรรมใดบ้าง?', a: 'สินค้าของเราให้บริการในหลากหลายอุตสาหกรรม:\n• วิศวกรรมโยธา: กำแพงคุณ การควบคุมการพังทลาย การปูผ้านุ่นช่อง\n• คมนาคม: การป้องกันไหล่ทางหลวงและรถไฟ การป้องกันสะพาน\n• เหมืองแร่: ตะแกรงกันหินตก การเสริมเขื่อน tailings\n• ชลประทาน: การป้องกันตลิ่ง การสร้างเขื่อน\n• ทหารและความมั่นคง: ระบบกีดขวาง รั้วรอบพื้นที่\n• ภูมิทัศน์: กำแพงสวน โครงสร้างเกเบี้ยนตกแต่ง\n• ชายฝั่งและทางทะเล: กันคลื่น การป้องกันแนวชายฝั่ง'},
+    {q: 'ฉันสามารถขอรับตารางราคาหรือแคตตาล็อกได้หรือไม่?', a: 'ได้! คุณสามารถดาวน์โหลดแคตตาล็อกสินค้าล่าสุดจากหน้าดาวน์โหลดของเรา หรือติดต่อเราโดยตรงแล้วเราจะส่งอีเมลภายใน 24 ชม. เนื่องจากราคาแตกต่างกันตามข้อมูลจำเพาะ ปริมาณ และต้นทุนวัสดุปัจจุบัน เราแนะนำให้ขอใบเสนอราคาแบบกำหนดเองเพื่อราคาที่แม่นยำ'},
+    {q: 'ทีมขายของคุณพูดภาษาอะไรบ้าง?', a: 'ทีมขายต่างประเทศของเราพูดภาษาอังกฤษได้อย่างคล่องแคล่ว เรายังมีพนักงานที่สื่อสารเป็นภาษาจีน อาหรับ สเปน รัสเซีย และฝรั่งเศส สำหรับภาษาอื่น เราใช้บริการแปลอาชีพเพื่อให้การสื่อสารชัดเจน WhatsApp และอีเมลคือช่องทางสื่อสารหลัก พร้อมให้บริการ 24/7'},
   ] : [
     {q: 'What is the minimum order quantity (MOQ)?', a: 'MOQ varies by product type. For gabion boxes, the typical MOQ is 50 pieces. For rockfall protection nets, it starts from 100 m². For hexagonal wire mesh and chain link fence, MOQ can be as low as 1 roll for first-time orders. We are flexible with new clients and can discuss trial orders.'},
     {q: 'What is your production lead time?', a: 'Standard products (in-stock or common specifications): 7-15 working days. Custom/OEM orders: 15-30 working days depending on complexity and quantity. Rush orders can be expedited with an additional 10-20% surcharge. We always provide accurate lead time in our quotation.'},
@@ -38,15 +70,15 @@ export default async function FAQPage({params}: {params: Promise<{locale: string
       <div className="bg-blue-900 text-white py-16 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 20px)'}} />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-3">{isZh ? '常见问题' : 'Frequently Asked Questions'}</h1>
-          <p className="text-blue-200 text-lg max-w-2xl">{isZh ? '查找关于我们产品、订购流程、运输等常见问题的答案。' : 'Find answers to common questions about our products, ordering process, shipping, and more.'}</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-3">{tLabel('常见问题', 'Frequently Asked Questions', locale)}</h1>
+          <p className="text-blue-200 text-lg max-w-2xl">{tLabel('查找关于我们产品、订购流程、运输等常见问题的答案。', 'Find answers to common questions about our products, ordering process, shipping, and more.', locale)}</p>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Quick Links */}
         <div className="flex flex-wrap gap-3 mb-12 justify-center">
-          {(isZh ? ['订购', '付款', '运输', '定制产品', '质量', '公司'] : ['Ordering', 'Payment', 'Shipping', 'Custom Products', 'Quality', 'Company']).map((tag) => (
+          {(locale === 'zh' ? ['订购', '付款', '运输', '定制产品', '质量', '公司'] : locale === 'vi' ? ['Đặt hàng', 'Thanh toán', 'Vận chuyển', 'Sản phẩm tùy chỉnh', 'Chất lượng', 'Công ty'] : locale === 'th' ? ['การสั่งซื้อ', 'การชำระเงิน', 'การขนส่ง', 'สินค้ากำหนดเอง', 'คุณภาพ', 'บริษัท'] : ['Ordering', 'Payment', 'Shipping', 'Custom Products', 'Quality', 'Company']).map((tag) => (
             <span key={tag} className="bg-white border border-slate-200 text-slate-600 px-4 py-1.5 rounded-full text-sm font-medium hover:border-blue-300 hover:text-blue-600 cursor-pointer transition-colors">
               {tag}
             </span>
@@ -70,15 +102,15 @@ export default async function FAQPage({params}: {params: Promise<{locale: string
 
         {/* CTA */}
         <div className="mt-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 md:p-12 text-center">
-          <h2 className="text-2xl font-bold text-white mb-3">{isZh ? '还有问题？' : 'Still Have Questions?'}</h2>
-          <p className="text-blue-100 mb-8 max-w-lg mx-auto">{isZh ? '我们的团队随时准备提供帮助。联系我们，我们将在24小时内回复。' : 'Our team is ready to help. Get in touch and we&apos;ll respond within 24 hours.'}</p>
+          <h2 className="text-2xl font-bold text-white mb-3">{tLabel('还有问题？', 'Still Have Questions?', locale)}</h2>
+          <p className="text-blue-100 mb-8 max-w-lg mx-auto">{tLabel('我们的团队随时准备提供帮助。联系我们，我们将在24小时内回复。', 'Our team is ready to help. Get in touch and we&apos;ll respond within 24 hours.', locale)}</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href={`/${locale}/contact`}>
               <button className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg">
-                {isZh ? '联系我们' : 'Contact Us'}
+                {tLabel('联系我们', 'Contact Us', locale)}
               </button>
             </Link>
-            <a href="https://wa.me/8613812345678" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/8618803189797" target="_blank" rel="noopener noreferrer">
               <button className="bg-green-500 hover:bg-green-600 text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg flex items-center gap-2">
                 💬 WhatsApp
               </button>

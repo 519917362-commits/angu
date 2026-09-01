@@ -20,6 +20,7 @@ interface Inquiry {
 
 interface Props {
   token: string;
+  onLogout: () => void;
 }
 
 const statusConfig: Record<string, { label: string; cls: string }> = {
@@ -39,7 +40,7 @@ const tableHead = [
   { label: T.inquiries.status, key: 'action' },
 ];
 
-export default function InquiryManager({ token }: Props) {
+export default function InquiryManager({ token, onLogout }: Props) {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('all');
@@ -47,13 +48,14 @@ export default function InquiryManager({ token }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
-  useEffect(() => { fetchInquiries(); }, []);
+  useEffect(() => { fetchInquiries(); }, [token]);
 
   const fetchInquiries = async () => {
     try {
       const res = await fetch('/api/inquiries', {
         headers: { Authorization: `Bearer ${token}` },
       });
+      if (res.status === 401) { onLogout(); return; }
       const data = await res.json();
       if (data.inquiries) setInquiries(data.inquiries);
     } catch {

@@ -1,11 +1,17 @@
 import Link from 'next/link';
 import {Download} from 'lucide-react';
+import type {Metadata} from 'next';
+import {generatePageMeta} from '@/lib/seo-utils';
+import { tLabel } from '@/lib/i18n';
+
+export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
+  const {locale} = await params;
+  return generatePageMeta('download', locale, `/${locale}/download`);
+}
 
 export default async function DownloadPage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
-  const isZh = locale === 'zh';
-
-  const downloads = isZh ? [
+  const downloads = locale === 'zh' ? [
     {
       title: '2025年产品目录',
       desc: '所有石笼网、防护网和金属丝网产品的完整目录，包含规格和价格范围。',
@@ -69,6 +75,136 @@ export default async function DownloadPage({params}: {params: Promise<{locale: s
       format: 'PDF',
       icon: '✅',
       category: '质量',
+    },
+  ] : locale === 'vi' ? [
+    {
+      title: 'Danh mục sản phẩm 2025',
+      desc: 'Danh mục đầy đủ tất cả sản phẩm rọ đá, lưới bảo vệ và lưới thép, bao gồm thông số kỹ thuật và mức giá.',
+      size: '12.4 MB',
+      format: 'PDF',
+      icon: '📖',
+      category: 'Danh mục',
+    },
+    {
+      title: 'Bảng thông số rọ đá',
+      desc: 'Thông số kỹ thuật chi tiết cho tất cả kích thước tiêu chuẩn và tùy chỉnh, vật liệu và tùy chọn phủ bề mặt.',
+      size: '2.1 MB',
+      format: 'PDF',
+      icon: '📋',
+      category: 'Thông số',
+    },
+    {
+      title: 'Sổ tay kỹ thuật lưới chống rơi đá',
+      desc: 'Sổ tay kỹ thuật bao gồm hướng dẫn thiết kế, quy trình lắp đặt và dữ liệu kiểm tải cho hệ thống chủ động/bị động.',
+      size: '8.7 MB',
+      format: 'PDF',
+      icon: '🔧',
+      category: 'Kỹ thuật',
+    },
+    {
+      title: 'Hướng dẫn lắp đặt đệm Reno',
+      desc: 'Hướng dẫn lắp đặt từng bước kèm hình minh họa cho bảo vệ bờ sông và kiểm soát xói mòn.',
+      size: '3.5 MB',
+      format: 'PDF',
+      icon: '🏗️',
+      category: 'Hướng dẫn',
+    },
+    {
+      title: 'Hồ sơ công ty & chứng nhận',
+      desc: 'Giới thiệu công ty, ảnh nhà máy, chứng nhận ISO/CE và danh sách khách hàng tham chiếu.',
+      size: '5.2 MB',
+      format: 'PDF',
+      icon: '🏢',
+      category: 'Công ty',
+    },
+    {
+      title: 'Bảng giá hàng rào lưới mắt cáo',
+      desc: 'Bảng giá hiện tại cho sản phẩm hàng rào lưới mắt cáo bao gồm các chiều cao, kích thước mắt lưới và lớp phủ khác nhau.',
+      size: '1.8 MB',
+      format: 'XLSX',
+      icon: '💰',
+      category: 'Bảng giá',
+    },
+    {
+      title: 'Bảng màu rọ đá phủ PVC',
+      desc: 'Các tùy chọn màu sắc cho sản phẩm rọ đá phủ PVC kèm mã màu RAL.',
+      size: '0.9 MB',
+      format: 'PDF',
+      icon: '🎨',
+      category: 'Thông số',
+    },
+    {
+      title: 'Mẫu báo cáo kiểm tra chất lượng',
+      desc: 'Mẫu báo cáo kiểm tra chất lượng thể hiện quy trình QC và tiêu chuẩn kiểm tra của chúng tôi.',
+      size: '1.2 MB',
+      format: 'PDF',
+      icon: '✅',
+      category: 'Chất lượng',
+    },
+  ] : locale === 'th' ? [
+    {
+      title: 'แคตตาล็อกสินค้า 2025',
+      desc: 'แคตตาล็อกครบถ้วนสำหรับเกเบี้ยน ตะแกรงป้องกัน และผลิตภัณฑ์ตะแกรงลวด พร้อมข้อมูลจำเพาะและช่วงราคา',
+      size: '12.4 MB',
+      format: 'PDF',
+      icon: '📖',
+      category: 'แคตตาล็อก',
+    },
+    {
+      title: 'ตารางข้อมูลจำเพาะกล่องเกเบี้ยน',
+      desc: 'ข้อมูลจำเพาะทางเทคนิคโดยละเอียดสำหรับขนาดมาตรฐานและกำหนดเองทั้งหมด วัสดุ และตัวเลือกการเคลือบผิว',
+      size: '2.1 MB',
+      format: 'PDF',
+      icon: '📋',
+      category: 'ข้อมูลจำเพาะ',
+    },
+    {
+      title: 'คู่มือเทคนิคตะแกรงป้องกันหินตก',
+      desc: 'คู่มือทางวิศวกรรมครอบคลุมแนวทางการออกแบบ ขั้นตอนการติดตั้ง ข้อมูลการทดสอบภาระสำหรับระบบแบบแอคทีฟ/แพสซีฟ',
+      size: '8.7 MB',
+      format: 'PDF',
+      icon: '🔧',
+      category: 'เทคนิค',
+    },
+    {
+      title: 'คู่มือติดตั้งฟูก Reno',
+      desc: 'คู่มือติดตั้งทีละขั้นตอนพร้อมแผนภาพสำหรับการป้องกันตลิ่งและควบคุมการพังทลาย',
+      size: '3.5 MB',
+      format: 'PDF',
+      icon: '🏗️',
+      category: 'คู่มือ',
+    },
+    {
+      title: 'ประวัติบริษัทและใบรับรอง',
+      desc: 'บทนำบริษัท ภาพโรงงาน ใบรับรอง ISO/CE และรายชื่อลูกค้าอ้างอิง',
+      size: '5.2 MB',
+      format: 'PDF',
+      icon: '🏢',
+      category: 'บริษัท',
+    },
+    {
+      title: 'ตารางราคาตะแกรงถัก',
+      desc: 'ตารางราคาปัจจุบันสำหรับตะแกรงถักรวมความสูง ขนาดตาข่าย และการเคลือบที่แตกต่างกัน',
+      size: '1.8 MB',
+      format: 'XLSX',
+      icon: '💰',
+      category: 'ราคา',
+    },
+    {
+      title: 'แผนภูมิสีเกเบี้ยนเคลือบ PVC',
+      desc: 'ตัวเลือกสีที่มีให้สำหรับผลิตภัณฑ์เกเบี้ยนเคลือบ PVC พร้อมรหัสสี RAL',
+      size: '0.9 MB',
+      format: 'PDF',
+      icon: '🎨',
+      category: 'ข้อมูลจำเพาะ',
+    },
+    {
+      title: 'แบบฟอร์มรายงานตรวจสอบคุณภาพ',
+      desc: 'ตัวอย่างรายงานตรวจสอบคุณภาพแสดงกระบวนการ QC และมาตรฐานการทดสอบของเรา',
+      size: '1.2 MB',
+      format: 'PDF',
+      icon: '✅',
+      category: 'คุณภาพ',
     },
   ] : [
     {
@@ -137,17 +273,44 @@ export default async function DownloadPage({params}: {params: Promise<{locale: s
     },
   ];
 
+  // ── JSON-LD: BreadcrumbList ──
+  const breadcrumbLD = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {'@type': 'ListItem', position: 1, name: tLabel('首页', 'Home', locale), item: `https://www.angumesh.com/${locale}`},
+      {'@type': 'ListItem', position: 2, name: tLabel('下载页标题', 'Downloads', locale), item: `https://www.angumesh.com/${locale}/download`},
+    ],
+  };
+
+  // ── JSON-LD: ItemList ──
+  const itemListLD = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: tLabel('安固丝网 — 下载资源', 'Angu Wire Mesh — Downloads & Resources', locale),
+    description: tLabel('产品目录、规格表、技术手册、安装指南、证书等下载资源。', 'Product catalogs, spec sheets, technical manuals, installation guides, certificates.', locale),
+    numberOfItems: downloads.length,
+    itemListElement: downloads.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.title,
+      description: item.desc,
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
+      {/* JSON-LD */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify([breadcrumbLD, itemListLD])}} />
       {/* Header */}
       <div className="bg-blue-900 text-white py-16 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 20px)'}} />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-3">{isZh ? '下载与资源' : 'Downloads & Resources'}</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-3">{tLabel('下载与资源', 'Downloads & Resources', locale)}</h1>
           <nav className="text-sm text-blue-200">
-            <Link href={`/${locale}`} className="hover:text-white transition-colors">{isZh ? '首页' : 'Home'}</Link>
+            <Link href={`/${locale}`} className="hover:text-white transition-colors">{tLabel('首页', 'Home', locale)}</Link>
             <span className="mx-2">/</span>
-            <span className="text-white">{isZh ? '下载' : 'Downloads'}</span>
+            <span className="text-white">{tLabel('下载页标题', 'Downloads', locale)}</span>
           </nav>
         </div>
       </div>
@@ -156,10 +319,10 @@ export default async function DownloadPage({params}: {params: Promise<{locale: s
 
         {/* Notice Banner */}
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-12 flex items-start gap-4">
-          <span className="text-2xl flex-shrink-0">ℹ️</span>
+          <span className="text-2xl flex-shrink-0" aria-hidden="true">ℹ️</span>
           <div>
-            <h3 className="font-semibold text-blue-900 mb-1">{isZh ? '找不到需要的文档？' : 'Need a document not listed here?'}</h3>
-            <p className="text-sm text-blue-700">{isZh ? '联系我们，我们将在24小时内发送任何产品信息、技术图纸或证书。' : 'Contact us and we&apos;ll send you any product information, technical drawings, or certificates within 24 hours.'}</p>
+            <h3 className="font-semibold text-blue-900 mb-1">{tLabel('找不到需要的文档？', 'Need a document not listed here?', locale)}</h3>
+            <p className="text-sm text-blue-700">{tLabel('联系我们，我们将在24小时内发送任何产品信息、技术图纸或证书。', 'Contact us and we&apos;ll send you any product information, technical drawings, or certificates within 24 hours.', locale)}</p>
           </div>
         </div>
 
@@ -167,7 +330,7 @@ export default async function DownloadPage({params}: {params: Promise<{locale: s
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {downloads.map((item) => (
             <div key={item.title} className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 hover:border-blue-200 hover:shadow-md transition-all group flex items-start gap-5">
-              <div className="w-14 h-14 bg-slate-100 group-hover:bg-blue-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 transition-colors">
+              <div className="w-14 h-14 bg-slate-100 group-hover:bg-blue-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 transition-colors" aria-hidden="true">
                 {item.icon}
               </div>
               <div className="flex-1 min-w-0">
@@ -179,7 +342,7 @@ export default async function DownloadPage({params}: {params: Promise<{locale: s
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-slate-400">{item.size}</span>
                   <button className="flex items-center gap-1.5 text-sm text-blue-600 font-medium hover:text-blue-700 transition-colors">
-                    <Download className="w-4 h-4" /> {isZh ? '下载' : 'Download'}
+                    <Download className="w-4 h-4" /> {tLabel('下载', 'Download', locale)}
                   </button>
                 </div>
               </div>
@@ -189,17 +352,17 @@ export default async function DownloadPage({params}: {params: Promise<{locale: s
 
         {/* CTA */}
         <div className="mt-16 text-center bg-white rounded-xl p-10 shadow-sm border border-slate-100">
-          <h2 className="text-2xl font-bold text-slate-900 mb-3">{isZh ? '找不到需要的内容？' : 'Can&apos;t Find What You Need?'}</h2>
-          <p className="text-slate-500 mb-6 max-w-lg mx-auto">{isZh ? '申请定制文档、CAD图纸或针对您项目的技术规格。' : 'Request custom documents, CAD drawings, or technical specifications tailored to your project.'}</p>
+          <h2 className="text-2xl font-bold text-slate-900 mb-3">{tLabel('找不到需要的内容？', 'Can&apos;t Find What You Need?', locale)}</h2>
+          <p className="text-slate-500 mb-6 max-w-lg mx-auto">{tLabel('申请定制文档、CAD图纸或针对您项目的技术规格。', 'Request custom documents, CAD drawings, or technical specifications tailored to your project.', locale)}</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href={`/${locale}/contact`}>
               <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold transition-all">
-                {isZh ? '申请文档' : 'Request Documents'}
+                {tLabel('申请文档', 'Request Documents', locale)}
               </button>
             </Link>
-            <a href="https://wa.me/8613812345678" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/8618803189797" target="_blank" rel="noopener noreferrer">
               <button className="border-2 border-green-500 text-green-600 hover:bg-green-50 px-8 py-3 rounded-xl font-semibold transition-all flex items-center gap-2">
-                💬 WhatsApp
+                <span aria-hidden="true">💬</span> WhatsApp
               </button>
             </a>
           </div>

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { tLabel } from '@/lib/i18n';
 
 export default function NotFound() {
   const pathname = usePathname() || '';
@@ -9,12 +10,12 @@ export default function NotFound() {
   const isZh = locale === 'zh';
 
   const t = {
-    title: isZh ? '页面未找到' : 'Page Not Found',
+    title: tLabel('页面未找到', 'Page Not Found', locale),
     description: isZh
       ? '您访问的页面可能已被删除、名称已更改，或暂时不可用。'
       : 'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.',
-    backHome: isZh ? '← 返回首页' : '← Back to Home',
-    browseProducts: isZh ? '浏览产品' : 'Browse Products',
+    backHome: tLabel('← 返回首页', '← Back to Home', locale),
+    browseProducts: tLabel('浏览产品', 'Browse Products', locale),
   };
 
   return (

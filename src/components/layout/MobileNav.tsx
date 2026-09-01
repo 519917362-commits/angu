@@ -5,14 +5,16 @@ import Link from 'next/link';
 import {useRouter, usePathname} from 'next/navigation';
 import {X, Menu, MessageCircle, Globe} from 'lucide-react';
 import {LANGUAGE_FLAGS} from '@/lib/flags';
+import { tLabel } from '@/lib/i18n';
 
-const LOCALES = ['en', 'zh', 'ar', 'ja', 'ko', 'id', 'vi', 'es', 'fr', 'de', 'pt', 'th'] as const;
+const LOCALES = ['en', 'zh'] as const;
 
 interface MobileNavProps {
   locale: string;
+  whatsapp?: string;
 }
 
-export function MobileNav({locale}: MobileNavProps) {
+export function MobileNav({locale, whatsapp = '8618803189797'}: MobileNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
   const router = useRouter();
@@ -21,13 +23,13 @@ export function MobileNav({locale}: MobileNavProps) {
   const isZh = locale === 'zh';
 
   const navItems = [
-    {key: 'home', href: `/${locale}`, label: isZh ? '首页' : 'Home'},
-    {key: 'products', href: `/${locale}/products`, label: isZh ? '产品' : 'Products'},
-    {key: 'solutions', href: `/${locale}/solutions`, label: isZh ? '解决方案' : 'Solutions'},
-    {key: 'aboutUs', href: `/${locale}/about`, label: isZh ? '关于我们' : 'About Us'},
-    {key: 'services', href: `/${locale}/service`, label: isZh ? '服务' : 'Services'},
-    {key: 'blog', href: `/${locale}/blog`, label: isZh ? '博客' : 'Blog'},
-    {key: 'contactUs', href: `/${locale}/contact`, label: isZh ? '联系我们' : 'Contact Us'},
+    {key: 'home', href: `/${locale}`, label: tLabel('首页', 'Home', locale)},
+    {key: 'products', href: `/${locale}/products`, label: tLabel('产品', 'Products', locale)},
+    {key: 'solutions', href: `/${locale}/solutions`, label: tLabel('解决方案', 'Solutions', locale)},
+    {key: 'aboutUs', href: `/${locale}/about`, label: tLabel('关于我们', 'About Us', locale)},
+    {key: 'services', href: `/${locale}/service`, label: tLabel('服务', 'Services', locale)},
+    {key: 'blog', href: `/${locale}/blog`, label: tLabel('博客', 'Blog', locale)},
+    {key: 'contactUs', href: `/${locale}/contact`, label: tLabel('联系我们', 'Contact Us', locale)},
   ];
 
   function handleLangSelect(newLocale: string) {
@@ -59,8 +61,8 @@ export function MobileNav({locale}: MobileNavProps) {
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 ${locale === 'ar' ? 'right-0' : 'left-0'} h-full w-80 max-w-[85vw] bg-white z-50 shadow-2xl transform transition-transform duration-300 lg:hidden ${
-          isOpen ? 'translate-x-0' : locale === 'ar' ? 'translate-x-full' : '-translate-x-full'
+        className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-white z-50 shadow-2xl transform transition-transform duration-300 lg:hidden ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Header */}
@@ -119,7 +121,7 @@ export function MobileNav({locale}: MobileNavProps) {
         {/* WhatsApp CTA */}
         <div className="px-4 pt-4">
           <a
-            href={`https://wa.me/8613812345678?text=Hello, I'm interested in your products.`}
+            href={`https://wa.me/${whatsapp}?text=Hello, I'm interested in your products.`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-semibold transition-colors"

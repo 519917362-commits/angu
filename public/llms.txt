@@ -1,4 +1,32 @@
+# Angu Wire Mesh — Entity Card
+# Schema: Organization / Manufacturer / HomeAndConstructionBusiness
+# Website: https://www.angumesh.com
+# Email: anguwiremesh@gmail.com
+# Phone: +86-188-0318-9797
+# NAICS: 332618 (Ornamental & Architectural Metal Work Manufacturing)
+# ISO 9001:2015, CE Marking (ETAG 027)
+# Founded: 2015
+# Location: Anping County, Hebei, China (38.235°N, 115.520°E)
+# Wikidata: (pending)
+# SameAs: https://www.linkedin.com/company/angu-wire-mesh
+# llms.txt version: 2.0 — entity-first layout for AI crawler ingestion
+
 # Angu Wire Mesh — Hebei Angu Wire Mesh Products Co., Ltd.
+
+## Entity Identifiers
+- Legal Name: Hebei Angu Wire Mesh Products Co., Ltd. / 河北安固丝网制品有限公司
+- DBA: Angu Wire Mesh / 安固丝网
+- Year Founded: 2015
+- Industry: Wire Mesh Manufacturing (NAICS 332618)
+- Location: Anping County, Hengshui, Hebei Province, China 053600
+- Geo: 38.235, 115.520
+- Export Reach: 60+ countries across Asia, Europe, Africa, Americas
+- Annual Capacity: 60,000+ tons
+- ISO 9001:2015 Certificate #: (verify on request)
+- CE Marking: Rockfall Protection Nets to ETAG 027
+- Google Knowledge Graph: https://www.angumesh.com/#organization
+- SameAs / External Profiles:
+  - https://www.linkedin.com/company/angu-wire-mesh
 
 ## Company Profile
 Angu Wire Mesh is a China-based manufacturer and exporter specializing in industrial wire mesh,
@@ -48,7 +76,17 @@ industrial distributors worldwide.
 - Industrial: machine guards, filtration screens, noise control barriers
 
 ## Contact
-- Website: https://www.anguwiremesh.com
-- Email: sales@anguwiremesh.com
-- WhatsApp: +86-138-1234-5678
-- Factory Address: Anping County, Hengshui, Hebei Province, China
+- Website: https://www.angumesh.com
+- Email: anguwiremesh@gmail.com
+- WhatsApp/Phone: +86-188-0318-9797
+- Factory Address: Anping County, Hengshui, Hebei Province, China 053600
+
+## Landing Page — Noise Barrier / 声屏障 / Tấm Cách Âm / แผงกั้นเสียง
+- URL: /en/noise-barrier (x-default), /zh/noise-barrier, /vi/noise-barrier, /th/noise-barrier
+- Type: Google Ads landing page
+- Products: 6 noise barrier models (highway, industrial, factory, rail transit, bridge, blast barrier)
+- Key Features: STC >38dB, NRC 0.85–0.95, hot-dip galvanized, 15+ year lifespan
+- Form: Quote request (name, email, phone, message) — submission to /api/inquiry
+- Target Markets: Vietnam (Zalo), Thailand (LINE), Southeast Asia (WhatsApp)
+- SEO: hreflang 4-language, FAQPage/BreadcrumbList/ItemList JSON-LD
+- Privacy Policy: /privacy (all 4 languages)

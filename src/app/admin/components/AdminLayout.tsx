@@ -12,21 +12,50 @@ interface Props {
   onLogout: () => void;
 }
 
-const tabs: { id: Tab; icon: string }[] = [
-  { id: 'inquiries', icon: '💬' },
-  { id: 'products', icon: '📦' },
-  { id: 'categories', icon: '📂' },
-  { id: 'blogs', icon: '📝' },
-  { id: 'blog-categories', icon: '📁' },
-  { id: 'logs', icon: '📋' },
-  { id: 'users', icon: '👤' },
+const tabs: { id: Tab; icon: string; section?: string }[] = [
+  { id: 'inquiries', icon: '💬', section: 'data' },
+  { id: 'products', icon: '📦', section: 'data' },
+  { id: 'categories', icon: '📂', section: 'data' },
+  { id: 'blogs', icon: '📝', section: 'data' },
+  { id: 'blog-categories', icon: '📁', section: 'data' },
+  { id: 'homepage', icon: '🏠', section: 'pages' },
+  { id: 'products-page', icon: '🏷️', section: 'pages' },
+  { id: 'service-page', icon: '🔧', section: 'pages' },
+  { id: 'solutions-page', icon: '💡', section: 'pages' },
+  { id: 'noise-barrier', icon: '🔇', section: 'pages' },
+  { id: 'blog-page', icon: '✍️', section: 'pages' },
+  { id: 'contact-page', icon: '📞', section: 'pages' },
+  { id: 'about', icon: '🏢', section: 'pages' },
+  { id: 'site-general', icon: '⚙️', section: 'system' },
+  { id: 'logs', icon: '📋', section: 'system' },
+  { id: 'users', icon: '👤', section: 'system' },
 ];
 
 export default function AdminLayout({ children, activeTab, onTabChange, onLogout }: Props) {
+  const renderTab = (tab: { id: Tab; icon: string }) => {
+    const isActive = activeTab === tab.id;
+    return (
+      <button
+        key={tab.id}
+        onClick={() => onTabChange(tab.id)}
+        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-left transition-all ${
+          isActive
+            ? 'bg-blue-600 text-white shadow-sm'
+            : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+        }`}
+      >
+        <span className="text-base">{tab.icon}</span>
+        <span className={isActive ? 'text-white font-medium' : 'text-slate-300'}>
+          {T.nav[tab.id]}
+        </span>
+      </button>
+    );
+  };
+
   return (
     <div className="h-screen bg-gray-50 flex overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-56 bg-slate-900 flex flex-col shrink-0 h-screen overflow-y-auto">
+      <aside className="w-56 bg-slate-900 flex flex-col shrink-0 h-screen overflow-y-auto admin-sidebar-scroll">
         {/* Brand */}
         <div className="px-5 py-5 border-b border-slate-700/50">
           <div className="flex items-center gap-2.5">
@@ -39,26 +68,30 @@ export default function AdminLayout({ children, activeTab, onTabChange, onLogout
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 px-3 py-4 space-y-0.5">
-          {tabs.map((tab) => {
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => onTabChange(tab.id)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-left transition-all ${
-                  isActive
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                }`}
-              >
-                <span className="text-base">{tab.icon}</span>
-                <span className={isActive ? 'text-white font-medium' : 'text-slate-300'}>
-                  {T.nav[tab.id]}
-                </span>
-              </button>
-            );
-          })}
+        <nav className="flex-1 px-3 py-4 space-y-4 overflow-y-auto admin-sidebar-scroll">
+          {/* Data Management */}
+          <div>
+            <div className="px-3 mb-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">数据 Data</div>
+            <div className="space-y-0.5">
+              {tabs.filter(t => t.section === 'data').map(renderTab)}
+            </div>
+          </div>
+
+          {/* Page Config */}
+          <div>
+            <div className="px-3 mb-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">页面配置 Pages</div>
+            <div className="space-y-0.5">
+              {tabs.filter(t => t.section === 'pages').map(renderTab)}
+            </div>
+          </div>
+
+          {/* System */}
+          <div>
+            <div className="px-3 mb-1 text-xs font-semibold text-slate-500 uppercase tracking-wider">系统 System</div>
+            <div className="space-y-0.5">
+              {tabs.filter(t => t.section === 'system').map(renderTab)}
+            </div>
+          </div>
         </nav>
 
         {/* Footer */}
@@ -81,7 +114,7 @@ export default function AdminLayout({ children, activeTab, onTabChange, onLogout
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto admin-scrollbar">
         {children}
       </main>
     </div>

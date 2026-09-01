@@ -7,6 +7,16 @@ Disallow: /admin/
 Disallow: /api/
 Allow: /
 
+User-agent: ChatGPT-User
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+User-agent: OAI-SearchBot
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
 User-agent: PerplexityBot
 Disallow: /admin/
 Disallow: /api/
@@ -42,4 +52,4 @@ User-agent: *
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://www.anguwiremesh.com/sitemap.xml
+Sitemap: https://www.angumesh.com/sitemap.xml

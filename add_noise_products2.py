@@ -1,0 +1,168 @@
+# -*- coding: utf-8 -*-
+"""新增 3 个声屏障产品：金属折弯/弧形、透明亚克力/玻璃、全封闭。"""
+import sqlite3, json
+
+db = sqlite3.connect('backend/inquiries.db')
+cur = db.cursor()
+
+FAQ_EN = [
+    {"q": "What is the minimum order quantity (MOQ)?", "a": "Standard MOQ is 1000 square meters per specification. For trial orders, 500 sqm can be arranged with a small-batch surcharge. Contact us for exact pricing."},
+    {"q": "What certifications do your products have?", "a": "Our products are ISO 9001:2015 certified and carry CE certification. Mill test certificates with actual acoustic and coating data are provided with each shipment."},
+    {"q": "How long is the delivery time?", "a": "Standard products ship in 15-20 days. Custom specifications take 25-35 days. Urgent orders can be expedited to 10-15 days with a rush fee."},
+    {"q": "Do you provide free samples?", "a": "Yes, we provide free A4-size panel samples. The customer covers express shipping (typically USD 30-50 via DHL/FedEx)."},
+    {"q": "What payment terms do you accept?", "a": "T/T (30% deposit, 70% against B/L copy) or L/C at sight. T/T 30 days net for long-term partners."},
+    {"q": "Can you customize panel size, color and material?", "a": "Yes. Panel height, width, thickness, surface color (powder-coated RAL), and material are fully customizable."},
+    {"q": "What packaging do you use?", "a": "Standard export packaging: moisture-proof kraft paper + palletized bundles secured with steel straps, labeled with specs and batch number."},
+    {"q": "How do I get a quote?", "a": "Send us your required panel height, length, acoustic target, and delivery port. We reply within 24 hours with a detailed FOB/CIF quotation."},
+]
+FAQ_ZH = [
+    {"q": "最小起订量是多少？", "a": "标准起订量为每种规格1000平方米。试单可安排500平方米（含小批量附加费）。请联系我们获取精确报价。"},
+    {"q": "产品有哪些认证？", "a": "产品通过ISO 9001:2015质量管理体系认证，并具备CE认证。每批货物附带实测声学和镀层数据的出厂检验报告。"},
+    {"q": "交货期多长？", "a": "标准产品15-20天发货。定制规格25-35天。紧急订单可加急至10-15天（含加急费）。"},
+    {"q": "提供免费样品吗？", "a": "是的，提供免费A4尺寸面板样品。客户承担快递运费（DHL/FedEx通常30-50美元）。"},
+    {"q": "接受哪些付款方式？", "a": "T/T电汇（30%定金，70%见提单副本付清）或即期信用证。长期客户可提供T/T 30天账期。"},
+    {"q": "可以定制面板尺寸、颜色和材质吗？", "a": "可以。面板高度、宽度、厚度、表面颜色（粉末喷涂RAL色卡）及材质均可定制。"},
+    {"q": "使用什么包装？", "a": "标准出口包装：防潮牛皮纸 + 托盘捆扎钢带固定，每捆标注规格和批号。"},
+    {"q": "如何获取报价？", "a": "请将面板高度、长度、降噪目标和目的港发送给我们，24小时内回复详细FOB/CIF报价。"},
+]
+
+products = [
+    # ── 5. 金属折弯/弧形声屏障 ──
+    {
+        "slug": "metal-bent-curved-noise-barrier",
+        "category_slug": "noise-barrier",
+        "name_en": "Metal Bent Curved Noise Barrier Arc Acoustic Panel",
+        "name_zh": "金属折弯/弧形声屏障 弧形隔音板",
+        "name_vi": "Tấm Chắn Ồn Kim Loại Uốn Cong Tấm Tiêu Âm Hình Cung",
+        "name_th": "แผงกั้นเสียงโลหะดัดโค้ง แผงซับเสียงโค้ง",
+        "short_description_en": "Curved/bent metal noise barrier with inward-bent top edge for superior noise diffraction. Aesthetic arc design, 15-25 dB(A) reduction for highways and elevated roads.",
+        "short_description_zh": "弧形/折弯金属声屏障，顶部内弯设计提升声衍射性能。美观弧形外观，降噪15-25dB(A)，适用于高速公路和高架路。",
+        "short_description_vi": "Tấm chắn ồn kim loại uốn cong với mép trên cong vào trong để khuếch tán tiếng ồn tốt hơn. Thiết kế cung thẩm mỹ, giảm 15-25 dB(A) cho cao tốc và đường trên cao.",
+        "short_description_th": "แผงกั้นเสียงโลหะดัดโค้ง ขอบบนโค้งเข้าด้านในเพื่อกระจายเสียงดีขึ้น ดีไซน์โค้งสวยงาม ลดเสียง 15-25 dB(A) สำหรับทางด่วนและทางยกระดับ",
+        "description_en": "Bent (curved) metal noise barriers add an inward-curved top section that increases effective barrier height and improves noise diffraction. The arc shape provides both acoustic and aesthetic benefits, especially on elevated roads and expressways.\n\n## Acoustic Performance\n- **Insertion Loss**: 15-25 dB(A)\n- **NRC**: 0.85\n- **STC**: 32\n- **Frequency Range**: 100-5000 Hz\n\n## Key Advantages\n- **Better Diffraction**: curved top increases effective acoustic height by 0.5-1.0m without extra structural load\n- **Aesthetic Appeal**: smooth arc line integrates with urban landscape\n- **Wind Resistant**: aerodynamic curve reduces wind load\n- **Modular**: prefabricated arc panels, fast installation\n\n## Technical Specifications\n| Parameter | Value |\n|-----------|-------|\n| Panel Height | 3.0-4.0m (straight + curved top) |\n| Curve Radius | 500-1000mm |\n| Panel Width | 0.5m |\n| Panel Thickness | 80-100mm |\n| Outer Skin | 0.8mm perforated galvanized steel |\n| Core | 50mm mineral wool 80 kg/m3 |\n| NRC | 0.85 |\n| STC | 32 |\n| Zinc Coating | >=120g/m2 |\n| Standard | GB/T 19889, ISO 717 |\n\n## Applications\n- Expressways and elevated roads\n- Urban interchanges\n- Railway lines\n- Bridges and viaducts\n- Residential boundary protection",
+        "description_zh": "折弯（弧形）金属声屏障增加了内弯顶部结构，提升有效屏障高度并改善声衍射。弧形外观兼具声学与美观优势，尤其适用于高架路和高速公路。\n\n## 声学性能\n- **插入损失**：15-25 dB(A)\n- **NRC**：0.85\n- **STC**：32\n- **有效频段**：100-5000 Hz\n\n## 核心优势\n- **更好的声衍射**：弧形顶部在不增加结构荷载下提升有效声学高度0.5-1.0m\n- **美观**：平滑弧线与城市景观融合\n- **抗风**：流线弧形降低风荷载\n- **模块化**：预制弧形面板，安装快捷\n\n## 技术规格\n| 参数 | 数值 |\n|-----------|-------|\n| 面板高度 | 3.0-4.0m（直立+弧形顶）|\n| 弯曲半径 | 500-1000mm |\n| 面板宽度 | 0.5m |\n| 面板厚度 | 80-100mm |\n| 外皮 | 0.8mm冲孔镀锌钢 |\n| 芯材 | 50mm岩棉 80 kg/m3 |\n| NRC | 0.85 |\n| STC | 32 |\n| 镀锌层 | >=120g/m2 |\n| 标准 | GB/T 19889, ISO 717 |\n\n## 应用场景\n- 高速公路与高架路\n- 城市立交\n- 铁路线\n- 桥梁与高架桥\n- 住宅区边界防护",
+        "description_vi": "Tấm chắn ồn kim loại uốn cong có phần đỉnh cong vào trong giúp tăng chiều cao hiệu dụng và cải thiện khuếch tán tiếng ồn. Hình dạng cung mang lại lợi ích cả về âm học lẫn thẩm mỹ.\n\n## Hiệu suất âm học\n- **Suy giảm**: 15-25 dB(A)\n- **NRC**: 0.85\n- **STC**: 32\n- **Dải tần**: 100-5000 Hz\n\n## Ưu điểm chính\n- **Khuếch tán tốt hơn**: đỉnh cong tăng chiều cao âm học 0.5-1.0m\n- **Thẩm mỹ**: đường cong mượt hòa với cảnh quan đô thị\n- **Chống gió**: đường cong khí động giảm tải trọng gió\n- **Mô-đun**: tấm cong đúc sẵn, lắp nhanh\n\n## Thông số kỹ thuật\n| Thông số | Giá trị |\n|-----------|-------|\n| Chiều cao | 3.0-4.0m |\n| Bán kính cong | 500-1000mm |\n| Chiều rộng | 0.5m |\n| Độ dày | 80-100mm |\n| Lớp ngoài | thép mạ kẽm đục lỗ 0.8mm |\n| Lõi | bông khoáng 50mm 80 kg/m3 |\n| NRC | 0.85 |\n| STC | 32 |\n| Lớp mạ kẽm | >=120g/m2 |\n| Tiêu chuẩn | GB/T 19889, ISO 717 |\n\n## Ứng dụng\n- Cao tốc và đường trên cao\n- Nút giao đô thị\n- Đường sắt\n- Cầu và cầu cạn\n- Bảo vệ ranh giới khu dân cư",
+        "description_th": "แผงกั้นเสียงโลหะดัดโค้งมีส่วนยอดโค้งเข้าด้านใน ช่วยเพิ่มความสูงใช้งานจริงและปรับปรุงการกระจายเสียง รูปทรงโค้งให้ประโยชน์ทั้งด้านเสียงและความสวยงาม\n\n## ประสิทธิภาพเสียง\n- **การลดเสียง**: 15-25 dB(A)\n- **NRC**: 0.85\n- **STC**: 32\n- **ช่วงความถี่**: 100-5000 Hz\n\n## ข้อดีหลัก\n- **กระจายเสียงดีขึ้น**: ยอดโค้งเพิ่มความสูงเสียง 0.5-1.0 ม.\n- **สวยงาม**: เส้นโค้งกลมกลืนกับภูมิทัศน์เมือง\n- **ต้านลม**: เส้นโค้งอากาศพลศาสตร์ลดแรงลม\n- **โมดูลาร์**: แผงโค้งสำเร็จรูป ติดตั้งเร็ว\n\n## ข้อมูลทางเทคนิค\n| พารามิเตอร์ | ค่า |\n|-----------|-------|\n| ความสูง | 3.0-4.0 ม. |\n| รัศมีโค้ง | 500-1000 มม. |\n| ความกว้าง | 0.5 ม. |\n| ความหนา | 80-100 มม. |\n| ผิวนอก | เหล็กชุบกัลวาไนซ์เจาะรู 0.8 มม. |\n| แกน | ใยหิน 50 มม. 80 กก./ลบ.ม. |\n| NRC | 0.85 |\n| STC | 32 |\n| ชุบสังกะสี | >=120 ก./ตร.ม. |\n| มาตรฐาน | GB/T 19889, ISO 717 |\n\n## การใช้งาน\n- ทางด่วนและทางยกระดับ\n- ทางแยกต่างระดับในเมือง\n- ทางรถไฟ\n- สะพานและทางยกระดับ\n- ป้องกันแนวเขตที่อยู่อาศัย",
+        "price": 130.0, "unit": "FOB Tianjin, per m2", "moq": 100,
+        "sort_weight": 59, "status": "published", "is_featured": 0,
+        "images": json.dumps(["/images/products/barrier.jpg"]),
+        "specifications_en": json.dumps({"panelHeight": "3.0-4.0m", "curveRadius": "500-1000mm", "panelWidth": "0.5m", "panelThickness": "80-100mm", "outerSkin": "0.8mm perforated galvanized steel", "core": "50mm mineral wool 80 kg/m3", "nrc": "0.85", "stc": "32", "insertionLoss": "15-25 dB(A)", "zincCoating": ">=120g/m2", "standard": "GB/T 19889, ISO 717"}),
+        "specifications_zh": json.dumps({"面板高度": "3.0-4.0m", "弯曲半径": "500-1000mm", "面板宽度": "0.5m", "面板厚度": "80-100mm", "外皮": "0.8mm冲孔镀锌钢", "芯材": "50mm岩棉 80 kg/m3", "NRC": "0.85", "STC": "32", "插入损失": "15-25 dB(A)", "镀锌层": ">=120g/m2", "标准": "GB/T 19889, ISO 717"}),
+        "specifications_vi": json.dumps({"panelHeight": "3.0-4.0m", "curveRadius": "500-1000mm", "panelWidth": "0.5m", "panelThickness": "80-100mm", "outerSkin": "thép mạ kẽm đục lỗ 0.8mm", "core": "bông khoáng 50mm 80 kg/m3", "nrc": "0.85", "stc": "32", "insertionLoss": "15-25 dB(A)", "zincCoating": ">=120g/m2", "standard": "GB/T 19889, ISO 717"}),
+        "specifications_th": json.dumps({"panelHeight": "3.0-4.0 ม.", "curveRadius": "500-1000 มม.", "panelWidth": "0.5 ม.", "panelThickness": "80-100 มม.", "outerSkin": "เหล็กชุบกัลวาไนซ์เจาะรู 0.8 มม.", "core": "ใยหิน 50 มม. 80 กก./ลบ.ม.", "nrc": "0.85", "stc": "32", "insertionLoss": "15-25 dB(A)", "zincCoating": ">=120 ก./ตร.ม.", "standard": "GB/T 19889, ISO 717"}),
+        "applications_en": json.dumps(["Expressways", "Elevated roads", "Urban interchanges", "Railway lines", "Bridges"]),
+        "applications_zh": json.dumps(["高速公路", "高架路", "城市立交", "铁路线", "桥梁"]),
+        "applications_vi": json.dumps(["Cao tốc", "Đường trên cao", "Nút giao đô thị", "Đường sắt", "Cầu"]),
+        "applications_th": json.dumps(["ทางด่วน", "ทางยกระดับ", "ทางแยกต่างระดับ", "ทางรถไฟ", "สะพาน"]),
+        "seo_title_en": "Metal Bent Curved Noise Barrier: Arc Acoustic Panel for 15-25 dB Reduction",
+        "seo_title_zh": "金属折弯弧形声屏障：弧形隔音板降噪15-25dB",
+        "seo_title_vi": "Tấm Chắn Ồn Kim Loại Uốn Cong: Tấm Tiêu Âm Hình Cung Giảm 15-25 dB",
+        "seo_title_th": "แผงกั้นเสียงโลหะดัดโค้ง: แผงซับเสียงโค้ง ลดเสียง 15-25 dB",
+        "seo_keywords_en": "curved noise barrier, bent sound barrier, arc acoustic panel, curved sound wall, highway curved barrier",
+        "seo_keywords_zh": "弧形声屏障,折弯声屏障,弧形隔音板,弧形隔音墙,公路弧形屏障",
+        "seo_keywords_vi": "tấm chắn ồn cong, vách tiêu âm cong, tấm cách âm hình cung, tấm chắn ồn uốn",
+        "seo_keywords_th": "แผงกั้นเสียงโค้ง, ผนังกันเสียงโค้ง, แผงซับเสียงโค้ง, แผงกั้นเสียงดัดโค้ง",
+        "seo_description_en": "Metal bent/curved noise barrier with inward-curved top for better diffraction. NRC 0.85, 15-25 dB(A) reduction. For expressways, elevated roads, interchanges. MOQ 100 m2.",
+        "seo_description_zh": "金属折弯弧形声屏障，顶部内弯设计改善声衍射。NRC 0.85，降噪15-25dB(A)。适用于高速公路、高架路、立交。起订100平方米。",
+        "seo_description_vi": "Tấm chắn ồn kim loại uốn cong, mép trên cong vào để khuếch tán tốt hơn. NRC 0.85, giảm 15-25 dB(A). Cho cao tốc, đường trên cao, nút giao. MOQ 100 m2.",
+        "seo_description_th": "แผงกั้นเสียงโลหะดัดโค้ง ยอดโค้งเข้าด้านในเพื่อกระจายเสียงดีขึ้น NRC 0.85 ลดเสียง 15-25 dB(A) สำหรับทางด่วน ทางยกระดับ ทางแยก MOQ 100 ตร.ม.",
+        "faq_en": json.dumps(FAQ_EN), "faq_zh": json.dumps(FAQ_ZH),
+        "faq_vi": json.dumps(FAQ_EN), "faq_th": json.dumps(FAQ_EN),
+    },
+    # ── 6. 透明亚克力/玻璃声屏障 ──
+    {
+        "slug": "transparent-acrylic-glass-noise-barrier",
+        "category_slug": "noise-barrier",
+        "name_en": "Transparent Acrylic & Glass Noise Barrier PC Panel",
+        "name_zh": "透明亚克力/玻璃声屏障 PC隔音板",
+        "name_vi": "Tấm Chắn Ồn Trong Suốt Acrylic & Kính Tấm PC",
+        "name_th": "แผงกั้นเสียงโปร่งใส อะคริลิค & กระจก แผง PC",
+        "short_description_en": "Transparent acrylic/glass noise barrier for maximum visibility with acoustic protection. Polycarbonate or tempered glass, STC 30-33, for bridges, urban roads and scenic areas.",
+        "short_description_zh": "透明亚克力/玻璃声屏障，兼顾视野通透与声学防护。PC板或钢化玻璃，STC 30-33，适用于桥梁、城市道路和景观区。",
+        "short_description_vi": "Tấm chắn ồn trong suốt acrylic/kính cho tầm nhìn tối đa kèm bảo vệ âm học. Polycarbonate hoặc kính cường lực, STC 30-33, cho cầu, đường đô thị và khu cảnh quan.",
+        "short_description_th": "แผงกั้นเสียงโปร่งใสอะคริลิค/กระจก ให้ทัศนวิสัยสูงสุดพร้อมป้องกันเสียง โพลีคาร์บอเนตหรือกระจกนิรภัย STC 30-33 สำหรับสะพาน ถนนในเมือง และพื้นที่ทิวทัศน์",
+        "description_en": "Transparent acoustic barriers use polycarbonate (PC) or tempered glass panels to maintain visual openness while blocking noise. Ideal for bridges, urban roads, and scenic areas where visibility is required.\n\n## Acoustic Performance\n- **STC**: 30-33\n- **Insertion Loss**: 15-25 dB(A)\n- **Light Transmission**: 89% (PC), 92% (glass)\n- **Frequency Range**: 100-5000 Hz\n\n## Key Advantages\n- **Maximum Visibility**: preserves sightlines and aesthetics\n- **Lightweight**: PC panels reduce structural load\n- **Impact Resistant**: tempered glass and PC options\n- **Weatherproof**: UV-stabilized, 15+ year life\n\n## Technical Specifications\n| Parameter | Value |\n|-----------|-------|\n| Panel Height | 2.0-3.0m |\n| Panel Thickness | 15mm PC / 10+10mm laminated glass |\n| Light Transmission | 89% (PC), 92% (glass) |\n| STC | 30-33 |\n| Insertion Loss | 15-25 dB(A) |\n| Fire Rating | B1 (PC) / A (glass) |\n| Standard | GB/T 19889, ISO 717 |\n\n## Applications\n- Bridges and viaducts\n- Urban arterial roads\n- Scenic routes and parkways\n- Residential view corridors\n- Rail transit lines",
+        "description_zh": "透明声屏障采用PC板或钢化玻璃面板，在隔声同时保持视野通透。适用于桥梁、城市道路和需要保持景观视线的区域。\n\n## 声学性能\n- **STC**：30-33\n- **插入损失**：15-25 dB(A)\n- **透光率**：89%（PC），92%（玻璃）\n- **有效频段**：100-5000 Hz\n\n## 核心优势\n- **视野通透**：保留视线与美观\n- **轻质**：PC板降低结构荷载\n- **抗冲击**：钢化玻璃与PC可选\n- **耐候**：UV稳定，15年以上寿命\n\n## 技术规格\n| 参数 | 数值 |\n|-----------|-------|\n| 面板高度 | 2.0-3.0m |\n| 面板厚度 | 15mm PC / 10+10mm夹胶玻璃 |\n| 透光率 | 89%（PC），92%（玻璃）|\n| STC | 30-33 |\n| 插入损失 | 15-25 dB(A) |\n| 防火等级 | B1（PC）/ A（玻璃）|\n| 标准 | GB/T 19889, ISO 717 |\n\n## 应用场景\n- 桥梁与高架桥\n- 城市主干道\n- 景观道路\n- 住宅景观走廊\n- 轨道交通线",
+        "description_vi": "Tấm chắn ồn trong suốt dùng polycarbonate (PC) hoặc kính cường lực để giữ tầm nhìn thoáng đãng trong khi chặn tiếng ồn. Lý tưởng cho cầu, đường đô thị và khu cảnh quan.\n\n## Hiệu suất âm học\n- **STC**: 30-33\n- **Suy giảm**: 15-25 dB(A)\n- **Truyền sáng**: 89% (PC), 92% (kính)\n- **Dải tần**: 100-5000 Hz\n\n## Ưu điểm chính\n- **Tầm nhìn tối đa**: giữ đường ngắm và thẩm mỹ\n- **Nhẹ**: tấm PC giảm tải kết cấu\n- **Chống va đập**: kính cường lực và PC\n- **Chống thời tiết**: ổn định UV, tuổi thọ 15+ năm\n\n## Thông số kỹ thuật\n| Thông số | Giá trị |\n|-----------|-------|\n| Chiều cao | 2.0-3.0m |\n| Độ dày | 15mm PC / 10+10mm kính dán |\n| Truyền sáng | 89% (PC), 92% (kính) |\n| STC | 30-33 |\n| Suy giảm | 15-25 dB(A) |\n| Chống cháy | B1 (PC) / A (kính) |\n| Tiêu chuẩn | GB/T 19889, ISO 717 |\n\n## Ứng dụng\n- Cầu và cầu cạn\n- Đường huyết mạch đô thị\n- Đường ngắm cảnh\n- Hành lang tầm nhìn khu dân cư\n- Tuyến đường sắt đô thị",
+        "description_th": "แผงกั้นเสียงโปร่งใสใช้แผ่นโพลีคาร์บอเนต (PC) หรือกระจกนิรภัยเพื่อคงความโปร่งโล่งขณะกันเสียง เหมาะสำหรับสะพาน ถนนในเมือง และพื้นที่ทิวทัศน์\n\n## ประสิทธิภาพเสียง\n- **STC**: 30-33\n- **การลดเสียง**: 15-25 dB(A)\n- **การส่งผ่านแสง**: 89% (PC), 92% (กระจก)\n- **ช่วงความถี่**: 100-5000 Hz\n\n## ข้อดีหลัก\n- **ทัศนวิสัยสูงสุด**: คงแนวสายตาและความสวยงาม\n- **น้ำหนักเบา**: แผ่น PC ลดภาระโครงสร้าง\n- **ทนแรงกระแทก**: กระจกนิรภัยและ PC\n- **ทนสภาพอากาศ**: เสถียร UV อายุ 15+ ปี\n\n## ข้อมูลทางเทคนิค\n| พารามิเตอร์ | ค่า |\n|-----------|-------|\n| ความสูง | 2.0-3.0 ม. |\n| ความหนา | 15 มม. PC / 10+10 มม. กระจกลามิเนต |\n| การส่งผ่านแสง | 89% (PC), 92% (กระจก) |\n| STC | 30-33 |\n| การลดเสียง | 15-25 dB(A) |\n| กันไฟ | B1 (PC) / A (กระจก) |\n| มาตรฐาน | GB/T 19889, ISO 717 |\n\n## การใช้งาน\n- สะพานและทางยกระดับ\n- ถนนสายหลักในเมือง\n- ถนนชมวิว\n- แนวทิวทัศน์ที่อยู่อาศัย\n- ระบบรถไฟฟ้า",
+        "price": 160.0, "unit": "FOB Tianjin, per m2", "moq": 80,
+        "sort_weight": 58, "status": "published", "is_featured": 0,
+        "images": json.dumps(["/images/products/barrier.jpg"]),
+        "specifications_en": json.dumps({"panelHeight": "2.0-3.0m", "panelThickness": "15mm PC / 10+10mm laminated glass", "lightTransmission": "89% (PC), 92% (glass)", "stc": "30-33", "insertionLoss": "15-25 dB(A)", "fireRating": "B1 (PC) / A (glass)", "standard": "GB/T 19889, ISO 717"}),
+        "specifications_zh": json.dumps({"面板高度": "2.0-3.0m", "面板厚度": "15mm PC / 10+10mm夹胶玻璃", "透光率": "89%（PC），92%（玻璃）", "STC": "30-33", "插入损失": "15-25 dB(A)", "防火等级": "B1（PC）/ A（玻璃）", "标准": "GB/T 19889, ISO 717"}),
+        "specifications_vi": json.dumps({"panelHeight": "2.0-3.0m", "panelThickness": "15mm PC / 10+10mm kính dán", "lightTransmission": "89% (PC), 92% (kính)", "stc": "30-33", "insertionLoss": "15-25 dB(A)", "fireRating": "B1 (PC) / A (kính)", "standard": "GB/T 19889, ISO 717"}),
+        "specifications_th": json.dumps({"panelHeight": "2.0-3.0 ม.", "panelThickness": "15 มม. PC / 10+10 มม. กระจกลามิเนต", "lightTransmission": "89% (PC), 92% (กระจก)", "stc": "30-33", "insertionLoss": "15-25 dB(A)", "fireRating": "B1 (PC) / A (กระจก)", "standard": "GB/T 19889, ISO 717"}),
+        "applications_en": json.dumps(["Bridges", "Viaducts", "Urban arterial roads", "Scenic routes", "Rail transit"]),
+        "applications_zh": json.dumps(["桥梁", "高架桥", "城市主干道", "景观道路", "轨道交通"]),
+        "applications_vi": json.dumps(["Cầu", "Cầu cạn", "Đường huyết mạch", "Đường ngắm cảnh", "Đường sắt đô thị"]),
+        "applications_th": json.dumps(["สะพาน", "ทางยกระดับ", "ถนนสายหลัก", "ถนนชมวิว", "ระบบรถไฟฟ้า"]),
+        "seo_title_en": "Transparent Acrylic & Glass Noise Barrier: Clear Acoustic Panel (STC 30-33)",
+        "seo_title_zh": "透明亚克力玻璃声屏障：通透隔音板（STC 30-33）",
+        "seo_title_vi": "Tấm Chắn Ồn Trong Suốt Acrylic & Kính: Tấm Tiêu Âm Trong (STC 30-33)",
+        "seo_title_th": "แผงกั้นเสียงโปร่งใสอะคริลิค & กระจก: แผงซับเสียงใส (STC 30-33)",
+        "seo_keywords_en": "transparent noise barrier, acrylic sound barrier, glass noise barrier, PC acoustic panel, clear sound wall",
+        "seo_keywords_zh": "透明声屏障,亚克力声屏障,玻璃声屏障,PC隔音板,透明隔音墙",
+        "seo_keywords_vi": "tấm chắn ồn trong suốt, vách tiêu âm acrylic, tấm chắn ồn kính, tấm PC cách âm",
+        "seo_keywords_th": "แผงกั้นเสียงโปร่งใส, ผนังกันเสียงอะคริลิค, แผงกั้นเสียงกระจก, แผง PC กันเสียง",
+        "seo_description_en": "Transparent acrylic/glass noise barrier: PC or tempered glass, STC 30-33, 15-25 dB(A) reduction, 89-92% light transmission. For bridges, urban roads. MOQ 80 m2.",
+        "seo_description_zh": "透明亚克力/玻璃声屏障：PC或钢化玻璃，STC 30-33，降噪15-25dB(A)，透光率89-92%。适用于桥梁、城市道路。起订80平方米。",
+        "seo_description_vi": "Tấm chắn ồn trong suốt acrylic/kính: PC hoặc kính cường lực, STC 30-33, giảm 15-25 dB(A), truyền sáng 89-92%. Cho cầu, đường đô thị. MOQ 80 m2.",
+        "seo_description_th": "แผงกั้นเสียงโปร่งใสอะคริลิค/กระจก: PC หรือกระจกนิรภัย STC 30-33 ลดเสียง 15-25 dB(A) ส่งผ่านแสง 89-92% สำหรับสะพาน ถนนในเมือง MOQ 80 ตร.ม.",
+        "faq_en": json.dumps(FAQ_EN), "faq_zh": json.dumps(FAQ_ZH),
+        "faq_vi": json.dumps(FAQ_EN), "faq_th": json.dumps(FAQ_EN),
+    },
+    # ── 7. 全封闭声屏障 ──
+    {
+        "slug": "fully-enclosed-noise-barrier",
+        "category_slug": "noise-barrier",
+        "name_en": "Fully Enclosed Noise Barrier Tunnel Sound Enclosure",
+        "name_zh": "全封闭声屏障 隧道式隔音罩",
+        "name_vi": "Tấm Chắn Ồn Kín Hoàn Toàn Vỏ Bọc Tiêu Âm Dạng Đường Hầm",
+        "name_th": "แผงกั้นเสียงปิดมิดชิด ครอบกันเสียงแบบอุโมงค์",
+        "short_description_en": "Fully enclosed noise barrier for maximum noise control, forming a complete acoustic tunnel over roads/rail. 20-30 dB(A) reduction for high-density urban corridors.",
+        "short_description_zh": "全封闭声屏障实现最强降噪，在道路/轨道上方形成完整隔音隧道。降噪20-30dB(A)，适用于高密度城市走廊。",
+        "short_description_vi": "Tấm chắn ồn kín hoàn toàn để kiểm soát tiếng ồn tối đa, tạo đường hầm tiêu âm hoàn chỉnh trên đường/đường sắt. Giảm 20-30 dB(A) cho hành lang đô thị mật độ cao.",
+        "short_description_th": "แผงกั้นเสียงปิดมิดชิดเพื่อควบคุมเสียงสูงสุด สร้างอุโมงค์กันเสียงสมบูรณ์เหนือถนน/ทางรถไฟ ลดเสียง 20-30 dB(A) สำหรับแนวเมืองหนาแน่น",
+        "description_en": "Fully enclosed noise barriers form a complete acoustic enclosure (tunnel) over the road or rail, providing the highest level of noise reduction. Used in high-density urban corridors, near hospitals, schools, and residential towers.\n\n## Acoustic Performance\n- **Insertion Loss**: 20-30 dB(A)\n- **NRC**: 0.85 (side walls)\n- **STC**: 32\n- **Frequency Range**: 100-5000 Hz\n\n## Key Advantages\n- **Maximum Reduction**: 20-30 dB(A), highest of all barrier types\n- **Complete Protection**: encloses noise source entirely\n- **Ventilation Integrated**: louvered roof for air flow\n- **Modular Steel Frame**: prefabricated sections, fast assembly\n\n## Technical Specifications\n| Parameter | Value |\n|-----------|-------|\n| Enclosure Height | 4.0-6.0m |\n| Enclosure Width | 8.0-20.0m (span) |\n| Side Wall | 100mm perforated steel + mineral wool |\n| Roof | louvered steel + transparent PC section |\n| NRC | 0.85 |\n| Insertion Loss | 20-30 dB(A) |\n| Zinc Coating | >=120g/m2 |\n| Standard | GB/T 19889, ISO 717 |\n\n## Applications\n- High-density urban expressways\n- Rail transit in residential areas\n- Near hospitals and schools\n- Elevated road sections\n- Industrial noise containment",
+        "description_zh": "全封闭声屏障在道路或轨道上方形成完整的声学罩体（隧道），提供最高等级的降噪。适用于高密度城市走廊、医院学校及住宅塔楼附近。\n\n## 声学性能\n- **插入损失**：20-30 dB(A)\n- **NRC**：0.85（侧墙）\n- **STC**：32\n- **有效频段**：100-5000 Hz\n\n## 核心优势\n- **降噪最强**：20-30 dB(A)，所有屏障类型中最高\n- **完全防护**：完全包围声源\n- **通风集成**：百叶屋顶保证空气流通\n- **模块化钢架**：预制分段，快速拼装\n\n## 技术规格\n| 参数 | 数值 |\n|-----------|-------|\n| 罩体高度 | 4.0-6.0m |\n| 罩体跨度 | 8.0-20.0m |\n| 侧墙 | 100mm冲孔钢板+岩棉 |\n| 屋顶 | 百叶钢板+透明PC段 |\n| NRC | 0.85 |\n| 插入损失 | 20-30 dB(A) |\n| 镀锌层 | >=120g/m2 |\n| 标准 | GB/T 19889, ISO 717 |\n\n## 应用场景\n- 高密度城市高速公路\n- 住宅区轨道交通\n- 医院学校附近\n- 高架路段\n- 工业噪声封闭",
+        "description_vi": "Tấm chắn ồn kín hoàn toàn tạo thành vỏ bọc âm học (đường hầm) hoàn chỉnh trên đường/đường sắt, mang lại mức giảm tiếng ồn cao nhất.\n\n## Hiệu suất âm học\n- **Suy giảm**: 20-30 dB(A)\n- **NRC**: 0.85 (tường bên)\n- **STC**: 32\n- **Dải tần**: 100-5000 Hz\n\n## Ưu điểm chính\n- **Giảm tối đa**: 20-30 dB(A), cao nhất trong các loại\n- **Bảo vệ hoàn toàn**: bao trọn nguồn ồn\n- **Thông gió tích hợp**: mái lá sách cho luồng khí\n- **Khung thép mô-đun**: phân đoạn đúc sẵn, lắp nhanh\n\n## Thông số kỹ thuật\n| Thông số | Giá trị |\n|-----------|-------|\n| Chiều cao | 4.0-6.0m |\n| Nhịp | 8.0-20.0m |\n| Tường bên | thép đục lỗ 100mm + bông khoáng |\n| Mái | thép lá sách + đoạn PC trong |\n| NRC | 0.85 |\n| Suy giảm | 20-30 dB(A) |\n| Lớp mạ kẽm | >=120g/m2 |\n| Tiêu chuẩn | GB/T 19889, ISO 717 |\n\n## Ứng dụng\n- Cao tốc đô thị mật độ cao\n- Đường sắt đô thị trong khu dân cư\n- Gần bệnh viện và trường học\n- Đoạn đường trên cao\n- Kiểm soát ồn công nghiệp",
+        "description_th": "แผงกั้นเสียงปิดมิดชิดสร้างครอบเสียงสมบูรณ์ (อุโมงค์) เหนือถนน/ทางรถไฟ ให้การลดเสียงระดับสูงสุด\n\n## ประสิทธิภาพเสียง\n- **การลดเสียง**: 20-30 dB(A)\n- **NRC**: 0.85 (ผนังข้าง)\n- **STC**: 32\n- **ช่วงความถี่**: 100-5000 Hz\n\n## ข้อดีหลัก\n- **ลดเสียงสูงสุด**: 20-30 dB(A) สูงสุดในทุกประเภท\n- **ป้องกันสมบูรณ์**: ครอบแหล่งเสียงทั้งหมด\n- **ระบายอากาศในตัว**: หลังคาระแนงให้อากาศไหล\n- **โครงเหล็กโมดูลาร์**: ชิ้นส่วนสำเร็จรูป ประกอบเร็ว\n\n## ข้อมูลทางเทคนิค\n| พารามิเตอร์ | ค่า |\n|-----------|-------|\n| ความสูง | 4.0-6.0 ม. |\n| ช่วงกว้าง | 8.0-20.0 ม. |\n| ผนังข้าง | เหล็กเจาะรู 100 มม. + ใยหิน |\n| หลังคา | เหล็กระแนง + ช่วง PC โปร่งใส |\n| NRC | 0.85 |\n| การลดเสียง | 20-30 dB(A) |\n| ชุบสังกะสี | >=120 ก./ตร.ม. |\n| มาตรฐาน | GB/T 19889, ISO 717 |\n\n## การใช้งาน\n- ทางด่วนเมืองหนาแน่น\n- ระบบรางในย่านที่อยู่อาศัย\n- ใกล้โรงพยาบาลและโรงเรียน\n- ช่วงถนนยกระดับ\n- ควบคุมเสียงอุตสาหกรรม",
+        "price": 280.0, "unit": "FOB Tianjin, per m2", "moq": 200,
+        "sort_weight": 57, "status": "published", "is_featured": 0,
+        "images": json.dumps(["/images/products/barrier.jpg"]),
+        "specifications_en": json.dumps({"enclosureHeight": "4.0-6.0m", "enclosureSpan": "8.0-20.0m", "sideWall": "100mm perforated steel + mineral wool", "roof": "louvered steel + transparent PC section", "nrc": "0.85", "insertionLoss": "20-30 dB(A)", "zincCoating": ">=120g/m2", "standard": "GB/T 19889, ISO 717"}),
+        "specifications_zh": json.dumps({"罩体高度": "4.0-6.0m", "罩体跨度": "8.0-20.0m", "侧墙": "100mm冲孔钢板+岩棉", "屋顶": "百叶钢板+透明PC段", "NRC": "0.85", "插入损失": "20-30 dB(A)", "镀锌层": ">=120g/m2", "标准": "GB/T 19889, ISO 717"}),
+        "specifications_vi": json.dumps({"enclosureHeight": "4.0-6.0m", "enclosureSpan": "8.0-20.0m", "sideWall": "thép đục lỗ 100mm + bông khoáng", "roof": "thép lá sách + đoạn PC trong", "nrc": "0.85", "insertionLoss": "20-30 dB(A)", "zincCoating": ">=120g/m2", "standard": "GB/T 19889, ISO 717"}),
+        "specifications_th": json.dumps({"enclosureHeight": "4.0-6.0 ม.", "enclosureSpan": "8.0-20.0 ม.", "sideWall": "เหล็กเจาะรู 100 มม. + ใยหิน", "roof": "เหล็กระแนง + ช่วง PC โปร่งใส", "nrc": "0.85", "insertionLoss": "20-30 dB(A)", "zincCoating": ">=120 ก./ตร.ม.", "standard": "GB/T 19889, ISO 717"}),
+        "applications_en": json.dumps(["Urban expressways", "Rail in residential areas", "Near hospitals & schools", "Elevated roads", "Industrial containment"]),
+        "applications_zh": json.dumps(["城市高速公路", "住宅区轨道交通", "医院学校附近", "高架路", "工业噪声封闭"]),
+        "applications_vi": json.dumps(["Cao tốc đô thị", "Đường sắt khu dân cư", "Gần bệnh viện & trường học", "Đường trên cao", "Kiểm soát ồn công nghiệp"]),
+        "applications_th": json.dumps(["ทางด่วนเมือง", "ระบบรางในที่อยู่อาศัย", "ใกล้โรงพยาบาล & โรงเรียน", "ถนนยกระดับ", "ควบคุมเสียงอุตสาหกรรม"]),
+        "seo_title_en": "Fully Enclosed Noise Barrier: Maximum 20-30 dB Tunnel Sound Enclosure",
+        "seo_title_zh": "全封闭声屏障：最强降噪20-30dB隧道式隔音罩",
+        "seo_title_vi": "Tấm Chắn Ồn Kín Hoàn Toàn: Vỏ Bọc Tiêu Âm Tối Đa 20-30 dB",
+        "seo_title_th": "แผงกั้นเสียงปิดมิดชิด: ครอบกันเสียงสูงสุด 20-30 dB",
+        "seo_keywords_en": "fully enclosed noise barrier, tunnel sound enclosure, acoustic tunnel, enclosed sound barrier, maximum noise reduction",
+        "seo_keywords_zh": "全封闭声屏障,隧道式隔音罩,声学隧道,封闭声屏障,最大降噪",
+        "seo_keywords_vi": "tấm chắn ồn kín hoàn toàn, vỏ bọc tiêu âm dạng đường hầm, đường hầm tiêu âm, giảm ồn tối đa",
+        "seo_keywords_th": "แผงกั้นเสียงปิดมิดชิด, ครอบกันเสียงแบบอุโมงค์, อุโมงค์กันเสียง, ลดเสียงสูงสุด",
+        "seo_description_en": "Fully enclosed noise barrier: complete acoustic tunnel, 20-30 dB(A) reduction. For urban expressways, rail corridors, hospitals. MOQ 200 m2.",
+        "seo_description_zh": "全封闭声屏障：完整隔音隧道，降噪20-30dB(A)。适用于城市高速、轨道交通走廊、医院。起订200平方米。",
+        "seo_description_vi": "Tấm chắn ồn kín hoàn toàn: đường hầm tiêu âm hoàn chỉnh, giảm 20-30 dB(A). Cho cao tốc đô thị, hành lang đường sắt, bệnh viện. MOQ 200 m2.",
+        "seo_description_th": "แผงกั้นเสียงปิดมิดชิด: อุโมงค์กันเสียงสมบูรณ์ ลดเสียง 20-30 dB(A) สำหรับทางด่วนเมือง แนวทางรถไฟ โรงพยาบาล MOQ 200 ตร.ม.",
+        "faq_en": json.dumps(FAQ_EN), "faq_zh": json.dumps(FAQ_ZH),
+        "faq_vi": json.dumps(FAQ_EN), "faq_th": json.dumps(FAQ_EN),
+    },
+]
+
+for p in products:
+    cols = list(p.keys())
+    placeholders = ','.join('?' for _ in cols)
+    sql = f'INSERT INTO products ({",".join(cols)}) VALUES ({placeholders})'
+    vals = [p[c] for c in cols]
+    cur.execute(sql, vals)
+    print('inserted:', p['slug'], 'id=', cur.lastrowid)
+
+db.commit()
+db.close()
+print('done - 3个产品已插入')

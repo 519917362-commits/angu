@@ -16,6 +16,8 @@ interface FaqSectionProps {
 export function FaqSection({faqs, locale, productName}: FaqSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const isZh = locale === 'zh';
+  const isVi = locale === 'vi';
+  const isTh = locale === 'th';
 
   if (faqs.length === 0) return null;
 
@@ -24,11 +26,15 @@ export function FaqSection({faqs, locale, productName}: FaqSectionProps) {
       {/* Header */}
       <div className="px-6 pt-6 pb-2">
         <h2 className="text-xl font-bold text-slate-900">
-          {isZh ? `${productName} — 采购常见问题` : `${productName} — Purchasing FAQ`}
+          {isZh ? `${productName} — 采购常见问题` : isVi ? `${productName} — Câu hỏi thường gặp khi mua hàng` : isTh ? `${productName} — คำถามที่พบบ่อยในการจัดซื้อ` : `${productName} — Purchasing FAQ`}
         </h2>
         <p className="text-sm text-slate-500 mt-1">
           {isZh
             ? '以下是海外采购商和工程师最常关心的技术问题及解答'
+            : isVi
+            ? 'Các câu hỏi kỹ thuật thường gặp từ người mua và kỹ sư nước ngoài'
+            : isTh
+            ? 'คำถามทางเทคนิคที่ผู้ซื้อและวิศวกรต่างประเทศถามบ่อย'
             : 'Technical questions frequently asked by overseas buyers and engineers'}
         </p>
       </div>

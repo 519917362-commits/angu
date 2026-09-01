@@ -67,17 +67,31 @@ export interface Product {
   sku: string;
   slug: string;
   categorySlug: string;
-  names: Record<string, string>; // {en: "...", ar: "...", ja: "...", ...}
+  names: Record<string, string>;
   shortDescriptions: Record<string, string>;
   fullDescriptions: Record<string, string>;
   specifications: ProductSpecifications;
+  specifications_zh?: ProductSpecifications;
+  specifications_vi?: ProductSpecifications;
+  specifications_th?: ProductSpecifications;
   applications: string[];
+  applications_zh?: string[];
+  applications_vi?: string[];
+  applications_th?: string[];
   images: string[];
   moq: number;
   priceUsd?: number;
   priceRemark?: string;
   isFeatured: boolean;
+  seoTitle?: Record<string, string>;
+  seoKeywords?: Record<string, string>;
+  seoDescription?: Record<string, string>;
+  faq?: Record<string, Array<{q: string; a: string}>>;
   createdAt: string;
+  sortWeight?: number;
+  category_name_en?: string;
+  category_name_zh?: string;
+  [key: string]: any;
 }
 
 export interface Category {

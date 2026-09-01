@@ -3,6 +3,7 @@
 import {useState} from 'react';
 import {MessageCircle} from 'lucide-react';
 import {InquiryModal} from './InquiryModal';
+import { tLabel } from '@/lib/i18n';
 
 interface InquiryButtonLargeProps {
   productName?: string;
@@ -22,7 +23,7 @@ export function InquiryButtonLarge({productName, productSlug, categorySlug, loca
         className="w-full py-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-base rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-3"
       >
         <MessageCircle className="w-5 h-5" />
-        {isZh ? '立即发送询盘' : 'Send Inquiry Now'}
+        {tLabel('立即发送询盘', 'Send Inquiry Now', locale)}
       </button>
       <InquiryModal
         isOpen={isOpen}

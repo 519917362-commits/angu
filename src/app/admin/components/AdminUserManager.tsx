@@ -11,9 +11,10 @@ interface AdminUser {
 
 interface Props {
   token: string;
+  onLogout: () => void;
 }
 
-export default function AdminUserManager({ token }: Props) {
+export default function AdminUserManager({ token, onLogout }: Props) {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -22,13 +23,14 @@ export default function AdminUserManager({ token }: Props) {
   const [pwForm, setPwForm] = useState({ password: '' });
   const [msg, setMsg] = useState('');
 
-  useEffect(() => { fetchUsers(); }, []);
+  useEffect(() => { fetchUsers(); }, [token]);
 
   const fetchUsers = async () => {
     try {
       const res = await fetch('/api/admin/admin-users', {
         headers: { Authorization: `Bearer ${token}` },
       });
+      if (res.status === 401) { onLogout(); return; }
       const data = await res.json();
       if (Array.isArray(data)) setUsers(data);
     } catch { console.error('Failed to load users'); }
@@ -43,6 +45,7 @@ export default function AdminUserManager({ token }: Props) {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(addForm),
       });
+      if (res.status === 401) { onLogout(); return; }
       if (res.ok) {
         setMsg(T.users.saveSuccess);
         setShowAddForm(false);
@@ -62,6 +65,7 @@ export default function AdminUserManager({ token }: Props) {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ password: pwForm.password }),
       });
+      if (res.status === 401) { onLogout(); return; }
       if (res.ok) {
         setMsg('密码已更新 Password updated');
         setEditingUser(null);
