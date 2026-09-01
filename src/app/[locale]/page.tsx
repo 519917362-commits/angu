@@ -30,8 +30,8 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
       ? 'แผงกั้นเสียง,แผงกันเสียง,แผงกั้นเสียงทางหลวง,ผู้ผลิตแผงกั้นเสียง,โรงงานโดยตรง'
       : 'noise barrier,sound barrier,highway noise barrier,acoustic barrier,noise barrier manufacturer,factory direct',
     alternates: {
-      canonical: locale === 'zh' ? '/zh' : locale === 'vi' ? '/vi' : locale === 'th' ? '/th' : '/en',
-      languages: {en: '/en', zh: '/zh', vi: '/vi', th: '/th'},
+      canonical: `https://www.angumesh.com${locale === 'zh' ? '/zh' : locale === 'vi' ? '/vi' : locale === 'th' ? '/th' : '/en'}`,
+      languages: {'x-default': '/en', en: '/en', zh: '/zh', vi: '/vi', th: '/th'},
     },
     openGraph: {
       title: locale === 'zh'

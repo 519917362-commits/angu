@@ -102,6 +102,7 @@ export async function generatePageMeta(
     alternates: {
       canonical: `${BASE_URL}${path}`,
       languages: {
+        'x-default': `${BASE_URL}/en${path.replace(/^\/zh|^\/en|^\/vi|^\/th/, '')}`,
         en: `${BASE_URL}/en${path.replace(/^\/zh|^\/en|^\/vi|^\/th/, '')}`,
         zh: `${BASE_URL}/zh${path.replace(/^\/zh|^\/en|^\/vi|^\/th/, '')}`,
         vi: `${BASE_URL}/vi${path.replace(/^\/zh|^\/en|^\/vi|^\/th/, '')}`,
