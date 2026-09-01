@@ -74,8 +74,8 @@ export default async function LocaleLayout({
       availableLanguage: ['English', 'Chinese'],
     },
     hasCertification: [
-      {'@type': 'Certification', name: 'ISO 9001:2015'},
-      {'@type': 'Certification', name: 'CE Marking'},
+      {'@type': 'Certification', name: 'ISO 9001:2015', certificationIdentification: 'ISO 9001:2015'},
+      {'@type': 'Certification', name: 'CE Marking', certificationIdentification: 'CE'},
     ],
     naics: '332618',
     areaServed: [
