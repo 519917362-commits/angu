@@ -212,6 +212,11 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
                   {bannerCta}
                 </button>
               </Link>
+              <Link href={`/${locale}/noise-barrier`}>
+                <button className="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold text-base backdrop-blur-sm transition-all hover:-translate-y-0.5">
+                  {locale === 'zh' ? '声屏障专题' : locale === 'vi' ? 'Chuyên Đề Cách Âm' : locale === 'th' ? 'หน้าแผงกั้นเสียง' : 'Noise Barrier'}
+                </button>
+              </Link>
               <Link href={`/${locale}/products`}>
                 <button className="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold text-base backdrop-blur-sm transition-all hover:-translate-y-0.5">
                   {locale === 'zh' ? '浏览产品' : locale === 'vi' ? 'Xem sản phẩm' : locale === 'th' ? 'ดูสินค้า' : 'View Products'}

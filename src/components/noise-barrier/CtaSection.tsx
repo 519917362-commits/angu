@@ -51,6 +51,17 @@ export function CtaSection({ locale, phone }: { locale: string; phone: string })
             </a>
           )}
         </div>
+
+        <div className="mt-6">
+          <a href={`/${locale}`}
+            className="inline-flex items-center gap-1.5 text-blue-100 hover:text-white text-sm underline underline-offset-4 transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            {isVi ? 'Về Trang Chủ'
+             : isTh ? 'กลับหน้าหลัก'
+             : locale === 'zh' ? '返回官网首页'
+             : 'Back to Homepage'}
+          </a>
+        </div>
       </div>
     </section>
   );

@@ -6,6 +6,7 @@ interface HeroContent {
   subheadline: string;
   trust: string[];
   ctaContact: string;
+  ctaProducts: string;
 }
 
 const heroContent: Record<string, HeroContent> = {
@@ -15,6 +16,7 @@ const heroContent: Record<string, HeroContent> = {
     subheadline: 'STC > 38dB · NRC 0.85–0.95 · Mạ Kẽm Nhúng Nóng 15+ Năm · Giao Cảng Hồ Chí Minh / Hải Phòng',
     trust: ['ISO 9001:2015', 'SGS Tested', 'Giao 10-15 Ngày', 'Hỗ Trợ CAD'],
     ctaContact: 'Liên Hệ Chúng Tôi',
+    ctaProducts: 'Xem Tất Cả Sản Phẩm',
   },
   th: {
     badge: 'ผู้ผลิตโดยตรง · ส่งออกสู่ประเทศไทย',
@@ -22,6 +24,7 @@ const heroContent: Record<string, HeroContent> = {
     subheadline: 'STC > 38dB · NRC 0.85–0.95 · ชุบกัลวาไนซ์ร้อน 15+ ปี · ส่งท่าเรือกรุงเทพฯ / แหลมฉบัง',
     trust: ['ISO 9001:2015', 'SGS Tested', 'จัดส่ง 10-15 วัน', 'รองรับ CAD'],
     ctaContact: 'ติดต่อเรา',
+    ctaProducts: 'ดูสินค้าทั้งหมด',
   },
   en: {
     badge: 'Direct Factory Export · Shipping to Vietnam & Thailand',
@@ -29,6 +32,7 @@ const heroContent: Record<string, HeroContent> = {
     subheadline: 'STC > 38dB · NRC 0.85–0.95 · Hot-Dip Galvanized 15+ Years · FOB/CIF to Southeast Asia',
     trust: ['ISO 9001:2015', 'SGS Tested', '10-15 Day Delivery', 'CAD Support'],
     ctaContact: 'Contact Us',
+    ctaProducts: 'View All Products',
   },
   zh: {
     badge: '中国工厂直供 · 出口越南与泰国',
@@ -36,6 +40,7 @@ const heroContent: Record<string, HeroContent> = {
     subheadline: 'STC > 38dB · NRC 0.85–0.95 · 热镀锌防腐 15+ 年 · FOB/CIF 胡志明/海防/曼谷',
     trust: ['ISO 9001:2015', 'SGS 检测', '10-15 天交货', 'CAD 技术支持'],
     ctaContact: '联系我们',
+    ctaProducts: '浏览全部产品',
   },
 };
 
@@ -74,6 +79,9 @@ export function HeroSection({ locale, heroImage }: { locale: string; heroImage?:
             <div className="flex flex-wrap gap-3 pt-2">
               <a href={`/${locale}/contact`} className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors text-sm">
                 {c.ctaContact} →
+              </a>
+              <a href={`/${locale}/products`} className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 font-semibold rounded-lg transition-colors text-sm">
+                {c.ctaProducts}
               </a>
             </div>
           </div>
