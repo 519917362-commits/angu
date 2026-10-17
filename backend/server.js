@@ -15,7 +15,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'angu-admin-secret-key-2026';
 // Security middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost', 'https://paiqi-wiremesh.com'],
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost', 'https://angumesh.com'],
   methods: ['POST', 'GET', 'PATCH', 'DELETE', 'PUT'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -74,7 +74,13 @@ app.use('/api/admin/', (req, res, next) => {
 });
 
 app.use(express.json({ limit: '10mb' }));
-app.use('/uploads', express.static('uploads'));
+// 上传文件：文件名唯一且内容不变，可长期强缓存（30天 immutable）
+app.use('/uploads', express.static('uploads', {
+  maxAge: '30d',
+  setHeaders: (res) => {
+    res.setHeader('Cache-Control', 'public, max-age=2592000, immutable');
+  },
+}));
 
 // Initialize SQLite database
 // Multer config for image uploads

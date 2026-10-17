@@ -61,3 +61,7 @@ backend/package-lock.json
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 图片优化备份目录（本地回滚用，勿提交）
+/backend/uploads-backup-*
+/public-backup-*

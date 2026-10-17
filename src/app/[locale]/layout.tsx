@@ -48,7 +48,7 @@ export default async function LocaleLayout({
     alternateName: ['Angu Wire Mesh', 'Hebei Angu Wire Mesh Products Co., Ltd.', '安固丝网'],
     url: 'https://www.angumesh.com',
     logo: 'https://www.angumesh.com/images/logo.png',
-    image: 'https://www.angumesh.com/og-image.png',
+    image: 'https://www.angumesh.com/og-image.jpg',
     description: 'ISO 9001 certified manufacturer of gabion boxes, rockfall protection nets, hexagonal wire mesh, chain link fence, and wire mesh products. Factory-direct pricing from Anping, China.',
     foundingDate: '2015',
     foundingLocation: {

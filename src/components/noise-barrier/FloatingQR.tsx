@@ -199,6 +199,8 @@ export function FloatingQR({ locale, contactInfo }: { locale: string; contactInf
                             alt={`${activeChannel.label} QR Code`}
                             width={170}
                             height={170}
+                            loading="lazy"
+                            decoding="async"
                             className="rounded-lg"
                           />
                         </div>

@@ -184,6 +184,8 @@ export function ContactBar({ info }: { info: ContactInfo }) {
                       alt={`${ch.label} QR`}
                       width={20}
                       height={20}
+                      loading="lazy"
+                      decoding="async"
                       className="rounded opacity-60"
                     />
                     <IconQr className="w-3 h-3" />
@@ -198,6 +200,8 @@ export function ContactBar({ info }: { info: ContactInfo }) {
                         alt={`${ch.label} QR Code`}
                         width={140}
                         height={140}
+                        loading="lazy"
+                        decoding="async"
                         className="rounded"
                       />
                     </div>

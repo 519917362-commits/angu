@@ -98,6 +98,8 @@ export function HeaderLanding({ locale, logoUrl, email, phone, ctaText, socials 
                           alt={`${s.label} QR Code`}
                           width={140}
                           height={140}
+                          loading="lazy"
+                          decoding="async"
                           className="rounded-lg"
                         />
                       </div>

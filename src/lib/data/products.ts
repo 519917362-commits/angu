@@ -102,7 +102,7 @@ export const categories: Category[] = [
       en: 'Active and passive slope protection nets for landslide prevention and rockfall control.',
       zh: '主动边坡防护网、被动边坡防护网，用于滑坡预防和落石控制。',
     },
-    image: '/images/products/slope-protection.jpg',
+    image: '/images/products/active-slope-net.jpg',
     productCount: 2,
   },
   // 五、防爆石笼网/防爆墙
@@ -227,7 +227,7 @@ export const categories: Category[] = [
       en: 'Highway noise barriers, equipment noise barriers, and factory sound insulation walls.',
       zh: '公路声屏障、设备声屏障、工厂声屏障，用于交通和工业降噪。',
     },
-    image: '/images/products/noise-barrier.jpg',
+    image: '/images/products/highway-noise-barrier.jpg',
     productCount: 3,
   },
 ];

@@ -134,7 +134,7 @@ function OrganizationLd({ locale, config }: { locale: string; config: Record<str
     description: desc || undefined,
     url: 'https://www.angumesh.com',
     logo: `https://www.angumesh.com${logo}`,
-    image: 'https://www.angumesh.com/og-image.png',
+    image: 'https://www.angumesh.com/og-image.jpg',
     telephone: phone,
     email,
     address: {

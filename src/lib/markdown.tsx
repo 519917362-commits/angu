@@ -24,7 +24,7 @@ export function renderInline(text: string): ReactNode[] {
     }
     const imgMatch = part.match(/!\[([^\]]*)\]\(([^)]+)\)/);
     if (imgMatch) {
-      return <img key={i} src={imgMatch[2]} alt={imgMatch[1]} className="max-w-full rounded-lg my-4" />;
+      return <img key={i} src={imgMatch[2]} alt={imgMatch[1]} className="max-w-full rounded-lg my-4" loading="lazy" decoding="async" />;
     }
     const linkMatch = part.match(/\[([^\]]*)\]\(([^)]+)\)/);
     if (linkMatch) {

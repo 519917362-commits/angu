@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { compressImage } from '@/lib/image-compress';
 
 interface SingleImageUploaderProps {
   value: string;
@@ -13,9 +14,10 @@ export default function SingleImageUploader({ value, onChange, token }: SingleIm
   const [error, setError] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleFile = async (file: File) => {
+  const handleFile = async (rawFile: File) => {
     setError('');
     setUploading(true);
+    const file = await compressImage(rawFile);
     const fd = new FormData();
     fd.append('image', file);
     try {
@@ -78,7 +80,7 @@ export default function SingleImageUploader({ value, onChange, token }: SingleIm
             {uploading ? 'Uploading...' : 'Upload Image'}
           </button>
           {error && <div className="text-red-500 text-xs mt-1">{error}</div>}
-          <div className="text-xs text-gray-400 mt-1">JPG, PNG, GIF, WebP up to 10MB</div>
+          <div className="text-xs text-gray-400 mt-1">JPG, PNG, GIF, WebP up to 10MB · 超过 200KB 自动压缩</div>
         </div>
       </div>
       {value && (
