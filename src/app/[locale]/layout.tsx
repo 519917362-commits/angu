@@ -1,6 +1,7 @@
 import {notFound} from 'next/navigation';
 import {routing} from '@/lib/routing';
 import {I18nProvider} from '@/lib/i18n-context';
+import {REVALIDATE_SECONDS, SITE_DATA_TAG} from '@/lib/api';
 import {Header} from '@/components/layout/Header';
 import {Footer} from '@/components/layout/Footer';
 import {InquiryButton} from '@/components/layout/InquiryButton';
@@ -13,7 +14,10 @@ export function generateStaticParams() {
 async function fetchSiteConfig(locale: string) {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-    const res = await fetch(`${baseUrl}/api/site-config`, { cache: 'no-store' });
+    const res = await fetch(`${baseUrl}/api/site-config`, {
+      // ISR：后台定期再生；管理后台保存后由 /api/revalidate 主动失效
+      next: { revalidate: REVALIDATE_SECONDS, tags: [SITE_DATA_TAG] },
+    });
     if (!res.ok) return null;
     return await res.json();
   } catch {

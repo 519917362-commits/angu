@@ -1,6 +1,7 @@
 import { routing } from '@/lib/routing';
+import { REVALIDATE_SECONDS, SITE_DATA_TAG } from '@/lib/api';
 
-const BACKEND = 'http://localhost:3001';
+const BACKEND = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const BASE_URL = 'https://www.angumesh.com';
 
 interface Product { slug: string; createdAt?: string; updatedAt?: string }
@@ -51,8 +52,12 @@ export async function GET() {
   let categories: Category[] = [];
   try {
     const [catRes, blogRes] = await Promise.all([
-      fetch(`${BACKEND}/api/catalog`, { cache: 'no-store' }),
-      fetch(`${BACKEND}/api/blog-posts`, { cache: 'no-store' }),
+      fetch(`${BACKEND}/api/catalog`, {
+        next: { revalidate: REVALIDATE_SECONDS, tags: [SITE_DATA_TAG] },
+      }),
+      fetch(`${BACKEND}/api/blog-posts`, {
+        next: { revalidate: REVALIDATE_SECONDS, tags: [SITE_DATA_TAG] },
+      }),
     ]);
     if (catRes.ok) {
       const catData = await catRes.json();

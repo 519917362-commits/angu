@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { generatePageMeta } from '@/lib/seo-utils';
+import { SITE_DATA_TAG } from '@/lib/api';
 
 // ── Types ──
 interface TimelineItem {
@@ -49,7 +50,9 @@ const API_BASE = process.env.API_BASE || 'http://localhost:3001';
 
 async function fetchAboutData(): Promise<AboutData> {
   try {
-    const res = await fetch(`${API_BASE}/api/about-page-config`, { next: { revalidate: 60 } });
+    const res = await fetch(`${API_BASE}/api/about-page-config`, {
+      next: { revalidate: 300, tags: [SITE_DATA_TAG] },
+    });
     if (!res.ok) throw new Error('Failed to fetch');
     return res.json();
   } catch {
@@ -59,7 +62,9 @@ async function fetchAboutData(): Promise<AboutData> {
 
 async function fetchSiteConfig(): Promise<Record<string, { value_en: string; value_zh: string }>> {
   try {
-    const res = await fetch(`${API_BASE}/api/site-config`, { next: { revalidate: 60 } });
+    const res = await fetch(`${API_BASE}/api/site-config`, {
+      next: { revalidate: 300, tags: [SITE_DATA_TAG] },
+    });
     if (!res.ok) return {};
     const data = await res.json();
     return (data as { config: Record<string, { value_en: string; value_zh: string }> }).config || {};

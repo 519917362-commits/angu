@@ -8,6 +8,7 @@
 
 import type {Metadata} from 'next';
 import {pageSeoDefaults, PageSeo} from './seo';
+import {REVALIDATE_SECONDS, SITE_DATA_TAG} from './api';
 
 export {pageSeoDefaults};
 export type {PageSeo};
@@ -32,6 +33,7 @@ async function loadSiteConfig(): Promise<SiteConfig['config']> {
   try {
     const res = await fetch(`${API_BASE}/api/site-config`, {
       signal: AbortSignal.timeout(3000),
+      next: { revalidate: REVALIDATE_SECONDS, tags: [SITE_DATA_TAG] },
     });
     if (res.ok) {
       const data = await res.json();

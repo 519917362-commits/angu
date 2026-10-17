@@ -28,6 +28,51 @@ const adminLimiter = rateLimit({
 });
 app.use('/api/admin/', adminLimiter);
 
+// Stricter rate limit for login (brute-force protection)
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { error: 'Too many login attempts. Please try again later.' },
+  // Count only failed-login responses when supported
+  skipSuccessfulRequests: true,
+});
+app.use('/api/admin/login', loginLimiter);
+
+// Production guard: warn loudly if JWT secret is still the fallback
+if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
+  console.warn('[SECURITY] JWT_SECRET is not set — using insecure fallback. Set JWT_SECRET in .env before production use.');
+}
+
+// ── On-demand ISR revalidation ──
+// 管理后台数据变更后，通知前端立即失效对应缓存（fire-and-forget，失败不影响主流程）
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+const REVALIDATE_SECRET = process.env.REVALIDATE_SECRET;
+const REVALIDATE_TAG = 'site-data';
+
+function triggerRevalidate() {
+  if (!REVALIDATE_SECRET) return; // 未配置密钥：跳过（前端也会拒绝），靠 ISR 定期刷新兜底
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 5000);
+  fetch(`${FRONTEND_URL}/api/revalidate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ secret: REVALIDATE_SECRET, tag: REVALIDATE_TAG }),
+    signal: controller.signal,
+  }).catch(() => {}).finally(() => clearTimeout(timer));
+}
+
+// 所有管理端写操作成功后，触发前端缓存失效
+app.use('/api/admin/', (req, res, next) => {
+  res.on('finish', () => {
+    const isMutation = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method);
+    const excluded = req.path === '/login' || req.path === '/upload';
+    if (isMutation && !excluded && res.statusCode < 400) {
+      triggerRevalidate();
+    }
+  });
+  next();
+});
+
 app.use(express.json({ limit: '10mb' }));
 app.use('/uploads', express.static('uploads'));
 

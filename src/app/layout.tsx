@@ -3,6 +3,7 @@ import './globals.css';
 import { GoogleAnalytics } from './GoogleAnalytics';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.angumesh.com'),
   title: {
     default: 'Angu Wire Mesh — Factory-Direct Gabion Boxes & Rockfall Protection Nets | ISO 9001',
     template: '%s',

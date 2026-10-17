@@ -2,7 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'angu-frontend',
-      cwd: '/Users/anxiang/.qclaw/workspace-agent-4fb505c4/paiqi-wiremesh',
+      // 相对路径基于本文件所在目录，工作区迁移后无需修改
+      cwd: '.',
       script: 'node_modules/.bin/next',
       args: 'dev -p 3000',
       env: { NODE_ENV: 'development' },
@@ -11,7 +12,7 @@ module.exports = {
     },
     {
       name: 'angu-backend',
-      cwd: '/Users/anxiang/.qclaw/workspace-agent-4fb505c4/paiqi-wiremesh/backend',
+      cwd: './backend',
       script: 'server.js',
       env: { NODE_ENV: 'development', PORT: '3001' },
       max_restarts: 10,
