@@ -93,7 +93,7 @@ export default async function ServicePage({params}: {params: Promise<{locale: st
 
   const faqs = locale === 'zh' ? [
     {q: '最小起订量（MOQ）是多少？', a: '不同产品MOQ不同。石笼网箱通常50件起订，防护网从100平方米起订。新客户可协商灵活安排。'},
-    {q: '典型交货期是多久？', a: '标准产品：7-15天。定制/OEM订单：15-30天，视复杂程度和数量而定。加急订单可协商额外费用。'},
+    {q: '典型交货期是多久？', a: '标准规格：15-25个工作日。定制/OEM订单：20-30个工作日，自订单确认并收到定金起算。加急订单可视排产协商。'},
     {q: '你们提供免费样品吗？', a: '是的，大多数产品提供免费样品。客户承担运费。首次批量下单后可退还样品费。'},
     {q: '你们接受哪些付款方式？', a: '我们接受T/T（30%定金，70%发货前）、大额订单（2万美元以上）即期信用证、小额西联汇款，以及样品费PayPal。'},
     {q: '你们能做定制尺寸和规格吗？', a: '当然！我们的优势就是定制生产。提供图纸或规格，我们的工程团队将制定最佳方案。'},
@@ -140,6 +140,7 @@ export default async function ServicePage({params}: {params: Promise<{locale: st
       '@type': 'Organization',
       name: 'An Gu Wire Mesh Products Co., Ltd.',
       url: 'https://www.angumesh.com',
+      sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },
     areaServed: { '@type': 'Place', name: 'Worldwide' },
     url: `https://www.angumesh.com/${locale}/service#service-${i + 1}`,
@@ -163,6 +164,7 @@ export default async function ServicePage({params}: {params: Promise<{locale: st
       '@type': 'Organization',
       name: 'An Gu Wire Mesh Products Co., Ltd.',
       url: 'https://www.angumesh.com',
+      sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },
     areaServed: {
       '@type': 'Continent',

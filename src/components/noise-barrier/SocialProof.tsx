@@ -1,33 +1,48 @@
+import {YEARS_LABEL} from '@/lib/company';
+
 interface StatItem { value: string; label: Record<string, string> }
 
+// 全部为可核验事实：成立年限由工商登记日期计算，产品数为当前在架 SKU 数
 const stats: StatItem[] = [
-  { value: '10+', label: { en: 'Years Manufacturing', zh: '年生产经验', vi: 'Năm Sản Xuất', th: 'ปีผลิต' } },
+  { value: YEARS_LABEL, label: { en: 'Years in Business', zh: '年制造经验', vi: 'Năm Hoạt Động', th: 'ปีดำเนินธุรกิจ' } },
   { value: '30+', label: { en: 'Export Countries', zh: '出口国家', vi: 'Quốc Gia Xuất Khẩu', th: 'ประเทศส่งออก' } },
-  { value: '500+', label: { en: 'Projects Completed', zh: '完成项目', vi: 'Dự Án Hoàn Thành', th: 'โครงการที่เสร็จ' } },
-  { value: '50,000+', label: { en: 'm² Monthly Output', zh: '月产能 m²', vi: 'm² Sản Xuất/Tháng', th: 'ตร.ม./เดือน' } },
+  { value: '36', label: { en: 'Product Specifications', zh: '在架产品规格', vi: 'Mã Sản Phẩm', th: 'รายการสินค้า' } },
+  { value: '5,000 t', label: { en: 'Annual Output', zh: '年产能', vi: 'Sản Lượng/Năm', th: 'กำลังผลิต/ปี' } },
 ];
 
-const testimonials: Record<string, Array<{ name: string; role: string; quote: string }>> = {
-  vi: [
-    { name: 'Nguyễn V.', role: 'Nhà thầu — Dự án đường cao tốc Bắc Nam', quote: 'Chất lượng tấm tốt, mạ kẽm đều. Giao hàng đúng hạn và hỗ trợ bản vẽ CAD miễn phí. Sẽ tiếp tục hợp tác.' },
-    { name: 'Trần H.', role: 'Giám đốc mua hàng — Công ty xây dựng VN', quote: 'Giá cạnh tranh so với nhà cung cấp nội địa, chất lượng vượt trội. Đặc biệt hài lòng với dịch vụ hậu mãi.' },
-  ],
-  th: [
-    { name: 'Somchai P.', role: 'ผู้รับเหมา — โครงการทางด่วน', quote: 'แผงคุณภาพดี ชุบกัลวาไนซ์เรียบร้อย ส่งตรงเวลาและสนับสนุนแบบ CAD ฟรี จะใช้บริการต่อ' },
-    { name: 'Apinya K.', role: 'ผู้จัดซื้อ — บริษัทก่อสร้างไทย', quote: 'ราคาแข่งกับผู้ผลิตในประเทศได้ คุณภาพดีกว่า ประทับใจบริการหลังการขายมาก' },
-  ],
+interface TrustPoint { title: string; body: string }
+
+// 原「客户评价」为无来源的虚构证言（含五星评分），已按合规要求移除，
+// 改为采购方可自行核验的四个环节。取得客户书面授权后可替换为真实评价。
+const trustPoints: Record<string, TrustPoint[]> = {
   en: [
-    { name: 'David R.', role: 'Procurement Manager — Construction Co.', quote: 'Quality panels, consistent galvanizing, on-time delivery. Free CAD support was a big plus.' },
-    { name: 'Ahmed S.', role: 'Contractor — Highway Project', quote: 'Competitive pricing, superior quality compared to local suppliers. Very satisfied with after-sales service.' },
+    { title: 'Certificates you can check', body: 'ISO 9001:2015 and CE certificates are issued with the quotation. Certificate numbers and issuing bodies are provided for verification on request.' },
+    { title: 'Factory audit welcome', body: 'Third-party inspection (SGS, BV, TÜV) and video factory tours are arranged before or during production at the buyer\u2019s choice.' },
+    { title: 'Samples before bulk', body: 'Trial orders start from 50 m². Panel samples with the actual coating weight and core density are sent before mass production.' },
+    { title: 'FOB Tianjin, documented', body: 'Prices are quoted FOB Tianjin with specification, MOQ and lead time stated in writing. Pre-shipment inspection reports are shared before loading.' },
   ],
   zh: [
-    { name: '王先生', role: '采购经理 — 建筑工程公司', quote: '面板质量好，镀锌均匀，交货准时。免费 CAD 支持是加分项。' },
-    { name: '李总', role: '承包商 — 高速公路项目', quote: '价格与本地供应商有竞争力，质量更优。售后服务令人满意。' },
+    { title: '可核验的资质', body: 'ISO 9001:2015 与 CE 证书随报价一并提供；如需核验，可提供证书编号与发证机构。' },
+    { title: '接受验厂与第三方验货', body: '可按买方要求安排 SGS、BV、TÜV 等第三方验货，或在生产前后安排视频验厂。' },
+    { title: '批量前先看样', body: '试单 50 m² 起；量产前寄送实测镀层重量与芯材密度的样板。' },
+    { title: '天津港 FOB，条款书面化', body: '报价为天津港 FOB，规格、起订量、交期均书面列明；装柜前提供出货检验报告。' },
+  ],
+  vi: [
+    { title: 'Chứng nhận có thể kiểm chứng', body: 'Chứng nhận ISO 9001:2015 và CE được gửi kèm báo giá. Số chứng nhận và tổ chức cấp được cung cấp để xác minh theo yêu cầu.' },
+    { title: 'Sẵn sàng kiểm tra nhà máy', body: 'Có thể bố trí kiểm định bên thứ ba (SGS, BV, TÜV) hoặc tham quan nhà máy qua video theo yêu cầu của người mua.' },
+    { title: 'Xem mẫu trước khi đặt hàng loạt', body: 'Đơn thử từ 50 m². Mẫu tấm với trọng lượng lớp mạ và mật độ lõi thực tế được gửi trước khi sản xuất hàng loạt.' },
+    { title: 'FOB Thiên Tân, điều khoản bằng văn bản', body: 'Giá báo FOB Thiên Tân kèm quy cách, MOQ và thời gian giao hàng bằng văn bản. Báo cáo kiểm tra trước khi xuất hàng được chia sẻ trước khi xếp hàng.' },
+  ],
+  th: [
+    { title: 'ใบรับรองที่ตรวจสอบได้', body: 'ใบรับรอง ISO 9001:2015 และ CE แนบมากับใบเสนอราคา สามารถขอเลขใบรับรองและหน่วยงานที่ออกให้เพื่อตรวจสอบได้' },
+    { title: 'ยินดีรับการตรวจโรงงาน', body: 'สามารถจัดให้มีการตรวจสอบโดยบุคคลที่สาม (SGS, BV, TÜV) หรือทัวร์โรงงานผ่านวิดีโอตามความต้องการของผู้ซื้อ' },
+    { title: 'ดูตัวอย่างก่อนสั่งล็อตใหญ่', body: 'สั่งทดลองได้ตั้งแต่ 50 ตร.ม. ส่งตัวอย่างแผงที่ระบุน้ำหนักเคลือบและความหนาแน่นแกนจริงก่อนผลิตจำนวนมาก' },
+    { title: 'FOB เทียนจิน ระบุเป็นลายลักษณ์อักษร', body: 'ราคาเป็น FOB เทียนจิน พร้อมระบุสเปก MOQ และเวลาส่งมอบเป็นลายลักษณ์อักษร มีรายงานตรวจสอบก่อนบรรทุกสินค้า' },
   ],
 };
 
 export function SocialProof({ locale }: { locale: string }) {
-  const t = testimonials[locale] || testimonials.en;
+  const points = trustPoints[locale] || trustPoints.en;
 
   return (
     <section className="py-16 sm:py-20 bg-white border-y border-slate-100">
@@ -42,28 +57,20 @@ export function SocialProof({ locale }: { locale: string }) {
           ))}
         </div>
 
-        {/* Testimonials */}
+        {/* How buyers verify us */}
         <div className="text-center mb-10">
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
-            {locale === 'vi' ? 'Khách Hàng Nói Gì?'
-             : locale === 'th' ? 'ลูกค้าพูดถึงเรา'
-             : locale === 'zh' ? '客户评价'
-             : 'What Our Clients Say'}
+            {locale === 'vi' ? 'Cách Người Mua Xác Minh Chúng Tôi'
+             : locale === 'th' ? 'วิธีที่ผู้ซื้อตรวจสอบเรา'
+             : locale === 'zh' ? '采购方可核验的四件事'
+             : 'Four Things Buyers Can Verify'}
           </h2>
         </div>
         <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {t.map((item, i) => (
+          {points.map((item, i) => (
             <div key={i} className="p-6 rounded-2xl bg-slate-50 border border-slate-100">
-              <div className="flex items-start gap-1 mb-3">
-                {[1,2,3,4,5].map(s => (
-                  <span key={s} className="text-yellow-400 text-sm">★</span>
-                ))}
-              </div>
-              <p className="text-sm text-slate-600 italic leading-relaxed mb-4">"{item.quote}"</p>
-              <div>
-                <div className="font-semibold text-slate-800 text-sm">{item.name}</div>
-                <div className="text-xs text-slate-500">{item.role}</div>
-              </div>
+              <div className="font-semibold text-slate-800 mb-2">{item.title}</div>
+              <p className="text-sm text-slate-600 leading-relaxed">{item.body}</p>
             </div>
           ))}
         </div>

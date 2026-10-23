@@ -14,10 +14,10 @@ const cards: ValueCard[] = [
       th: 'ลดเสียงรบกวนเหนือระดับ',
     },
     desc: {
-      en: 'High-density mineral wool core + scientific louvered / micro-perforated panel design. NRC up to 0.85–0.95. Achieves 25–35 dB insertion loss for highway and industrial applications. Compliant with EN 1793, GB/T 19884.',
-      zh: '高密度矿棉芯 + 科学百叶/微孔板设计，吸音系数 NRC 达 0.85–0.95。公路与工业场景实测插入损失 25–35 dB。符合 EN 1793、GB/T 19884 标准。',
-      vi: 'Lõi bông khoáng mật độ cao + thiết kế tấm thanh / đục lỗ siêu nhỏ khoa học. Hệ số NRC đạt 0.85–0.95. Suy giảm tiếng ồn thực tế 25–35 dB cho đường cao tốc và nhà máy. Tuân thủ EN 1793, GB/T 19884.',
-      th: 'แกนใยหินความหนาแน่นสูง + การออกแบบแผงเกล็ด / เจาะรูขนาดไมโครอย่างเป็นวิทยาศาสตร์ ค่า NRC สูงถึง 0.85–0.95 ลดเสียงแทรก 25–35 dB สำหรับทางหลวงและโรงงาน ตามมาตรฐาน EN 1793, GB/T 19884',
+      en: 'High-density mineral wool core + scientific louvered / micro-perforated panel design. NRC 0.85. Achieves 10–18 dB(A) insertion loss for highway and industrial applications. Compliant with EN 1793, GB/T 19884.',
+      zh: '高密度矿棉芯 + 科学百叶/微孔板设计，吸音系数 NRC 0.85。公路与工业场景实测插入损失 10–18 dB(A)。符合 EN 1793、GB/T 19884 标准。',
+      vi: 'Lõi bông khoáng mật độ cao + thiết kế tấm thanh / đục lỗ siêu nhỏ khoa học. Hệ số NRC đạt 0.85. Suy giảm tiếng ồn thực tế 10–18 dB(A) cho đường cao tốc và nhà máy. Tuân thủ EN 1793, GB/T 19884.',
+      th: 'แกนใยหินความหนาแน่นสูง + การออกแบบแผงเกล็ด / เจาะรูขนาดไมโครอย่างเป็นวิทยาศาสตร์ ค่า NRC 0.85 ลดเสียงแทรก 10–18 dB(A) สำหรับทางหลวงและโรงงาน ตามมาตรฐาน EN 1793, GB/T 19884',
     },
   },
   {

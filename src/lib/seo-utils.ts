@@ -93,9 +93,10 @@ export async function generatePageMeta(
   const title = overrides?.title || seo.title;
   const description = overrides?.description || seo.description;
   const keywords = overrides?.keywords || seo.keywords;
-  // Global fallback OG image from site_config
+  // Global fallback OG image from site_config (1200x630, shipped in /public)
   const defaultImageConfig = await loadSiteConfig();
-  const seoDefaultImage = defaultImageConfig?.seo_default_image?.[locale] || defaultImageConfig?.seo_default_image?.en || null;
+  const configuredImage = defaultImageConfig?.seo_default_image?.[locale] || defaultImageConfig?.seo_default_image?.en || null;
+  const seoDefaultImage = configuredImage || `${BASE_URL}/og-image.jpg`;
 
   return {
     title,

@@ -78,6 +78,7 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
       '@type': 'Organization',
       name: 'Angu Wire Mesh',
       url: 'https://www.angumesh.com',
+      sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },
     publisher: {
       '@type': 'Organization',
@@ -86,6 +87,7 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
         '@type': 'ImageObject',
         url: 'https://www.angumesh.com/images/logo.png',
       },
+      sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },
     ...(keywords ? {keywords: keywords} : {}),
     mainEntityOfPage: {

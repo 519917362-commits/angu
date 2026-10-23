@@ -25,8 +25,8 @@ export default async function BlogPage({params}: {params: Promise<{locale: strin
   const headerSubtitle = v('blog_header_subtitle', 'Expert guides, engineering cases, and insights on gabion, protection net, and fencing', '石笼网、防护网和围栏行业指南，工程案例和经验分享');
   const headerBreadcrumb = v('blog_header_breadcrumb', 'Blog', '博客');
   const seoIntro = v('blog_seo_intro',
-    `The Angu Wire Mesh Blog is a technical knowledge hub for global engineering contractors, procurement managers, and wire mesh industry professionals. Drawing from 15 years of factory expertise and projects across 30+ countries, we publish expert content on gabion construction, rockfall protection design, fence selection, and industry standards. Our ${published.length} published articles cover everything from product specifications to on-site installation guides — all backed by real-world project experience.`,
-    `安固丝网博客是面向全球工程承包商、采购经理和丝网行业从业者的技术内容平台。我们基于15年工厂制造经验和30+国家出口案例，分享石笼网施工、边坡防护设计、围栏选型、行业标准解读等专业内容。${published.length}篇已发布文章涵盖从产品技术参数到实地安装指南的全链路知识。`
+    `The Angu Wire Mesh Blog is a technical knowledge hub for global engineering contractors, procurement managers, and wire mesh industry professionals. Drawing from factory expertise built since 2014 and projects across 30+ countries, we publish expert content on gabion construction, rockfall protection design, fence selection, and industry standards. Our ${published.length} published articles cover everything from product specifications to on-site installation guides — all backed by real-world project experience.`,
+    `安固丝网博客是面向全球工程承包商、采购经理和丝网行业从业者的技术内容平台。我们基于自2014年建厂以来的制造经验和30+国家出口案例，分享石笼网施工、边坡防护设计、围栏选型、行业标准解读等专业内容。${published.length}篇已发布文章涵盖从产品技术参数到实地安装指南的全链路知识。`
   );
   const faqTitle = v('blog_faq_title', 'About the Angu Wire Mesh Blog', '关于安固丝网博客');
   const faqDesc = v('blog_faq_desc', '', ''); // unused currently, reserved
@@ -58,6 +58,7 @@ export default async function BlogPage({params}: {params: Promise<{locale: strin
       '@type': 'Organization',
       name: 'An Gu Wire Mesh Products Co., Ltd.',
       url: 'https://www.angumesh.com',
+      sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },
     publisher: {
       '@type': 'Organization',
@@ -66,6 +67,7 @@ export default async function BlogPage({params}: {params: Promise<{locale: strin
         '@type': 'ImageObject',
         url: 'https://www.angumesh.com/images/logo.png',
       },
+      sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },
     blogPost: published.map(post => {
       const title = locale === 'zh' ? post.title_zh : locale === 'vi' ? post.title_vi || post.title_en : locale === 'th' ? post.title_th || post.title_en : post.title_en;
@@ -79,6 +81,7 @@ export default async function BlogPage({params}: {params: Promise<{locale: strin
         author: {
           '@type': 'Organization',
           name: 'An Gu Wire Mesh Products Co., Ltd.',
+          sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
         },
         ...(post.cover_image ? {image: post.cover_image} : {}),
       };
@@ -92,7 +95,7 @@ export default async function BlogPage({params}: {params: Promise<{locale: strin
     },
     {
       q: {en: 'Are the blog articles written by industry experts?', zh: '博客文章是由行业专家撰写的吗？', vi: 'Các bài viết trên blog có được viết bởi chuyên gia ngành không?', th: 'บทความบล็อกเขียนโดยผู้เชี่ยวชาญในอุตสาหกรรมหรือไม่?'},
-      a: {en: 'Yes. Articles are authored by our engineering team with 15+ years of wire mesh manufacturing experience, often in collaboration with civil engineers and project managers who have deployed Angu products in real-world infrastructure projects across 30+ countries.', zh: '是的。文章由拥有15年以上丝网制造经验的工程团队撰写，经常与实际部署过安固产品的土木工程师和项目经理合作，项目遍布30多个国家。', vi: 'Có. Bài viết được soạn bởi đội ngũ kỹ thuật của chúng tôi với hơn 15 năm kinh nghiệm sản xuất lưới thép, thường hợp tác với kỹ sư xây dựng và quản lý dự án đã triển khai sản phẩm Angu trong các dự án hạ tầng thực tế tại hơn 30 quốc gia.', th: 'ใช่ บทความเขียนโดยทีมวิศวกรของเราที่มีประสบการณ์ผลิตตะแกรงลวดมากกว่า 15 ปี มักร่วมมือกับวิศวกรโยธาและผู้จัดการโครงการที่ได้ใช้ผลิตภัณฑ์ Angu ในโครงการโครงสร้างพื้นฐานจริงในกว่า 30 ประเทศ'},
+      a: {en: 'Yes. Articles are authored by our engineering team, which has been manufacturing wire mesh since 2014, often in collaboration with civil engineers and project managers who have deployed Angu products in real-world infrastructure projects across 30+ countries.', zh: '是的。文章由自2014年起从事丝网制造的工程团队撰写，经常与实际部署过安固产品的土木工程师和项目经理合作，项目遍布30多个国家。', vi: 'Có. Bài viết được soạn bởi đội ngũ kỹ thuật của chúng tôi, đơn vị sản xuất lưới thép từ năm 2014, thường hợp tác với kỹ sư xây dựng và quản lý dự án đã triển khai sản phẩm Angu trong các dự án hạ tầng thực tế tại hơn 30 quốc gia.', th: 'ใช่ บทความเขียนโดยทีมวิศวกรของเรา ซึ่งผลิตตะแกรงลวดตั้งแต่ปี 2014 มักร่วมมือกับวิศวกรโยธาและผู้จัดการโครงการที่ได้ใช้ผลิตภัณฑ์ Angu ในโครงการโครงสร้างพื้นฐานจริงในกว่า 30 ประเทศ'},
     },
     {
       q: {en: 'Can I request a topic for the blog?', zh: '我可以申请博客话题吗？', vi: 'Tôi có thể yêu cầu chủ đề cho blog không?', th: 'ฉันขอหัวข้อสำหรับบล็อกได้หรือไม่?'},

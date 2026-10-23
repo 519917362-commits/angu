@@ -22,7 +22,38 @@ Disallow: /admin/
 Disallow: /api/
 Allow: /
 
+User-agent: Perplexity-User
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+# Anthropic 现行三件套（anthropic-ai 为旧 token，保留兼容）
+User-agent: ClaudeBot
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+User-agent: Claude-User
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+User-agent: Claude-SearchBot
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
 User-agent: anthropic-ai
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+User-agent: Applebot-Extended
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+User-agent: Bytespider
 Disallow: /admin/
 Disallow: /api/
 Allow: /

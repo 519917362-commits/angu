@@ -97,7 +97,7 @@ export function tLabel(zh: string, en: string, locale: string): string {
     '出口全球': { zh: '出口全球', en: 'Global Export', vi: 'Xuất khẩu toàn cầu', th: 'ส่งออกทั่วโลก' },
     '+86 138 1234 5678': { zh: '+86 138 1234 5678', en: '+1 234 567 8900', vi: '+1 234 567 8900', th: '+1 234 567 8900' },
     '/zh': { zh: '/zh', en: '/en', vi: '/en', th: '/en' },
-    '15年丝网制造经验，ISO/CE认证，出口30+国家。': { zh: '15年丝网制造经验，ISO/CE认证，出口30+国家。', en: '15 years of wire mesh manufacturing, ISO/CE certified, exported to 30+ countries.', vi: '15 năm kinh nghiệm sản xuất lưới thép, chứng nhận ISO/CE, xuất khẩu đến 30+ quốc gia.', th: '15 ปีประสบการณ์การผลิตตะแกรงลวด ได้รับการรับรอง ISO/CE ส่งออกไปยัง 30+ ประเทศ' },
+    '12年丝网制造经验，ISO/CE认证，出口30+国家。': { zh: '12年丝网制造经验，ISO/CE认证，出口30+国家。', en: 'wire mesh manufacturing since 2014, ISO/CE certified, exported to 30+ countries.', vi: '12 năm kinh nghiệm sản xuất lưới thép, chứng nhận ISO/CE, xuất khẩu đến 30+ quốc gia.', th: '12 ปีประสบการณ์การผลิตตะแกรงลวด ได้รับการรับรอง ISO/CE ส่งออกไปยัง 30+ ประเทศ' },
     'ISO 9001 & CE 认证制造商': { zh: 'ISO 9001 & CE 认证制造商', en: 'ISO 9001 & CE Certified Manufacturer', vi: 'Nhà sản xuất chứng nhận ISO 9001 & CE', th: 'ผู้ผลิตที่ได้รับการรับรอง ISO 9001 & CE' },
     'WhatsApp咨询': { zh: 'WhatsApp咨询', en: 'Chat on WhatsApp', vi: 'Trò chuyện trên WhatsApp', th: 'แชทบน WhatsApp' },
     'zh-CN': { zh: 'zh-CN', en: 'en-US', vi: 'en-US', th: 'en-US' },

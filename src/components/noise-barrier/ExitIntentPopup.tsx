@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { X, FileText } from 'lucide-react';
+import { submitInquiryLead } from '@/lib/inquiry';
 
 const content: Record<string, { title: string; subtitle: string; btn: string; close: string }> = {
   vi: {
@@ -125,15 +126,12 @@ export function ExitIntentPopup({ locale }: { locale: string }) {
               e.preventDefault();
               const form = e.currentTarget;
               const data = new FormData(form);
-              const body = Object.fromEntries(data.entries());
-              body.source = 'exit_intent_popup';
-              body.locale = locale;
-              body.product_interest = 'Noise Barrier Catalog';
               try {
-                await fetch('/api/inquiry', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(body),
+                // 无论提交结果都关闭弹窗，避免打断用户浏览
+                await submitInquiryLead(Object.fromEntries(data.entries()), {
+                  source: 'exit_popup',
+                  productInterest: 'Noise Barrier Catalog',
+                  locale,
                 });
               } catch {}
               close();

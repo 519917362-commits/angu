@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { submitInquiryLead } from '@/lib/inquiry';
 
 interface FormContent {
   title: string;
@@ -89,28 +90,13 @@ export function QuoteForm({ locale }: { locale: string }) {
               setStatus('loading');
               const form = e.currentTarget;
               const data = new FormData(form);
-              const body = Object.fromEntries(data.entries());
-              body.source = 'google_ads_noise_barrier';
-              body.locale = locale;
-              body.product_interest = 'Noise Barrier';
               try {
-                const res = await fetch('/api/inquiry', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(body),
+                const result = await submitInquiryLead(Object.fromEntries(data.entries()), {
+                  source: 'google_ads_noise_barrier',
+                  productInterest: 'Noise Barrier',
+                  locale,
                 });
-                if (res.ok) {
-                  setStatus('success');
-                  if (typeof window !== 'undefined' && (window as any).gtag) {
-                    (window as any).gtag?.('event', 'conversion', {
-                      send_to: process.env.NEXT_PUBLIC_ADS_CONVERSION_ID || 'AW-CONVERSION_ID/CONVERSION_LABEL',
-                      value: 1,
-                      currency: 'USD',
-                    });
-                  }
-                } else {
-                  setStatus('error');
-                }
+                setStatus(result.success ? 'success' : 'error');
               } catch {
                 setStatus('error');
               }

@@ -91,14 +91,16 @@ sudo certbot --nginx -d paiqi-wiremesh.com -d www.paiqi-wiremesh.com
 ```env
 PORT=3001
 NODE_ENV=production
-ALLOWED_ORIGINS=https://paiqi-wiremesh.com
+ALLOWED_ORIGINS=https://www.angumesh.com
 
 # SMTP 配置（用于询盘邮件通知）
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-NOTIFY_EMAIL=sales@paiqi-wiremesh.com
+# angumesh.com 的 MX 指向网易企业邮（hzmx01/02.mxmail.netease.com）
+# 授权码在「网易企业邮箱 → 设置 → POP3/SMTP/IMAP」中生成，不是登录密码
+SMTP_HOST=smtp.qiye.163.com
+SMTP_PORT=465
+SMTP_USER=annie@angumesh.com
+SMTP_PASS=<网易企业邮授权码>
+NOTIFY_EMAIL=annie@angumesh.com
 ```
 
 ## 管理命令

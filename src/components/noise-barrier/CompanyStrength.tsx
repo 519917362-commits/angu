@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import type { NoiseBarrierFactoryImage, NoiseBarrierCertification, LocaleText } from '@/lib/api';
+import {YEARS_LABEL} from '@/lib/company';
 
 interface SectionContent {
   title: string;
@@ -8,48 +9,51 @@ interface SectionContent {
   certTitle: string;
 }
 
+// 数据口径（与工商登记及官网一致）：
+//   2014-08-15 成立 / 10,000 m² 厂区（自有中文站披露“近万平”）/ 年产 5,000 吨 / 出口 30+ 国家
+// 旧版本写的 “40 亩 · 200+ 员工 · 50,000㎡” 无任何出处，且与年报及官网互相矛盾，已删除。
 const content: Record<string, SectionContent> = {
   vi: {
-    title: 'Nhà Máy Trực Tiếp · 15 Năm Chuyên Sản Xuất',
-    subtitle: '40 mẫu đất · 200+ nhân viên · 50,000 m²/năm năng lực sản xuất',
+    title: 'Nhà Máy Trực Tiếp · Sản Xuất Từ 2014',
+    subtitle: 'Nhà xưởng 10.000 m² · 5.000 tấn/năm · 30+ quốc gia xuất khẩu',
     stats: [
-      { value: '15+', label: 'Năm kinh nghiệm' },
-      { value: '40', label: 'Mẫu đất nhà máy' },
-      { value: '200+', label: 'Nhân viên' },
-      { value: '50,000㎡', label: 'Sản xuất / năm' },
+      { value: YEARS_LABEL, label: 'Năm hoạt động' },
+      { value: '10.000㎡', label: 'Diện tích nhà xưởng' },
+      { value: '5.000 t', label: 'Sản lượng/năm' },
+      { value: '30+', label: 'Quốc gia' },
     ],
     certTitle: 'Chứng Nhận & Kiểm Định',
   },
   th: {
-    title: 'โรงงานผลิตโดยตรง · 15 ปี เชี่ยวชาญการผลิต',
-    subtitle: '40 ไร่ · 200+ พนักงาน · 50,000 ตร.ม. ต่อปี กำลังการผลิต',
+    title: 'โรงงานผลิตโดยตรง · ผลิตตั้งแต่ปี 2014',
+    subtitle: 'โรงงาน 10,000 ตร.ม. · 5,000 ตัน/ปี · ส่งออก 30+ ประเทศ',
     stats: [
-      { value: '15+', label: 'ปีประสบการณ์' },
-      { value: '40', label: 'ไร่โรงงาน' },
-      { value: '200+', label: 'พนักงาน' },
-      { value: '50,000㎡', label: 'ผลิต / ปี' },
+      { value: YEARS_LABEL, label: 'ปีดำเนินธุรกิจ' },
+      { value: '10,000㎡', label: 'พื้นที่โรงงาน' },
+      { value: '5,000 t', label: 'กำลังผลิต/ปี' },
+      { value: '30+', label: 'ประเทศ' },
     ],
     certTitle: 'ใบรับรอง & ตรวจสอบ',
   },
   en: {
-    title: 'Direct Factory · 15 Years of Manufacturing',
-    subtitle: '40 mu · 200+ employees · 50,000 m²/year production capacity',
+    title: 'Direct Factory · Manufacturing Since 2014',
+    subtitle: '10,000 m² facility · 5,000 t annual output · 30+ export countries',
     stats: [
-      { value: '15+', label: 'Years' },
-      { value: '40', label: 'mu factory' },
-      { value: '200+', label: 'Employees' },
-      { value: '50,000㎡', label: 'Per year' },
+      { value: YEARS_LABEL, label: 'Years in Business' },
+      { value: '10,000㎡', label: 'Factory Area' },
+      { value: '5,000 t', label: 'Annual Output' },
+      { value: '30+', label: 'Countries' },
     ],
     certTitle: 'Certifications & Testing',
   },
   zh: {
-    title: '源头工厂 · 15 年专注生产',
-    subtitle: '40 亩厂房 · 200+ 员工 · 50,000㎡/年 产能',
+    title: '源头工厂 · 2014 年建厂',
+    subtitle: '10,000㎡ 厂区 · 年产 5,000 吨 · 出口 30+ 国家',
     stats: [
-      { value: '15+', label: '年经验' },
-      { value: '40', label: '亩工厂' },
-      { value: '200+', label: '名员工' },
-      { value: '50,000㎡', label: '年产能' },
+      { value: YEARS_LABEL, label: '年制造经验' },
+      { value: '10,000㎡', label: '厂区面积' },
+      { value: '5,000 吨', label: '年产能' },
+      { value: '30+', label: '出口国家' },
     ],
     certTitle: '资质与检测',
   },

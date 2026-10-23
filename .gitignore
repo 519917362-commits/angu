@@ -32,6 +32,9 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# 模板必须进仓库，否则新环境部署时没有任何配置参考
+!.env.example
+!**/.env.example
 
 # backend
 backend/node_modules/

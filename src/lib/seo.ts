@@ -24,50 +24,50 @@ export const pageSeoDefaults: Record<string, LocaleSeo> = {
     en: {
       title: 'Noise Barrier Manufacturer — Highway & Industrial | Angu',
       description:
-        'Factory-direct noise barriers for highways, industry, rail and bridges. ISO 9001 & CE certified, 15 years experience, shipped to 30+ countries.',
+        'Factory-direct noise barriers for highways, industry, rail and bridges. ISO 9001 & CE certified, manufacturing since 2014, shipped to 30+ countries.',
       keywords: 'noise barrier, sound barrier, highway noise barrier, acoustic barrier, noise barrier manufacturer, factory direct',
     },
     zh: {
       title: '声屏障厂家 — 公路·工业隔音屏障 | 安固丝网',
       description:
-        '工厂直供公路、工业、轨道交通、桥梁声屏障。ISO 9001与CE认证，15年制造经验，出口30+国家。',
+        '工厂直供公路、工业、轨道交通、桥梁声屏障。ISO 9001与CE认证，12年制造经验，出口30+国家。',
       keywords: '声屏障, 隔音屏障, 公路声屏障, 工业降噪, 声屏障厂家, 工厂直供',
     },
     vi: {
       title: 'Nhà Sản Xuất Tấm Chắn Ồn — Đường Cao Tốc & Công Nghiệp | Angu',
       description:
-        'Tấm chắn ồn trực tiếp từ nhà máy cho đường cao tốc, công nghiệp, đường sắt và cầu. Chứng nhận ISO 9001 & CE, 15 năm kinh nghiệm, xuất khẩu 30+ quốc gia.',
+        'Tấm chắn ồn trực tiếp từ nhà máy cho đường cao tốc, công nghiệp, đường sắt và cầu. Chứng nhận ISO 9001 & CE, 12 năm kinh nghiệm, xuất khẩu 30+ quốc gia.',
       keywords: 'tấm chắn ồn, vách cách âm, tấm chắn ồn đường cao tốc, nhà sản xuất tấm chắn ồn, nhà máy trực tiếp',
     },
     th: {
       title: 'ผู้ผลิตแผงกั้นเสียง — ทางหลวง & อุตสาหกรรม | Angu',
       description:
-        'แผงกั้นเสียงจากโรงงานโดยตรงสำหรับทางหลวง อุตสาหกรรม ระบบราง และสะพาน รับรอง ISO 9001 & CE ประสบการณ์ 15 ปี ส่งออก 30+ ประเทศ',
+        'แผงกั้นเสียงจากโรงงานโดยตรงสำหรับทางหลวง อุตสาหกรรม ระบบราง และสะพาน รับรอง ISO 9001 & CE ประสบการณ์ 12 ปี ส่งออก 30+ ประเทศ',
       keywords: 'แผงกั้นเสียง, แผงกันเสียง, แผงกั้นเสียงทางหลวง, ผู้ผลิตแผงกั้นเสียง, โรงงานโดยตรง',
     },
   },
 
   about: {
     en: {
-      title: 'About Angu — Wire Mesh Manufacturer Since 2015 | ISO 9001 Certified',
+      title: 'About Angu — Wire Mesh Manufacturer Since 2014 | ISO 9001 Certified',
       description:
-        'Angu Wire Mesh is a leading manufacturer of gabion boxes, wire mesh fences, and rockfall protection nets based in Anping, China. ISO 9001 & CE certified, 15+ years experience, exporting to 30+ countries.',
+        'Angu Wire Mesh is a leading manufacturer of gabion boxes, wire mesh fences, and rockfall protection nets based in Anping, China. ISO 9001 & CE certified, manufacturing since 2014, exporting to 30+ countries.',
       keywords: 'wire mesh manufacturer, Anping factory, ISO 9001, CE certified, gabion producer, about Angu',
     },
     zh: {
       title: '关于安固 — 丝网制造专家 | ISO 9001认证企业',
       description:
-        '安固丝网位于中国丝网之都河北安平，专注石笼网箱、防护网、护栏网等丝网产品研发制造。ISO 9001与CE认证，15年行业经验，产品出口30+国家。',
+        '安固丝网位于中国丝网之都河北安平，专注石笼网箱、防护网、护栏网等丝网产品研发制造。ISO 9001与CE认证，12年行业经验，产品出口30+国家。',
       keywords: '丝网厂家, 安平工厂, ISO 9001认证, CE认证, 石笼网生产商, 关于安固',
     },
     vi: {
-      title: 'Về Angu — Nhà Sản Xuất Lưới Thép Từ 2015 | ISO 9001',
+      title: 'Về Angu — Nhà Sản Xuất Lưới Thép Từ 2014 | ISO 9001',
       description:
         'Angu Wire Mesh là nhà sản xuất hàng đầu về lồng rọ đá, hàng rào lưới thép và lưới chống sạt lở tại Anping, Trung Quốc. Chứng nhận ISO 9001 & CE, 15+ năm kinh nghiệm, xuất khẩu đến 30+ quốc gia.',
       keywords: 'nhà sản xuất lưới thép, nhà máy Anping, ISO 9001, CE, sản xuất rọ đá, về Angu',
     },
     th: {
-      title: 'เกี่ยวกับ Angu — ผู้ผลิตลวดตาข่ายตั้งแต่ปี 2015 | รับรอง ISO 9001',
+      title: 'เกี่ยวกับ Angu — ผู้ผลิตลวดตาข่ายตั้งแต่ปี 2014 | รับรอง ISO 9001',
       description:
         'Angu Wire Mesh เป็นผู้ผลิตชั้นนำด้านกล่องเกเบี้ยน รั้วลวดตาข่าย และตาข่ายกันหินร่วง ตั้งอยู่ที่ Anping ประเทศจีน ได้รับการรับรอง ISO 9001 & CE มีประสบการณ์ 15+ ปี ส่งออกไปยัง 30+ ประเทศ',
       keywords: 'ผู้ผลิตลวดตาข่าย, โรงงาน Anping, ISO 9001, CE, ผู้ผลิตเกเบี้ยน, เกี่ยวกับ Angu',
@@ -213,25 +213,25 @@ export const pageSeoDefaults: Record<string, LocaleSeo> = {
     en: {
       title: 'Solutions — Wire Mesh Applications by Industry | Angu',
       description:
-        'Industry-specific wire mesh solutions: bridge protection, mining safety, water conservancy, highway barriers, coastal defense, noise control, landscaping, livestock, and construction. 15 years expertise, factory-direct from Anping, China.',
+        'Industry-specific wire mesh solutions: bridge protection, mining safety, water conservancy, highway barriers, coastal defense, noise control, landscaping, livestock, and construction. expertise built since 2014, factory-direct from Anping, China.',
       keywords: 'wire mesh solutions, bridge protection, mining safety, water conservancy, highway barriers, coastal defense',
     },
     zh: {
       title: '解决方案 — 丝网行业应用方案 | 安固丝网',
       description:
-        '按行业定制的丝网解决方案：桥梁防护、矿山安全、水利工程、公路护栏、海岸防护、工业降噪、园林景观、畜牧养殖、建筑施工。15年经验，河北安平工厂直供。',
+        '按行业定制的丝网解决方案：桥梁防护、矿山安全、水利工程、公路护栏、海岸防护、工业降噪、园林景观、畜牧养殖、建筑施工。12年经验，河北安平工厂直供。',
       keywords: '丝网解决方案, 桥梁防护, 矿山安全, 水利工程, 公路护栏, 海岸防护',
     },
     vi: {
       title: 'Giải Pháp — Ứng Dụng Lưới Thép Theo Ngành | Angu',
       description:
-        'Giải pháp lưới thép chuyên biệt theo ngành: bảo vệ cầu, an toàn khai thác mỏ, thủy lợi, hàng rào cao tốc, phòng hộ bờ biển, kiểm soát tiếng ồn, cảnh quan, chăn nuôi và xây dựng. 15 năm kinh nghiệm, nhà máy tại Anping, Trung Quốc.',
+        'Giải pháp lưới thép chuyên biệt theo ngành: bảo vệ cầu, an toàn khai thác mỏ, thủy lợi, hàng rào cao tốc, phòng hộ bờ biển, kiểm soát tiếng ồn, cảnh quan, chăn nuôi và xây dựng. 12 năm kinh nghiệm, nhà máy tại Anping, Trung Quốc.',
       keywords: 'giải pháp lưới thép, bảo vệ cầu, an toàn mỏ, thủy lợi, hàng rào cao tốc, phòng hộ bờ biển',
     },
     th: {
       title: 'โซลูชัน — การประยุกต์ใช้ลวดตาข่ายตามอุตสาหกรรม | Angu',
       description:
-        'โซลูชันลวดตาข่ายเฉพาะอุตสาหกรรม: ป้องกันสะพาน ความปลอดภัยเหมืองแร่ ชลประทาน แผงกั้นทางหลวง ป้องกันชายฝั่ง ควบคุมเสียงรบกวน ภูมิทัศน์ ปศุสัตว์ และก่อสร้าง ประสบการณ์ 15 ปี โรงงานที่ Anping จีน',
+        'โซลูชันลวดตาข่ายเฉพาะอุตสาหกรรม: ป้องกันสะพาน ความปลอดภัยเหมืองแร่ ชลประทาน แผงกั้นทางหลวง ป้องกันชายฝั่ง ควบคุมเสียงรบกวน ภูมิทัศน์ ปศุสัตว์ และก่อสร้าง ประสบการณ์ 12 ปี โรงงานที่ Anping จีน',
       keywords: 'โซลูชันลวดตาข่าย, ป้องกันสะพาน, ความปลอดภัยเหมืองแร่, ชลประทาน, แผงกั้นทางหลวง, ป้องกันชายฝั่ง',
     },
   },

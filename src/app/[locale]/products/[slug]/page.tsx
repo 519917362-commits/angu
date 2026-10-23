@@ -7,10 +7,25 @@ import {InquiryButtonLarge} from '@/components/inquiry/InquiryButtonLarge';
 import {ProductCard} from '@/components/products/ProductCard';
 import ProductGallery from '@/components/products/ProductGallery';
 import type {Product} from '@/types/product';
-import {getProductFaqs} from '@/lib/data/productFaqs';
 import {tLabel} from '@/lib/i18n';
 import {renderMarkdown} from '@/lib/markdown';
 import {routing} from '@/lib/routing';
+import {QUOTE_NOTE_EN, QUOTE_NOTE_ZH, LEAD_TIME_NOTE_EN, LEAD_TIME_NOTE_ZH, MOQ_NOTE_EN, MOQ_NOTE_ZH} from '@/lib/company';
+
+/**
+ * 从 priceRemark（如 "FOB Tianjin, per m2"）解析计价单位。
+ * 旧版前台把单位硬编码成 "/unit"，导致 $100/m² 被显示成 $100/件。
+ */
+function priceUnit(remark?: string): string {
+  const m = (remark || '').toLowerCase().match(/per\s+(m2|m²|square meter|panel|piece|pcs|roll|coil|linear meter|meter)/);
+  if (!m) return '';
+  const map: Record<string, string> = {
+    m2: 'm²', 'm²': 'm²', 'square meter': 'm²',
+    panel: 'panel', piece: 'piece', pcs: 'pcs', roll: 'roll', coil: 'coil',
+    meter: 'm', 'linear meter': 'linear m',
+  };
+  return map[m[1]] || '';
+}
 
 const specLabels: Record<string, Record<string, string>> = {
   // Basic
@@ -243,6 +258,16 @@ interface ProductDetailPageProps {
 
 export async function generateStaticParams() {
   const catalog = await getCatalog();
+  // 守卫：后端不可达时 getCatalog() 会静默返回空数组，过去会导致"构建成功但 0 个产品页"，
+  // 部署后全站退化为按需渲染且无人察觉。这里改为显式失败，让部署脚本中止。
+  // 确需无数据构建（如纯前端预览）时，设置 ALLOW_EMPTY_CATALOG=1。
+  if (catalog.products.length === 0 && process.env.ALLOW_EMPTY_CATALOG !== '1') {
+    throw new Error(
+      '[build] /api/catalog 返回 0 个产品：后端不可达或数据为空。' +
+      '已中止构建以避免发布一个没有产品页的站点。' +
+      '（确认要空构建请设置 ALLOW_EMPTY_CATALOG=1）',
+    );
+  }
   const slugs = catalog.products.map(p => p.slug);
   const params: {locale: string; slug: string}[] = [];
   const locales = routing.locales;
@@ -309,10 +334,8 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
   const category = catalog.categories.find(c => c.slug === product.categorySlug);
   const categoryName = category?.names[locale] || category?.names.en || product.categorySlug;
 
-  // Product-specific FAQs
-  // GEO: Priority use API-provided FAQ (240 Q&A), fallback to local productFaqs.ts
-const apiFaqs = product.faq?.[locale] || product.faq?.en || [];
-const productFaqs = apiFaqs.length > 0 ? apiFaqs : getProductFaqs(product.slug, locale);
+  // Product-specific FAQs — 数据源唯一：全部来自后台/数据库（36/36 产品已覆盖）
+  const productFaqs = product.faq?.[locale] || product.faq?.en || [];
 
   const baseUrl = 'https://www.angumesh.com';
 
@@ -322,21 +345,41 @@ const productFaqs = apiFaqs.length > 0 ? apiFaqs : getProductFaqs(product.slug, 
   // Extract material from specs for `material` field
   const material = product.specifications?.material || product.specifications_zh?.material || '';
 
-  // B2B industrial goods: we do NOT use @type Product because price is not a
-  // meaningful attribute here (inquiry-based sales). Product requires
-  // offers/review/aggregateRating — omitting them triggers a Search Console
-  // "severe issue". Use Thing instead with harmless descriptive fields.
+  // ── JSON-LD: Product ──
+  // B2B 询盘制没有公开标价，但仍必须用 Product 而非 Thing：
+  // 只有 Product 才能让搜索引擎与 AI 建立"产品实体"，Thing 只是最泛化的占位类型，
+  // 拿不到任何富媒体资格、也进不了产品知识图谱。
+  // 合规底线：无真实评价数据，故不输出 aggregateRating（虚构评分违反 Google 政策）。
+  const specLabelOf = (key: string): string =>
+    specLabels[key]?.[locale] ||
+    specLabels[key]?.en ||
+    specLabels[zhKeyToEnKey[key]]?.[locale] ||
+    specLabels[zhKeyToEnKey[key]]?.en ||
+    key.replace(/([A-Z])/g, ' $1').replace(/^./, (s: string) => s.toUpperCase()).trim();
+
+  const specProperties = Object.entries(specs || {})
+    .filter(([, v]) => typeof v === 'string' && v.trim().length > 0)
+    .slice(0, 20)
+    .map(([k, v]) => ({
+      '@type': 'PropertyValue',
+      name: specLabelOf(k),
+      value: String(v).trim(),
+    }));
+
   const productLD: Record<string, unknown> = {
     '@context': 'https://schema.org',
-    '@type': 'Thing',
+    '@type': 'Product',
     name,
     description: fullDesc.slice(0, 500) || shortDesc,
     url: `${baseUrl}/${locale}/products/${product.slug}`,
+    ...(product.sku ? { sku: product.sku } : {}),
+    category: categoryName,
     brand: { '@type': 'Brand', name: 'Angu Wire Mesh' },
     manufacturer: {
       '@type': 'Organization',
       name: 'Angu Wire Mesh',
       url: baseUrl,
+      sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },
   };
   if (productImages.length > 0) {
@@ -344,6 +387,30 @@ const productFaqs = apiFaqs.length > 0 ? apiFaqs : getProductFaqs(product.slug, 
   }
   if (material) {
     productLD.material = material;
+  }
+  if (specProperties.length > 0) {
+    productLD.additionalProperty = specProperties;
+  }
+  // 有公开指导价才输出 Offer；无价则整体省略（Product 本身依然有效）
+  if (typeof product.priceUsd === 'number' && product.priceUsd > 0) {
+    productLD.offers = {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'USD',
+      lowPrice: product.priceUsd,
+      offerCount: 1,
+      availability: 'https://schema.org/MadeToOrder',
+      url: `${baseUrl}/${locale}/products/${product.slug}`,
+      ...(product.moq
+        ? {
+            eligibleQuantity: {
+              '@type': 'QuantitativeValue',
+              minValue: product.moq,
+              unitText: priceUnit(product.priceRemark) || product.priceRemark || 'unit',
+            },
+          }
+        : {}),
+      seller: { '@type': 'Organization', name: 'Angu Wire Mesh', url: baseUrl },
+    };
   }
 
   // ── JSON-LD: BreadcrumbList (with product) ──
@@ -478,7 +545,9 @@ const productFaqs = apiFaqs.length > 0 ? apiFaqs : getProductFaqs(product.slug, 
                     <tr className="border-b border-slate-50">
                       <th scope="row" className="py-2.5 font-medium text-slate-500 text-left">{locale === 'zh' ? '起订量' : locale === 'vi' ? 'SL đặt tối thiểu' : locale === 'th' ? 'จำนวนสั่งขั้นต่ำ' : 'MOQ'}</th>
                       <td className="py-2.5 text-slate-900 text-end font-medium">
-                        {product.moq ? `${product.moq} ${locale === 'zh' ? '件' : locale === 'vi' ? 'chiếc' : locale === 'th' ? 'ชิ้น' : 'pieces'}` : (locale === 'zh' ? '可协商' : locale === 'vi' ? 'Có thể thương lượng' : locale === 'th' ? 'ตกลงได้' : 'Negotiable')}
+                        {product.moq
+                          ? `${product.moq} ${priceUnit(product.priceRemark) || (locale === 'zh' ? '件' : locale === 'vi' ? 'chiếc' : locale === 'th' ? 'ชิ้น' : 'pieces')}`
+                          : (locale === 'zh' ? '可协商' : locale === 'vi' ? 'Có thể thương lượng' : locale === 'th' ? 'ตกลงได้' : 'Negotiable')}
                       </td>
                     </tr>
                   </tbody>
@@ -486,16 +555,21 @@ const productFaqs = apiFaqs.length > 0 ? apiFaqs : getProductFaqs(product.slug, 
                 {product.priceRemark && (
                   <p className="text-xs text-slate-400 mt-2">{product.priceRemark}</p>
                 )}
+                {/* 交易条款统一口径：试单量、交期，避免各页各写一套 */}
+                <p className="text-xs text-slate-400 mt-1">{locale === 'zh' ? MOQ_NOTE_ZH : MOQ_NOTE_EN}</p>
+                <p className="text-xs text-slate-400 mt-1">{locale === 'zh' ? LEAD_TIME_NOTE_ZH : LEAD_TIME_NOTE_EN}</p>
               </div>
 
               {/* Price */}
               {product.priceUsd && (
                 <div className="bg-blue-50 rounded-xl p-4">
-                  <div className="text-sm text-blue-600 mb-1">{locale === 'zh' ? 'FOB价格' : locale === 'vi' ? 'Giá FOB' : locale === 'th' ? 'ราคา FOB' : 'FOB Price'}</div>
+                  <div className="text-sm text-blue-600 mb-1">{locale === 'zh' ? 'FOB 天津港参考价' : locale === 'vi' ? 'Giá tham khảo FOB Thiên Tân' : locale === 'th' ? 'ราคาอ้างอิง FOB เทียนจิน' : 'Indicative FOB Tianjin Price'}</div>
                   <div className="text-3xl font-bold text-blue-700">
+                    <span className="text-base font-normal text-blue-500 mr-1">{locale === 'zh' ? '起' : locale === 'vi' ? 'Từ' : locale === 'th' ? 'เริ่ม' : 'From'}</span>
                     ${product.priceUsd}
-                    <span className="text-base font-normal text-blue-500">/{locale === 'zh' ? '件' : locale === 'vi' ? 'đơn vị' : locale === 'th' ? 'หน่วย' : 'unit'}</span>
+                    <span className="text-base font-normal text-blue-500">/{priceUnit(product.priceRemark) || (locale === 'zh' ? '件' : 'unit')}</span>
                   </div>
+                  <p className="text-xs text-blue-700/70 mt-2">{locale === 'zh' ? QUOTE_NOTE_ZH : QUOTE_NOTE_EN}</p>
                 </div>
               )}
 
@@ -536,8 +610,8 @@ const productFaqs = apiFaqs.length > 0 ? apiFaqs : getProductFaqs(product.slug, 
                 </div>
                 <div className="flex items-center gap-2 text-sm text-slate-500">
                   <span aria-hidden="true">✉️</span>
-                  <a href="mailto:anguwiremesh@gmail.com" className="hover:text-blue-600 transition-colors">
-                    anguwiremesh@gmail.com
+                  <a href="mailto:annie@angumesh.com" className="hover:text-blue-600 transition-colors">
+                    annie@angumesh.com
                   </a>
                 </div>
               </div>

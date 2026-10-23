@@ -95,16 +95,8 @@ export async function GET() {
     for (const [path, freq, pri] of pages) {
       urls.push(urlBlock({ locale, path, changefreq: freq, priority: pri, lastmod: SITE_LASTMOD }));
     }
-    // Category filter pages — use latest product createdAt in that category as lastmod proxy
-    for (const cat of categories) {
-      urls.push(urlBlock({
-        locale,
-        path: `/products?category=${cat.slug}`,
-        changefreq: 'weekly',
-        priority: '0.8',
-        lastmod: SITE_LASTMOD,
-      }));
-    }
+    // Category filter pages (/products?category=xx) 不进 sitemap：
+    // 这些页面的 canonical 指向 /products，提交它们与 canonical 自相矛盾且浪费抓取配额
     // Product detail pages — use updatedAt or createdAt
     for (const product of products) {
       urls.push(urlBlock({

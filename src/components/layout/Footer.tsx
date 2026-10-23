@@ -6,6 +6,7 @@ import {usePathname} from 'next/navigation';
 import {Mail, Phone, MapPin} from 'lucide-react';
 import {useCategories, useSiteConfig, cfgVal} from '@/lib/hooks';
 import { tLabel } from '@/lib/i18n';
+import {COMPANY} from '@/lib/company';
 
 interface FooterProps {
   locale: string;
@@ -20,9 +21,18 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
   const siteConfig = useSiteConfig();
   const [logoError, setLogoError] = useState(false);
   const phone = cfgVal(siteConfig, 'phone', locale, '+86 188 0318 9797');
-  const email = cfgVal(siteConfig, 'email', locale, 'anguwiremesh@gmail.com');
-  const address = cfgVal(siteConfig, 'address', locale, 'Anping County, Hengshui, Hebei, China');
-  const copyright = cfgVal(siteConfig, 'copyright', locale, `© ${new Date().getFullYear()} Hebei Angu Wire Mesh Products Co., Ltd.`);
+  const email = cfgVal(siteConfig, 'email', locale, 'annie@angumesh.com');
+  const address = cfgVal(
+    siteConfig,
+    'address',
+    locale,
+    locale === 'zh'
+      ? COMPANY.streetAddressZh
+      : `${COMPANY.streetAddress}, ${COMPANY.addressLocality}, ${COMPANY.addressRegion} ${COMPANY.postalCode}, China`,
+  );
+  // 版权年份动态计算：数据库里的固定年份会过期
+  const copyrightRaw = cfgVal(siteConfig, 'copyright', locale, `© ${new Date().getFullYear()} ${COMPANY.legalNameEn}`);
+  const copyright = copyrightRaw.replace(/©\s*\d{4}/, `© ${new Date().getFullYear()}`);
   const clientLogoUrl = cfgVal(siteConfig, 'logo_url', locale, '');
   const logoUrl = serverLogoUrl || clientLogoUrl;
 
@@ -72,7 +82,7 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
             <p className="text-sm text-slate-400 leading-relaxed mb-5">
               {cfgVal(siteConfig, 'company_short_intro_en', locale, isZh
                 ? '安固丝网是一家专业制造商，主营电焊网、护栏网、石笼网、边坡防护网、声屏障等金属丝网产品，出口30多个国家和地区。'
-                : 'Hebei Angu Wire Mesh Products Co., Ltd. is a professional manufacturer of welded wire mesh, chain link fence, gabion boxes, slope protection nets, noise barriers and more — exported to 30+ countries.')}
+                : `${COMPANY.legalNameEn} is a professional manufacturer of welded wire mesh, chain link fence, gabion boxes, slope protection nets, noise barriers and more — exported to 30+ countries.`)}
             </p>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm">

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type {Metadata} from 'next';
 import {getCatalog, getSiteConfig} from '@/lib/api';
 import {  pickLocale, tLabel  } from '@/lib/i18n';;
+import {YEARS_LABEL} from '@/lib/company';
 import {ProductCard} from '@/components/products/ProductCard';
 
 // ── Metadata ──
@@ -16,12 +17,12 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
       ? 'ผู้ผลิตแผงกั้นเสียง — ทางหลวง & อุตสาหกรรม | Angu'
       : 'Noise Barrier Manufacturer — Highway & Industrial | Angu',
     description: locale === 'zh'
-      ? '工厂直供公路、工业、轨道交通、桥梁声屏障。ISO 9001与CE认证，15年制造经验，出口30+国家。'
+      ? '工厂直供公路、工业、轨道交通、桥梁声屏障。ISO 9001与CE认证，12年制造经验，出口30+国家。'
       : locale === 'vi'
-      ? 'Tấm chắn ồn trực tiếp từ nhà máy cho đường cao tốc, công nghiệp, đường sắt và cầu. Chứng nhận ISO 9001 & CE, 15 năm kinh nghiệm, xuất khẩu 30+ quốc gia.'
+      ? 'Tấm chắn ồn trực tiếp từ nhà máy cho đường cao tốc, công nghiệp, đường sắt và cầu. Chứng nhận ISO 9001 & CE, 12 năm kinh nghiệm, xuất khẩu 30+ quốc gia.'
       : locale === 'th'
-      ? 'แผงกั้นเสียงจากโรงงานโดยตรงสำหรับทางหลวง อุตสาหกรรม ระบบราง และสะพาน รับรอง ISO 9001 & CE ประสบการณ์ 15 ปี ส่งออก 30+ ประเทศ'
-      : 'Factory-direct noise barriers for highways, industry, rail and bridges. ISO 9001 & CE certified, 15 years experience, shipped to 30+ countries.',
+      ? 'แผงกั้นเสียงจากโรงงานโดยตรงสำหรับทางหลวง อุตสาหกรรม ระบบราง และสะพาน รับรอง ISO 9001 & CE ประสบการณ์ 12 ปี ส่งออก 30+ ประเทศ'
+      : 'Factory-direct noise barriers for highways, industry, rail and bridges. ISO 9001 & CE certified, manufacturing since 2014, shipped to 30+ countries.',
     keywords: locale === 'zh'
       ? '声屏障,隔音屏障,公路声屏障,工业降噪,声屏障厂家,工厂直供'
       : locale === 'vi'
@@ -30,8 +31,15 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
       ? 'แผงกั้นเสียง,แผงกันเสียง,แผงกั้นเสียงทางหลวง,ผู้ผลิตแผงกั้นเสียง,โรงงานโดยตรง'
       : 'noise barrier,sound barrier,highway noise barrier,acoustic barrier,noise barrier manufacturer,factory direct',
     alternates: {
-      canonical: `https://www.angumesh.com${locale === 'zh' ? '/zh' : locale === 'vi' ? '/vi' : locale === 'th' ? '/th' : '/en'}`,
-      languages: {'x-default': '/en', en: '/en', zh: '/zh', vi: '/vi', th: '/th'},
+      canonical: `https://www.angumesh.com/${locale}`,
+      // hreflang 必须绝对 URL：Google 对相对值会整簇忽略（含 x-default 自引用）
+      languages: {
+        'x-default': 'https://www.angumesh.com/en',
+        en: 'https://www.angumesh.com/en',
+        zh: 'https://www.angumesh.com/zh',
+        vi: 'https://www.angumesh.com/vi',
+        th: 'https://www.angumesh.com/th',
+      },
     },
     openGraph: {
       title: locale === 'zh'
@@ -42,12 +50,12 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
         ? 'แผงกั้นเสียง — ทางหลวง & อุตสาหกรรม | Angu'
         : 'Noise Barrier Manufacturer — Highway & Industrial | Angu',
       description: locale === 'zh'
-        ? '工厂直供公路、工业、轨道交通、桥梁声屏障。ISO 9001与CE认证，15年经验。'
+        ? '工厂直供公路、工业、轨道交通、桥梁声屏障。ISO 9001与CE认证，12年经验。'
         : locale === 'vi'
-        ? 'Tấm chắn ồn trực tiếp từ nhà máy cho đường cao tốc, công nghiệp, đường sắt và cầu. Chứng nhận ISO 9001 & CE, 15 năm kinh nghiệm.'
+        ? 'Tấm chắn ồn trực tiếp từ nhà máy cho đường cao tốc, công nghiệp, đường sắt và cầu. Chứng nhận ISO 9001 & CE, 12 năm kinh nghiệm.'
         : locale === 'th'
-        ? 'แผงกั้นเสียงจากโรงงานโดยตรงสำหรับทางหลวง อุตสาหกรรม ระบบราง และสะพาน รับรอง ISO 9001 & CE ประสบการณ์ 15 ปี'
-        : 'Factory-direct noise barriers for highways, industry, rail and bridges. ISO 9001 & CE certified, 15 years experience.',
+        ? 'แผงกั้นเสียงจากโรงงานโดยตรงสำหรับทางหลวง อุตสาหกรรม ระบบราง และสะพาน รับรอง ISO 9001 & CE ประสบการณ์ 12 ปี'
+        : 'Factory-direct noise barriers for highways, industry, rail and bridges. ISO 9001 & CE certified, manufacturing since 2014.',
       type: 'website',
       locale: locale === 'zh' ? 'zh_CN' : locale === 'vi' ? 'vi_VN' : locale === 'th' ? 'th_TH' : 'en_US',
       siteName: locale === 'zh' ? '安固丝网' : 'Angu Wire Mesh',
@@ -134,10 +142,10 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
   // --- Config values ---
   const heroBadge = cfg('hero_badge_en', locale === 'zh' ? 'ISO 9001 & CE 认证制造商' : 'ISO 9001 & CE Certified');
   const heroTitle = cfg('hero_title_prefix_en', locale === 'zh' ? '安固丝网 — 石笼网箱·防护网·护栏网厂家直销' : 'Angu Wire Mesh — Gabion · Rockfall · Fencing');
-  const heroSubtitle = cfg('hero_subtitle_en', locale === 'zh' ? '中国丝网之都安平·15年制造经验·工厂直供' : 'Anping · China Wire Mesh Capital · 15 Years · Factory-Direct');
+  const heroSubtitle = cfg('hero_subtitle_en', locale === 'zh' ? '中国丝网之都安平·12年制造经验·工厂直供' : 'Anping · China Wire Mesh Capital · 15 Years · Factory-Direct');
   const heroCta = cfg('hero_cta_en', locale === 'zh' ? '获取报价' : 'Get Quote');
   const companyTitle = cfg('home_company_title', locale === 'zh' ? '关于安固丝网' : 'About Angu Wire Mesh');
-  const companyDesc1 = cfg('home_company_desc1', locale === 'zh' ? '安固丝网坐落于中国河北安平——中国丝网之都，是一家拥有15年行业经验的金属丝网制造商。公司引进全自动六角编织机、PVC包覆生产线等先进设备，年产金属丝网300万平方米，产品出口东南亚、中东、欧洲、非洲、南美等30多个国家和地区。' : 'Angu Wire Mesh is based in Anping, Hebei — the Wire Mesh Capital of China — with 15 years of manufacturing expertise. Our factory is equipped with fully automated hexagonal weaving machines and PVC coating lines, producing 3 million sqm of metal wire mesh annually. Products are exported to 30+ countries across Southeast Asia, the Middle East, Europe, Africa, and South America.');
+  const companyDesc1 = cfg('home_company_desc1', locale === 'zh' ? '安固丝网坐落于中国河北安平——中国丝网之都，是一家拥有12年行业经验的金属丝网制造商。公司引进全自动六角编织机、PVC包覆生产线等先进设备，年产金属丝网300万平方米，产品出口东南亚、中东、欧洲、非洲、南美等30多个国家和地区。' : 'Angu Wire Mesh is based in Anping, Hebei — the Wire Mesh Capital of China — with manufacturing since 2014 expertise. Our factory is equipped with fully automated hexagonal weaving machines and PVC coating lines, producing 3 million sqm of metal wire mesh annually. Products are exported to 30+ countries across Southeast Asia, the Middle East, Europe, Africa, and South America.');
   const companyDesc2 = cfg('home_company_desc2', locale === 'zh' ? '我们持有多项ISO 9001及CE认证，主营石笼网箱、边坡防护网、护栏网、声屏障、刺绳、钢格板等9大品类28款系列产品，广泛应用于建筑水利、公路铁路、矿山边坡、农牧养殖等领域，是工程采购的可靠合作伙伴。' : 'We hold ISO 9001 and CE certifications across our 9 product categories and 28 series: gabion boxes, rockfall protection nets, fencing, noise barriers, barbed wire, and steel grating — serving construction, highway, mining, agriculture, and more. A trusted partner for engineering procurement.');
   const aboutImage = cfg('home_about_image', locale === 'zh' ? '/images/about/factory-workshop.jpg' : '/images/about/factory-workshop.jpg');
   const featuredTitle = cfg('home_featured_title', locale === 'zh' ? '精选产品' : 'Featured Products');
@@ -231,10 +239,10 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {[
-                {num: '15+', label: locale === 'zh' ? '年行业经验' : locale === 'vi' ? 'Năm kinh nghiệm' : locale === 'th' ? 'ปีประสบการณ์' : 'Years Experience'},
+                {num: YEARS_LABEL, label: locale === 'zh' ? '年制造经验' : locale === 'vi' ? 'Năm hoạt động' : locale === 'th' ? 'ปีดำเนินธุรกิจ' : 'Years in Business'},
                 {num: '30+', label: locale === 'zh' ? '出口国家' : locale === 'vi' ? 'Quốc gia xuất khẩu' : locale === 'th' ? 'ประเทศส่งออก' : 'Countries Exported'},
-                {num: '500+', label: locale === 'zh' ? '满意客户' : locale === 'vi' ? 'Khách hàng hài lòng' : locale === 'th' ? 'ลูกค้าพึงพอใจ' : 'Happy Clients'},
-                {num: '50+', label: locale === 'zh' ? '产品类型' : locale === 'vi' ? 'Loại sản phẩm' : locale === 'th' ? 'ประเภทสินค้า' : 'Product Types'},
+                {num: '36', label: locale === 'zh' ? '在架产品规格' : locale === 'vi' ? 'Mã sản phẩm' : locale === 'th' ? 'รายการสินค้า' : 'Product Specifications'},
+                {num: '9', label: locale === 'zh' ? '产品线' : locale === 'vi' ? 'Dòng sản phẩm' : locale === 'th' ? 'กลุ่มสินค้า' : 'Product Lines'},
               ].map((stat) => (
                 <div key={stat.label}>
                   <div className="text-2xl md:text-3xl font-bold text-blue-600">{stat.num}</div>
@@ -267,7 +275,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
               {[
                 {en: 'ISO 9001 Certified', zh: 'ISO 9001 认证', vi: 'Chứng nhận ISO 9001', th: 'ได้รับการรับรอง ISO 9001'},
                 {en: 'CE Certified', zh: 'CE 认证', vi: 'Chứng nhận CE', th: 'ได้รับการรับรอง CE'},
-                {en: '15+ Years Experience', zh: '15+ 年经验', vi: '15+ Năm Kinh Nghiệm', th: '15+ ปีประสบการณ์'},
+                {en: '12+ Years Experience', zh: '15+ 年经验', vi: '12+ Năm Kinh Nghiệm', th: '12+ ปีประสบการณ์'},
                 {en: '30+ Countries Exported', zh: '出口 30+ 国家', vi: 'Xuất Khẩu 30+ Quốc Gia', th: 'ส่งออก 30+ ประเทศ'},
               ].map((badge) => (
                 <span key={badge.en} className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 text-xs font-medium px-3 py-1.5 rounded-full border border-blue-200">
@@ -296,8 +304,8 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
                   <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-slate-900">500+</div>
-                  <div className="text-xs text-slate-500">{tLabel('全球客户', 'Global Clients', locale)}</div>
+                  <div className="text-2xl font-bold text-slate-900">30+</div>
+                  <div className="text-xs text-slate-500">{tLabel('出口国家', 'Export Countries', locale)}</div>
                 </div>
               </div>
             </div>

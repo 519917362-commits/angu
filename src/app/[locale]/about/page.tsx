@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { generatePageMeta } from '@/lib/seo-utils';
 import { SITE_DATA_TAG } from '@/lib/api';
+import { YEARS_IN_BUSINESS } from '@/lib/company';
+import { IconWhatsApp } from '@/components/icons';
 
 // ── Types ──
 interface TimelineItem {
@@ -121,7 +123,7 @@ function OrganizationLd({ locale, config }: { locale: string; config: Record<str
   const name = t(config, 'company_name_en', locale) || 'Angu Wire Mesh';
   const desc = t(config, 'company_desc_en', locale) || '';
   const phone = t(config, 'phone', locale) || '+86 188 0318 9797';
-  const email = t(config, 'email', locale) || 'anguwiremesh@gmail.com';
+  const email = t(config, 'email', locale) || 'annie@angumesh.com';
   const address = t(config, 'address', locale) || 'Anping County, Hengshui, Hebei, China';
   const logo = t(config, 'logo_url', locale) || '/uploads/1782284361461-934403953.png';
 
@@ -159,7 +161,7 @@ function OrganizationLd({ locale, config }: { locale: string; config: Record<str
       '@type': 'ContactPoint',
       telephone: phone,
       contactType: 'sales',
-      availableLanguage: ['English', 'Chinese'],
+      availableLanguage: ['English', 'Chinese', 'Vietnamese', 'Thai'],
     },
     hasCertification: [
       {'@type': 'Certification', name: 'ISO 9001:2015', description: 'Quality Management System'},
@@ -209,10 +211,10 @@ function AboutFaqLd({ locale, config }: { locale: string; config: Record<string,
       q_zh: `${companyName}的年产能是多少？`,
       q_vi: `Năng lực sản xuất hàng năm của ${companyName} là bao nhiêu?`,
       q_th: `กำลังการผลิตต่อปีของ ${companyName} อยู่ที่เท่าไหร่?`,
-      a_en: `${companyName} has an annual production capacity of 5,000+ tons across 15,000 m² of factory space, equipped with automated gabion weaving lines and welding mesh production lines.`,
-      a_zh: `${companyName}拥有15,000㎡工厂面积，配备自动石笼网编织线和焊接网生产线，年产能5,000+吨。`,
-      a_vi: `${companyName} có năng lực sản xuất hàng năm 5.000+ tons với diện tích nhà máy 15.000 m², được trang bị dây chuyền đan lưới gabion tự động và dây chuyền sản xuất lưới hàn.`,
-      a_th: `${companyName} มีกำลังการผลิตต่อปี 5,000+ tons บนพื้นที่โรงงาน 15,000 m² พร้อมด้วยสายการผลิตถักตาข่าย gabion อัตโนมัติและสายการผลิตตาข่ายเชื่อม`,
+      a_en: `${companyName} has an annual production capacity of 5,000 tons across 10,000 m² of factory space, equipped with automated gabion weaving lines and welding mesh production lines.`,
+      a_zh: `${companyName}拥有10,000㎡工厂面积，配备自动石笼网编织线和焊接网生产线，年产能5,000吨。`,
+      a_vi: `${companyName} có năng lực sản xuất hàng năm 5.000 tấn với diện tích nhà máy 10.000 m², được trang bị dây chuyền đan lưới gabion tự động và dây chuyền sản xuất lưới hàn.`,
+      a_th: `${companyName} มีกำลังการผลิตต่อปี 5,000 ตัน บนพื้นที่โรงงาน 10,000 ตร.ม. พร้อมด้วยสายการผลิตถักตาข่าย gabion อัตโนมัติและสายการผลิตตาข่ายเชื่อม`,
     },
     {
       q_en: `What products does ${companyName} manufacture?`,
@@ -281,7 +283,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
   // Dynamic strings from config
   const headerTitle = cfg('about_header_title_en') || (tLabel('关于安固丝网', 'About Angu Wire Mesh', locale));
-  const headerSubtitle = cfg('about_header_subtitle_en') || (tLabel('15年丝网制造经验，ISO/CE认证，出口30+国家。', '15 years of wire mesh manufacturing, ISO/CE certified, exported to 30+ countries.', locale));
+  const headerSubtitle = cfg('about_header_subtitle_en') || (tLabel('12年丝网制造经验，ISO/CE认证，出口30+国家。', 'wire mesh manufacturing since 2014, ISO/CE certified, exported to 30+ countries.', locale));
   const sectionLabel = cfg('about_section_label_en') || (tLabel('关于我们', 'About Us', locale));
   const overviewTitle = cfg('about_overview_title_en') || '';
   const overviewP1 = cfg('about_overview_p1_en') || '';
@@ -297,7 +299,9 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const locationBadge = cfg('about_location_badge_en') || (tLabel('安平 · 中国丝网之都', 'Anping · China Wire Mesh Capital', locale));
 
   // Dynamic stats from site config
-  const statYears = t(siteCfg, 'stats_years', locale) || '15+';
+  // 成立年限统一由工商登记日期计算；去掉历史配置里可能带的 "+"，
+  // 否则下方 `${statYears}+` 会渲染成 "12++"。
+  const statYears = (t(siteCfg, 'stats_years', locale) || String(YEARS_IN_BUSINESS)).replace(/\+$/, '');
   const statCountries = t(siteCfg, 'stats_countries', locale) || '30+';
   const statProducts = t(siteCfg, 'stats_products', locale) || '30';
   const statInspection = t(siteCfg, 'stats_inspection', locale) || '100%';
@@ -352,6 +356,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             '@type': 'Organization',
             name: cfg('company_name_en') || 'Angu Wire Mesh',
             url: 'https://www.angumesh.com',
+            sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
           },
         }) }}
       />
@@ -399,29 +404,29 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
               <p>
                 <strong>安固丝网（Angu Wire Mesh）</strong>是位于中国河北省安平县的<strong>ISO 9001认证制造商</strong>，
                 专注石笼网箱、边坡防护网、勾花网围栏、电焊网等9大丝网品类的研发、生产和出口。
-                工厂占地15,000㎡，年产5,000+吨，<strong>15年行业经验</strong>，产品出口30+国家，服务500+工程项目。
+                工厂占地10,000㎡，年产5,000吨，<strong>自2014年成立</strong>，产品出口30+国家。
                 我们支持来图来样OEM/ODM定制，提供从样品到门到门物流的全链路服务。
               </p>
             ) : locale === 'vi' ? (
               <p>
                 <strong>Angu Wire Mesh</strong> là <strong>nhà sản xuất được chứng nhận ISO 9001</strong> đặt tại Huyện An Bình, Hà Bắc, Trung Quốc —
                 trung tâm toàn cầu về sản xuất lưới thép. Chúng tôi chuyên nghiên cứu, sản xuất và xuất khẩu 9 danh mục sản phẩm bao gồm
-                rọ đá, lưới chống rơi đá, hàng rào lưới mắt cáo và lưới thép hàn. Vận hành từ <strong>nhà máy 15.000 m² với năng lực hàng năm 5.000+ tấn</strong>,
-                chúng tôi mang <strong>15 năm kinh nghiệm</strong> đến 500+ dự án tại hơn 30 quốc gia. Hỗ trợ OEM/ODM theo bản vẽ và mẫu, dịch vụ toàn vòng từ nguyên mẫu đến logistics tận nơi.
+                rọ đá, lưới chống rơi đá, hàng rào lưới mắt cáo và lưới thép hàn. Vận hành từ <strong>nhà máy 10.000 m² với năng lực hàng năm 5.000 tấn</strong>,
+                chúng tôi sản xuất từ năm 2014 và xuất khẩu đến hơn 30 quốc gia. Hỗ trợ OEM/ODM theo bản vẽ và mẫu, dịch vụ toàn vòng từ nguyên mẫu đến logistics tận nơi.
               </p>
             ) : locale === 'th' ? (
               <p>
                 <strong>Angu Wire Mesh</strong> เป็น <strong>ผู้ผลิตที่ได้รับการรับรอง ISO 9001</strong> ตั้งอยู่ที่เขตอันผิง หฺอเป่ย ประเทศจีน —
                 ศูนย์กลางการผลิตตะแกรงลวดของโลก เราเชี่ยวชาญด้าน R&D การผลิต และการส่งออก 9 หมวดสินค้า รวมถึง
-                กล่องเกเบี้ยน ตะแกรงป้องกันหินตก รั้วตะแกรงถัก และตะแกรงลวดเชื่อม ดำเนินงานจาก <strong>โรงงาน 15,000 ตร.ม. ผลิตได้ 5,000+ ตันต่อปี</strong>
-                เรานำ <strong>15 ปีประสบการณ์</strong> มาสู่ 500+ โครงการใน 30+ ประเทศ รองรับ OEM/ODM ตามแบบและตัวอย่าง บริการครบวงจรตั้งแต่ต้นแบบถึงการขนส่งถึงบ้าน
+                กล่องเกเบี้ยน ตะแกรงป้องกันหินตก รั้วตะแกรงถัก และตะแกรงลวดเชื่อม ดำเนินงานจาก <strong>โรงงาน 10,000 ตร.ม. ผลิตได้ 5,000 ตันต่อปี</strong>
+                เราผลิตตั้งแต่ปี 2014 และส่งออกไปกว่า 30 ประเทศ รองรับ OEM/ODM ตามแบบและตัวอย่าง บริการครบวงจรตั้งแต่ต้นแบบถึงการขนส่งถึงบ้าน
               </p>
             ) : (
               <p>
                 <strong>Angu Wire Mesh</strong> is an <strong>ISO 9001 certified manufacturer</strong> based in Anping County, Hebei, China —
                 the global hub of wire mesh production. We specialize in R&amp;D, manufacturing, and export of 9 product categories including
-                gabion boxes, rockfall protection nets, chain link fences, and welded wire mesh. Operating from a <strong>15,000 m² factory with 5,000+ tons annual capacity</strong>,
-                we bring <strong>15 years of expertise</strong> to 500+ projects across 30+ countries. We support drawing-to-sample OEM/ODM and full-cycle service from prototyping to door-to-door logistics.
+                gabion boxes, rockfall protection nets, chain link fences, and welded wire mesh. Operating from a <strong>10,000 m² factory with 5,000 tons annual capacity</strong>,
+                we have been manufacturing since 2014 and ship to 30+ countries. We support drawing-to-sample OEM/ODM and full-cycle service from prototyping to door-to-door logistics.
               </p>
             )}
           </div>
@@ -624,7 +629,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                       </a>
                       {person.whatsapp && (
                         <a href={`https://wa.me/${(person.whatsapp || '').replace(/[^0-9+]/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-green-600 hover:text-green-700 transition-colors">
-                          <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                          <IconWhatsApp className="w-3.5 h-3.5 flex-shrink-0" />
                           WhatsApp
                         </a>
                       )}
@@ -691,10 +696,10 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                   q_zh: `工厂产能如何？`,
                   q_vi: `Năng lực nhà máy thế nào?`,
                   q_th: `กำลังการผลิตของโรงงานเป็นอย่างไร?`,
-                  a_en: `15,000 m² factory with 5,000+ tons annual capacity. 6 automated gabion lines, 2 welding lines, 50+ skilled workers.`,
-                  a_zh: `15,000㎡工厂面积，年产5,000+吨。6条自动石笼网编织线、2条焊接网生产线、50+技术工人。`,
-                  a_vi: `Nhà máy 15.000 m² với năng lực 5.000+ tấn/năm. 6 dây chuyền rọ đá tự động, 2 dây chuyền hàn, 50+ công nhân lành nghề.`,
-                  a_th: `โรงงาน 15,000 ตร.ม. กำลังการผลิต 5,000+ ตัน/ปี สายการผลิตกล่องเกเบี้ยนอัตโนมัติ 6 สาย สายการเชื่อม 2 สาย พนักงานที่มีทักษะ 50+ คน`,
+                  a_en: `10,000 m² factory with 5,000 tons annual capacity. 6 automated gabion lines and 2 welding lines.`,
+                  a_zh: `10,000㎡工厂面积，年产5,000吨。6条自动石笼网编织线、2条焊接网生产线。`,
+                  a_vi: `Nhà máy 10.000 m² với năng lực 5.000 tấn/năm. 6 dây chuyền rọ đá tự động và 2 dây chuyền hàn.`,
+                  a_th: `โรงงาน 10,000 ตร.ม. กำลังการผลิต 5,000 ตัน/ปี สายการผลิตกล่องเกเบี้ยนอัตโนมัติ 6 สาย และสายการเชื่อม 2 สาย`,
                 },
                 {
                   q_en: `What products are available?`,

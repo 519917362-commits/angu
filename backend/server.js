@@ -13,6 +13,9 @@ const PORT = process.env.PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || 'angu-admin-secret-key-2026';
 
 // Security middleware
+// Nginx 反代下必须信任一层代理，否则 rate-limit 与日志拿到的都是 127.0.0.1，
+// 全站会被算作同一个 IP（限流误伤所有人）。
+app.set('trust proxy', 1);
 app.use(helmet());
 app.use(cors({
   origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost', 'https://angumesh.com'],
@@ -36,11 +39,210 @@ const loginLimiter = rateLimit({
   // Count only failed-login responses when supported
   skipSuccessfulRequests: true,
 });
+
+// 询盘提交限流：公开接口，防脚本灌库 + 邮件轰炸。
+// 阈值放宽到 20/小时——B2B 办公网常有出口 NAT，多人共享同一 IP。
+const inquiryLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many submissions from this network. Please contact us by email or WhatsApp.' },
+});
 app.use('/api/admin/login', loginLimiter);
 
 // Production guard: warn loudly if JWT secret is still the fallback
 if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
   console.warn('[SECURITY] JWT_SECRET is not set — using insecure fallback. Set JWT_SECRET in .env before production use.');
+}
+
+// ── Inquiry email notification ──────────────────────────────────────────
+// angumesh.com 的 MX 指向网易企业邮（hzmx01/02.mxmail.netease.com）。
+// SMTP_PASS 必须是「客户端授权码」（网易企业邮 → 设置 → POP3/SMTP/IMAP 生成），
+// 不是邮箱登录密码——用登录密码会返回 535 认证失败。
+// 发件人必须是认证账号本身，伪造 from 会被网易拒信（550）。
+const SMTP_HOST = process.env.SMTP_HOST || 'smtp.qiye.163.com';
+const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
+const SMTP_USER = process.env.SMTP_USER || 'admin@angumesh.com';
+const SMTP_PASS = process.env.SMTP_PASS || '';
+// 通知收件人固定为业务邮箱：发信账号是 admin，但询盘要落到业务同事手里。
+// 不回落 SMTP_USER，否则环境变量漏配时通知会发给管理员自己。
+const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'annie@angumesh.com';
+const ADMIN_URL = process.env.ADMIN_URL || 'https://www.angumesh.com/admin';
+// 客户自动回复默认关闭：邮件正文代表公司对外承诺，需业务确认文案后再开（AUTO_REPLY=on）
+const AUTO_REPLY_ON = process.env.AUTO_REPLY === 'on';
+
+let mailer = null;
+if (SMTP_PASS) {
+  mailer = nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: SMTP_PORT === 465,
+    auth: { user: SMTP_USER, pass: SMTP_PASS },
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 20000,
+  });
+  mailer.verify()
+    .then(() => console.log(`[mail] SMTP ready: ${SMTP_USER} via ${SMTP_HOST}:${SMTP_PORT}`))
+    .catch((err) => console.error('[mail] SMTP verify failed:', err.message));
+} else {
+  console.warn('[mail] SMTP_PASS 未配置，询盘通知邮件跳过（询盘仍正常入库，可在后台查看）');
+}
+
+const escHtml = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => (
+  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+));
+
+// 北京时间，便于对照业务时间
+function beijingTime() {
+  return new Date().toLocaleString('zh-CN', {
+    timeZone: 'Asia/Shanghai',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', hour12: false,
+  });
+}
+
+function dbGet(sql, params = []) {
+  return new Promise((resolve) => {
+    db.get(sql, params, (err, row) => resolve(err ? null : row));
+  });
+}
+
+const AUTO_REPLY_COPY = {
+  en: {
+    subject: (no) => `We received your inquiry ${no} — Angu Wire Mesh`,
+    body: (name, no, product) => `Dear ${name},
+
+Thank you for contacting Angu Wire Mesh. Your inquiry ${no}${product ? ` about ${product}` : ''} has been received.
+
+Our export team will reply within 24 hours on business days, usually with a formal quotation stating specification, MOQ, lead time and FOB Tianjin price.
+
+If your project is urgent, reach us directly:
+- Email: ${SMTP_USER}
+- WhatsApp / Phone: +86 188 0318 9797
+
+Angu Wire Mesh (Anping County Angu Metal Wire Mesh Products Co., Ltd.)
+Manufacturing since 2014 · ISO 9001:2015 · CE
+https://www.angumesh.com`,
+  },
+  zh: {
+    subject: (no) => `已收到您的询盘 ${no} — 安固丝网`,
+    body: (name, no, product) => `尊敬的 ${name}：
+
+感谢您联系安固丝网。您的询盘 ${no}${product ? `（${product}）` : ''} 已收到。
+
+我们的外贸团队将在工作日 24 小时内回复，通常附上包含规格、起订量、交期和天津港 FOB 价格的正式报价。
+
+如项目紧急，可直接联系我们：
+- 邮箱：${SMTP_USER}
+- WhatsApp / 电话：+86 188 0318 9797
+
+安固丝网（安平县安固金属丝网制品有限公司）
+2014 年建厂 · ISO 9001:2015 · CE
+https://www.angumesh.com`,
+  },
+};
+
+async function sendInquiryNotification(inquiry) {
+  if (!mailer) return;
+
+  const productLabel = inquiry.product_label || inquiry.product_slug || 'Not specified';
+  const productUrl = inquiry.product_slug ? `https://www.angumesh.com/en/products/${inquiry.product_slug}` : '';
+  const country = inquiry.country || 'Unknown';
+  const phoneRaw = String(inquiry.phone || '');
+  const phoneDigits = phoneRaw.replace(/[^\d+]/g, '');
+  const waLink = phoneDigits ? `https://wa.me/${phoneDigits.replace(/^\+/, '')}` : '';
+
+  const subject = `【新询盘】${country} · ${productLabel} · ${inquiry.name}（${inquiry.inquiry_no}）`;
+
+  const row = (label, value) => value
+    ? `<tr><td style="padding:6px 12px 6px 0;color:#64748b;white-space:nowrap;vertical-align:top">${escHtml(label)}</td><td style="padding:6px 0;color:#0f172a">${value}</td></tr>`
+    : '';
+
+  const html = `<!DOCTYPE html><html><body style="margin:0;padding:24px;background:#f1f5f9;font-family:-apple-system,'Segoe UI',Arial,sans-serif">
+  <div style="max-width:640px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0">
+    <div style="background:#1d4ed8;padding:20px 24px">
+      <div style="color:#dbeafe;font-size:12px;letter-spacing:.08em;text-transform:uppercase">New inquiry · ${escHtml(beijingTime())} (UTC+8)</div>
+      <div style="color:#fff;font-size:20px;font-weight:700;margin-top:4px">${escHtml(country)} · ${escHtml(productLabel)}</div>
+    </div>
+    <div style="padding:20px 24px">
+      <table style="width:100%;border-collapse:collapse;font-size:14px">
+        ${row('询盘号', `<strong>${escHtml(inquiry.inquiry_no)}</strong>`)}
+        ${row('客户', escHtml(inquiry.name))}
+        ${row('公司', inquiry.company ? escHtml(inquiry.company) : '')}
+        ${row('国家/地区', escHtml(country))}
+        ${row('邮箱', `<a href="mailto:${escHtml(inquiry.email)}" style="color:#1d4ed8">${escHtml(inquiry.email)}</a>`)}
+        ${row('电话', phoneDigits ? `<a href="tel:${escHtml(phoneDigits)}" style="color:#1d4ed8">${escHtml(phoneRaw)}</a>${waLink ? ` · <a href="${escHtml(waLink)}" style="color:#16a34a">WhatsApp</a>` : ''}` : '')}
+        ${row('产品', inquiry.product_slug ? `<a href="${escHtml(productUrl)}" style="color:#1d4ed8">${escHtml(productLabel)}</a>` : escHtml(productLabel))}
+        ${row('数量', inquiry.quantity ? escHtml(inquiry.quantity) : '')}
+        ${row('来源语言', escHtml(inquiry.locale || 'en'))}
+        ${row('来源页', inquiry.referer ? `<span style="font-size:12px;color:#475569">${escHtml(String(inquiry.referer).slice(0, 120))}</span>` : '')}
+      </table>
+      <div style="margin-top:18px;padding:14px 16px;background:#f8fafc;border-left:3px solid #1d4ed8;border-radius:4px">
+        <div style="font-size:12px;color:#64748b;margin-bottom:6px">客户留言</div>
+        <div style="font-size:14px;color:#0f172a;line-height:1.7;white-space:pre-wrap">${escHtml(inquiry.message)}</div>
+      </div>
+      <div style="margin-top:20px">
+        <a href="mailto:${escHtml(inquiry.email)}?subject=${encodeURIComponent('Re: ' + inquiry.inquiry_no + ' — Angu Wire Mesh')}" style="display:inline-block;background:#1d4ed8;color:#fff;text-decoration:none;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600">回复客户</a>
+        <a href="${escHtml(ADMIN_URL)}" style="display:inline-block;margin-left:8px;border:1px solid #cbd5e1;color:#334155;text-decoration:none;padding:9px 18px;border-radius:8px;font-size:14px">打开后台</a>
+      </div>
+      <div style="margin-top:16px;font-size:12px;color:#94a3b8">直接回复本邮件即可发给客户（Reply-To 已设为客户邮箱）。</div>
+    </div>
+  </div>
+</body></html>`;
+
+  const text = [
+    `New inquiry ${inquiry.inquiry_no} — ${beijingTime()} (UTC+8)`,
+    '',
+    `Name:    ${inquiry.name}`,
+    `Company: ${inquiry.company || '-'}`,
+    `Country: ${country}`,
+    `Email:   ${inquiry.email}`,
+    `Phone:   ${phoneRaw || '-'}`,
+    `Product: ${productLabel}`,
+    `Qty:     ${inquiry.quantity || '-'}`,
+    `Locale:  ${inquiry.locale || 'en'}`,
+    '',
+    'Message:',
+    inquiry.message,
+    '',
+    `Reply directly to this email, or open ${ADMIN_URL}`,
+  ].join('\n');
+
+  try {
+    await mailer.sendMail({
+      from: `"Angu Wire Mesh" <${SMTP_USER}>`,
+      to: NOTIFY_EMAIL,
+      replyTo: `"${inquiry.name}" <${inquiry.email}>`,
+      subject,
+      text,
+      html,
+    });
+    console.log(`[mail] inquiry ${inquiry.inquiry_no} notified → ${NOTIFY_EMAIL}`);
+  } catch (err) {
+    // 邮件失败绝不能影响询盘入库，但要留下可排查的记录
+    console.error(`[mail] inquiry ${inquiry.inquiry_no} notification FAILED:`, err.message);
+  }
+}
+
+async function sendAutoReply(inquiry) {
+  if (!mailer || !AUTO_REPLY_ON) return;
+  const locale = ['en', 'zh'].includes(inquiry.locale) ? inquiry.locale : 'en';
+  const copy = AUTO_REPLY_COPY[locale];
+  const productLabel = inquiry.product_label || '';
+  try {
+    await mailer.sendMail({
+      from: `"Angu Wire Mesh" <${SMTP_USER}>`,
+      to: inquiry.email,
+      replyTo: NOTIFY_EMAIL,
+      subject: copy.subject(inquiry.inquiry_no),
+      text: copy.body(inquiry.name, inquiry.inquiry_no, productLabel),
+    });
+    console.log(`[mail] auto-reply sent → ${inquiry.email}`);
+  } catch (err) {
+    console.error(`[mail] auto-reply to ${inquiry.email} FAILED:`, err.message);
+  }
 }
 
 // ── On-demand ISR revalidation ──
@@ -103,7 +305,9 @@ const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    const allowed = /jpeg|jpg|png|gif|webp|svg/;
+    // 不接受 SVG：SVG 可内嵌 <script>，且 /uploads 与站点同源，
+    // 打开即构成存储型 XSS（可窃取 localStorage 里的 admin_token）。
+    const allowed = /jpeg|jpg|png|gif|webp/;
     const ext = allowed.test(path.extname(file.originalname).toLowerCase());
     const mime = allowed.test(file.mimetype);
     cb(null, ext && mime);
@@ -550,31 +754,31 @@ function initDatabase() {
     ['company_name_en', 'Angu Wire Mesh', '安固丝网'],
     ['company_tagline', 'Wire Mesh · Gabion · Fencing · Protection · Noise Barrier', '丝网类 · 护栏网 · 石笼网 · 防护网 · 声屏障'],
     ['logo_url', '/images/logo.png', '/images/logo.png'],
-    ['company_short_intro_en', 'Hebei Angu Wire Mesh Products Co., Ltd. is a professional manufacturer of welded wire mesh, chain link fence, gabion boxes, slope protection nets, noise barriers and more \u2014 exported to 30+ countries.', '安固丝网是一家专业制造商,主营电焊网、护栏网、石笼网、边坡防护网、声屏障等金属丝网产品,出口30多个国家和地区。'],
-    ['company_desc_en', 'Angu Wire Mesh (Hebei Angu Wire Mesh Products Co., Ltd.) is headquartered in Anping - China\'s Wire Mesh Capital. We are an integrated manufacturer specializing in R&D, production, and export of gabion boxes, rockfall protection nets, fencing, noise barriers, barbed wire, and more across 9 product lines, with an annual capacity exceeding 5,000 tons.', '安固丝网(河北安固丝网制品有限公司)位于中国丝网之都--安平。我们是一家集研发、生产、销售于一体的金属丝网制造企业,主营石笼网箱、边坡防护网、护栏网、声屏障、刺绳等九大品类,年产能力超过5,000吨。'],
+    ['company_short_intro_en', 'Anping County Angu Metal Wire Mesh Products Co., Ltd. is a professional manufacturer of welded wire mesh, chain link fence, gabion boxes, slope protection nets, noise barriers and more \u2014 exported to 30+ countries.', '安固丝网是一家专业制造商,主营电焊网、护栏网、石笼网、边坡防护网、声屏障等金属丝网产品,出口30多个国家和地区。'],
+    ['company_desc_en', 'Angu Wire Mesh (Anping County Angu Metal Wire Mesh Products Co., Ltd.) is headquartered in Anping - China\'s Wire Mesh Capital. We are an integrated manufacturer specializing in R&D, production, and export of gabion boxes, rockfall protection nets, fencing, noise barriers, barbed wire, and more across 9 product lines, with an annual capacity exceeding 5,000 tons.', '安固丝网(安平县安固金属丝网制品有限公司)位于中国丝网之都--安平。我们是一家集研发、生产、销售于一体的金属丝网制造企业,主营石笼网箱、边坡防护网、护栏网、声屏障、刺绳等九大品类,年产能力超过5,000吨。'],
     ['company_desc2_en', 'We hold ISO 9001:2015 quality management certification and CE product certification. Our products are exported to 30+ countries and regions across Southeast Asia, the Middle East, Africa, South America, and Europe, widely used in bridge, highway, mining, water conservancy, military, and landscaping projects.', '我们拥有ISO 9001:2015质量管理体系认证和CE产品认证,产品远销东南亚、中东、非洲、南美、欧洲等30多个国家和地区,广泛应用于桥梁、公路、矿山、水利、军事、园林等工程领域。'],
     ['phone', '+86 188 0318 9797', '+86 188 0318 9797'],
-    ['email', 'anguwiremesh@gmail.com', 'anguwiremesh@gmail.com'],
+    ['email', 'annie@angumesh.com', 'annie@angumesh.com'],
     ['address', 'Anping County, Hengshui, Hebei, China', '中国河北省衡水市安平县'],
     ['whatsapp', '+86 188 0318 9797', '+86 188 0318 9797'],
     ['stats_years', '15+', ''],
     ['stats_products', '30', '30'],
     ['stats_countries', '30+', ''],
     ['stats_inspection', '100%', ''],
-    ['copyright', '© 2025 Hebei Angu Wire Mesh Products Co., Ltd. All rights reserved.', ''],
+    ['copyright', '© 2026 Anping County Angu Metal Wire Mesh Products Co., Ltd. All rights reserved.', ''],
     ['hero_badge_en', 'ISO 9001 & CE Certified Manufacturer', 'ISO 9001 & CE 认证制造商'],
     ['hero_title_prefix_en', 'Professional Wire Mesh & Gabion Manufacturer', '专业丝网与石笼网制造商'],
-    ['hero_subtitle_en', 'From Anping, China - Trusted by 500+ clients across 30+ countries since 2015', '来自中国安平 - 自2015年以来,深受30多个国家500多位客户的信赖'],
+    ['hero_subtitle_en', 'From Anping, China — manufacturing since 2014, shipping to 30+ countries', '来自中国安平 — 自2014年建厂，产品出口30多个国家和地区'],
     ['hero_cta_en', 'Get a Free Quote', '免费获取报价'],
-    ['about_title_en', '15 Years of Wire Mesh Manufacturing, Serving 30+ Countries', '15年专注金属丝网制造,服务全球30+国家'],
+    ['about_title_en', 'Wire Mesh Manufacturing Since 2014, Serving 30+ Countries', '12年专注金属丝网制造,服务全球30+国家'],
     ['about_label_en', 'About Angu Wire Mesh', '关于安固丝网'],
     ['about_location_badge_en', 'Anping · China Wire Mesh Capital', '安平 · 中国丝网之都'],
     // ── SEO defaults (overrideable in admin) ──
     ['seo.home.title_en', 'Angu Wire Mesh - Wire Mesh, Gabion & Fence Manufacturer', '安固丝网 - 丝网、石笼网、护栏网制造商'],
-    ['seo.home.description_en', 'Hebei Angu Wire Mesh is a professional manufacturer of welded wire mesh, gabion boxes, fencing, slope protection nets, and noise barriers. ISO 9001 & CE certified. Exporting to 30+ countries.', '河北安固丝网制品有限公司专业生产电焊网、石笼网箱、护栏网、边坡防护网和声屏障。ISO 9001和CE认证,出口全球30多个国家。'],
+    ['seo.home.description_en', 'Hebei Angu Wire Mesh is a professional manufacturer of welded wire mesh, gabion boxes, fencing, slope protection nets, and noise barriers. ISO 9001 & CE certified. Exporting to 30+ countries.', '安平县安固金属丝网制品有限公司专业生产电焊网、石笼网箱、护栏网、边坡防护网和声屏障。ISO 9001和CE认证,出口全球30多个国家。'],
     ['seo.home.keywords_en', 'wire mesh, gabion box, fence, slope protection net, noise barrier, welded wire mesh manufacturer China', '丝网,石笼网箱,护栏网,边坡防护网,声屏障,电焊网制造商'],
-    ['seo.about.title_en', 'About Angu Wire Mesh - 15 Years Manufacturing Experience', '关于安固丝网 - 15年制造经验'],
-    ['seo.about.description_en', 'Learn about Angu Wire Mesh - 15 years of wire mesh manufacturing, ISO 9001 & CE certified, exporting gabion boxes, rockfall nets, and fencing to 30+ countries.', '了解安固丝网 - 15年丝网制造经验,ISO 9001和CE认证,石笼网箱、防护网和围栏产品出口30多个国家。'],
+    ['seo.about.title_en', 'About Angu Wire Mesh - Manufacturing Since 2014', '关于安固丝网 - 12年制造经验'],
+    ['seo.about.description_en', 'Learn about Angu Wire Mesh - wire mesh manufacturing since 2014, ISO 9001 & CE certified, exporting gabion boxes, rockfall nets, and fencing to 30+ countries.', '了解安固丝网 - 12年丝网制造经验,ISO 9001和CE认证,石笼网箱、防护网和围栏产品出口30多个国家。'],
     ['seo.about.keywords_en', 'about Angu Wire Mesh, wire mesh manufacturer China, gabion factory, wire mesh company', '关于安固丝网,丝网制造商,石笼网工厂,丝网公司'],
     ['seo.products.title_en', 'Wire Mesh Products - Gabion, Fence, Protection Net | Angu', '丝网产品 - 石笼网、护栏网、防护网 | 安固丝网'],
     ['seo.products.description_en', 'Browse our complete range of wire mesh products: gabion boxes, rockfall nets, chain link fences, noise barriers, barbed wire, and more. ISO & CE certified manufacturer from China.', '浏览我们的全线丝网产品:石笼网箱、边坡防护网、勾花网围栏、声屏障、刺绳等。ISO和CE认证的中国制造商。'],
@@ -607,7 +811,7 @@ function initDatabase() {
   db.get('SELECT COUNT(*) as cnt FROM banners', [], (err, row) => {
   if (row && row.cnt > 0) return;
   const defaultBanners = [
-    [0, '/images/banners/banner1.jpg', '/images/banners/banner1.jpg', 'Professional Gabion Box & Rockfall Protection Net Manufacturer', '专业石笼网箱与防护网制造商', 'From Anping, China - Trusted by 500+ clients across 30+ countries since 2015', '来自中国安平 - 自2015年以来,深受30多个国家500多位客户的信赖', 'Get a Free Quote', '免费获取报价', '/contact'],
+    [0, '/images/banners/banner1.jpg', '/images/banners/banner1.jpg', 'Professional Gabion Box & Rockfall Protection Net Manufacturer', '专业石笼网箱与防护网制造商', 'From Anping, China — manufacturing since 2014, shipping to 30+ countries', '来自中国安平 — 自2014年建厂，产品出口30多个国家和地区', 'Get a Free Quote', '免费获取报价', '/contact'],
     [1, '/images/banners/banner2.jpg', '/images/banners/banner2.jpg', 'ISO 9001 Certified - Premium Quality Rockfall Protection Systems', 'ISO 9001认证 - 高品質落石防护系统', 'CE certified products with full traceability. Tested to ETAG 027 standards.', '完全なトレーサビリティを備えたCE認証製品。ETAG 027規格で試験済み。', 'View Certifications', '查看认证', '/about'],
     [2, '/images/banners/banner3.jpg', '/images/banners/banner3.jpg', 'Factory Direct Pricing - Low MOQ, Fast Delivery Worldwide', '工厂直送価格 - 低MOQ、世界への迅速な配送', 'Minimum order quantity from 50 pieces. Door-to-door shipping available.', '最小注文数量50個から。世界中へのドアツードア配送対応。', 'Contact Us', '联系我们', '/contact'],
   ];
@@ -620,7 +824,7 @@ function initDatabase() {
   db.get('SELECT COUNT(*) as cnt FROM why_choose_us', [], (err, row) => {
   if (row && row.cnt > 0) return;
   const defaultWhyChooseUs = [
-    ['🏭', 'Factory Strength', '工厂实力', '15+ years in Anping, China\'s Wire Mesh Capital. 5,000+ tons annual output, 50+ skilled workers.', '中国丝网之都安平,15年专注制造。年产5,000+吨,50+技术工人。', 0],
+    ['🏭', 'Factory Strength', '工厂实力', 'Manufacturing in Anping, China\'s Wire Mesh Capital since 2014. 5,000 tons annual output.', '中国丝网之都安平，2014年建厂，年产5,000吨。', 0],
     ['🛡️', 'ISO 9001 & CE Certified', 'ISO 9001 & CE 认证', 'ISO 9001:2015 certified manufacturing with strict QC at every stage. Pre-shipment inspection for every order.', 'ISO 9001:2015 认证制造,全流程质检,每单出货前必检。', 1],
     ['🔧', 'Full Customization', '全定制生产', 'Custom dimensions, wire diameters, coatings available. OEM/ODM supported with technical drawings.', '尺寸、丝径、涂层全可定制。支持来图来样 OEM/ODM 加工。', 2],
     ['🚢', 'Global Shipping', '全球物流', 'FCL or LCL via Tianjin Port. DHL/FedEx air freight for urgent orders. Exported to 30+ countries.', '整柜/拼箱天津港出发,急单可走空运。已出口 30+ 国家。', 3],
@@ -655,11 +859,11 @@ function initDatabase() {
   db.get('SELECT COUNT(*) as cnt FROM about_timeline', [], (err, row) => {
   if (!row || row.cnt === 0) {
   const tl = [
-    [2015, '🏭', 'Company Founded', '公司成立', 'Hebei Angu Wire Mesh Products Co., Ltd. officially registered in Anping - China\'s Wire Mesh Capital. Started with 8 team members, focused on gabion boxes and fencing.', '河北安固丝网制品有限公司在中国丝网之都--安平正式注册成立,初创团队8人,主营石笼网和护栏网。', 0],
+    [2014, '🏭', 'Company Founded', '公司成立', 'Anping County Angu Metal Wire Mesh Products Co., Ltd. officially registered in Anping - China\'s Wire Mesh Capital. Started with 8 team members, focused on gabion boxes and fencing.', '安平县安固金属丝网制品有限公司在中国丝网之都--安平正式注册成立,初创团队8人,主营石笼网和护栏网。', 0],
     [2016, '🚢', 'First Export Order', '首次出口', 'Completed first international shipment via Tianjin Port to Southeast Asia. Passed SGS factory audit in the same year.', '完成首笔外贸订单,产品通过天津港发往东南亚市场,开启国际化之路。同年通过SGS工厂验厂。', 1],
     [2018, '📋', 'ISO 9001 Certified', 'ISO 9001 认证', 'Achieved ISO 9001:2015 quality management certification. Annual capacity reached 1,200 tons.', '获得ISO 9001:2015质量管理体系认证,建立从原材料到成品的全流程质检体系。年产能突破1,200吨。', 2],
     [2019, '🇪🇺', 'CE & ETAG 027 Certified', 'CE & ETAG 027 认证', 'Rockfall protection nets obtained CE and ETAG 027 European technical approval - unlocking the EU market.', '防护网产品获得欧盟CE认证和ETAG 027欧洲技术认证,打开欧洲市场大门。', 3],
-    [2021, '🏗️', 'New Production Base', '新生产基地', 'Expanded to a 15,000 m2 modern facility with 6 automated gabion weaving lines. Annual capacity tripled to 3,500 tons.', '扩建至15,000m2现代化厂区,新增6条全自动石笼网编织线和2条焊接网生产线,年产能跃升至3,500吨。', 4],
+    [2021, '🏗️', 'New Production Base', '新生产基地', 'Expanded to a 10,000 m2 modern facility with 6 automated gabion weaving lines. Annual capacity tripled to 3,500 tons.', '扩建至10,000m2现代化厂区,新增6条全自动石笼网编织线和2条焊接网生产线,年产能跃升至3,500吨。', 4],
     [2023, '🌍', 'Global Milestone', '全球化里程碑', 'Export coverage reached 30+ countries. Annual output surpassed 5,000 tons. Product catalog expanded to 9 categories.', '出口覆盖30+国家和地区,年产量突破5,000吨。产品拓展至声屏障、防爆墙、刀片刺绳等9大品类。', 5],
     [2024, '💻', 'Digital Transformation', '数字化升级', 'Deployed ERP management system and automated production scheduling. Digital response speed improved by 60%.', '部署ERP管理系统和自动化排产平台,上线多语种全球官网和24/7在线询盘系统,数字化响应速度提升60%。', 6],
     [2026, '🤖', 'Smart Manufacturing', '智能质造', 'Introduced AI-powered visual inspection and fully-automated welding robots. Initiated Green Factory upgrade program.', '引入AI视觉检测系统和全自动焊接机器人,质检效率提升3倍。启动绿色工厂升级计划,推进低碳制造。', 7],
@@ -674,10 +878,10 @@ function initDatabase() {
   db.get('SELECT COUNT(*) as cnt FROM about_team', [], (err, row) => {
   if (!row || row.cnt === 0) {
   const t = [
-    ['👩‍💼', 'Wang Fang', '王芳', 'Export Manager', '外贸经理', 'SE & South Asia', '东南亚 · 南亚', 'Thailand, Vietnam, Indonesia, India, Philippines', '泰国、越南、印尼、印度、菲律宾', '+86 186 3188 5501', '+86 186 3188 5501', 'wangfang@anguwiremesh.com', '10 years in foreign trade, fluent in English. 200+ overseas clients served.', '10年外贸经验,精通英语。负责东南亚及南亚市场,累计服务200+海外客户。', 0],
-    ['👨‍💼', 'Liu Yang', '刘洋', 'Regional Sales Manager', '区域销售经理', 'Middle East & Africa', '中东 · 非洲', 'UAE, Saudi Arabia, Kenya, Nigeria, South Africa', '阿联酋、沙特、肯尼亚、尼日利亚、南非', '+86 186 3188 5502', '+86 186 3188 5502', 'liuyang@anguwiremesh.com', '8 years in Middle East & Africa markets. 50+ major projects delivered.', '8年中东非洲市场经验,熟悉当地建筑标准和贸易流程,完成50+大型工程项目。', 1],
-    ['👩‍💼', 'Zhao Min', '赵敏', 'Regional Sales Manager', '区域销售经理', 'Europe & Americas', '欧洲 · 美洲', 'Germany, Spain, UK, Brazil, Chile', '德国、西班牙、英国、巴西、智利', '+86 186 3188 5503', '+86 186 3188 5503', 'zhaomin@anguwiremesh.com', 'Fluent in English and Spanish. Expert in CE/ETAG 027 compliance and technical sales.', '精通英语和西班牙语,熟悉CE/ETAG 027认证要求,擅长技术型客户开发和投标支持。', 2],
-    ['👨‍💼', 'Sun Jie', '孙杰', 'Domestic Sales Manager', '国内销售经理', 'China & Asia-Pacific', '中国 · 亚太其他', 'China Mainland, Hong Kong, Taiwan, S. Korea, Japan', '中国大陆、香港、台湾、韩国、日本', '+86 186 3188 5504', '+86 186 3188 5504', 'sunjie@anguwiremesh.com', '12 years in domestic wire mesh sales. Full-service from selection to delivery.', '12年国内丝网销售经验,深耕工程承包商渠道,提供从选型到交付的全流程服务。', 3],
+    ['👩‍💼', 'Wang Fang', '王芳', 'Export Manager', '外贸经理', 'SE & South Asia', '东南亚 · 南亚', 'Thailand, Vietnam, Indonesia, India, Philippines', '泰国、越南、印尼、印度、菲律宾', '+86 186 3188 5501', '+86 186 3188 5501', 'wangfang@angumesh.com', '10 years in foreign trade, fluent in English. Covers Southeast Asia and South Asia markets.', '10年外贸经验,精通英语。负责东南亚及南亚市场。', 0],
+    ['👨‍💼', 'Liu Yang', '刘洋', 'Regional Sales Manager', '区域销售经理', 'Middle East & Africa', '中东 · 非洲', 'UAE, Saudi Arabia, Kenya, Nigeria, South Africa', '阿联酋、沙特、肯尼亚、尼日利亚、南非', '+86 186 3188 5502', '+86 186 3188 5502', 'liuyang@angumesh.com', '8 years in Middle East & Africa markets, familiar with local building standards and trade procedures.', '8年中东非洲市场经验,熟悉当地建筑标准和贸易流程。', 1],
+    ['👩‍💼', 'Zhao Min', '赵敏', 'Regional Sales Manager', '区域销售经理', 'Europe & Americas', '欧洲 · 美洲', 'Germany, Spain, UK, Brazil, Chile', '德国、西班牙、英国、巴西、智利', '+86 186 3188 5503', '+86 186 3188 5503', 'zhaomin@angumesh.com', 'Fluent in English and Spanish. Expert in CE/ETAG 027 compliance and technical sales.', '精通英语和西班牙语,熟悉CE/ETAG 027认证要求,擅长技术型客户开发和投标支持。', 2],
+    ['👨‍💼', 'Sun Jie', '孙杰', 'Domestic Sales Manager', '国内销售经理', 'China & Asia-Pacific', '中国 · 亚太其他', 'China Mainland, Hong Kong, Taiwan, S. Korea, Japan', '中国大陆、香港、台湾、韩国、日本', '+86 186 3188 5504', '+86 186 3188 5504', 'sunjie@angumesh.com', '12 years in domestic wire mesh sales. Full-service from selection to delivery.', '12年国内丝网销售经验,深耕工程承包商渠道,提供从选型到交付的全流程服务。', 3],
   ];
   t.forEach(([av, nEn, nZh, tiEn, tiZh, mEn, mZh, cEn, cZh, ph, wa, em, dEn, dZh, sort]) => {
     db.run('INSERT INTO about_team (avatar, name_en, name_zh, title_en, title_zh, market_en, market_zh, countries_en, countries_zh, phone, whatsapp, email, desc_en, desc_zh, sort_order) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [av, nEn, nZh, tiEn, tiZh, mEn, mZh, cEn, cZh, ph, wa, em, dEn, dZh, sort]);
@@ -718,18 +922,18 @@ function initDatabase() {
   // ── Seed about page SEO config ──
   const aboutSeoDefaults = [
     ['about_seo_title_en', 'About Angu Wire Mesh - ISO/CE Certified Manufacturer from China', '关于安固丝网 -- ISO/CE认证的中国丝网制造商'],
-    ['about_seo_desc_en', 'Learn about Angu Wire Mesh: 15 years of wire mesh manufacturing, ISO 9001 & CE certified, exporting gabion boxes, fencing, and rockfall protection nets to 30+ countries from Anping, China.', '了解安固丝网:15年丝网制造经验,ISO 9001 & CE认证,石笼网箱、护栏网、防护网出口30+国家,位于中国丝网之都安平。'],
+    ['about_seo_desc_en', 'Learn about Angu Wire Mesh: wire mesh manufacturing since 2014, ISO 9001 & CE certified, exporting gabion boxes, fencing, and rockfall protection nets to 30+ countries from Anping, China.', '了解安固丝网:12年丝网制造经验,ISO 9001 & CE认证,石笼网箱、护栏网、防护网出口30+国家,位于中国丝网之都安平。'],
     ['about_seo_keywords_en', 'about Angu wire mesh, wire mesh manufacturer China, factory tour, ISO 9001, CE certified, gabion manufacturer, Anping wire mesh', '关于安固丝网,丝网制造商,工厂参观,ISO 9001认证,CE认证,石笼网厂家,安平丝网'],
     ['about_header_title_en', 'About Angu Wire Mesh', '关于安固丝网'],
-    ['about_header_subtitle_en', '15 years of wire mesh manufacturing, ISO/CE certified, exported to 30+ countries.', '15年丝网制造经验,ISO/CE认证,出口30+国家。'],
+    ['about_header_subtitle_en', 'wire mesh manufacturing since 2014, ISO/CE certified, exported to 30+ countries.', '12年丝网制造经验,ISO/CE认证,出口30+国家。'],
     ['about_overview_title_en', 'Angu Wire Mesh - Manufacturer from China\'s Wire Mesh Capital', '安固丝网 - 中国丝网之都的制造商'],
-    ['about_overview_p1_en', 'Angu Wire Mesh (Hebei Angu Wire Mesh Products Co., Ltd.) is headquartered in Anping - China\'s Wire Mesh Capital. We are an integrated manufacturer specializing in R&D, production, and export of gabion boxes, rockfall protection nets, fencing, noise barriers, barbed wire, and more across 9 product lines, with an annual capacity exceeding 5,000 tons.', '安固丝网(河北安固丝网制品有限公司)位于中国丝网之都--安平。我们是一家集研发、生产、销售于一体的金属丝网制造企业,主营石笼网箱、边坡防护网、护栏网、声屏障、刺绳等九大品类,年产能超过5,000吨。'],
+    ['about_overview_p1_en', 'Angu Wire Mesh (Anping County Angu Metal Wire Mesh Products Co., Ltd.) is headquartered in Anping - China\'s Wire Mesh Capital. We are an integrated manufacturer specializing in R&D, production, and export of gabion boxes, rockfall protection nets, fencing, noise barriers, barbed wire, and more across 9 product lines, with an annual capacity exceeding 5,000 tons.', '安固丝网(安平县安固金属丝网制品有限公司)位于中国丝网之都--安平。我们是一家集研发、生产、销售于一体的金属丝网制造企业,主营石笼网箱、边坡防护网、护栏网、声屏障、刺绳等九大品类,年产能超过5,000吨。'],
     ['about_overview_p2_en', 'We hold ISO 9001:2015 quality management certification and CE product certification. Our products are exported to 30+ countries and regions across Southeast Asia, the Middle East, Africa, South America, and Europe, serving bridge, highway, mining, water conservancy, military, and landscaping projects.', '我们拥有ISO 9001:2015质量管理体系认证和CE产品认证,产品远销东南亚、中东、非洲、南美、欧洲等30多个国家和地区,广泛应用于桥梁、公路、矿山、水利、军事、园林等工程领域。'],
     ['about_section_label_en', 'About Us', '关于我们'],
     ['about_company_intro_title_en', 'Our Company', '公司概况'],
     ['about_timeline_title_en', 'Our Journey', '发展历程'],
     ['about_team_title_en', 'Sales Team', '业务团队'],
-    ['about_team_subtitle_en', '4 regional managers covering major global markets. Your dedicated contact for localized service.', '4位区域业务经理,覆盖全球主要市场,为您提供本地化专业服务。'],
+    ['about_team_subtitle_en', 'Regional managers covering major global markets. Your dedicated contact for localized service.', '区域业务经理覆盖全球主要市场，为您提供本地化专业服务。'],
     ['about_factory_title_en', 'Our Factory', '我们的工厂'],
     ['about_factory_subtitle_en', 'A tour of our production facilities, quality control lab, and warehouse.', '参观我们的生产车间、质检实验室和仓库。'],
     ['about_cert_title_en', 'Certifications & Quality Assurance', '认证与质量保证'],
@@ -1293,9 +1497,15 @@ app.get('/api/site-config', (req, res) => {
 });
 
 // Submit inquiry (public)
-app.post('/api/inquiry', async (req, res) => {
+app.post('/api/inquiry', inquiryLimiter, async (req, res) => {
   try {
     const { name, email, phone, company, country, quantity, message, productSlug, categorySlug, locale } = req.body;
+
+    // 蜜罐：正常访客看不见这个字段，机器人会填。命中后静默返回成功，
+    // 不写库、不发邮件，也不提示"被识别"，避免对方调整策略。
+    if (req.body.website || req.body.company_url) {
+      return res.json({ success: true, inquiryNo: `INQ-${Date.now()}` });
+    }
 
     if (!name || !email || !message) {
       return res.status(400).json({ error: 'Name, email, and message are required.' });
@@ -1303,6 +1513,10 @@ app.post('/api/inquiry', async (req, res) => {
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ error: 'Invalid email address.' });
+    }
+
+    if (String(message).length > 5000) {
+      return res.status(400).json({ error: 'Message too long (max 5000 characters).' });
     }
 
     const inquiryNo = `INQ-${Date.now()}`;
@@ -1317,26 +1531,32 @@ app.post('/api/inquiry', async (req, res) => {
           return res.status(500).json({ error: 'Failed to save inquiry.' });
         }
 
-        if (process.env.SMTP_HOST) {
-          try {
-            await transporter.sendMail({
-              from: process.env.SMTP_FROM || 'noreply@paiqi-wiremesh.com',
-              to: process.env.NOTIFY_EMAIL || 'sales@paiqi-wiremesh.com',
-              subject: `New Inquiry: ${inquiryNo} from ${name}`,
-              html: `
-                <h2>New Inquiry Received</h2>
-                <p><strong>Inquiry No:</strong> ${inquiryNo}</p>
-                <p><strong>Name:</strong> ${name}</p>
-                <p><strong>Email:</strong> ${email}</p>
-                <p><strong>Product:</strong> ${productSlug || 'N/A'}</p>
-                <p><strong>Message:</strong></p>
-                <p>${message.replace(/\n/g, '<br/>')}</p>
-              `
-            });
-          } catch (emailErr) {
-            console.error('Email failed:', emailErr);
-          }
+        // 产品名只查一次，通知邮件与自动回复共用
+        let productLabel = '';
+        if (productSlug) {
+          const p = await dbGet('SELECT name_en FROM products WHERE slug = ? LIMIT 1', [productSlug]);
+          productLabel = p?.name_en || '';
         }
+
+        const record = {
+          inquiry_no: inquiryNo,
+          name, email,
+          phone: phone || '',
+          company: company || '',
+          country: country || '',
+          quantity: quantity || '',
+          message,
+          product_slug: productSlug || '',
+          product_label: productLabel,
+          locale: locale || 'en',
+          ip: req.ip,
+          referer: req.get('referer') || '',
+        };
+
+        // 询盘已入库，邮件异步发送：SMTP 握手可能耗时 1-3s，
+        // 不能拖慢表单提交；发送失败也已在函数内部记录，不影响入库结果。
+        sendInquiryNotification(record).catch(() => {});
+        sendAutoReply(record).catch(() => {});
 
         res.json({ success: true, inquiryNo });
       }

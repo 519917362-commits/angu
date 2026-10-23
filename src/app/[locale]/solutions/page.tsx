@@ -297,7 +297,7 @@ export default async function SolutionsPage({params}: {params: Promise<{locale: 
     return (entry as Record<string, string>)[locale] || entry.en || (locale === 'zh' ? (fbZh ?? fbEn) : fbEn);
   };
   const headerTitle = v('solutions_header_title', 'Industry-Leading Wire Mesh Solutions', '行业领先的丝网解决方案');
-  const headerSubtitle = v('solutions_header_subtitle', 'From bridge abutments to backyard gardens — Angu delivers engineered wire mesh systems across 9 industries. 15 years of factory expertise, ISO 9001 certified, exported to 30+ countries.', '从桥梁桥台到后花园——安固为9大行业提供工程级丝网系统。15年工厂经验，ISO 9001认证，出口30+国家。');
+  const headerSubtitle = v('solutions_header_subtitle', 'From bridge abutments to backyard gardens — Angu delivers engineered wire mesh systems across 9 industries. factory expertise built since 2014, ISO 9001 certified, exported to 30+ countries.', '从桥梁桥台到后花园——安固为9大行业提供工程级丝网系统。12年工厂经验，ISO 9001认证，出口30+国家。');
   const headerBreadcrumb = v('solutions_header_breadcrumb', 'Solutions', '解决方案');
   const seoIntro = v('solutions_seo_intro',
     'Angu Wire Mesh designs and supplies custom wire mesh solutions for infrastructure, mining, and defense applications. Gabion retaining walls, rockfall barriers, blast fencing, noise barriers — engineered to EN, ASTM, and JT standards.',
@@ -343,6 +343,7 @@ export default async function SolutionsPage({params}: {params: Promise<{locale: 
       '@type': 'Organization',
       name: 'Angu Wire Mesh',
       url: 'https://www.angumesh.com',
+      sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },
     serviceType: getValue(sol.title, locale, sol.title),
     areaServed: 'Global',
@@ -429,7 +430,7 @@ export default async function SolutionsPage({params}: {params: Promise<{locale: 
               {[
                 t('ISO 9001 Certified', 'ISO 9001 认证', 'Chứng nhận ISO 9001', 'รับรอง ISO 9001'),
                 t('CE Certified', 'CE 认证', 'Chứng nhận CE', 'รับรอง CE'),
-                t('15+ Years Experience', '15+ 年经验', '15+ năm kinh nghiệm', '15+ ปีประสบการณ์'),
+                t('12+ Years Experience', '15+ 年经验', '15+ năm kinh nghiệm', '12+ ปีประสบการณ์'),
                 t('30+ Countries Exported', '出口 30+ 国家', 'Xuất khẩu 30+ quốc gia', 'ส่งออก 30+ ประเทศ'),
               ].map((tag, i) => (
                 <span key={i} className="inline-flex items-center gap-1.5 bg-white/10 text-white/90 text-xs font-medium px-3 py-1.5 rounded-full border border-white/15 backdrop-blur-sm">

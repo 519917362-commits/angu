@@ -21,8 +21,8 @@ const specContent: Record<string, SpecContent> = {
     rows: [
       { param: { en: 'Panel Type', zh: '面板类型', vi: 'Loại Tấm', th: 'ประเภทแผง' }, value: { en: 'Sound-absorbing (louvered / micro-perforated)', zh: '吸声型（百叶/微孔）', vi: 'Hấp thụ âm (tấm thanh / đục lỗ siêu nhỏ)', th: 'ดูดซับเสียง (เกล็ด / เจาะรูขนาดไมโคร)' } },
       { param: { en: 'Panel Height', zh: '面板高度', vi: 'Chiều Cao Tấm', th: 'ความสูงแผง' }, value: { en: '2.0m / 2.5m / 3.0m / 4.0m (custom)', zh: '2.0m / 2.5m / 3.0m / 4.0m（可定制）', vi: '2.0m / 2.5m / 3.0m / 4.0m (tùy chỉnh)', th: '2.0 / 2.5 / 3.0 / 4.0 ม. (สั่งทำ)' } },
-      { param: { en: 'NRC (Noise Reduction Coefficient)', zh: '吸音系数 NRC', vi: 'Hệ Số Giảm Ồn NRC', th: 'ค่าสัมประสิทธิ์ลดเสียง NRC' }, value: { en: '0.85 – 0.95', zh: '0.85 – 0.95', vi: '0.85 – 0.95', th: '0.85 – 0.95' } },
-      { param: { en: 'STC Rating', zh: '隔声等级 STC', vi: 'Cấp Cách Âm STC', th: 'ระดับกันเสียง STC' }, value: { en: '> 38 dB', zh: '> 38 dB', vi: '> 38 dB', th: '> 38 dB' } },
+      { param: { en: 'NRC (Noise Reduction Coefficient)', zh: '吸音系数 NRC', vi: 'Hệ Số Giảm Ồn NRC', th: 'ค่าสัมประสิทธิ์ลดเสียง NRC' }, value: { en: '0.85', zh: '0.85', vi: '0.85', th: '0.85' } },
+      { param: { en: 'STC Rating', zh: '隔声等级 STC', vi: 'Cấp Cách Âm STC', th: 'ระดับกันเสียง STC' }, value: { en: '32 – 34 dB', zh: '32 – 34 dB', vi: '32 – 34 dB', th: '32 – 34 dB' } },
       { param: { en: 'Insertion Loss', zh: '插入损失', vi: 'Suy Giảm Tiếng Ồn', th: 'การสูญเสียการแทรก' }, value: { en: '10 – 15 dB(A)', zh: '10 – 15 dB(A)', vi: '10 – 15 dB(A)', th: '10 – 15 dB(A)' } },
       { param: { en: 'Outer Skin', zh: '外面板', vi: 'Vỏ Ngoài', th: 'ผิวด้านนอก' }, value: { en: '0.8mm perforated galvanized steel', zh: '0.8mm 穿孔镀锌钢板', vi: 'Thép mạ kẽm đục lỗ 0.8mm', th: 'เหล็กชุบกัลวาไนซ์เจาะรู 0.8 มม.' } },
       { param: { en: 'Sound Core', zh: '吸音芯材', vi: 'Lõi Tiêu Âm', th: 'แกนดูดซับเสียง' }, value: { en: '50–80mm mineral wool, 80 kg/m³', zh: '50–80mm 矿棉, 80 kg/m³', vi: 'Bông khoáng 50–80mm, 80 kg/m³', th: 'ใยหิน 50–80 มม., 80 กก./ลบ.ม.' } },

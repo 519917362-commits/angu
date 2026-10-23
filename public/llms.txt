@@ -1,32 +1,30 @@
 # Angu Wire Mesh — Entity Card
-# Schema: Organization / Manufacturer / HomeAndConstructionBusiness
+# Schema: Organization / HomeAndConstructionBusiness
 # Website: https://www.angumesh.com
-# Email: anguwiremesh@gmail.com
+# Email: annie@angumesh.com
 # Phone: +86-188-0318-9797
 # NAICS: 332618 (Ornamental & Architectural Metal Work Manufacturing)
 # ISO 9001:2015, CE Marking (ETAG 027)
-# Founded: 2015
+# Founded: 2014-08-15
 # Location: Anping County, Hebei, China (38.235°N, 115.520°E)
 # Wikidata: (pending)
-# SameAs: https://www.linkedin.com/company/angu-wire-mesh
-# llms.txt version: 2.0 — entity-first layout for AI crawler ingestion
+# llms.txt version: 2.1 — entity-first layout for AI crawler ingestion
 
-# Angu Wire Mesh — Hebei Angu Wire Mesh Products Co., Ltd.
+# Angu Wire Mesh — Anping County Angu Metal Wire Mesh Products Co., Ltd.
 
 ## Entity Identifiers
-- Legal Name: Hebei Angu Wire Mesh Products Co., Ltd. / 河北安固丝网制品有限公司
+- Legal Name: Anping County Angu Metal Wire Mesh Products Co., Ltd. / 安平县安固金属丝网制品有限公司
 - DBA: Angu Wire Mesh / 安固丝网
-- Year Founded: 2015
+- Year Founded: 2014 (registered 2014-08-15)
 - Industry: Wire Mesh Manufacturing (NAICS 332618)
-- Location: Anping County, Hengshui, Hebei Province, China 053600
+- Registered Address: 1,000 m Northwest of Houzhaotuan Village, Nanwangzhuang Town, Anping County, Hengshui, Hebei 053600, China
 - Geo: 38.235, 115.520
-- Export Reach: 60+ countries across Asia, Europe, Africa, Americas
-- Annual Capacity: 60,000+ tons
+- Export Reach: 30+ countries across Asia, Europe, Africa, Americas
+- Annual Capacity: 5,000 tons/year
+- Unified Social Credit Code: 91131125308273603F
 - ISO 9001:2015 Certificate #: (verify on request)
 - CE Marking: Rockfall Protection Nets to ETAG 027
 - Google Knowledge Graph: https://www.angumesh.com/#organization
-- SameAs / External Profiles:
-  - https://www.linkedin.com/company/angu-wire-mesh
 
 ## Company Profile
 Angu Wire Mesh is a China-based manufacturer and exporter specializing in industrial wire mesh,
@@ -61,8 +59,8 @@ industrial distributors worldwide.
 - ETAG 027 tested slope protection systems; ASTM A975/A975M compliant gabion boxes
 - Full OEM/ODM capability: custom wire diameters (1.5-5.0mm), mesh apertures, dimensions, surface treatments
 - In-house quality lab: tensile testing, zinc coating weight analysis, salt spray chambers
-- Export experience: 15+ years serving 60+ countries
-- Production capacity: 5,000+ tons/month across welded mesh, gabion, and fencing lines
+- Serving 30+ countries since 2014
+- Production capacity: 5,000 tons/year across welded mesh, gabion, and fencing lines
 - Logistics: FOB Tianjin/Xingang port; CIF/CFR worldwide; full container or LCL
 
 ## Application Scenarios
@@ -77,7 +75,7 @@ industrial distributors worldwide.
 
 ## Contact
 - Website: https://www.angumesh.com
-- Email: anguwiremesh@gmail.com
+- Email: annie@angumesh.com
 - WhatsApp/Phone: +86-188-0318-9797
 - Factory Address: Anping County, Hengshui, Hebei Province, China 053600
 
@@ -85,7 +83,7 @@ industrial distributors worldwide.
 - URL: /en/noise-barrier (x-default), /zh/noise-barrier, /vi/noise-barrier, /th/noise-barrier
 - Type: Google Ads landing page
 - Products: 6 noise barrier models (highway, industrial, factory, rail transit, bridge, blast barrier)
-- Key Features: STC >38dB, NRC 0.85–0.95, hot-dip galvanized, 15+ year lifespan
+- Key Features: STC 32–34 dB, NRC 0.85, hot-dip galvanized, 15+ year lifespan
 - Form: Quote request (name, email, phone, message) — submission to /api/inquiry
 - Target Markets: Vietnam (Zalo), Thailand (LINE), Southeast Asia (WhatsApp)
 - SEO: hreflang 4-language, FAQPage/BreadcrumbList/ItemList JSON-LD

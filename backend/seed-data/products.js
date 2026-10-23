@@ -735,8 +735,8 @@ module.exports = [
     "name_zh": "工厂声屏障墙 4.0m高",
     "short_description_en": "High factory noise barrier wall, 4.0m height. Heavy-duty construction for industrial plant perimeter noise control.",
     "short_description_zh": "高工厂声屏障墙，4.0m高。重型结构，用于工业厂区周界噪声控制。",
-    "description_en": "Our factory noise barrier walls are designed for maximum noise reduction around industrial facilities. The heavy-duty construction withstands harsh industrial environments.\n\n**Specifications:**\n- Wall Height: 4.0m (3.0-6.0m available)\n- Panel Width: 1.0m / 2.0m\n- Structure: H-beam steel posts + barrier panels\n- Post: H200 × 200 × 8 × 12mm\n- Sound-Absorbing: 100mm rock wool, 100kg/m³\n- Face: 1.2mm galvanized perforated steel\n- Noise Reduction: 25-35dB\n- Wind Load: 0.75 kN/m²\n- Foundation: Concrete pile foundation\n\n**Applications:**\n- Factory perimeter walls\n- Power plant noise control\n- Steel mill soundproofing\n- Cement plant noise barriers",
-    "description_zh": "我们的工厂声屏障墙专为工业设施周边最大降噪而设计。重型结构适应恶劣的工业环境。\n\n**规格参数：**\n- 墙体高度：4.0m（3.0-6.0m 可选）\n- 面板宽度：1.0m / 2.0m\n- 结构：H型钢立柱 + 屏障板\n- 立柱：H200 × 200 × 8 × 12mm\n- 吸声材料：100mm岩棉，100kg/m³\n- 面板：1.2mm 镀锌冲孔钢板\n- 降噪：25-35dB\n- 风荷载：0.75 kN/m²\n- 基础：混凝土桩基础\n\n**应用场景：**\n- 工厂围墙\n- 电厂噪声控制\n- 钢厂隔音\n- 水泥厂声屏障",
+    "description_en": "Our factory noise barrier walls are designed for maximum noise reduction around industrial facilities. The heavy-duty construction withstands harsh industrial environments.\n\n**Specifications:**\n- Wall Height: 4.0m (3.0-6.0m available)\n- Panel Width: 1.0m / 2.0m\n- Structure: H-beam steel posts + barrier panels\n- Post: H200 × 200 × 8 × 12mm\n- Sound-Absorbing: 100mm rock wool, 100kg/m³\n- Face: 1.2mm galvanized perforated steel\n- Noise Reduction: 10–18 dB(A)\n- Wind Load: 0.75 kN/m²\n- Foundation: Concrete pile foundation\n\n**Applications:**\n- Factory perimeter walls\n- Power plant noise control\n- Steel mill soundproofing\n- Cement plant noise barriers",
+    "description_zh": "我们的工厂声屏障墙专为工业设施周边最大降噪而设计。重型结构适应恶劣的工业环境。\n\n**规格参数：**\n- 墙体高度：4.0m（3.0-6.0m 可选）\n- 面板宽度：1.0m / 2.0m\n- 结构：H型钢立柱 + 屏障板\n- 立柱：H200 × 200 × 8 × 12mm\n- 吸声材料：100mm岩棉，100kg/m³\n- 面板：1.2mm 镀锌冲孔钢板\n- 降噪：10–18 dB(A)\n- 风荷载：0.75 kN/m²\n- 基础：混凝土桩基础\n\n**应用场景：**\n- 工厂围墙\n- 电厂噪声控制\n- 钢厂隔音\n- 水泥厂声屏障",
     "price": 150,
     "unit": "FOB Tianjin, per m²",
     "moq": 100,
@@ -744,15 +744,15 @@ module.exports = [
     "status": "published",
     "is_featured": 0,
     "images": "[\"/images/products/factory-noise-barrier.jpg\"]",
-    "specifications_en": "{\"wallHeight\":\"4.0m\",\"panelWidth\":\"1.0m / 2.0m\",\"post\":\"H200×200×8×12mm H-beam\",\"soundAbsorbing\":\"100mm rock wool 100kg/m³\",\"face\":\"1.2mm galvanized perforated steel\",\"noiseReduction\":\"25-35dB\",\"windLoad\":\"0.75 kN/m²\"}",
-    "specifications_zh": "{\"wallHeight\":\"4.0m\",\"panelWidth\":\"1.0m / 2.0m\",\"post\":\"H200×200×8×12mm H-beam\",\"soundAbsorbing\":\"100mm rock wool 100kg/m³\",\"face\":\"1.2mm galvanized perforated steel\",\"noiseReduction\":\"25-35dB\",\"windLoad\":\"0.75 kN/m²\"}",
+    "specifications_en": "{\"wallHeight\":\"4.0m\",\"panelWidth\":\"1.0m / 2.0m\",\"post\":\"H200×200×8×12mm H-beam\",\"soundAbsorbing\":\"100mm rock wool 100kg/m³\",\"face\":\"1.2mm galvanized perforated steel\",\"noiseReduction\":\"10–18 dB(A)\",\"windLoad\":\"0.75 kN/m²\"}",
+    "specifications_zh": "{\"wallHeight\":\"4.0m\",\"panelWidth\":\"1.0m / 2.0m\",\"post\":\"H200×200×8×12mm H-beam\",\"soundAbsorbing\":\"100mm rock wool 100kg/m³\",\"face\":\"1.2mm galvanized perforated steel\",\"noiseReduction\":\"10–18 dB(A)\",\"windLoad\":\"0.75 kN/m²\"}",
     "applications_en": "[\"Factory perimeters\",\"Power plants\",\"Steel mills\",\"Cement plants\"]",
     "applications_zh": "[\"Factory perimeters\",\"Power plants\",\"Steel mills\",\"Cement plants\"]",
     "seo_title_en": "Factory Noise Barrier Wall 4.0m Heavy-Duty | Angu Wire Mesh",
     "seo_title_zh": "Factory Noise Barrier Wall 4.0m Heavy-Duty | Angu Wire Mesh",
     "seo_keywords_en": "factory noise barrier, industrial soundproof wall, plant perimeter wall, noise control",
     "seo_keywords_zh": "factory noise barrier, industrial soundproof wall, plant perimeter wall, noise control",
-    "seo_description_en": "Heavy-duty factory noise barrier wall 4.0m height. 25-35dB noise reduction. For factory perimeters, power plants, steel mills, and cement plants.",
-    "seo_description_zh": "Heavy-duty factory noise barrier wall 4.0m height. 25-35dB noise reduction. For factory perimeters, power plants, steel mills, and cement plants."
+    "seo_description_en": "Heavy-duty factory noise barrier wall 4.0m height. 10–18 dB(A) noise reduction. For factory perimeters, power plants, steel mills, and cement plants.",
+    "seo_description_zh": "Heavy-duty factory noise barrier wall 4.0m height. 10–18 dB(A) noise reduction. For factory perimeters, power plants, steel mills, and cement plants."
   }
 ];

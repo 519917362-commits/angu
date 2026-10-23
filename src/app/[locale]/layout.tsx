@@ -2,6 +2,7 @@ import {notFound} from 'next/navigation';
 import {routing} from '@/lib/routing';
 import {I18nProvider} from '@/lib/i18n-context';
 import {REVALIDATE_SECONDS, SITE_DATA_TAG} from '@/lib/api';
+import {COMPANY} from '@/lib/company';
 import {Header} from '@/components/layout/Header';
 import {Footer} from '@/components/layout/Footer';
 import {InquiryButton} from '@/components/layout/InquiryButton';
@@ -43,27 +44,36 @@ export default async function LocaleLayout({
   const orgJsonLd = {
     '@context': 'https://schema.org',
     '@id': 'https://www.angumesh.com/#organization',
-    '@type': ['Organization', 'Manufacturer', 'HomeAndConstructionBusiness'],
+    // 注意：schema.org 没有 Manufacturer 这个类型（只有 manufacturer 属性），
+    // 之前写成 ["Organization","Manufacturer",...] 属无效类型，会让整段 JSON-LD 校验失败。
+    '@type': ['Organization', 'HomeAndConstructionBusiness'],
     name: 'Angu Wire Mesh',
-    alternateName: ['Angu Wire Mesh', 'Hebei Angu Wire Mesh Products Co., Ltd.', '安固丝网'],
+    legalName: COMPANY.legalNameEn,
+    alternateName: ['Angu Wire Mesh', '安固丝网', COMPANY.legalNameEn, COMPANY.legalNameZh],
+    identifier: {
+      '@type': 'PropertyValue',
+      propertyID: 'UnifiedSocialCreditCode',
+      value: COMPANY.creditCode,
+    },
     url: 'https://www.angumesh.com',
     logo: 'https://www.angumesh.com/images/logo.png',
     image: 'https://www.angumesh.com/og-image.jpg',
     description: 'ISO 9001 certified manufacturer of gabion boxes, rockfall protection nets, hexagonal wire mesh, chain link fence, and wire mesh products. Factory-direct pricing from Anping, China.',
-    foundingDate: '2015',
+    foundingDate: COMPANY.foundedISO,
     foundingLocation: {
       '@type': 'Place',
       name: 'Anping County, Hebei, China',
       geo: {'@type': 'GeoCoordinates', latitude: 38.235, longitude: 115.520},
     },
     telephone: '+86-188-0318-9797',
-    email: 'anguwiremesh@gmail.com',
+    email: COMPANY.email,
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Anping County',
-      addressRegion: 'Hebei',
-      addressCountry: 'CN',
-      postalCode: '053600',
+      streetAddress: COMPANY.streetAddress,
+      addressLocality: COMPANY.addressLocality,
+      addressRegion: COMPANY.addressRegion,
+      addressCountry: COMPANY.addressCountry,
+      postalCode: COMPANY.postalCode,
     },
     geo: {
       '@type': 'GeoCoordinates',
@@ -74,8 +84,8 @@ export default async function LocaleLayout({
       '@type': 'ContactPoint',
       contactType: 'sales',
       telephone: '+86-188-0318-9797',
-      email: 'anguwiremesh@gmail.com',
-      availableLanguage: ['English', 'Chinese'],
+      email: COMPANY.email,
+      availableLanguage: ['English', 'Chinese', 'Vietnamese', 'Thai'],
     },
     hasCertification: [
       {'@type': 'Certification', name: 'ISO 9001:2015', certificationIdentification: 'ISO 9001:2015'},

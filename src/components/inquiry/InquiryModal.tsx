@@ -4,7 +4,7 @@ import {useState, useEffect, useRef} from 'react';
 import {createPortal} from 'react-dom';
 import {X, MessageCircle} from 'lucide-react';
 import {cn} from '@/lib/utils';
-import {submitInquiry} from '@/lib/api';
+import {submitInquiryLead} from '@/lib/inquiry';
 import { tLabel } from '@/lib/i18n';
 
 interface InquiryModalProps {
@@ -67,18 +67,13 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    // Honeypot: if filled, silently reject
-    if (formData.website) {
-      setSubmitted(true);
-      setTimeout(onClose, 3000);
-      return;
-    }
-
     setIsSubmitting(true);
     setError('');
     try {
-      const {website, ...inquiryData} = formData;
-      const result = await submitInquiry({...inquiryData, productSlug, categorySlug, locale});
+      const result = await submitInquiryLead(
+        {...formData, productSlug, categorySlug},
+        {source: 'product_modal', productInterest: productSlug || categorySlug || undefined, locale}
+      );
       if (result.success) {
         setSubmitted(true);
         setTimeout(onClose, 3000);

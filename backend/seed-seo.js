@@ -3,10 +3,10 @@ const db = new sqlite3.Database('./inquiries.db');
 
 const seoData = [
   ['seo.home.title_en', 'Angu Wire Mesh — Gabion, Protection Net & Fence Manufacturer', '安固丝网 — 石笼网、防护网、护栏网制造商'],
-  ['seo.home.description_en', 'Hebei Angu Wire Mesh is a professional manufacturer of gabion boxes, rockfall protection nets, chain link fences, and noise barriers. ISO 9001 & CE certified. Exporting to 30+ countries.', '河北安固丝网制品有限公司专业生产石笼网箱、边坡防护网、勾花网围栏和声屏障。ISO 9001和CE认证，产品出口全球30多个国家。'],
+  ['seo.home.description_en', 'Angu Wire Mesh (Anping County Angu Metal Wire Mesh Products Co., Ltd.) is a professional manufacturer of gabion boxes, rockfall protection nets, chain link fences, and noise barriers. ISO 9001 & CE certified. Exporting to 30+ countries.', '安固丝网（安平县安固金属丝网制品有限公司）专业生产石笼网箱、边坡防护网、勾花网围栏和声屏障。ISO 9001和CE认证，产品出口全球30多个国家。'],
   ['seo.home.keywords_en', 'gabion box, wire mesh, protection net, chain link fence, noise barrier, rockfall net manufacturer China', '石笼网箱,丝网,防护网,勾花网,声屏障,边坡防护网制造商'],
-  ['seo.about.title_en', 'About Angu Wire Mesh — 15 Years Manufacturing Experience', '关于安固丝网 — 15年制造经验'],
-  ['seo.about.description_en', 'Learn about Angu Wire Mesh — 15 years of wire mesh manufacturing, ISO 9001 & CE certified, exporting gabion boxes, rockfall nets, and fencing to 30+ countries.', '了解安固丝网 — 15年丝网制造经验，ISO 9001和CE认证，石笼网箱、防护网和围栏产品出口30多个国家。'],
+  ['seo.about.title_en', 'About Angu Wire Mesh — 15 Years Manufacturing Experience', '关于安固丝网 — 12年制造经验'],
+  ['seo.about.description_en', 'Learn about Angu Wire Mesh — wire mesh manufacturing since 2014, ISO 9001 & CE certified, exporting gabion boxes, rockfall nets, and fencing to 30+ countries.', '了解安固丝网 — 12年丝网制造经验，ISO 9001和CE认证，石笼网箱、防护网和围栏产品出口30多个国家。'],
   ['seo.about.keywords_en', 'about Angu Wire Mesh, wire mesh manufacturer China, gabion factory, wire mesh company', '关于安固丝网,丝网制造商,石笼网工厂,丝网公司'],
   ['seo.products.title_en', 'Wire Mesh Products — Gabion, Fence, Protection Net | Angu', '丝网产品 — 石笼网、护栏网、防护网 | 安固丝网'],
   ['seo.products.description_en', 'Browse our complete range of wire mesh products: gabion boxes, rockfall nets, chain link fences, noise barriers, barbed wire, and more. ISO & CE certified manufacturer from China.', '浏览我们的全线丝网产品：石笼网箱、边坡防护网、勾花网围栏、声屏障、刺绳等。ISO和CE认证的中国制造商。'],

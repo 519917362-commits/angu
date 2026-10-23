@@ -3,6 +3,7 @@
 import {use, useState, FormEvent} from 'react';
 import {MessageCircle, Mail, Phone, MapPin, Loader2} from 'lucide-react';
 import {useSiteConfig, cfgVal} from '@/lib/hooks';
+import {submitInquiryLead} from '@/lib/inquiry';
 import { tLabel } from '@/lib/i18n';
 
 export default function ContactPage({params}: {params: Promise<{locale: string}>}) {
@@ -17,37 +18,25 @@ export default function ContactPage({params}: {params: Promise<{locale: string}>
 
   const siteConfig = useSiteConfig();
   const phone = cfgVal(siteConfig, 'phone', locale, '+86 188 0318 9797');
-  const email = cfgVal(siteConfig, 'email', locale, 'anguwiremesh@gmail.com');
+  const email = cfgVal(siteConfig, 'email', locale, 'annie@angumesh.com');
   const whatsapp = cfgVal(siteConfig, 'whatsapp', locale, '+86 188 0318 9797');
   const address = cfgVal(siteConfig, 'address', locale, tLabel('中国河北省衡水市安平县', 'Anping County, Hengshui, Hebei, China', locale));
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Honeypot: if filled, silently reject
-    if (formData.website) {
-      setStatus('success');
-      return;
-    }
-
     setStatus('sending');
     setErrorMsg('');
 
     try {
-      const {website, ...inquiryData} = formData;
-      const res = await fetch('/api/inquiry', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          ...inquiryData,
-          locale,
-        }),
+      const result = await submitInquiryLead(formData, {
+        source: 'contact_page',
+        productInterest: formData.product_interest || undefined,
+        locale,
       });
 
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || (tLabel('提交失败，请稍后重试。', 'Submission failed. Please try again.', locale)));
+      if (!result.success) {
+        throw new Error(tLabel('提交失败，请稍后重试。', 'Submission failed. Please try again.', locale));
       }
 
       setSubmittedData(formData);

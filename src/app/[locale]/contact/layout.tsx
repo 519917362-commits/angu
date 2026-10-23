@@ -34,7 +34,7 @@ export default async function ContactLayout({children, params}: {children: React
 
   // Contact info from config for JSON-LD
   const ldPhone = v(config, 'phone', locale, '+86-188-0318-9797');
-  const ldEmail = v(config, 'email', locale, 'anguwiremesh@gmail.com');
+  const ldEmail = v(config, 'email', locale, 'annie@angumesh.com');
 
   // ── JSON-LD structured data ──
   const breadcrumbSchema = {
@@ -62,6 +62,7 @@ export default async function ContactLayout({children, params}: {children: React
       '@type': 'Organization',
       name: 'An Gu Wire Mesh Products Co., Ltd.',
       url: 'https://www.angumesh.com',
+      sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
       telephone: ldPhone,
       email: ldEmail,
       address: {
