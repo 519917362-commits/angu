@@ -430,7 +430,7 @@ export default async function SolutionsPage({params}: {params: Promise<{locale: 
               {[
                 t('ISO 9001 Certified', 'ISO 9001 认证', 'Chứng nhận ISO 9001', 'รับรอง ISO 9001'),
                 t('CE Certified', 'CE 认证', 'Chứng nhận CE', 'รับรอง CE'),
-                t('12+ Years Experience', '15+ 年经验', '15+ năm kinh nghiệm', '12+ ปีประสบการณ์'),
+                t('12+ Years Experience', '12+ 年经验', '12+ năm kinh nghiệm', '12+ ปีประสบการณ์'),
                 t('30+ Countries Exported', '出口 30+ 国家', 'Xuất khẩu 30+ quốc gia', 'ส่งออก 30+ ประเทศ'),
               ].map((tag, i) => (
                 <span key={i} className="inline-flex items-center gap-1.5 bg-white/10 text-white/90 text-xs font-medium px-3 py-1.5 rounded-full border border-white/15 backdrop-blur-sm">

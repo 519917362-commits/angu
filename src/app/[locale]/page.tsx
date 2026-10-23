@@ -275,7 +275,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
               {[
                 {en: 'ISO 9001 Certified', zh: 'ISO 9001 认证', vi: 'Chứng nhận ISO 9001', th: 'ได้รับการรับรอง ISO 9001'},
                 {en: 'CE Certified', zh: 'CE 认证', vi: 'Chứng nhận CE', th: 'ได้รับการรับรอง CE'},
-                {en: '12+ Years Experience', zh: '15+ 年经验', vi: '12+ Năm Kinh Nghiệm', th: '12+ ปีประสบการณ์'},
+                {en: '12+ Years Experience', zh: '12+ 年经验', vi: '12+ Năm Kinh Nghiệm', th: '12+ ปีประสบการณ์'},
                 {en: '30+ Countries Exported', zh: '出口 30+ 国家', vi: 'Xuất Khẩu 30+ Quốc Gia', th: 'ส่งออก 30+ ประเทศ'},
               ].map((badge) => (
                 <span key={badge.en} className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 text-xs font-medium px-3 py-1.5 rounded-full border border-blue-200">

@@ -63,13 +63,13 @@ export const pageSeoDefaults: Record<string, LocaleSeo> = {
     vi: {
       title: 'Về Angu — Nhà Sản Xuất Lưới Thép Từ 2014 | ISO 9001',
       description:
-        'Angu Wire Mesh là nhà sản xuất hàng đầu về lồng rọ đá, hàng rào lưới thép và lưới chống sạt lở tại Anping, Trung Quốc. Chứng nhận ISO 9001 & CE, 15+ năm kinh nghiệm, xuất khẩu đến 30+ quốc gia.',
+        'Angu Wire Mesh là nhà sản xuất hàng đầu về lồng rọ đá, hàng rào lưới thép và lưới chống sạt lở tại Anping, Trung Quốc. Chứng nhận ISO 9001 & CE, 12 năm kinh nghiệm, xuất khẩu đến 30+ quốc gia.',
       keywords: 'nhà sản xuất lưới thép, nhà máy Anping, ISO 9001, CE, sản xuất rọ đá, về Angu',
     },
     th: {
       title: 'เกี่ยวกับ Angu — ผู้ผลิตลวดตาข่ายตั้งแต่ปี 2014 | รับรอง ISO 9001',
       description:
-        'Angu Wire Mesh เป็นผู้ผลิตชั้นนำด้านกล่องเกเบี้ยน รั้วลวดตาข่าย และตาข่ายกันหินร่วง ตั้งอยู่ที่ Anping ประเทศจีน ได้รับการรับรอง ISO 9001 & CE มีประสบการณ์ 15+ ปี ส่งออกไปยัง 30+ ประเทศ',
+        'Angu Wire Mesh เป็นผู้ผลิตชั้นนำด้านกล่องเกเบี้ยน รั้วลวดตาข่าย และตาข่ายกันหินร่วง ตั้งอยู่ที่ Anping ประเทศจีน ได้รับการรับรอง ISO 9001 & CE มีประสบการณ์ 12 ปี ส่งออกไปยัง 30+ ประเทศ',
       keywords: 'ผู้ผลิตลวดตาข่าย, โรงงาน Anping, ISO 9001, CE, ผู้ผลิตเกเบี้ยน, เกี่ยวกับ Angu',
     },
   },
