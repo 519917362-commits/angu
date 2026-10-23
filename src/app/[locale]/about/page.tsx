@@ -2,8 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { generatePageMeta } from '@/lib/seo-utils';
 import { SITE_DATA_TAG } from '@/lib/api';
-import { YEARS_IN_BUSINESS } from '@/lib/company';
+import { YEARS_IN_BUSINESS, COMPANY } from '@/lib/company';
 import { IconWhatsApp } from '@/components/icons';
+import { CertificationsSection } from '@/components/about/CertificationsSection';
+import { CERTIFICATIONS, CERT_ISSUER, certificationLd } from '@/lib/certifications';
 
 // ── Types ──
 interface TimelineItem {
@@ -151,7 +153,7 @@ function OrganizationLd({ locale, config }: { locale: string; config: Record<str
       latitude: 38.235,
       longitude: 115.520,
     },
-    foundingDate: '2015',
+    foundingDate: COMPANY.foundedISO,
     foundingLocation: {
       '@type': 'Place',
       name: 'Anping County, Hebei, China',
@@ -164,7 +166,7 @@ function OrganizationLd({ locale, config }: { locale: string; config: Record<str
       availableLanguage: ['English', 'Chinese', 'Vietnamese', 'Thai'],
     },
     hasCertification: [
-      {'@type': 'Certification', name: 'ISO 9001:2015', description: 'Quality Management System'},
+      ...certificationLd(),
       {'@type': 'Certification', name: 'CE Marking', description: 'EU Market Compliance — Rockfall Protection Nets'},
     ],
     naics: '332618',
@@ -201,10 +203,10 @@ function AboutFaqLd({ locale, config }: { locale: string; config: Record<string,
       q_zh: `${companyName}有哪些认证？`,
       q_vi: `${companyName} có những chứng nhận gì?`,
       q_th: `${companyName}มีใบรับรองอะไรบ้าง?`,
-      a_en: `${companyName} is ISO 9001:2015 certified for quality management and holds CE certification and ETAG 027 European technical approval for rockfall protection nets. SGS and Bureau Veritas (BV) third-party inspections are also available upon request.`,
-      a_zh: `${companyName}获得ISO 9001:2015质量管理体系认证，边坡防护网产品持有CE和ETAG 027欧洲技术认证。同时支持SGS、必维(BV)等第三方检测。`,
-      a_vi: `${companyName} đạt chứng nhận ISO 9001:2015 về quản lý chất lượng, đồng thời có chứng nhận CE và phê duyệt kỹ thuật châu Âu ETAG 027 cho lưới chống đá rơi. Khách hàng cũng có thể yêu cầu kiểm tra bên thứ ba bởi SGS và Bureau Veritas (BV).`,
-      a_th: `${companyName}ได้รับการรับรอง ISO 9001:2015 ด้านการจัดการคุณภาพ และมีใบรับรอง CE รวมถึงการรับรองทางเทคนิคยุโรป ETAG 027 สำหรับตาข่ายป้องกันหินพัง นอกจากนี้ยังสามารถจัดตรวจสอบโดยบุคคลที่สาม SGS และ Bureau Veritas (BV) ได้ตามคำขอ`,
+      a_en: `${companyName} holds three ISO management system certificates issued by ${CERT_ISSUER.en}, all valid until 15 July 2027: ISO 9001:2015 quality management (No. ${CERTIFICATIONS[0].number}), ISO 14001:2015 environmental management (No. ${CERTIFICATIONS[1].number}) and ISO 45001:2018 occupational health & safety (No. ${CERTIFICATIONS[2].number}). Certificate copies are downloadable on this page and verifiable on China's CNCA platform. CE marking documentation and ETAG 027 test reports for rockfall protection nets, plus SGS/BV third-party inspection, are available on request.`,
+      a_zh: `${companyName}持有${CERT_ISSUER.zh}颁发的三体系认证证书，有效期均至 2027 年 7 月 15 日：ISO 9001:2015 质量管理体系（证书号 ${CERTIFICATIONS[0].number}）、ISO 14001:2015 环境管理体系（证书号 ${CERTIFICATIONS[1].number}）、ISO 45001:2018 职业健康安全管理体系（证书号 ${CERTIFICATIONS[2].number}）。证书原件可在本页下载，并可在国家认监委网站核验。边坡防护网的 CE 标识资料、ETAG 027 检测报告，以及 SGS/必维（BV）第三方检验，均可按需提供。`,
+      a_vi: `${companyName} sở hữu ba chứng nhận hệ thống ISO do ${CERT_ISSUER.en} cấp, có hiệu lực đến 15/07/2027: ISO 9001:2015 quản lý chất lượng (số ${CERTIFICATIONS[0].number}), ISO 14001:2015 quản lý môi trường (số ${CERTIFICATIONS[1].number}) và ISO 45001:2018 an toàn & sức khỏe nghề nghiệp (số ${CERTIFICATIONS[2].number}). Bản gốc có thể tải trên trang này và tra cứu tại cổng CNCA Trung Quốc. Hồ sơ CE, báo cáo thử nghiệm ETAG 027 cho lưới chống đá rơi và kiểm định bên thứ ba SGS/BV được cung cấp theo yêu cầu.`,
+      a_th: `${companyName} ถือใบรับรองระบบมาตรฐาน ISO สามฉบับที่ออกโดย ${CERT_ISSUER.en} มีอายุถึง 15 กรกฎาคม 2027 ได้แก่ ISO 9001:2015 การจัดการคุณภาพ (เลขที่ ${CERTIFICATIONS[0].number}), ISO 14001:2015 การจัดการสิ่งแวดล้อม (เลขที่ ${CERTIFICATIONS[1].number}) และ ISO 45001:2018 อาชีวอนามัยและความปลอดภัย (เลขที่ ${CERTIFICATIONS[2].number}) ดาวน์โหลดสำเนาได้จากหน้านี้ และตรวจสอบได้ที่แพลตฟอร์ม CNCA ของจีน เอกสาร CE รายงานทดสอบ ETAG 027 สำหรับตาข่ายกันหินร่วง และการตรวจสอบโดย SGS/BV มีให้ตามคำขอ`,
     },
     {
       q_en: `What is the annual production capacity of ${companyName}?`,
@@ -278,7 +280,6 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const timeline = data.timeline || [];
   const team = data.team || [];
   const factoryImages = data.factoryImages || [];
-  const certifications = data.certifications || [];
   const whyChooseUs = data.whyChooseUs || [];
 
   // Dynamic strings from config
@@ -307,7 +308,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const statInspection = t(siteCfg, 'stats_inspection', locale) || '100%';
 
   // Dynamic hero badge text
-  const heroBadge = cfg('hero_badge_en') || (tLabel('ISO 9001 & CE 认证制造商', 'ISO 9001 & CE Certified Manufacturer', locale));
+  const heroBadge = cfg('hero_badge_en') || (tLabel('ISO 9001/14001/45001 三体系认证制造商', 'ISO 9001 / 14001 / 45001 Certified Manufacturer', locale));
 
   // Company hero image for right-side visual (from site_config, fallback to first factory image)
   // site_config returns { en: '...', zh: '...' } format for about_company_image
@@ -319,8 +320,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
   // Dynamic badges from config with locale-aware text
   const badgeDefs = [
-    { en: 'ISO 9001 Certified', zh: 'ISO 9001 认证', vi: 'Chứng nhận ISO 9001', th: 'ได้รับการรับรอง ISO 9001' },
-    { en: 'CE Certified', zh: 'CE 认证', vi: 'Chứng nhận CE', th: 'ได้รับการรับรอง CE' },
+    { en: 'ISO 9001 / 14001 / 45001', zh: 'ISO 三体系认证', vi: 'Chứng nhận ISO 3 hệ thống', th: 'ใบรับรอง ISO 3 ระบบ' },
+    { en: 'CE Marking', zh: 'CE 认证', vi: 'Dấu CE', th: 'เครื่องหมาย CE' },
     { en: `${statYears} Years Experience`, zh: `${statYears} 年经验`, vi: `${statYears} Năm Kinh Nghiệm`, th: `${statYears} ปีประสบการณ์` },
     { en: `${statCountries} Countries Exported`, zh: `出口 ${statCountries} 国家`, vi: `Xuất Khẩu ${statCountries} Quốc Gia`, th: `ส่งออก ${statCountries} ประเทศ` },
   ];
@@ -360,23 +361,6 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           },
         }) }}
       />
-      {/* GEO: Certifications ItemList JSON-LD */}
-      {certifications.length > 0 && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'ItemList',
-            name: certTitle,
-            itemListElement: certifications.map((cert, i) => ({
-              '@type': 'ListItem',
-              position: i + 1,
-              name: pickLocale(cert, 'name', locale),
-              description: pickLocale(cert, 'desc', locale),
-            })),
-          }) }}
-        />
-      )}
 
       {/* Header (dark gradient) */}
       <section className="relative bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white py-20 overflow-hidden">
@@ -402,28 +386,28 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           <div className="prose prose-slate max-w-none text-sm leading-relaxed text-slate-600">
             {locale === 'zh' ? (
               <p>
-                <strong>安固丝网（Angu Wire Mesh）</strong>是位于中国河北省安平县的<strong>ISO 9001认证制造商</strong>，
+                <strong>安固丝网（Angu Wire Mesh）</strong>是位于中国河北省安平县的<strong>ISO 9001 / ISO 14001 / ISO 45001 三体系认证制造商</strong>，
                 专注石笼网箱、边坡防护网、勾花网围栏、电焊网等9大丝网品类的研发、生产和出口。
                 工厂占地10,000㎡，年产5,000吨，<strong>自2014年成立</strong>，产品出口30+国家。
                 我们支持来图来样OEM/ODM定制，提供从样品到门到门物流的全链路服务。
               </p>
             ) : locale === 'vi' ? (
               <p>
-                <strong>Angu Wire Mesh</strong> là <strong>nhà sản xuất được chứng nhận ISO 9001</strong> đặt tại Huyện An Bình, Hà Bắc, Trung Quốc —
+                <strong>Angu Wire Mesh</strong> là <strong>nhà sản xuất được chứng nhận ISO 9001 / 14001 / 45001</strong> đặt tại Huyện An Bình, Hà Bắc, Trung Quốc —
                 trung tâm toàn cầu về sản xuất lưới thép. Chúng tôi chuyên nghiên cứu, sản xuất và xuất khẩu 9 danh mục sản phẩm bao gồm
                 rọ đá, lưới chống rơi đá, hàng rào lưới mắt cáo và lưới thép hàn. Vận hành từ <strong>nhà máy 10.000 m² với năng lực hàng năm 5.000 tấn</strong>,
                 chúng tôi sản xuất từ năm 2014 và xuất khẩu đến hơn 30 quốc gia. Hỗ trợ OEM/ODM theo bản vẽ và mẫu, dịch vụ toàn vòng từ nguyên mẫu đến logistics tận nơi.
               </p>
             ) : locale === 'th' ? (
               <p>
-                <strong>Angu Wire Mesh</strong> เป็น <strong>ผู้ผลิตที่ได้รับการรับรอง ISO 9001</strong> ตั้งอยู่ที่เขตอันผิง หฺอเป่ย ประเทศจีน —
+                <strong>Angu Wire Mesh</strong> เป็น <strong>ผู้ผลิตที่ได้รับการรับรอง ISO 9001 / 14001 / 45001</strong> ตั้งอยู่ที่เขตอันผิง หฺอเป่ย ประเทศจีน —
                 ศูนย์กลางการผลิตตะแกรงลวดของโลก เราเชี่ยวชาญด้าน R&D การผลิต และการส่งออก 9 หมวดสินค้า รวมถึง
                 กล่องเกเบี้ยน ตะแกรงป้องกันหินตก รั้วตะแกรงถัก และตะแกรงลวดเชื่อม ดำเนินงานจาก <strong>โรงงาน 10,000 ตร.ม. ผลิตได้ 5,000 ตันต่อปี</strong>
                 เราผลิตตั้งแต่ปี 2014 และส่งออกไปกว่า 30 ประเทศ รองรับ OEM/ODM ตามแบบและตัวอย่าง บริการครบวงจรตั้งแต่ต้นแบบถึงการขนส่งถึงบ้าน
               </p>
             ) : (
               <p>
-                <strong>Angu Wire Mesh</strong> is an <strong>ISO 9001 certified manufacturer</strong> based in Anping County, Hebei, China —
+                <strong>Angu Wire Mesh</strong> is an <strong>ISO 9001 / 14001 / 45001 certified manufacturer</strong> based in Anping County, Hebei, China —
                 the global hub of wire mesh production. We specialize in R&amp;D, manufacturing, and export of 9 product categories including
                 gabion boxes, rockfall protection nets, chain link fences, and welded wire mesh. Operating from a <strong>10,000 m² factory with 5,000 tons annual capacity</strong>,
                 we have been manufacturing since 2014 and ship to 30+ countries. We support drawing-to-sample OEM/ODM and full-cycle service from prototyping to door-to-door logistics.
@@ -744,24 +728,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           </div>
         </div>
 
-        {/* Certifications */}
-        {certifications.length > 0 && (
-          <div className="mb-12">
-            <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">{certTitle}</h2>
-              <div className="w-16 h-1 bg-blue-600 mx-auto" />
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {certifications.map((cert) => (
-                <div key={cert.id} className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 text-center hover:border-blue-200 transition-colors">
-                  <div className="text-4xl mb-3">{cert.icon}</div>
-                  <h3 className="font-bold text-slate-900 mb-1">{pickLocale(cert, 'name', locale)}</h3>
-                  <p className="text-xs text-slate-500">{pickLocale(cert, 'desc', locale)}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Certifications — ISO 三体系（数据见 src/lib/certifications.ts） */}
+        <CertificationsSection locale={locale} title={certTitle} />
 
         {/* Why Choose Us */}
         {whyChooseUs.length > 0 && (

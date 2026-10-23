@@ -3,6 +3,7 @@ import {routing} from '@/lib/routing';
 import {I18nProvider} from '@/lib/i18n-context';
 import {REVALIDATE_SECONDS, SITE_DATA_TAG} from '@/lib/api';
 import {COMPANY} from '@/lib/company';
+import {certificationLd} from '@/lib/certifications';
 import {Header} from '@/components/layout/Header';
 import {Footer} from '@/components/layout/Footer';
 import {InquiryButton} from '@/components/layout/InquiryButton';
@@ -58,7 +59,7 @@ export default async function LocaleLayout({
     url: 'https://www.angumesh.com',
     logo: 'https://www.angumesh.com/images/logo.png',
     image: 'https://www.angumesh.com/og-image.jpg',
-    description: 'ISO 9001 certified manufacturer of gabion boxes, rockfall protection nets, hexagonal wire mesh, chain link fence, and wire mesh products. Factory-direct pricing from Anping, China.',
+    description: 'ISO 9001 / 14001 / 45001 certified manufacturer of gabion boxes, rockfall protection nets, hexagonal wire mesh, chain link fence, and wire mesh products. Factory-direct pricing from Anping, China.',
     foundingDate: COMPANY.foundedISO,
     foundingLocation: {
       '@type': 'Place',
@@ -88,7 +89,7 @@ export default async function LocaleLayout({
       availableLanguage: ['English', 'Chinese', 'Vietnamese', 'Thai'],
     },
     hasCertification: [
-      {'@type': 'Certification', name: 'ISO 9001:2015', certificationIdentification: 'ISO 9001:2015'},
+      ...certificationLd(),
       {'@type': 'Certification', name: 'CE Marking', certificationIdentification: 'CE'},
     ],
     naics: '332618',

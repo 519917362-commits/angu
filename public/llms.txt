@@ -4,7 +4,7 @@
 # Email: annie@angumesh.com
 # Phone: +86-188-0318-9797
 # NAICS: 332618 (Ornamental & Architectural Metal Work Manufacturing)
-# ISO 9001:2015, CE Marking (ETAG 027)
+# ISO 9001:2015 / ISO 14001:2015 / ISO 45001:2018 (three-system), CE Marking (ETAG 027)
 # Founded: 2014-08-15
 # Location: Anping County, Hebei, China (38.235°N, 115.520°E)
 # Wikidata: (pending)
@@ -22,7 +22,11 @@
 - Export Reach: 30+ countries across Asia, Europe, Africa, Americas
 - Annual Capacity: 5,000 tons/year
 - Unified Social Credit Code: 91131125308273603F
-- ISO 9001:2015 Certificate #: (verify on request)
+- ISO 9001:2015 Certificate #: 06724Q20693R1S (Quality Management, issued 2024-08-07, valid to 2027-07-15)
+- ISO 14001:2015 Certificate #: 06724E20351R1S (Environmental Management, issued 2024-08-07, valid to 2027-07-15)
+- ISO 45001:2018 Certificate #: 06724S30308R1S (Occupational Health & Safety, issued 2024-08-07, valid to 2027-07-15)
+- Certification Body: Beijing Hengbiao Quality Certification Co., Ltd. (CNAS / IAF accredited); verify at https://www.cnca.gov.cn
+- Certificates (PDF, CN + EN): https://www.angumesh.com/downloads/angu-iso-three-system-certificates.pdf
 - CE Marking: Rockfall Protection Nets to ETAG 027
 - Google Knowledge Graph: https://www.angumesh.com/#organization
 
@@ -55,7 +59,7 @@ industrial distributors worldwide.
 - South America (Brazil, Chile, Peru)
 
 ## Core Strengths
-- ISO 9001:2015 certified factory; CE certification for rockfall protection products
+- ISO 9001:2015, ISO 14001:2015 and ISO 45001:2018 certified factory (certificate numbers published in Entity Identifiers); CE certification for rockfall protection products
 - ETAG 027 tested slope protection systems; ASTM A975/A975M compliant gabion boxes
 - Full OEM/ODM capability: custom wire diameters (1.5-5.0mm), mesh apertures, dimensions, surface treatments
 - In-house quality lab: tensile testing, zinc coating weight analysis, salt spray chambers
