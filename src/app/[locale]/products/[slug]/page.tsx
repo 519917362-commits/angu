@@ -282,7 +282,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({params}: ProductDetailPageProps): Promise<Metadata> {
   const {locale, slug} = await params;
   const product = await getProduct(slug);
-  if (!product) return {title: tLabel('产品未找到', 'Product Not Found', locale)};
+  // 这里必须 notFound()，不能只返回一个 "Product Not Found" 的标题：
+  // 页面组件里的 notFound() 发生在流式渲染开始之后，Next 对「流式响应」固定返回
+  // 200（官方文档 not-found.js §Status Codes），结果就是一个标题写着"找不到产品"
+  // 却返回 200 的软 404。放到 generateMetadata 里抛出，响应还没开始流，才能拿到真 404。
+  if (!product) notFound();
 
   const name = product.names[locale] || product.names.en || '';
   // GEO: prefer seoTitle (question-style) for meta title
