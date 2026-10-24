@@ -44,6 +44,23 @@ const nextConfig: NextConfig = {
       {protocol: 'https', hostname: '**.supabase.co'}
     ]
   },
+  // 转化确认页别名：外部投放/邮件里常写成 /thank-you、/thanks 或 /{locale}/thanks，
+  // 统一 308 到 /{locale}/thank-you，避免落到 404 丢掉转化归因
+  async redirects() {
+    return [
+      // 根路径 → 默认语种。原本由 app/page.tsx 的 permanentRedirect 承担，
+      // 但 app/layout.tsx 删除后（为了给 /{locale}/* 输出正确的 <html lang>）
+      // app/page.tsx 不再有根 layout，改由这里处理。permanent: true 依旧输出 308。
+      {source: '/', destination: '/en', permanent: true},
+      {source: '/thank-you', destination: '/en/thank-you', permanent: true},
+      {source: '/thanks', destination: '/en/thank-you', permanent: true},
+      {
+        source: '/:locale(en|zh|vi|th)/thanks',
+        destination: '/:locale/thank-you',
+        permanent: true,
+      },
+    ];
+  },
   // Proxy API requests to local backend during development
   async rewrites() {
     return [

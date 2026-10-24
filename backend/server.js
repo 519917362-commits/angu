@@ -1911,7 +1911,7 @@ app.get('/api/noise-barrier-data', (req, res) => {
         result.certifications = [
           { id:1, icon:'📋', name_en:'ISO 9001:2015', name_zh:'ISO 9001:2015', name_vi:'ISO 9001:2015', name_th:'ISO 9001:2015', desc_en:'Quality Management System', desc_zh:'质量管理体系认证', desc_vi:'Hệ Thống Quản Lý Chất Lượng', desc_th:'ระบบบริหารคุณภาพ' },
           { id:2, icon:'🔬', name_en:'SGS / BV Testing', name_zh:'SGS / BV 检测', name_vi:'Kiểm Tra SGS / BV', name_th:'ทดสอบโดย SGS / BV', desc_en:'3rd-Party Inspection Available', desc_zh:'第三方检测可提供', desc_vi:'Kiểm Tra Bên Thứ Ba', desc_th:'มีบริการตรวจสอบบุคคลที่สาม' },
-          { id:3, icon:'🔊', name_en:'Acoustic Lab Tested', name_zh:'声学实验室检测', name_vi:'Kiểm Tra Phòng Lab', name_th:'ทดสอบในห้องปฏิบัติการเสียง', desc_en:'STC ≥38dB / NRC ≥0.85', desc_zh:'STC ≥38dB / NRC ≥0.85', desc_vi:'STC ≥38dB / NRC ≥0.85', desc_th:'STC ≥38dB / NRC ≥0.85' },
+          { id:3, icon:'🔊', name_en:'Acoustic Lab Tested', name_zh:'声学实验室检测', name_vi:'Kiểm Tra Phòng Lab', name_th:'ทดสอบในห้องปฏิบัติการเสียง', desc_en:'STC 32–34 dB / NRC 0.85', desc_zh:'STC 32–34 dB / NRC 0.85', desc_vi:'STC 32–34 dB / NRC 0.85', desc_th:'STC 32–34 dB / NRC 0.85' },
           { id:4, icon:'🧂', name_en:'Salt Spray >2000h', name_zh:'盐雾测试 >2000h', name_vi:'Phun Muối >2000h', name_th:'ทดสอบละอองเกลือ >2000ชม.', desc_en:'Hot-Dip Galvanized Durability', desc_zh:'热镀锌耐久验证', desc_vi:'Chống Ăn Mòn Mạ Kẽm', desc_th:'ความทนทานเคลือบสังกะสี' },
         ];
 

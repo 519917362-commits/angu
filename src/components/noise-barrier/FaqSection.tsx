@@ -7,7 +7,7 @@ const faqs: Record<string, Array<{ q: string; a: string }>> = {
     { q: 'Thời gian giao hàng đến Việt Nam là bao lâu?', a: 'Từ 10–15 ngày sản xuất + 7–14 ngày vận chuyển biển đến cảng Hồ Chí Minh hoặc Hải Phòng. Tổng thời gian thực tế khoảng 20–30 ngày kể từ khi xác nhận đơn.' },
     { q: 'Có hỗ trợ bản vẽ CAD và tính toán kết cấu không?', a: 'Có. Chúng tôi cung cấp miễn phí bản vẽ CAD, tính toán tải trọng gió, và phân tích kết cấu cho dự án của bạn. Chỉ cần gửi yêu cầu với thông số dự án.' },
     { q: 'Báo giá bao gồm những gì?', a: 'Báo giá FOB hoặc CIF bao gồm: tấm cách âm + trụ H + đế bản + bu lông + gioăng cao su. Không bao gồm phí lắp dựng tại công trường (có thể hỗ trợ kỹ sư hiện trường với chi phí phụ).' },
-    { q: 'Số lượng đặt hàng tối thiểu (MOQ) là多少?', a: 'MOQ: 500 m² cho tấm tiêu âm tiêu chuẩn. Với dự án lớn (>5000 m²), chúng tôi cung cấp giá chiết khấu đặc biệt và hỗ trợ giao hàng theo đợt.' },
+    { q: 'Số lượng đặt hàng tối thiểu (MOQ) là bao nhiêu?', a: 'MOQ: 500 m² cho tấm tiêu âm tiêu chuẩn. Với dự án lớn (>5000 m²), chúng tôi cung cấp giá chiết khấu đặc biệt và hỗ trợ giao hàng theo đợt.' },
     { q: 'Chính sách bảo hành như thế nào?', a: 'Bảo hành 5 năm cho mạ kẽm nhúng nóng chống rỉ sét. Tuổi thọ thiết kế 15+ năm trong điều kiện khí hậu nhiệt đới tại Việt Nam.' },
     { q: 'Có thể tùy chỉnh màu sắc và kích thước không?', a: 'Có. Kích thước tấm có thể tùy chỉnh 2.0m / 2.5m / 3.0m / 4.0m. Màu sắc theo bảng RAL, sơn tĩnh điện polyester hoặc PVDF.' },
   ],

@@ -10,17 +10,17 @@ interface GalleryContent {
 const content: Record<string, GalleryContent> = {
   vi: {
     title: 'Dự Án Thực Tế',
-    subtitle: 'Hình ảnh thi công thực tế từ các dự án đường cao tốc, nhà máy và cầu tại Việt Nam & quốc tế',
+    subtitle: 'Hình ảnh thi công thực tế từ các dự án đường cao tốc, nhà máy và cầu đã bàn giao',
     emptyText: 'Hình ảnh dự án đang được cập nhật. Vui lòng liên hệ để nhận portfolio đầy đủ.',
   },
   th: {
     title: 'ผลงานจริง',
-    subtitle: 'ภาพติดตั้งจริงจากโครงการทางด่วน โรงงาน และสะพานในประเทศไทยและต่างประเทศ',
+    subtitle: 'ภาพติดตั้งจริงจากโครงการทางด่วน โรงงาน และสะพานที่ส่งมอบแล้ว',
     emptyText: 'กำลังอัปเดตรูปภาพโครงการ กรุณาติดต่อเพื่อรับ portfolio เต็มรูปแบบ',
   },
   en: {
     title: 'Real Project Gallery',
-    subtitle: 'On-site installation photos from highway, factory, and bridge projects across Vietnam and internationally',
+    subtitle: 'On-site installation photos from highway, factory, and bridge projects we have delivered',
     emptyText: 'Project photos are being updated. Contact us for the full project portfolio.',
   },
   zh: {
