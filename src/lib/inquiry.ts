@@ -1,5 +1,6 @@
 import { submitInquiry } from './api';
 import { trackLead } from './analytics';
+import { getAttributionPayload } from './attribution';
 
 /**
  * 全站询盘提交的唯一入口。
@@ -37,8 +38,14 @@ export async function submitInquiryLead(
   // 蜜罐命中：伪装成功，不触网、不上报转化
   if (website) return { success: true };
 
+  // 归因参数（gclid / utm_*）由 AttributionCapture 在落地时写进 localStorage，
+  // 这里随表单一起提交。没有归因时是空对象，行为与改造前完全一致。
+  // 放在 data 之后：归因字段固定为那 11 个，不会覆盖用户填写的任何内容。
+  const attribution = getAttributionPayload();
+
   const result = await submitInquiry({
     ...data,
+    ...attribution,
     source,
     product_interest: data.product_interest || productInterest,
     locale,

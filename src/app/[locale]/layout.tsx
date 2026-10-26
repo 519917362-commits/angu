@@ -2,6 +2,7 @@ import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import '../globals.css';
 import {GoogleAnalytics} from '../GoogleAnalytics';
+import {AttributionCapture} from '@/components/AttributionCapture';
 import {routing} from '@/lib/routing';
 import {I18nProvider} from '@/lib/i18n-context';
 import {REVALIDATE_SECONDS, SITE_DATA_TAG} from '@/lib/api';
@@ -210,6 +211,7 @@ export default async function LocaleLayout({
     <html lang={HTML_LANG[locale] ?? 'en'} suppressHydrationWarning>
       <body>
         <GoogleAnalytics />
+        <AttributionCapture />
         <I18nProvider locale={locale}>
           <script
             type="application/ld+json"

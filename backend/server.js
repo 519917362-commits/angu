@@ -156,6 +156,20 @@ async function sendInquiryNotification(inquiry) {
 
   const subject = `【新询盘】${country} · ${productLabel} · ${inquiry.name}（${inquiry.inquiry_no}）`;
 
+  // 归因摘要：销售在邮件里直接看到这条线索来自哪个渠道/系列/关键词，
+  // 不用登后台查库。点击 ID（gclid）只入库不展示——太长且对人无意义，
+  // 它的用途是后续把成交回传给 Google Ads（离线转化导入）。
+  const hasClickId = Boolean(inquiry.gclid || inquiry.gbraid || inquiry.wbraid);
+  const attrParts = [];
+  if (hasClickId) attrParts.push('Google Ads');
+  else if (inquiry.utm_source) attrParts.push(inquiry.utm_source);
+  else if (inquiry.referrer) attrParts.push(inquiry.referrer);
+  else attrParts.push('Direct / organic');
+  if (inquiry.utm_campaign) attrParts.push(`系列 ${inquiry.utm_campaign}`);
+  if (inquiry.utm_term) attrParts.push(`关键词 ${inquiry.utm_term}`);
+  if (inquiry.landing_page) attrParts.push(`落地 ${inquiry.landing_page}`);
+  const attrSummary = attrParts.join(' · ');
+
   const row = (label, value) => value
     ? `<tr><td style="padding:6px 12px 6px 0;color:#64748b;white-space:nowrap;vertical-align:top">${escHtml(label)}</td><td style="padding:6px 0;color:#0f172a">${value}</td></tr>`
     : '';
@@ -177,6 +191,7 @@ async function sendInquiryNotification(inquiry) {
         ${row('产品', inquiry.product_slug ? `<a href="${escHtml(productUrl)}" style="color:#1d4ed8">${escHtml(productLabel)}</a>` : escHtml(productLabel))}
         ${row('数量', inquiry.quantity ? escHtml(inquiry.quantity) : '')}
         ${row('来源语言', escHtml(inquiry.locale || 'en'))}
+        ${row('来源归因', hasClickId ? `<strong style="color:#15803d">${escHtml(attrSummary)}</strong>` : escHtml(attrSummary))}
         ${row('来源页', inquiry.referer ? `<span style="font-size:12px;color:#475569">${escHtml(String(inquiry.referer).slice(0, 120))}</span>` : '')}
       </table>
       <div style="margin-top:18px;padding:14px 16px;background:#f8fafc;border-left:3px solid #1d4ed8;border-radius:4px">
@@ -203,6 +218,7 @@ async function sendInquiryNotification(inquiry) {
     `Product: ${productLabel}`,
     `Qty:     ${inquiry.quantity || '-'}`,
     `Locale:  ${inquiry.locale || 'en'}`,
+    `Source:  ${attrSummary}`,
     '',
     'Message:',
     inquiry.message,
@@ -342,10 +358,43 @@ function initDatabase() {
       category_slug TEXT,
       locale TEXT DEFAULT 'en',
       status TEXT DEFAULT 'new',
+      -- 广告归因：gclid 等点击标识用于把成交回传 Google Ads（离线转化导入），
+      -- utm_* 用于分辨渠道/系列/关键词，landing_page 记录首触页面
+      gclid TEXT DEFAULT '',
+      gbraid TEXT DEFAULT '',
+      wbraid TEXT DEFAULT '',
+      utm_source TEXT DEFAULT '',
+      utm_medium TEXT DEFAULT '',
+      utm_campaign TEXT DEFAULT '',
+      utm_term TEXT DEFAULT '',
+      utm_content TEXT DEFAULT '',
+      referrer TEXT DEFAULT '',
+      landing_page TEXT DEFAULT '',
+      captured_at TEXT DEFAULT '',
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
+
+  // ── inquiries 归因列迁移 ──
+  // 线上库是加列之前建的，CREATE TABLE IF NOT EXISTS 对已存在的表完全不生效，
+  // 必须显式 ALTER。逐列比对 pragma，已存在就跳过，可重复执行。
+  const ATTR_MIGRATION = [
+    'gclid', 'gbraid', 'wbraid',
+    'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+    'referrer', 'landing_page', 'captured_at',
+  ];
+  db.all('PRAGMA table_info(inquiries)', [], (err, cols) => {
+    if (err || !Array.isArray(cols)) return;
+    const existing = new Set(cols.map((c) => c.name));
+    for (const col of ATTR_MIGRATION) {
+      if (existing.has(col)) continue;
+      db.run(`ALTER TABLE inquiries ADD COLUMN ${col} TEXT DEFAULT ''`, (e) => {
+        if (e) console.error(`Migration failed: inquiries.${col} —`, e.message);
+        else console.log(`Migration: added inquiries.${col}`);
+      });
+    }
+  });
 
   // Admin users table
   db.run(`
@@ -1523,10 +1572,33 @@ app.post('/api/inquiry', inquiryLimiter, async (req, res) => {
 
     const inquiryNo = `INQ-${Date.now()}`;
 
+    // 广告归因字段：由前端 AttributionCapture 采集后随表单提交。
+    // 单独成组 + 动态拼接，避免手数 22 个占位符出错；将来加参数只改数组。
+    const ATTR_COLS = [
+      'gclid', 'gbraid', 'wbraid',
+      'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+      'referrer', 'landing_page', 'captured_at',
+    ];
+    // 外部输入一律当不可信字符串：非字符串直接丢弃，并截断长度，
+    // 防止有人往归因字段里灌超长内容撑爆库和邮件正文
+    const attrValue = (v) => (typeof v === 'string' ? v.trim().slice(0, 200) : '');
+
+    const baseCols = [
+      'inquiry_no', 'name', 'email', 'phone', 'company', 'country',
+      'quantity', 'message', 'product_slug', 'category_slug', 'locale',
+    ];
+    const baseValues = [
+      inquiryNo, name, email, phone || '', company || '', country || '',
+      quantity || '', message || '', productSlug || '', categorySlug || '', locale || 'en',
+    ];
+
+    const allCols = [...baseCols, ...ATTR_COLS];
+    const allValues = [...baseValues, ...ATTR_COLS.map((c) => attrValue(req.body[c]))];
+
     db.run(
-      `INSERT INTO inquiries (inquiry_no, name, email, phone, company, country, quantity, message, product_slug, category_slug, locale)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [inquiryNo, name, email, phone || '', company || '', country || '', quantity || '', message || '', productSlug || '', categorySlug || '', locale || 'en'],
+      `INSERT INTO inquiries (${allCols.join(', ')})
+       VALUES (${allCols.map(() => '?').join(', ')})`,
+      allValues,
       async function(err) {
         if (err) {
           console.error('Database insert failed:', err);
@@ -1553,6 +1625,18 @@ app.post('/api/inquiry', inquiryLimiter, async (req, res) => {
           locale: locale || 'en',
           ip: req.ip,
           referer: req.get('referer') || '',
+          // 归因：广告来的线索要让销售一眼看出是哪个渠道/系列/关键词
+          gclid: attrValue(req.body.gclid),
+          gbraid: attrValue(req.body.gbraid),
+          wbraid: attrValue(req.body.wbraid),
+          utm_source: attrValue(req.body.utm_source),
+          utm_medium: attrValue(req.body.utm_medium),
+          utm_campaign: attrValue(req.body.utm_campaign),
+          utm_term: attrValue(req.body.utm_term),
+          utm_content: attrValue(req.body.utm_content),
+          referrer: attrValue(req.body.referrer),
+          landing_page: attrValue(req.body.landing_page),
+          captured_at: attrValue(req.body.captured_at),
         };
 
         // 询盘已入库，邮件异步发送：SMTP 握手可能耗时 1-3s，
