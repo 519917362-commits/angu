@@ -401,6 +401,10 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
       '@type': 'AggregateOffer',
       priceCurrency: 'USD',
       lowPrice: product.priceUsd,
+      // AggregateOffer 规格要求 lowPrice 与 highPrice 同时存在，
+      // 只给 lowPrice 会被 Google 判定为无效报价，富结果整体不生效。
+      // 此处是单一挂牌价，故 highPrice 与 lowPrice 取同一值。
+      highPrice: product.priceUsd,
       offerCount: 1,
       availability: 'https://schema.org/MadeToOrder',
       url: `${baseUrl}/${locale}/products/${product.slug}`,

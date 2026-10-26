@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { Product, Category } from '@/types/product';
 import { ProductCard } from '@/components/products/ProductCard';
 import { tLabel } from '@/lib/i18n';
+import { YEARS_LABEL } from '@/lib/company';
 
 export async function generateMetadata({ params }: {
   params: Promise<{ locale: string }>;
@@ -150,8 +151,8 @@ export default async function ProductsPage({
   );
   const headerBreadcrumb = v('products_header_breadcrumb', 'Products', '产品中心');
   const seoIntro = v('products_seo_intro',
-    `Angu Wire Mesh is a professional wire mesh manufacturer based in Anping, Hebei — the "Wire Mesh Capital" of China. With 15 years of industry experience, we are ISO 9001 and CE certified. We offer ${sortedCategories.length} product categories with ${products.length} product series. All products are factory-direct with no middleman markup. We export to 30+ countries.`,
-    `安固丝网是河北安平专业的丝网产品制造商，拥有12年行业经验，通过ISO 9001质量管理体系认证和CE产品认证。我们提供${sortedCategories.length}大品类、${products.length}款丝网产品。所有产品工厂直供，无中间商加价。出口全球30+国家和地区。`
+    `Angu Wire Mesh is a professional wire mesh manufacturer based in Anping, Hebei — the "Wire Mesh Capital" of China. With ${YEARS_LABEL} years of industry experience, we are ISO 9001 and CE certified. We offer ${sortedCategories.length} product categories with ${products.length} product series. All products are factory-direct with no middleman markup. We export to 30+ countries.`,
+    `安固丝网是河北安平专业的丝网产品制造商，拥有${YEARS_LABEL}年行业经验，通过ISO 9001质量管理体系认证和CE产品认证。我们提供${sortedCategories.length}大品类、${products.length}款丝网产品。所有产品工厂直供，无中间商加价。出口全球30+国家和地区。`
   );
   const faqTitle = v('products_faq_title', 'Frequently Asked Questions', '常见问题');
   const faqDesc = v('products_faq_desc', 'Common questions about Angu Wire Mesh products and procurement', '关于安固丝网产品和采购的常见疑问解答');
