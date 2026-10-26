@@ -91,6 +91,7 @@ export async function GET() {
     // 四个品类支柱页（/gabion、/fence、/wire-mesh、/protection-net）
     ...PILLAR_SLUGS.map((s) => [`/${s}`, 'weekly', '0.9'] as [string, string, string]),
     ['/privacy', 'yearly', '0.3'],
+    ['/terms', 'yearly', '0.3'],
   ];
 
   const urls: string[] = [];

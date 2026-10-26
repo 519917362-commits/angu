@@ -159,10 +159,14 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-slate-500">{copyright}</p>
-          <div className="flex items-center gap-4 text-sm text-slate-500">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-slate-500">
             <Link href={`/${locale}/download`} className="hover:text-white transition-colors">{tLabel('下载中心', 'Downloads', locale)}</Link>
-            <span>|</span>
+            <span aria-hidden="true">|</span>
             <Link href={`/${locale}/service/faq`} className="hover:text-white transition-colors">{tLabel('常见问题', 'FAQ', locale)}</Link>
+            <span aria-hidden="true">|</span>
+            <Link href={`/${locale}/privacy`} className="hover:text-white transition-colors">{tLabel('隐私政策', 'Privacy Policy', locale)}</Link>
+            <span aria-hidden="true">|</span>
+            <Link href={`/${locale}/terms`} className="hover:text-white transition-colors">{tLabel('服务条款', 'Terms of Service', locale)}</Link>
           </div>
         </div>
       </div>

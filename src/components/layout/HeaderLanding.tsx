@@ -61,7 +61,7 @@ export function HeaderLanding({ locale, logoUrl, email, phone, ctaText, socials 
 
           {/* Right: socials with hover QR + CTA */}
           <div className="flex items-center gap-1.5">
-            {/* Social icons */}
+            {/* Social icons — 后台没配真实账号时 socials 为空，整块不渲染 */}
             <div className="hidden sm:flex items-center gap-0.5">
               {socials.map((s) => (
                 <div

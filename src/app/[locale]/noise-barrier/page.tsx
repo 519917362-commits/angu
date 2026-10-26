@@ -13,6 +13,7 @@ import { CompanyStrength } from '@/components/noise-barrier/CompanyStrength';
 import { ProjectGallery } from '@/components/noise-barrier/ProjectGallery';
 import { QuoteForm } from '@/components/noise-barrier/QuoteForm';
 import { NoiseBarrierClient } from '@/components/noise-barrier/NoiseBarrierClient';
+import { whatsappNumber, zaloId, lineId, facebookUrl } from '@/lib/channels';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -174,7 +175,6 @@ export default async function NoiseBarrierPage({
       : siteConfig.config.phone;
     if (rawPhone) phone = rawPhone;
   }
-  const cleanPhone = phone.replace(/[^0-9+]/g, '');
 
   // Get hero image from config or fallback
   const heroImage = nbData?.config?.noise_hero_image?.[locale as keyof typeof nbData.config.noise_hero_image]
@@ -196,10 +196,12 @@ export default async function NoiseBarrierPage({
   const contactInfo = {
     email: getCfg('email') || 'annie@angumesh.com',
     phone: getCfg('phone') || '+86 188 0318 9797',
-    whatsapp: getCfg('whatsapp') || getCfg('phone') || '+86 188 0318 9797',
-    facebook: getCfg('facebook') || 'https://www.facebook.com/anguwiremesh',
-    zalo: getCfg('zalo') || getCfg('phone') || '+86 188 0318 9797',
-    lineId: getCfg('line_id') || 'anguwiremesh',
+    whatsapp: whatsappNumber(getCfg('whatsapp') || getCfg('phone')) || '8618803189797',
+    facebook: facebookUrl(getCfg('facebook')),
+    // Zalo / LINE 不再回落到手机号：Zalo 只支持 +84，LINE ID 也必须有真实账号。
+    // 后台没配就是空字符串，下游组件据此隐藏入口（见 src/lib/channels.ts）。
+    zalo: zaloId(getCfg('zalo')),
+    lineId: lineId(getCfg('line_id')),
     locale,
     qrWhatsApp: getCfg('qr_whatsapp') || '',
     qrZalo: getCfg('qr_zalo') || '',
@@ -307,7 +309,12 @@ export default async function NoiseBarrierPage({
       <FaqSection locale={locale} />
 
       {/* 11. CTA */}
-      <CtaSection locale={locale} phone={cleanPhone} />
+      <CtaSection
+        locale={locale}
+        whatsapp={contactInfo.whatsapp}
+        zalo={contactInfo.zalo}
+        lineId={contactInfo.lineId}
+      />
 
       {/* Client components: FloatingContact + ExitIntentPopup */}
       <NoiseBarrierClient locale={locale} contactInfo={contactInfo} />

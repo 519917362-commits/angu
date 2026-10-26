@@ -1,5 +1,15 @@
 import { IconWhatsApp } from '@/components/icons';
-export function CtaSection({ locale, phone }: { locale: string; phone: string }) {
+export function CtaSection({
+  locale,
+  whatsapp,
+  zalo,
+  lineId,
+}: {
+  locale: string;
+  whatsapp: string;
+  zalo: string;
+  lineId: string;
+}) {
   const isVi = locale === 'vi';
   const isTh = locale === 'th';
 
@@ -31,21 +41,23 @@ export function CtaSection({ locale, phone }: { locale: string; phone: string })
              : '📋 Get Your Quote Now'}
           </a>
 
-          {/* Vietnam: Zalo - Thailand: LINE */}
-          {isVi ? (
-            <a href={`https://zalo.me/${phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer"
+          {/* 越南语优先 Zalo、泰语优先 LINE，但只有后台真的配了账号才显示。
+              没有就一律回落 WhatsApp —— 以前这里直接拿手机号拼 zalo.me / line.me，
+              泰国页甚至会拼出 line.me/ti/p/~8618803189797，点开必然找不到人。 */}
+          {isVi && zalo ? (
+            <a href={`https://zalo.me/${zalo}`} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-blue-500/20 border border-blue-300/30 text-white font-semibold rounded-lg hover:bg-blue-500/30 transition-colors">
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
               Chat Zalo
             </a>
-          ) : isTh ? (
-            <a href={`https://line.me/ti/p/~${phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer"
+          ) : isTh && lineId ? (
+            <a href={`https://line.me/ti/p/~${lineId}`} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-green-500/20 border border-green-300/30 text-white font-semibold rounded-lg hover:bg-green-500/30 transition-colors">
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="6"/></svg>
               Chat LINE
             </a>
           ) : (
-            <a href={`https://wa.me/${phone}`} target="_blank" rel="noopener noreferrer"
+            <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-green-500/20 border border-green-300/30 text-white font-semibold rounded-lg hover:bg-green-500/30 transition-colors">
               <IconWhatsApp className="w-5 h-5" />
               Chat WhatsApp

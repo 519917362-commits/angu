@@ -11,6 +11,7 @@ import {certificationLd} from '@/lib/certifications';
 import {Header} from '@/components/layout/Header';
 import {Footer} from '@/components/layout/Footer';
 import {InquiryButton} from '@/components/layout/InquiryButton';
+import {MobileContactBar} from '@/components/layout/MobileContactBar';
 import {BackToTop} from '@/components/layout/BackToTop';
 
 /**
@@ -209,7 +210,8 @@ export default async function LocaleLayout({
 
   return (
     <html lang={HTML_LANG[locale] ?? 'en'} suppressHydrationWarning>
-      <body>
+      {/* pb-16/sm:pb-0 给移动端底部常驻联系条留出高度，否则会盖住页脚最后一行 */}
+      <body className="pb-16 sm:pb-0">
         <GoogleAnalytics />
         <AttributionCapture />
         <I18nProvider locale={locale}>
@@ -221,6 +223,7 @@ export default async function LocaleLayout({
           <main>{children}</main>
           <Footer locale={locale} logoUrl={logoUrl} />
           <InquiryButton />
+          <MobileContactBar locale={locale} />
           <BackToTop />
         </I18nProvider>
       </body>

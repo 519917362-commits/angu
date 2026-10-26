@@ -10,6 +10,7 @@ import {HeaderLanding} from './HeaderLanding';
 import {MessageCircle} from 'lucide-react';
 import {useCategories, useSiteConfig, cfgVal} from '@/lib/hooks';
 import { tLabel } from '@/lib/i18n';
+import { whatsappNumber, zaloId, lineId, facebookUrl } from '@/lib/channels';
 
 interface HeaderProps {
   locale: string;
@@ -25,6 +26,10 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
   const isLanding = pathname?.includes('/noise-barrier');
 
   const whatsapp = cfgVal(siteConfig, 'whatsapp', locale, '8618803189797');
+  // 配置里的号码是给人看的（+86 188 0318 9797，带空格和加号），
+  // 但 wa.me 只吃纯数字。不转换的话，客户端拿到配置后链接会变成
+  // https://wa.me/+86 188 0318 9797 —— 直接失效。
+  const waDigits = whatsappNumber(whatsapp);
   const email = cfgVal(siteConfig, 'email', locale, 'annie@angumesh.com');
   const phone = cfgVal(siteConfig, 'phone', locale, '+86 188 0318 9797');
   const clientLogoUrl = cfgVal(siteConfig, 'logo_url', locale, '');
@@ -42,36 +47,31 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
   if (isLanding) {
     const ctaText = locale === 'vi' ? 'Nhận Báo Giá' : locale === 'th' ? 'ขอใบเสนอราคา' : locale === 'zh' ? '获取报价' : 'Get Quote';
 
-    // Social channels for landing header
-    const waNum = whatsapp.replace(/[^0-9]/g, '');
-    const zaloNum = (cfgVal(siteConfig, 'zalo', locale, phone)).replace(/[^0-9]/g, '');
-    const lineId = cfgVal(siteConfig, 'line_id', locale, 'anguwiremesh');
-    const fbUrl = cfgVal(siteConfig, 'facebook', locale, 'https://www.facebook.com/anguwiremesh');
+    // Social channels for landing header.
+    // 每个渠道都先过 src/lib/channels.ts 的判定：没有真实账号就不渲染，
+    // 避免越南语页面出现 zalo.me/<+86 手机号> 这种点开找不到人的死链。
+    const waNum = waDigits;
+    const zaloNum = zaloId(cfgVal(siteConfig, 'zalo', locale, ''));
+    const liId = lineId(cfgVal(siteConfig, 'line_id', locale, ''));
+    const fbUrl = facebookUrl(cfgVal(siteConfig, 'facebook', locale, ''));
     const qrWa = cfgVal(siteConfig, 'qr_whatsapp', locale, '');
     const qrZa = cfgVal(siteConfig, 'qr_zalo', locale, '');
     const qrLi = cfgVal(siteConfig, 'qr_line', locale, '');
     const qrFb = cfgVal(siteConfig, 'qr_facebook', locale, '');
 
-    const socialChannels = [
-      { key: 'whatsapp', label: 'WhatsApp', color: '#25D366',
-        href: `https://wa.me/${waNum}`,
-        qrImg: qrWa,
-        icon: <IconWhatsApp className="w-5 h-5" /> },
-      { key: 'zalo', label: 'Zalo', color: '#0068FF',
-        href: `https://zalo.me/${zaloNum}`,
-        qrImg: qrZa,
-        icon: <IconZalo className="w-5 h-5" /> },
-      { key: 'line', label: 'LINE', color: '#06C755',
-        href: `https://line.me/ti/p/~${lineId}`,
-        qrImg: qrLi,
-        icon: <IconLINE className="w-5 h-5" /> },
-      { key: 'facebook', label: 'Facebook', color: '#1877F2',
-        href: fbUrl,
-        qrImg: qrFb,
-        icon: <IconFacebook className="w-5 h-5" /> },
-    ];
+    const socialChannels: {
+      key: string; label: string; color: string; href: string; qrImg: string; icon: React.ReactNode;
+    }[] = [];
+    if (waNum) socialChannels.push({ key: 'whatsapp', label: 'WhatsApp', color: '#25D366',
+      href: `https://wa.me/${waNum}`, qrImg: qrWa, icon: <IconWhatsApp className="w-5 h-5" /> });
+    if (zaloNum) socialChannels.push({ key: 'zalo', label: 'Zalo', color: '#0068FF',
+      href: `https://zalo.me/${zaloNum}`, qrImg: qrZa, icon: <IconZalo className="w-5 h-5" /> });
+    if (liId) socialChannels.push({ key: 'line', label: 'LINE', color: '#06C755',
+      href: `https://line.me/ti/p/~${liId}`, qrImg: qrLi, icon: <IconLINE className="w-5 h-5" /> });
+    if (fbUrl) socialChannels.push({ key: 'facebook', label: 'Facebook', color: '#1877F2',
+      href: fbUrl, qrImg: qrFb, icon: <IconFacebook className="w-5 h-5" /> });
 
-    // Locale-based order: first one is most prominent
+    // Locale-based order: first one is most prominent（缺渠道时自动跳过）
     const localeOrder: Record<string, string[]> = {
       vi: ['zalo', 'whatsapp', 'line', 'facebook'],
       th: ['line', 'whatsapp', 'facebook', 'zalo'],
@@ -79,7 +79,9 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
       zh: ['whatsapp', 'zalo', 'line', 'facebook'],
     };
     const orderedKeys = localeOrder[locale] || localeOrder.en;
-    const orderedSocials = orderedKeys.map(k => socialChannels.find(s => s.key === k)!).filter(Boolean);
+    const orderedSocials = orderedKeys
+      .map(k => socialChannels.find(s => s.key === k))
+      .filter((s): s is NonNullable<typeof s> => Boolean(s));
 
     return (
       <HeaderLanding locale={locale} logoUrl={logoUrl} email={email} phone={phone} ctaText={ctaText} socials={orderedSocials} />
@@ -250,7 +252,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
 
             {/* WhatsApp CTA */}
             <a
-              href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(locale === 'zh' ? '您好，我对贵司产品很感兴趣。' : "Hello, I'm interested in your products.")}`}
+              href={`https://wa.me/${waDigits}?text=${encodeURIComponent(locale === 'zh' ? '您好，我对贵司产品很感兴趣。' : "Hello, I'm interested in your products.")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="hidden sm:flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-medium rounded-lg transition-colors"
@@ -260,7 +262,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
             </a>
 
             {/* Mobile Nav */}
-            <MobileNav locale={locale} whatsapp={whatsapp} />
+            <MobileNav locale={locale} whatsapp={waDigits} />
           </div>
         </div>
       </div>

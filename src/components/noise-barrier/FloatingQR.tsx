@@ -2,6 +2,7 @@
 import { IconWhatsApp, IconZalo, IconLINE, IconFacebook, IconClose, IconChat } from '../icons';
 
 import { useState, useEffect } from 'react';
+import { whatsappNumber, zaloId, lineId, facebookUrl } from '@/lib/channels';
 
 interface ContactInfo {
   email: string;
@@ -34,26 +35,32 @@ interface ChannelDef {
   href: (info: ContactInfo) => string;
   display: (info: ContactInfo) => string;
   qrUrl: (info: ContactInfo) => string;
+  /** 有没有真实账号 —— 没有就整个渠道不渲染，避免点开是死链 */
+  available: (info: ContactInfo) => boolean;
 }
 
-function buildChannels(locale: string): ChannelDef[] {
+function buildChannels(locale: string, info: ContactInfo): ChannelDef[] {
   const channels: ChannelDef[] = [
     { key: 'whatsapp', label: 'WhatsApp', shortLabel: 'WhatsApp', icon: <IconWhatsApp />, color: brandColors.whatsapp,
       href: (i) => `https://wa.me/${i.whatsapp.replace(/[^0-9]/g, '')}`,
       display: (i) => i.whatsapp,
-      qrUrl: (i) => i.qrWhatsApp || '' },
+      qrUrl: (i) => i.qrWhatsApp || '',
+      available: (i) => whatsappNumber(i.whatsapp) !== '' },
     { key: 'zalo', label: 'Zalo', shortLabel: 'Zalo', icon: <IconZalo />, color: brandColors.zalo,
       href: (i) => `https://zalo.me/${i.zalo.replace(/[^0-9]/g, '')}`,
       display: (i) => i.zalo,
-      qrUrl: (i) => i.qrZalo || '' },
+      qrUrl: (i) => i.qrZalo || '',
+      available: (i) => zaloId(i.zalo) !== '' },
     { key: 'line', label: 'LINE', shortLabel: 'LINE', icon: <IconLINE />, color: brandColors.line,
       href: (i) => `https://line.me/ti/p/~${i.lineId}`,
       display: (i) => i.lineId,
-      qrUrl: (i) => i.qrLine || '' },
+      qrUrl: (i) => i.qrLine || '',
+      available: (i) => lineId(i.lineId) !== '' },
     { key: 'facebook', label: 'Facebook', shortLabel: 'Facebook', icon: <IconFacebook />, color: brandColors.facebook,
       href: (i) => i.facebook,
       display: () => 'Angu Wire Mesh',
-      qrUrl: (i) => i.qrFacebook || '' },
+      qrUrl: (i) => i.qrFacebook || '',
+      available: (i) => facebookUrl(i.facebook) !== '' },
   ];
 
   // Locale priority order
@@ -64,7 +71,9 @@ function buildChannels(locale: string): ChannelDef[] {
     zh: ['whatsapp', 'zalo', 'line', 'facebook'],
   };
   const ord = order[locale] || order.en;
-  return ord.map(k => channels.find(c => c.key === k)!).filter(Boolean);
+  return ord
+    .map(k => channels.find(c => c.key === k))
+    .filter((c): c is ChannelDef => Boolean(c) && Boolean(c!.available(info)));
 }
 
 const uiText: Record<string, { title: string; scanTip: string; chatNow: string; chatLabel: string }> = {
@@ -79,7 +88,7 @@ export function FloatingQR({ locale, contactInfo }: { locale: string; contactInf
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('');
 
-  const channels = buildChannels(locale);
+  const channels = buildChannels(locale, contactInfo);
   const t = uiText[locale] || uiText.en;
 
   // Set default tab based on locale priority
@@ -101,7 +110,8 @@ export function FloatingQR({ locale, contactInfo }: { locale: string; contactInf
 
   const activeChannel = channels.find(c => c.key === activeTab) || channels[0];
 
-  if (!visible) return null;
+  // 没有任何可用渠道（后台全没配）就不显示悬浮按钮，免得点开是个空面板
+  if (!visible || !activeChannel) return null;
 
   return (
     <>
