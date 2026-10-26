@@ -47,6 +47,12 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
             <span className="text-slate-700">|</span>
             <a href={`mailto:${email}`} className="hover:text-white transition-colors">{email}</a>
           </div>
+          {/* 落地页也要能点到合规页：Google 审核和客户尽调都会看有没有隐私政策与服务条款 */}
+          <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 text-xs text-slate-500 mb-3">
+            <Link href={`/${locale}/privacy`} className="hover:text-white transition-colors">{tLabel('隐私政策', 'Privacy Policy', locale)}</Link>
+            <span aria-hidden="true">|</span>
+            <Link href={`/${locale}/terms`} className="hover:text-white transition-colors">{tLabel('服务条款', 'Terms of Service', locale)}</Link>
+          </div>
           <p className="text-xs text-slate-500">{copyright}</p>
         </div>
       </footer>
