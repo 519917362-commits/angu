@@ -56,7 +56,9 @@ export async function GET() {
       fetch(`${BACKEND}/api/catalog`, {
         next: { revalidate: REVALIDATE_SECONDS, tags: [SITE_DATA_TAG] },
       }),
-      fetch(`${BACKEND}/api/blog-posts`, {
+      // limit 必须显式给大值：后端 /api/blog-posts 默认只返回 10 条，
+      // 文章超过 10 篇后其余会静默漏出 sitemap。
+      fetch(`${BACKEND}/api/blog-posts?limit=500`, {
         next: { revalidate: REVALIDATE_SECONDS, tags: [SITE_DATA_TAG] },
       }),
     ]);

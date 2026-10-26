@@ -140,7 +140,8 @@ export async function getProduct(slug: string): Promise<Product | null> {
 
 /** Get published blog posts */
 export async function getBlogPosts(): Promise<BlogPost[]> {
-  const data = await fetchAPI<{ posts: BlogPost[] }>('/api/blog-posts');
+  // 后端默认 limit=10，文章多于 10 篇后其余会静默消失，必须显式传大值
+  const data = await fetchAPI<{ posts: BlogPost[] }>('/api/blog-posts?limit=500');
   return data?.posts || [];
 }
 
