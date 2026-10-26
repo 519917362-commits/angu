@@ -9,8 +9,23 @@ const BUILTIN_GA_ID = 'G-VHCDNSEK78';
 const ENV_GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 const GA_ID = ENV_GA_ID && !/X{4,}/i.test(ENV_GA_ID) ? ENV_GA_ID : BUILTIN_GA_ID;
 
+// Google Ads 账户级代码 ID。
+// 这个值由 Ads 后台「转化 → 设置 Google 代码」生成，是账户级公开标识
+// （会原样出现在页面源码里），不是密钥，同样内置一份作兜底。
+// gtag('config','AW-…') 一旦出现在页面上，Ads 才能收到该账户的事件。
+const BUILTIN_ADS_ID = 'AW-18532049868';
+const ENV_ADS_ID = process.env.NEXT_PUBLIC_ADS_ID;
+const ADS_ID = ENV_ADS_ID && !/X{4,}/i.test(ENV_ADS_ID) ? ENV_ADS_ID : BUILTIN_ADS_ID;
+
 // 两个独立转化：表单线索 / WhatsApp·电话点击，分别作为 Google Ads 出价目标
-const ADS_FORM_CONV = process.env.NEXT_PUBLIC_ADS_FORM_CONVERSION;
+//
+// 表单转化的 send_to 内置兜底：Ads 后台「提交潜在客户表单」这个转化操作
+// 生成的事件代码段里就是这个值，会原样出现在页面源码中，不是密钥。
+// 内置的好处是换机器/丢 .env.local 也不会静默丢掉转化上报。
+const BUILTIN_ADS_FORM_CONV = 'AW-18532049868/Ow_JCPjxtqodEMzH4oRF';
+const ENV_ADS_FORM_CONV = process.env.NEXT_PUBLIC_ADS_FORM_CONVERSION;
+const ADS_FORM_CONV =
+  ENV_ADS_FORM_CONV && !/X{4,}/i.test(ENV_ADS_FORM_CONV) ? ENV_ADS_FORM_CONV : BUILTIN_ADS_FORM_CONV;
 const ADS_CONTACT_CONV = process.env.NEXT_PUBLIC_ADS_WHATSAPP_CONVERSION;
 
 /** GA4 衡量 ID 是否已配置真实值（G-XXXXXXXXXX） */
@@ -41,18 +56,20 @@ export function isAdsConfigured(): boolean {
   return isValidSendTo(ADS_FORM_CONV) || isValidSendTo(ADS_CONTACT_CONV);
 }
 
-/** gtag.js 饿加载用：Ads 场景取 AW- 账户前缀，未配置时回落 GA ID */
+/**
+ * gtag.js 加载用的 ID。
+ * 保持用 GA4 衡量 ID 加载：这条路径线上已验证稳定，换加载 ID 有可能
+ * 影响 GA4 收录，而 Ads 只需在同一个 dataLayer 里追加一条
+ * gtag('config','AW-…') 就能收到事件。GA4 未配置时才回落到 AW-。
+ */
 export function primaryTagId(): string | null {
-  if (isAdsConfigured()) {
-    const conv = isValidSendTo(ADS_FORM_CONV) ? ADS_FORM_CONV : ADS_CONTACT_CONV;
-    return (conv as string).split('/')[0];
-  }
   if (isGaConfigured()) return GA_ID as string;
-  return null;
+  return adsAccountPrefix();
 }
 
 /** Ads 账户前缀（AW-xxxxxx），用于 gtag('config') */
 export function adsAccountPrefix(): string | null {
+  if (ADS_ID && /^AW-\d{6,}$/.test(ADS_ID)) return ADS_ID;
   if (!isAdsConfigured()) return null;
   const conv = isValidSendTo(ADS_FORM_CONV) ? ADS_FORM_CONV : ADS_CONTACT_CONV;
   return (conv as string).split('/')[0];
@@ -97,11 +114,9 @@ export function trackLead(params: LeadParams = {}): void {
   // 表单线索与联系方式点击使用不同的 Ads 转化，便于分别优化出价
   const sendTo = source === 'contact_click' ? ADS_CONTACT_CONV : ADS_FORM_CONV;
   if (isValidSendTo(sendTo)) {
-    w.gtag('event', 'conversion', {
-      send_to: sendTo,
-      value: 1,
-      currency: 'USD',
-    });
+    // 不传 value / currency：账户币种是人民币，这里写死 USD 会让价值报表失真。
+    // 留空即采用转化操作里配置的默认值（1 CNY）。
+    w.gtag('event', 'conversion', { send_to: sendTo });
   }
 }
 
