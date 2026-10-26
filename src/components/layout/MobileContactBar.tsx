@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import {usePathname} from 'next/navigation';
 import {MessageCircle, FileText} from 'lucide-react';
 import {WHATSAPP_NUMBER} from '@/lib/contact';
 
@@ -19,6 +20,10 @@ const T: Record<string, {whatsapp: string; quote: string}> = {
  */
 export function MobileContactBar({locale}: {locale: string}) {
   const t = T[locale] || T.en;
+  const pathname = usePathname();
+  // 营销页自己就有表单，直接滚到表单比跳去 /contact 少一步（少一步就少一次流失）
+  const isLanding = pathname?.includes('/noise-barrier');
+  const quoteHref = isLanding ? '#quote-form' : `/${locale}/contact`;
 
   return (
     <div className="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur border-t border-slate-200 pb-[env(safe-area-inset-bottom)]">
@@ -33,7 +38,7 @@ export function MobileContactBar({locale}: {locale: string}) {
           {t.whatsapp}
         </a>
         <Link
-          href={`/${locale}/contact`}
+          href={quoteHref}
           className="flex items-center justify-center gap-1.5 h-11 rounded-lg bg-blue-600 active:bg-blue-700 text-white font-medium text-sm"
         >
           <FileText className="w-4 h-4 flex-shrink-0" />

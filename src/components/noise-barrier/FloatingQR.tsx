@@ -195,11 +195,12 @@ export function FloatingQR({ locale, contactInfo }: { locale: string; contactInf
         </div>
       )}
 
-      {/* Floating button */}
+      {/* Floating button — 移动端由底部常驻联系条（MobileContactBar）承担：
+          两者都固定在底部会叠在一起，而且手机上没人会扫自己屏幕上的二维码 */}
       {!expanded && (
         <button
           onClick={() => setExpanded(true)}
-          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-xl px-5 py-3.5 transition-all hover:scale-105"
+          className="hidden sm:flex fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-xl px-5 py-3.5 transition-all hover:scale-105"
           aria-label={t.chatNow}
         >
           <IconChat className="w-5 h-5" />
