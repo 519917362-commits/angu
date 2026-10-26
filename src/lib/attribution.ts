@@ -113,7 +113,11 @@ export function captureAttribution(): void {
   }
 
   const next: StoredAttribution = {
-    ...(existing || {}),
+    // 只继承首触点，广告参数一律从本次 URL 重新取。
+    // 若整组 {...existing} 展开，会遇到「新点击没带 utm_term，旧关键词残留」，
+    // 拼出「泰国系列 + 越南关键词」这种串数据——实测踩过。
+    landing_page: existing?.landing_page,
+    referrer: existing?.referrer,
     ts: Date.now(),
   };
 
