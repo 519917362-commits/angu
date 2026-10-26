@@ -38,7 +38,15 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
-    unoptimized: true,
+    // 站点照片大多是 PNG（1500×1500 的图能到 2.4MB），必须交给 Next 的图片管线
+    // 转 WebP + 按视口裁尺寸，否则落地页首屏要下十几 MB。
+    // 打开后组件里的 <Image> 才会输出 srcset 与 /_next/image 地址。
+    formats: ['image/webp'],
+    // 生成过的派生图在磁盘上保留 31 天，命中后不再消耗 sharp 的 CPU
+    minimumCacheTTL: 2678400,
+    // 只保留实际用得到的档位，减少变体数量与冷启动裁剪次数
+    deviceSizes: [640, 828, 1080, 1200, 1920],
+    imageSizes: [128, 256, 384],
     remotePatterns: [
       {protocol: 'https', hostname: 'images.unsplash.com'},
       {protocol: 'https', hostname: '**.supabase.co'}
