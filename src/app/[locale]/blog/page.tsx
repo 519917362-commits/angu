@@ -1,5 +1,6 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import {getBlogPosts, getSiteConfig} from '@/lib/api';
 import {generatePageMeta} from '@/lib/seo-utils';
 import { tLabel } from '@/lib/i18n';
@@ -201,16 +202,16 @@ export default async function BlogPage({params}: {params: Promise<{locale: strin
                 <Link
                   key={post.id}
                   href={`/${locale}/blog/${post.slug}`}
-                  className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-100 hover:border-blue-100"
+                  className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-100 hover:border-blue-100 isolate"
                 >
-                  <div className="aspect-[16/9] bg-slate-100 overflow-hidden">
-                    <img
+                  <div className="relative aspect-[16/9] bg-slate-100 overflow-hidden">
+                    <Image
                       src={coverUrl}
                       alt={title}
-                      width={400}
-                      height={225}
-                      loading={i < 3 ? 'eager' : 'lazy'}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      priority={i < 3}
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                   <div className="p-6">
