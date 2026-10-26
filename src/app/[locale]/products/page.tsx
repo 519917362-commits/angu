@@ -308,12 +308,13 @@ export default async function ProductsPage({
               <p>{seoIntro}</p>
             </div>
 
-            {/* Category quick-nav pills */}
+            {/* Category quick-nav pills — 指向品类支柱页而不是 ?category= 参数页，
+                参数页 canonical 指向 /products，拿不到排名；支柱页才能承接品类词 */}
             <nav className="flex flex-wrap gap-2 mt-4" aria-label={tLabel('产品分类快速导航', 'Product category quick navigation', locale)}>
               {sortedCategories.map((cat) => (
                 <Link
                   key={cat.id}
-                  href={`/${locale}/products?category=${cat.slug}`}
+                  href={`/${locale}/${cat.slug}`}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 text-slate-600 rounded-full text-xs font-medium transition-colors shadow-sm"
                 >
                   {cat.names[locale] || cat.names.en}

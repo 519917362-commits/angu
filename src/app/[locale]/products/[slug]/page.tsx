@@ -4,6 +4,7 @@ import {notFound} from 'next/navigation';
 import {getProduct, getCatalog} from '@/lib/api';
 import {generatePageMeta} from '@/lib/seo-utils';
 import {InquiryButtonLarge} from '@/components/inquiry/InquiryButtonLarge';
+import {ProductQuoteForm} from '@/components/products/ProductQuoteForm';
 import {ProductCard} from '@/components/products/ProductCard';
 import ProductGallery from '@/components/products/ProductGallery';
 import type {Product} from '@/types/product';
@@ -653,6 +654,15 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
             </div>
           </div>
         )}
+
+        {/* 页内询价表单：Google 落地到产品页的访客多数不会点弹窗按钮，
+            常驻表单能兜住这批人 */}
+        <ProductQuoteForm
+          productName={name}
+          productSlug={product.slug}
+          categorySlug={product.categorySlug}
+          locale={locale}
+        />
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (

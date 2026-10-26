@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { submitInquiryLead } from '@/lib/inquiry';
 
@@ -10,6 +11,8 @@ interface FormContent {
   nameLabel: string;
   emailLabel: string;
   phoneLabel: string;
+  companyLabel: string;
+  countryLabel: string;
   qtyLabel: string;
   msgLabel: string;
   submitBtn: string;
@@ -24,6 +27,8 @@ const formContent: Record<string, FormContent> = {
     nameLabel: 'Họ và Tên *',
     emailLabel: 'Email *',
     phoneLabel: 'Zalo / WhatsApp',
+    companyLabel: 'Công ty',
+    countryLabel: 'Quốc gia / Khu vực *',
     qtyLabel: 'Số lượng (m / m²)',
     msgLabel: 'Yêu cầu dự án...',
     submitBtn: 'Gửi Yêu Cầu Báo Giá',
@@ -36,6 +41,8 @@ const formContent: Record<string, FormContent> = {
     nameLabel: 'ชื่อ-นามสกุล *',
     emailLabel: 'อีเมล *',
     phoneLabel: 'LINE / WhatsApp',
+    companyLabel: 'บริษัท',
+    countryLabel: 'ประเทศ / ภูมิภาค *',
     qtyLabel: 'จำนวน (ม. / ตร.ม.)',
     msgLabel: 'รายละเอียดโครงการ...',
     submitBtn: 'ส่งคำขอใบเสนอราคา',
@@ -48,6 +55,8 @@ const formContent: Record<string, FormContent> = {
     nameLabel: 'Name *',
     emailLabel: 'Email *',
     phoneLabel: 'WhatsApp / Phone',
+    companyLabel: 'Company',
+    countryLabel: 'Country / Region *',
     qtyLabel: 'Quantity (m / m²)',
     msgLabel: 'Project requirements...',
     submitBtn: 'Request Quotation',
@@ -60,6 +69,8 @@ const formContent: Record<string, FormContent> = {
     nameLabel: '姓名 *',
     emailLabel: '邮箱 *',
     phoneLabel: 'WhatsApp / 电话',
+    companyLabel: '公司名称',
+    countryLabel: '国家 / 地区 *',
     qtyLabel: '数量 (米 / 平方米)',
     msgLabel: '项目需求...',
     submitBtn: '提交询价',
@@ -70,6 +81,7 @@ const formContent: Record<string, FormContent> = {
 
 export function QuoteForm({ locale }: { locale: string }) {
   const c = formContent[locale] || formContent.en;
+  const router = useRouter();
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   return (
@@ -97,6 +109,11 @@ export function QuoteForm({ locale }: { locale: string }) {
                   locale,
                 });
                 setStatus(result.success ? 'success' : 'error');
+                if (result.success) {
+                  // 停顿 700ms 让用户看到 ✓，再进独立确认页。
+                  // 确认页有独立 URL，Google Ads / GA4 才能按页面访问计数转化。
+                  window.setTimeout(() => router.push(`/${locale}/thank-you`), 700);
+                }
               } catch {
                 setStatus('error');
               }
@@ -116,6 +133,29 @@ export function QuoteForm({ locale }: { locale: string }) {
               <input type="text" name="phone"
                 placeholder={c.phoneLabel}
                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-sm" />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" name="company" autoComplete="organization"
+                placeholder={c.companyLabel}
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-sm" />
+              {/* 国家是外贸报价的前置信息（运费/关税/标准都按国别定），
+                  用 datalist 给常用市场做提示，同时允许手填任何国家 */}
+              <input type="text" name="country" required autoComplete="country-name"
+                list="angu-country-options"
+                placeholder={c.countryLabel}
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-sm" />
+              <datalist id="angu-country-options">
+                {['Vietnam', 'Thailand', 'Malaysia', 'Indonesia', 'Philippines', 'Singapore',
+                  'Cambodia', 'Myanmar', 'Laos', 'India', 'Bangladesh', 'Sri Lanka',
+                  'Pakistan', 'United Arab Emirates', 'Saudi Arabia', 'Qatar',
+                  'Australia', 'New Zealand', 'United States', 'Mexico', 'Brazil',
+                  'Chile', 'Peru', 'Nigeria', 'Kenya', 'South Africa', 'Egypt',
+                  'Turkey', 'Poland', 'Germany', 'United Kingdom', 'Spain', 'Italy',
+                  'Russia', 'Kazakhstan', 'Japan', 'South Korea'].map((n) => (
+                  <option key={n} value={n} />
+                ))}
+              </datalist>
             </div>
 
             <input type="text" name="quantity"

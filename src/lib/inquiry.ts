@@ -12,6 +12,7 @@ import { trackLead } from './analytics';
 
 export type InquiryLeadSource =
   | 'product_modal'
+  | 'product_page'
   | 'contact_page'
   | 'exit_popup'
   | 'google_ads_noise_barrier';

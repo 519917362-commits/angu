@@ -1507,15 +1507,17 @@ app.post('/api/inquiry', inquiryLimiter, async (req, res) => {
       return res.json({ success: true, inquiryNo: `INQ-${Date.now()}` });
     }
 
-    if (!name || !email || !message) {
-      return res.status(400).json({ error: 'Name, email, and message are required.' });
+    // 只强制姓名与邮箱：落地页表单里 message 并非必填，
+    // 之前这里卡 message 会让只留联系方式、想被回电的访客直接吃到 400。
+    if (!name || !email) {
+      return res.status(400).json({ error: 'Name and email are required.' });
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ error: 'Invalid email address.' });
     }
 
-    if (String(message).length > 5000) {
+    if (String(message || '').length > 5000) {
       return res.status(400).json({ error: 'Message too long (max 5000 characters).' });
     }
 
@@ -1524,7 +1526,7 @@ app.post('/api/inquiry', inquiryLimiter, async (req, res) => {
     db.run(
       `INSERT INTO inquiries (inquiry_no, name, email, phone, company, country, quantity, message, product_slug, category_slug, locale)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [inquiryNo, name, email, phone || '', company || '', country || '', quantity || '', message, productSlug || '', categorySlug || '', locale || 'en'],
+      [inquiryNo, name, email, phone || '', company || '', country || '', quantity || '', message || '', productSlug || '', categorySlug || '', locale || 'en'],
       async function(err) {
         if (err) {
           console.error('Database insert failed:', err);
@@ -1545,7 +1547,7 @@ app.post('/api/inquiry', inquiryLimiter, async (req, res) => {
           company: company || '',
           country: country || '',
           quantity: quantity || '',
-          message,
+          message: message || '',
           product_slug: productSlug || '',
           product_label: productLabel,
           locale: locale || 'en',

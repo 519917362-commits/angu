@@ -1,5 +1,6 @@
 import { routing } from '@/lib/routing';
 import { REVALIDATE_SECONDS, SITE_DATA_TAG } from '@/lib/api';
+import { PILLAR_SLUGS } from '@/lib/pillars';
 
 const BACKEND = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const BASE_URL = 'https://www.angumesh.com';
@@ -85,6 +86,8 @@ export async function GET() {
     ['/about', 'monthly', '0.7'],
     ['/contact', 'monthly', '0.7'],
     ['/noise-barrier', 'weekly', '0.9'],
+    // 四个品类支柱页（/gabion、/fence、/wire-mesh、/protection-net）
+    ...PILLAR_SLUGS.map((s) => [`/${s}`, 'weekly', '0.9'] as [string, string, string]),
     ['/privacy', 'yearly', '0.3'],
   ];
 

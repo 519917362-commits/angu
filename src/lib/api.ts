@@ -111,10 +111,26 @@ export interface SceneConfig {
   categorySlugs: string[];
 }
 
+/**
+ * 上一次成功取到的目录。
+ *
+ * ISR 每 5 分钟会在后台重新取数。如果那一瞬间后端刚好在重启，
+ * fetchAPI 会返回 null——旧逻辑直接返回空数组，于是「0 个产品」的页面
+ * 被当成新内容缓存下来，线上就出现一个空产品目录（实测发生过一次）。
+ * 这里保留最后一次成功结果，取数失败时先顶上；连一次成功都没有才抛错，
+ * 让框架保留上一版缓存而不是把空页面固化。
+ */
+let lastGoodCatalog: { products: Product[]; categories: Category[] } | null = null;
+
 /** Get all published products + categories (homepage, product listing) */
 export async function getCatalog(): Promise<{ products: Product[]; categories: Category[] }> {
   const data = await fetchAPI<{ products: Product[]; categories: Category[] }>('/api/catalog');
-  return data || { products: [], categories: [] };
+  if (data && Array.isArray(data.products)) {
+    lastGoodCatalog = data;
+    return data;
+  }
+  if (lastGoodCatalog) return lastGoodCatalog;
+  throw new Error('catalog unavailable: backend did not return products');
 }
 
 /** Get a single product by slug (product detail page) */

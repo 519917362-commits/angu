@@ -1,4 +1,5 @@
 import {Product} from '@/types/product';
+import Image from 'next/image';
 import Link from 'next/link';
 import { tLabel } from '@/lib/i18n';
 
@@ -15,13 +16,12 @@ export function ProductCard({product, locale}: ProductCardProps) {
     <Link href={`/${locale}/products/${product.slug}`}>
       <article className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-100 h-full flex flex-col isolate">
         <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 flex-shrink-0">
-          <img
+          <Image
             src={product.images[0]}
             alt={name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            loading="lazy"
-            width={400}
-            height={300}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
           {product.moq && (
             <span className="absolute top-3 start-3 bg-blue-600 text-white text-xs px-2 py-1 rounded-md">
