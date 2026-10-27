@@ -303,8 +303,10 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   // 成立年限统一由工商登记日期计算；去掉历史配置里可能带的 "+"，
   // 否则下方 `${statYears}+` 会渲染成 "12++"。
   const statYears = (t(siteCfg, 'stats_years', locale) || String(YEARS_IN_BUSINESS)).replace(/\+$/, '');
-  const statCountries = t(siteCfg, 'stats_countries', locale) || '30+';
-  const statProducts = t(siteCfg, 'stats_products', locale) || '30';
+  // 配置里可能已经带 "+"（如 "30+"），下面渲染时会再拼一次 "+"，
+  // 不先剥掉就会输出 "30++"（2026-10-26 复检第 6 条）。
+  const statCountries = (t(siteCfg, 'stats_countries', locale) || '30').replace(/\+$/, '');
+  const statProducts = (t(siteCfg, 'stats_products', locale) || '30').replace(/\+$/, '');
   const statInspection = t(siteCfg, 'stats_inspection', locale) || '100%';
 
   // Dynamic hero badge text
@@ -323,7 +325,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
     { en: 'ISO 9001 / 14001 / 45001', zh: 'ISO 三体系认证', vi: 'Chứng nhận ISO 3 hệ thống', th: 'ใบรับรอง ISO 3 ระบบ' },
     { en: 'CE Marking', zh: 'CE 认证', vi: 'Dấu CE', th: 'เครื่องหมาย CE' },
     { en: `${statYears} Years Experience`, zh: `${statYears} 年经验`, vi: `${statYears} Năm Kinh Nghiệm`, th: `${statYears} ปีประสบการณ์` },
-    { en: `${statCountries} Countries Exported`, zh: `出口 ${statCountries} 国家`, vi: `Xuất Khẩu ${statCountries} Quốc Gia`, th: `ส่งออก ${statCountries} ประเทศ` },
+    { en: `${statCountries}+ Countries Exported`, zh: `出口 ${statCountries}+ 国家`, vi: `Xuất Khẩu ${statCountries}+ Quốc Gia`, th: `ส่งออก ${statCountries}+ ประเทศ` },
   ];
 
   // GEO: internal links to product categories
@@ -502,12 +504,14 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           <div className="px-8 md:px-12 py-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { value: `${statYears}+`, labelEn: 'Years Experience', labelZh: '年行业经验', icon: '🏭' },
-                { value: `${statCountries}+`, labelEn: 'Countries Exported', labelZh: '出口国家', icon: '🌍' },
-                { value: statProducts, labelEn: 'Product Series', labelZh: '产品系列', icon: '📦' },
-                { value: statInspection, labelEn: 'Inspection Rate', labelZh: '质检覆盖率', icon: '✅' },
+                // 字段名必须是 label_en / label_zh…：pickLocale() 找的是 `${field}_${locale}`，
+                // 之前写成 labelEn/labelZh，取不到值导致四个标签全部渲染成空白。
+                { value: `${statYears}+`, icon: '🏭', label_en: 'Years Experience', label_zh: '年行业经验', label_vi: 'Năm Kinh Nghiệm', label_th: 'ปีประสบการณ์' },
+                { value: `${statCountries}+`, icon: '🌍', label_en: 'Countries Exported', label_zh: '出口国家', label_vi: 'Quốc Gia Xuất Khẩu', label_th: 'ประเทศที่ส่งออก' },
+                { value: statProducts, icon: '📦', label_en: 'Product Series', label_zh: '产品系列', label_vi: 'Dòng Sản Phẩm', label_th: 'กลุ่มสินค้า' },
+                { value: statInspection, icon: '✅', label_en: 'Inspection Rate', label_zh: '质检覆盖率', label_vi: 'Tỷ Lệ Kiểm Tra', label_th: 'อัตราการตรวจสอบ' },
               ].map((s) => (
-                <div key={s.labelEn} className="bg-slate-50 rounded-xl p-4 text-center hover:bg-blue-50 transition-colors group">
+                <div key={s.label_en} className="bg-slate-50 rounded-xl p-4 text-center hover:bg-blue-50 transition-colors group">
                   <div className="text-xl mb-1">{s.icon}</div>
                   <div className="text-2xl md:text-3xl font-bold text-blue-600 group-hover:text-blue-700 transition-colors">{s.value}</div>
                   <div className="text-xs text-slate-500 mt-0.5">{pickLocale(s, 'label', locale)}</div>

@@ -102,6 +102,10 @@ export function QuoteForm({ locale }: { locale: string }) {
               setStatus('loading');
               const form = e.currentTarget;
               const data = new FormData(form);
+              // 蜜罐字段被填 → 后端静默返回成功（不写库、不发邮件、不报转化）。
+              // 这里同样不跳确认页：否则机器人的提交会落到 /thank-you 上，
+              // 一旦账户里再配了"页面加载"型转化，就变成一条假转化。
+              const honeypotHit = String(data.get('website') || '').trim() !== '';
               try {
                 const result = await submitInquiryLead(Object.fromEntries(data.entries()), {
                   source: 'google_ads_noise_barrier',
@@ -109,9 +113,10 @@ export function QuoteForm({ locale }: { locale: string }) {
                   locale,
                 });
                 setStatus(result.success ? 'success' : 'error');
-                if (result.success) {
+                if (result.success && !honeypotHit) {
                   // 停顿 700ms 让用户看到 ✓，再进独立确认页。
-                  // 确认页有独立 URL，Google Ads / GA4 才能按页面访问计数转化。
+                  // ⚠️ 转化已经由 submitInquiryLead 以 conversion 事件上报过了，
+                  //    不要再把 /thank-you 配成"页面加载"型转化动作，否则一条询盘记两次。
                   window.setTimeout(() => router.push(`/${locale}/thank-you`), 700);
                 }
               } catch {

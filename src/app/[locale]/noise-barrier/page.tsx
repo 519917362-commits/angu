@@ -14,6 +14,7 @@ import { ProjectGallery } from '@/components/noise-barrier/ProjectGallery';
 import { QuoteForm } from '@/components/noise-barrier/QuoteForm';
 import { NoiseBarrierClient } from '@/components/noise-barrier/NoiseBarrierClient';
 import { whatsappNumber, zaloId, lineId, facebookUrl } from '@/lib/channels';
+import { getNoiseBarrierFaqs } from '@/lib/noiseBarrierFaq';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -42,40 +43,6 @@ const seoContent: Record<string, { title: string; description: string; keywords:
   },
 };
 
-const faqJsonLd: Record<string, Array<{ q: string; a: string }>> = {
-  vi: [
-    { q: 'Thời gian giao hàng đến Việt Nam là bao lâu?', a: 'Từ 10–15 ngày sản xuất + 7–14 ngày vận chuyển biển đến cảng Hồ Chí Minh hoặc Hải Phòng. Tổng thời gian thực tế khoảng 20–30 ngày kể từ khi xác nhận đơn.' },
-    { q: 'Có hỗ trợ bản vẽ CAD và tính toán kết cấu không?', a: 'Có. Chúng tôi cung cấp miễn phí bản vẽ CAD, tính toán tải trọng gió, và phân tích kết cấu cho dự án của bạn.' },
-    { q: 'Báo giá bao gồm những gì?', a: 'Báo giá FOB hoặc CIF bao gồm: tấm cách âm + trụ H + đế bản + bu lông + gioăng cao su.' },
-    { q: 'Số lượng đặt hàng tối thiểu (MOQ) là bao nhiêu?', a: 'MOQ: 500 m² cho tấm tiêu âm tiêu chuẩn. Dự án lớn (>5000 m²) có giá chiết khấu đặc biệt.' },
-    { q: 'Chính sách bảo hành như thế nào?', a: 'Bảo hành 5 năm cho mạ kẽm nhúng nóng. Tuổi thọ thiết kế 15+ năm trong khí hậu nhiệt đới.' },
-    { q: 'Có thể tùy chỉnh màu sắc và kích thước không?', a: 'Có. Kích thước 2.0m / 2.5m / 3.0m / 4.0m. Màu theo RAL, sơn polyester hoặc PVDF.' },
-  ],
-  th: [
-    { q: 'ระยะเวลาจัดส่งถึงประเทศไทยนานเท่าไหร่?', a: 'ผลิต 10–15 วัน + ขนส่งทางเรือ 7–14 วัน รวมประมาณ 20–30 วัน' },
-    { q: 'มีบริการแบบ CAD และคำนวณโครงสร้างไหม?', a: 'มี เราให้บริการแบบ CAD และคำนวณโครงสร้างฟรี' },
-    { q: 'ใบเสนอราคารวมอะไรบ้าง?', a: 'FOB/CIF รวม: แผงกั้นเสียง + เสา H + แผ่นฐาน + นอต + ปะเก็นยาง' },
-    { q: 'จำนวนสั่งซื้อขั้นต่ำ (MOQ) เท่าไหร่?', a: 'MOQ: 500 ตร.ม. โครงการใหญ่มีส่วนลดพิเศษ' },
-    { q: 'นโยบายรับประกันเป็นอย่างไร?', a: 'รับประกัน 5 ปี อายุการใช้งาน 15+ ปี' },
-    { q: 'สามารถสั่งสีและขนาดพิเศษได้ไหม?', a: 'ได้ ขนาด 2.0/2.5/3.0/4.0 ม. สีตาม RAL' },
-  ],
-  en: [
-    { q: 'What is the delivery time to Vietnam/Thailand?', a: '10–15 days production + 7–14 days sea freight. Total 20–30 days.' },
-    { q: 'Do you provide CAD drawings?', a: 'Yes, free CAD drawings and structural analysis.' },
-    { q: 'What does the quotation include?', a: 'FOB/CIF includes panels + H-posts + base plates + bolts + seals.' },
-    { q: 'What is the MOQ?', a: '500 m² for standard panels. Large projects get special pricing.' },
-    { q: 'Warranty?', a: '5-year warranty on galvanizing. 15+ year design life.' },
-    { q: 'Custom colors and dimensions?', a: 'Yes, 2.0/2.5/3.0/4.0m panels, RAL colors.' },
-  ],
-  zh: [
-    { q: '发货到越南/泰国需要多长时间？', a: '生产 10–15 天 + 海运 7–14 天，总计 20–30 天。' },
-    { q: '提供 CAD 图纸吗？', a: '提供免费 CAD 图纸和结构分析。' },
-    { q: '报价包含哪些？', a: 'FOB/CIF 包含面板+立柱+底板+螺栓+密封条。' },
-    { q: 'MOQ 是多少？', a: '500 平方米起订，大项目有折扣。' },
-    { q: '保修？', a: '热镀锌保修 5 年，设计寿命 15+ 年。' },
-    { q: '可定制？', a: '可，尺寸 2.0/2.5/3.0/4.0m，RAL 色卡。' },
-  ],
-};
 
 export async function generateMetadata({
   params,
@@ -210,7 +177,8 @@ export default async function NoiseBarrierPage({
   };
 
   // FAQ JSON-LD
-  const faqItems = faqJsonLd[locale] || faqJsonLd.en;
+  // FAQ 文案与页面渲染共用 src/lib/noiseBarrierFaq.ts，避免结构化数据与可见内容不一致
+  const faqItems = getNoiseBarrierFaqs(locale);
   const faqLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

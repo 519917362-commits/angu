@@ -5,7 +5,7 @@ export function TrustBadges({ locale }: { locale: string }) {
     { label: { en: 'ISO 9001 / 14001 / 45001', zh: 'ISO 三体系认证', vi: 'Chứng nhận ISO 3 hệ thống', th: 'ใบรับรอง ISO 3 ระบบ' }, desc: { en: 'Quality · Environment · Safety', zh: '质量 · 环境 · 职业健康安全', vi: 'Chất lượng · Môi trường · An toàn', th: 'คุณภาพ · สิ่งแวดล้อม · ความปลอดภัย' } },
     { label: { en: 'SGS Tested', zh: 'SGS 检测', vi: 'Kiểm Định SGS', th: 'ทดสอบโดย SGS' }, desc: { en: '3rd Party Lab Verified', zh: '第三方实验室验证', vi: 'Phòng Thí Nghiệm Bên Thứ Ba', th: 'ตรวจสอบโดยห้องปฏิบัติการอิสระ' } },
     { label: { en: 'Custom OEM', zh: '定制代工', vi: 'Gia Công OEM', th: 'รับผลิต OEM' }, desc: { en: 'Your Specs, Our Factory', zh: '按图纸生产', vi: 'Sản Xuất Theo Bản Vẽ', th: 'ผลิตตามแบบของคุณ' } },
-    { label: { en: 'Fast Delivery', zh: '快速交货', vi: 'Giao Hàng Nhanh', th: 'จัดส่งรวดเร็ว' }, desc: { en: '10–15 Days Standard', zh: '标准 10–15 天', vi: 'Tiêu Chuẩn 10–15 Ngày', th: 'มาตรฐาน 10–15 วัน' } },
+    { label: { en: 'Fast Production', zh: '快速生产', vi: 'Sản Xuất Nhanh', th: 'ผลิตรวดเร็ว' }, desc: { en: '10–15 Days Standard', zh: '标准 10–15 天', vi: 'Tiêu Chuẩn 10–15 Ngày', th: 'มาตรฐาน 10–15 วัน' } },
     { label: { en: 'CAD Support', zh: 'CAD 支持', vi: 'Hỗ Trợ CAD', th: 'สนับสนุน CAD' }, desc: { en: 'Free Engineering Drawings', zh: '免费工程图纸', vi: 'Bản Vẽ Kỹ Thuật Miễn Phí', th: 'แบบวิศวกรรมฟรี' } },
     { label: { en: 'Export to ASEAN', zh: '出口东南亚', vi: 'Xuất Khẩu ASEAN', th: 'ส่งออกอาเซียน' }, desc: { en: 'VN & TH Regular Shipping', zh: '越南/泰国定期发货', vi: 'Vận Chuyển Thường Xuyên VN & TH', th: 'จัดส่งประจำ เวียดนาม-ไทย' } },
   ];
