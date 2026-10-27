@@ -144,7 +144,9 @@ export default async function LocaleLayout({
     },
     hasCertification: [
       ...certificationLd(),
-      {'@type': 'Certification', name: 'CE Marking', certificationIdentification: 'CE'},
+      // CE 只覆盖落石防护网（ETAG 027），结构化数据里必须写明范围，
+      // 否则等于向 Google 声明全品类都有 CE
+      {'@type': 'Certification', name: 'CE Marking (Rockfall Protection Nets)', certificationIdentification: 'CE'},
     ],
     naics: '332618',
     areaServed: [

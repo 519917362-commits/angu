@@ -603,7 +603,9 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
               <div className="space-y-3 pt-2 border-t border-slate-100">
                 <div className="flex flex-wrap gap-2">
                   <span className="inline-flex items-center gap-1 text-xs bg-green-50 text-green-700 px-2 py-1 rounded-md font-medium"><span aria-hidden="true">✓</span> ISO 9001</span>
-                  <span className="inline-flex items-center gap-1 text-xs bg-green-50 text-green-700 px-2 py-1 rounded-md font-medium"><span aria-hidden="true">✓</span> CE</span>
+                  {/* 原来这里对所有产品都打「✓ CE」，但 CE 只覆盖落石防护网，
+                      护栏网 / 石笼 / 电焊网等产品页挂着 CE 属于不实宣称 */}
+                  <span className="inline-flex items-center gap-1 text-xs bg-green-50 text-green-700 px-2 py-1 rounded-md font-medium"><span aria-hidden="true">✓</span> SGS / BV</span>
                   <span className="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-medium"><span aria-hidden="true">🌍</span> {locale === 'zh' ? '出口30+国' : locale === 'vi' ? '30+ Quốc gia' : locale === 'th' ? '30+ ประเทศ' : '30+ Countries'}</span>
                   <span className="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-md font-medium"><span aria-hidden="true">🏭</span> {locale === 'zh' ? '工厂直供' : locale === 'vi' ? 'Trực tiếp nhà máy' : locale === 'th' ? 'โรงงานโดยตรง' : 'Factory Direct'}</span>
                 </div>

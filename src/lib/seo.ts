@@ -24,7 +24,7 @@ export const pageSeoDefaults: Record<string, LocaleSeo> = {
     en: {
       title: 'Noise Barrier Manufacturer — Highway & Industrial | Angu',
       description:
-        'Factory-direct noise barriers for highways, industry, rail and bridges. ISO 9001 & CE certified, manufacturing since 2014, shipped to 30+ countries.',
+        'Factory-direct noise barriers for highways, industry, rail and bridges. ISO 9001 certified, manufacturing since 2014, shipped to 30+ countries.',
       keywords: 'noise barrier, sound barrier, highway noise barrier, acoustic barrier, noise barrier manufacturer, factory direct',
     },
     zh: {
@@ -36,13 +36,13 @@ export const pageSeoDefaults: Record<string, LocaleSeo> = {
     vi: {
       title: 'Nhà Sản Xuất Tấm Chắn Ồn — Đường Cao Tốc & Công Nghiệp | Angu',
       description:
-        'Tấm chắn ồn trực tiếp từ nhà máy cho đường cao tốc, công nghiệp, đường sắt và cầu. Chứng nhận ISO 9001 & CE, 12 năm kinh nghiệm, xuất khẩu 30+ quốc gia.',
+        'Tấm chắn ồn trực tiếp từ nhà máy cho đường cao tốc, công nghiệp, đường sắt và cầu. Chứng nhận ISO 9001, 12 năm kinh nghiệm, xuất khẩu 30+ quốc gia.',
       keywords: 'tấm chắn ồn, vách cách âm, tấm chắn ồn đường cao tốc, nhà sản xuất tấm chắn ồn, nhà máy trực tiếp',
     },
     th: {
       title: 'ผู้ผลิตแผงกั้นเสียง — ทางหลวง & อุตสาหกรรม | Angu',
       description:
-        'แผงกั้นเสียงจากโรงงานโดยตรงสำหรับทางหลวง อุตสาหกรรม ระบบราง และสะพาน รับรอง ISO 9001 & CE ประสบการณ์ 12 ปี ส่งออก 30+ ประเทศ',
+        'แผงกั้นเสียงจากโรงงานโดยตรงสำหรับทางหลวง อุตสาหกรรม ระบบราง และสะพาน รับรอง ISO 9001 ประสบการณ์ 12 ปี ส่งออก 30+ ประเทศ',
       keywords: 'แผงกั้นเสียง, แผงกันเสียง, แผงกั้นเสียงทางหลวง, ผู้ผลิตแผงกั้นเสียง, โรงงานโดยตรง',
     },
   },
@@ -51,7 +51,7 @@ export const pageSeoDefaults: Record<string, LocaleSeo> = {
     en: {
       title: 'About Angu — Wire Mesh Manufacturer Since 2014 | ISO 9001 Certified',
       description:
-        'Angu Wire Mesh is a leading manufacturer of gabion boxes, wire mesh fences, and rockfall protection nets based in Anping, China. ISO 9001 & CE certified, manufacturing since 2014, exporting to 30+ countries.',
+        'Angu Wire Mesh is a leading manufacturer of gabion boxes, wire mesh fences, and rockfall protection nets based in Anping, China. ISO 9001 certified, manufacturing since 2014, exporting to 30+ countries.',
       keywords: 'wire mesh manufacturer, Anping factory, ISO 9001, CE certified, gabion producer, about Angu',
     },
     zh: {
@@ -63,13 +63,13 @@ export const pageSeoDefaults: Record<string, LocaleSeo> = {
     vi: {
       title: 'Về Angu — Nhà Sản Xuất Lưới Thép Từ 2014 | ISO 9001',
       description:
-        'Angu Wire Mesh là nhà sản xuất hàng đầu về lồng rọ đá, hàng rào lưới thép và lưới chống sạt lở tại Anping, Trung Quốc. Chứng nhận ISO 9001 & CE, 12 năm kinh nghiệm, xuất khẩu đến 30+ quốc gia.',
+        'Angu Wire Mesh là nhà sản xuất hàng đầu về lồng rọ đá, hàng rào lưới thép và lưới chống sạt lở tại Anping, Trung Quốc. Chứng nhận ISO 9001, 12 năm kinh nghiệm, xuất khẩu đến 30+ quốc gia.',
       keywords: 'nhà sản xuất lưới thép, nhà máy Anping, ISO 9001, CE, sản xuất rọ đá, về Angu',
     },
     th: {
       title: 'เกี่ยวกับ Angu — ผู้ผลิตลวดตาข่ายตั้งแต่ปี 2014 | รับรอง ISO 9001',
       description:
-        'Angu Wire Mesh เป็นผู้ผลิตชั้นนำด้านกล่องเกเบี้ยน รั้วลวดตาข่าย และตาข่ายกันหินร่วง ตั้งอยู่ที่ Anping ประเทศจีน ได้รับการรับรอง ISO 9001 & CE มีประสบการณ์ 12 ปี ส่งออกไปยัง 30+ ประเทศ',
+        'Angu Wire Mesh เป็นผู้ผลิตชั้นนำด้านกล่องเกเบี้ยน รั้วลวดตาข่าย และตาข่ายกันหินร่วง ตั้งอยู่ที่ Anping ประเทศจีน ได้รับการรับรอง ISO 9001 มีประสบการณ์ 12 ปี ส่งออกไปยัง 30+ ประเทศ',
       keywords: 'ผู้ผลิตลวดตาข่าย, โรงงาน Anping, ISO 9001, CE, ผู้ผลิตเกเบี้ยน, เกี่ยวกับ Angu',
     },
   },

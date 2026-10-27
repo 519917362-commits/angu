@@ -284,7 +284,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
   // Dynamic strings from config
   const headerTitle = cfg('about_header_title_en') || (tLabel('关于安固丝网', 'About Angu Wire Mesh', locale));
-  const headerSubtitle = cfg('about_header_subtitle_en') || (tLabel('12年丝网制造经验，ISO/CE认证，出口30+国家。', 'wire mesh manufacturing since 2014, ISO/CE certified, exported to 30+ countries.', locale));
+  const headerSubtitle = cfg('about_header_subtitle_en') || (tLabel('12年丝网制造经验，ISO 9001认证，出口30+国家。', 'wire mesh manufacturing since 2014, ISO 9001 certified, exported to 30+ countries.', locale));
   const sectionLabel = cfg('about_section_label_en') || (tLabel('关于我们', 'About Us', locale));
   const overviewTitle = cfg('about_overview_title_en') || '';
   const overviewP1 = cfg('about_overview_p1_en') || '';

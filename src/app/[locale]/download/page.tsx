@@ -46,7 +46,7 @@ export default async function DownloadPage({params}: {params: Promise<{locale: s
     },
     {
       title: '公司简介与证书',
-      desc: '公司介绍、工厂照片、ISO/CE证书和客户参考列表。',
+      desc: '公司介绍、工厂照片、ISO 9001证书和客户参考列表。',
       size: '5.2 MB',
       format: 'PDF',
       icon: '🏢',
@@ -111,7 +111,7 @@ export default async function DownloadPage({params}: {params: Promise<{locale: s
     },
     {
       title: 'Hồ sơ công ty & chứng nhận',
-      desc: 'Giới thiệu công ty, ảnh nhà máy, chứng nhận ISO/CE và danh sách khách hàng tham chiếu.',
+      desc: 'Giới thiệu công ty, ảnh nhà máy, chứng nhận ISO 9001 và danh sách khách hàng tham chiếu.',
       size: '5.2 MB',
       format: 'PDF',
       icon: '🏢',
@@ -176,7 +176,7 @@ export default async function DownloadPage({params}: {params: Promise<{locale: s
     },
     {
       title: 'ประวัติบริษัทและใบรับรอง',
-      desc: 'บทนำบริษัท ภาพโรงงาน ใบรับรอง ISO/CE และรายชื่อลูกค้าอ้างอิง',
+      desc: 'บทนำบริษัท ภาพโรงงาน ใบรับรอง ISO 9001 และรายชื่อลูกค้าอ้างอิง',
       size: '5.2 MB',
       format: 'PDF',
       icon: '🏢',
@@ -241,7 +241,7 @@ export default async function DownloadPage({params}: {params: Promise<{locale: s
     },
     {
       title: 'Company Profile & Certificates',
-      desc: 'Company introduction, factory photos, ISO/CE certificates, and client reference list.',
+      desc: 'Company introduction, factory photos, ISO 9001 certificates, and client reference list.',
       size: '5.2 MB',
       format: 'PDF',
       icon: '🏢',

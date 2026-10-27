@@ -151,7 +151,7 @@ export default async function ProductsPage({
   );
   const headerBreadcrumb = v('products_header_breadcrumb', 'Products', '产品中心');
   const seoIntro = v('products_seo_intro',
-    `Angu Wire Mesh is a professional wire mesh manufacturer based in Anping, Hebei — the "Wire Mesh Capital" of China. With ${YEARS_LABEL} years of industry experience, we are ISO 9001 and CE certified. We offer ${sortedCategories.length} product categories with ${products.length} product series. All products are factory-direct with no middleman markup. We export to 30+ countries.`,
+    `Angu Wire Mesh is a professional wire mesh manufacturer based in Anping, Hebei — the "Wire Mesh Capital" of China. With ${YEARS_LABEL} years of industry experience, we are ISO 9001 certified. We offer ${sortedCategories.length} product categories with ${products.length} product series. All products are factory-direct with no middleman markup. We export to 30+ countries.`,
     `安固丝网是河北安平专业的丝网产品制造商，拥有${YEARS_LABEL}年行业经验，通过ISO 9001质量管理体系认证和CE产品认证。我们提供${sortedCategories.length}大品类、${products.length}款丝网产品。所有产品工厂直供，无中间商加价。出口全球30+国家和地区。`
   );
   const faqTitle = v('products_faq_title', 'Frequently Asked Questions', '常见问题');
@@ -194,12 +194,12 @@ export default async function ProductsPage({
       ? 'แคตตาล็อกสินค้า Angu Wire Mesh — เกเบี้ยน รั้ว ตะแกรงป้องกัน'
       : 'Angu Wire Mesh Product Catalog — Gabion, Fence, Protection Nets',
     description: locale === 'zh'
-      ? '安固丝网完整产品目录，涵盖石笼网箱、防护网、护栏网、刺绳、声屏障等九大品类，工厂直供，ISO 9001/CE认证。'
+      ? '安固丝网完整产品目录，涵盖石笼网箱、防护网、护栏网、刺绳、声屏障等九大品类，工厂直供，ISO 9001认证。'
       : locale === 'vi'
-      ? 'Danh mục sản phẩm đầy đủ của Angu Wire Mesh, bao gồm rọ đá, lưới bảo vệ, hàng rào, dây kẻ gai, cách âm và hơn thế nữa. Trực tiếp nhà máy, chứng nhận ISO 9001/CE.'
+      ? 'Danh mục sản phẩm đầy đủ của Angu Wire Mesh, bao gồm rọ đá, lưới bảo vệ, hàng rào, dây kẻ gai, cách âm và hơn thế nữa. Trực tiếp nhà máy, chứng nhận ISO 9001.'
       : locale === 'th'
-      ? 'แคตตาล็อกสินค้าครบถ้วนของ Angu Wire Mesh ครอบคลุมกล่องเกเบี้ยน ตะแกรงป้องกัน รั้ว ลวดหนาม แผงกั้นเสียง และอื่นๆ จำหน่ายโดยตรงจากโรงงาน ได้รับการรับรอง ISO 9001/CE'
-      : 'Complete product catalog of Angu Wire Mesh, covering gabion boxes, protection nets, fencing, barbed wire, noise barriers and more. Factory-direct, ISO 9001/CE certified.',
+      ? 'แคตตาล็อกสินค้าครบถ้วนของ Angu Wire Mesh ครอบคลุมกล่องเกเบี้ยน ตะแกรงป้องกัน รั้ว ลวดหนาม แผงกั้นเสียง และอื่นๆ จำหน่ายโดยตรงจากโรงงาน ได้รับการรับรอง ISO 9001'
+      : 'Complete product catalog of Angu Wire Mesh, covering gabion boxes, protection nets, fencing, barbed wire, noise barriers and more. Factory-direct, ISO 9001 certified.',
     numberOfItems: products.length,
     itemListElement: products.map((p, i) => ({
       '@type': 'ListItem',
