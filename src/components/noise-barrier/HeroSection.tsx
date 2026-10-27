@@ -12,16 +12,18 @@ interface HeroContent {
 const heroContent: Record<string, HeroContent> = {
   vi: {
     badge: 'Nhà Sản Xuất Trực Tiếp · Xuất Khẩu Sang Việt Nam',
-    headline: 'Tấm Cách Âm Đường Cao Tốc & Công Nghiệp — Giá Xuất Xưởng',
-    subheadline: 'STC 32–34 dB · NRC 0.85 · Mạ Kẽm Nhúng Nóng 15+ Năm · Giao Cảng Hồ Chí Minh / Hải Phòng',
+    // H1 同时覆盖「tấm cách âm」（板材）与「tường chắn âm」（墙体）两个越南语高频叫法
+    headline: 'Tấm Cách Âm & Tường Chắn Âm Đường Cao Tốc, Công Nghiệp — Giá Xuất Xưởng',
+    subheadline: 'STC 32–34 · NRC 0.85 · Mạ Kẽm Nhúng Nóng 15+ Năm · Giao Cảng Hồ Chí Minh / Hải Phòng',
     trust: ['ISO 9001:2015', 'SGS Tested', 'Sản Xuất 10-15 Ngày', 'Hỗ Trợ CAD'],
     ctaContact: 'Liên Hệ Chúng Tôi',
     ctaProducts: 'Xem Tất Cả Sản Phẩm',
   },
   th: {
     badge: 'ผู้ผลิตโดยตรง · ส่งออกสู่ประเทศไทย',
-    headline: 'แผงกั้นเสียงทางหลวงและอุตสาหกรรม — ราคาหน้าโรงงาน',
-    subheadline: 'STC 32–34 dB · NRC 0.85 · ชุบกัลวาไนซ์ร้อน 15+ ปี · ส่งท่าเรือกรุงเทพฯ / แหลมฉบัง',
+    // H1 同时覆盖「แผงกั้นเสียง」（声屏障板）与「กำแพงกันเสียง」（隔音墙）两个泰语高频叫法
+    headline: 'แผงกั้นเสียง & กำแพงกันเสียง สำหรับทางหลวงและอุตสาหกรรม — ราคาหน้าโรงงาน',
+    subheadline: 'STC 32–34 · NRC 0.85 · ชุบกัลวาไนซ์ร้อน 15+ ปี · ส่งท่าเรือกรุงเทพฯ / แหลมฉบัง',
     trust: ['ISO 9001:2015', 'SGS Tested', 'ผลิต 10-15 วัน', 'รองรับ CAD'],
     ctaContact: 'ติดต่อเรา',
     ctaProducts: 'ดูสินค้าทั้งหมด',
@@ -29,7 +31,7 @@ const heroContent: Record<string, HeroContent> = {
   en: {
     badge: 'Direct Factory Export · Shipping to Vietnam & Thailand',
     headline: 'Highway & Industrial Noise Barrier — Factory-Direct Pricing',
-    subheadline: 'STC 32–34 dB · NRC 0.85 · Hot-Dip Galvanized 15+ Years · FOB/CIF to Southeast Asia',
+    subheadline: 'STC 32–34 · NRC 0.85 · Hot-Dip Galvanized 15+ Years · FOB/CIF to Southeast Asia',
     trust: ['ISO 9001:2015', 'SGS Tested', '10-15 Day Production', 'CAD Support'],
     ctaContact: 'Contact Us',
     ctaProducts: 'View All Products',
@@ -37,7 +39,7 @@ const heroContent: Record<string, HeroContent> = {
   zh: {
     badge: '中国工厂直供 · 出口越南与泰国',
     headline: '公路与工业声屏障 — 工厂直供价',
-    subheadline: 'STC 32–34 dB · NRC 0.85 · 热镀锌防腐 15+ 年 · FOB/CIF 胡志明/海防/曼谷',
+    subheadline: 'STC 32–34 · NRC 0.85 · 热镀锌防腐 15+ 年 · FOB/CIF 胡志明/海防/曼谷',
     trust: ['ISO 9001:2015', 'SGS 检测', '10-15 天生产', 'CAD 技术支持'],
     ctaContact: '联系我们',
     ctaProducts: '浏览全部产品',
@@ -102,8 +104,8 @@ export function HeroSection({ locale, heroImage }: { locale: string; heroImage?:
             {/* Floating spec badges */}
             <div className="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-xl p-4 text-slate-900 flex gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">32–34</div>
-                <div className="text-xs text-slate-500">STC dB</div>
+                <div className="text-xl sm:text-2xl font-bold text-blue-600">32–34</div>
+                <div className="text-xs text-slate-500">STC</div>
               </div>
               <div className="w-px bg-slate-200" />
               <div className="text-center">

@@ -22,12 +22,12 @@ export function generateStaticParams() {
 
 const seoContent: Record<string, { title: string; description: string; keywords: string }> = {
   vi: {
-    title: 'Tấm Cách Âm Đường Cao Tốc & Công Nghiệp — Nhà Máy Trực Tiếp Trung Quốc | Angu',
+    title: 'Tấm Cách Âm & Tường Chắn Âm Đường Cao Tốc — Nhà Máy Trực Tiếp | Angu',
     description: 'Nhà sản xuất tấm cách âm chất lượng cao: tấm tiêu âm đường cao tốc, tường cách âm nhà máy, tấm chắn ồn cầu & metro. Mạ kẽm nhúng nóng, STC 32–34 dB, NRC 0.85. Giá xuất xưởng, giao cảng Việt Nam.',
     keywords: 'tấm cách âm, vách cách âm, tường tiêu âm, tấm chắn ồn, tấm tiêu âm, chắn ồn đường cao tốc, giảm tiếng ồn nhà máy, cách âm cầu, cách âm metro, rào chắn tiếng ồn, tấm hấp âm kim loại, mạ kẽm nhúng nóng, tấm cách âm nhôm, tấm cách âm sợi thủy tinh, xuất khẩu Việt Nam, nhà sản xuất tấm cách âm Trung Quốc, giá tấm cách âm, báo giá tấm tiêu âm, STC 32dB, NRC 0.85, MOQ 100m2, FOB CIF Hải Phòng Hồ Chí Minh',
   },
   th: {
-    title: 'แผงกั้นเสียงทางหลวงและอุตสาหกรรม — โรงงานโดยตรงจากจีน | Angu',
+    title: 'แผงกั้นเสียง & กำแพงกันเสียง ทางหลวง — โรงงานโดยตรงจากจีน | Angu',
     description: 'ผู้ผลิตแผงกั้นเสียงคุณภาพสูง: แผงซับเสียงทางด่วน กำแพงกันเสียงโรงงาน แผงกั้นเสียงสะพานและรถไฟฟ้า ชุบกัลวาไนซ์ร้อน STC 32–34 dB NRC 0.85 ราคาหน้าโรงงาน ส่งออกไทย',
     keywords: 'แผงกั้นเสียง, กำแพงกันเสียง, แผงซับเสียง, แผงดูดซับเสียง, กันเสียงทางด่วน, ลดเสียงโรงงาน, กั้นเสียงสะพาน, กั้นเสียงรถไฟฟ้า, รั้วกันเสียง, แผงกั้นเสียงโลหะ, ชุบกัลวาไนซ์ร้อน, แผงกั้นเสียงอลูมิเนียม, แผงกั้นเสียงไฟเบอร์กลาส, ส่งออกประเทศไทย, โรงงานแผงกั้นเสียงจีน, ราคาแผงกั้นเสียง, STC 32dB, NRC 0.85, MOQ 100ตรม, FOB CIF ลาดบัญชิดเกต',
   },

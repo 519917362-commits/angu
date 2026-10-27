@@ -141,6 +141,9 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
           {/* Certifications */}
           <div>
             <h3 className="text-white font-semibold mb-5">{tLabel('认证', 'Certifications', locale)}</h3>
+            {/* 只列可核验的证书。CE 不在此处出现：CE 覆盖范围仅限落石防护网（ETAG 027），
+                放在全站页脚等于对声屏障、护栏网等产品也做了 CE 声称。
+                证书编号可在「关于我们」页核对，CE 文件随报价单独提供。 */}
             <div className="space-y-3 text-sm text-slate-400">
               <div className="flex items-center gap-2">
                 <span className="text-blue-500">✓</span>
@@ -148,11 +151,11 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-blue-500">✓</span>
-                <span>CE Certified</span>
+                <span>ISO 14001:2015</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-blue-500">✓</span>
-                <span>ETAG 027</span>
+                <span>ISO 45001:2018</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-blue-500">✓</span>

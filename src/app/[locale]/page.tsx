@@ -140,7 +140,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
   };
 
   // --- Config values ---
-  const heroBadge = cfg('hero_badge_en', locale === 'zh' ? 'ISO 9001 & CE 认证制造商' : 'ISO 9001 & CE Certified');
+  const heroBadge = cfg('hero_badge_en', locale === 'zh' ? 'ISO 9001:2015 认证制造商' : 'ISO 9001:2015 Certified Manufacturer');
   const heroTitle = cfg('hero_title_prefix_en', locale === 'zh' ? '安固丝网 — 石笼网箱·防护网·护栏网厂家直销' : 'Angu Wire Mesh — Gabion · Rockfall · Fencing');
   const heroSubtitle = cfg('hero_subtitle_en', locale === 'zh' ? '中国丝网之都安平·12年制造经验·工厂直供' : 'Anping · China Wire Mesh Capital · 15 Years · Factory-Direct');
   const heroCta = cfg('hero_cta_en', locale === 'zh' ? '获取报价' : 'Get Quote');
@@ -149,7 +149,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
   const companyDesc2 = cfg('home_company_desc2', locale === 'zh' ? '我们持有多项ISO 9001及CE认证，主营石笼网箱、边坡防护网、护栏网、声屏障、刺绳、钢格板等9大品类28款系列产品，广泛应用于建筑水利、公路铁路、矿山边坡、农牧养殖等领域，是工程采购的可靠合作伙伴。' : 'We hold ISO 9001 and CE certifications across our 9 product categories and 28 series: gabion boxes, rockfall protection nets, fencing, noise barriers, barbed wire, and steel grating — serving construction, highway, mining, agriculture, and more. A trusted partner for engineering procurement.');
   const aboutImage = cfg('home_about_image', locale === 'zh' ? '/images/about/factory-workshop.jpg' : '/images/about/factory-workshop.jpg');
   const featuredTitle = cfg('home_featured_title', locale === 'zh' ? '精选产品' : 'Featured Products');
-  const featuredDesc = cfg('home_featured_desc', locale === 'zh' ? '工厂直供热销丝网产品，ISO/CE认证，支持定制' : 'Hot-selling factory-direct wire mesh products, ISO/CE certified, customizable.');
+  const featuredDesc = cfg('home_featured_desc', locale === 'zh' ? '工厂直供热销丝网产品，ISO 认证，支持定制' : 'Hot-selling factory-direct wire mesh products, ISO certified, customizable.');
   const categoriesTitle = cfg('home_categories_title', locale === 'zh' ? '产品分类' : 'Product Categories');
   const categoriesDesc = cfg('home_categories_desc', locale === 'zh' ? '九大品类，一站式采购' : '9 categories, one-stop procurement.');
   const whyUsTitle = cfg('home_why_us_title', locale === 'zh' ? '为什么选择安固？' : 'Why Choose Angu?');
@@ -161,7 +161,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
   const ctaDesc = cfg('home_cta_desc', locale === 'zh' ? '告诉我们您的需求，我们24小时内回复详细报价。' : 'Tell us your requirements and get a detailed quote within 24 hours.');
   const ctaButton = cfg('home_cta_button', locale === 'zh' ? '立即询价' : 'Request Quote');
   const crosslinksTitle = cfg('home_crosslinks_title', locale === 'zh' ? '快速导航' : 'Quick Navigation');
-  const seoIntroText = cfg('home_seo_intro', locale === 'zh' ? '安固丝网 — ISO/CE认证金属丝网制造商，主营石笼网箱、边坡防护网、护栏网、声屏障、刺绳等，工厂直供，出口30+国家。' : 'Angu Wire Mesh — ISO/CE certified manufacturer of gabion boxes, rockfall nets, fencing, noise barriers, barbed wire. Factory-direct, exported to 30+ countries.');
+  const seoIntroText = cfg('home_seo_intro', locale === 'zh' ? '安固丝网 — ISO 9001 认证金属丝网制造商，主营石笼网箱、边坡防护网、护栏网、声屏障、刺绳等，工厂直供，出口30+国家。' : 'Angu Wire Mesh — ISO 9001 certified manufacturer of gabion boxes, rockfall nets, fencing, noise barriers, barbed wire. Factory-direct, exported to 30+ countries.');
 
   const bannerData = siteConfig?.banners?.[0];
   const bannerCta = (bannerData?.ctaText as Record<string, string>)?.[locale] || bannerData?.ctaText?.en || 'Get a Quote';
@@ -274,7 +274,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
             <div className="flex flex-wrap gap-3 mt-6">
               {[
                 {en: 'ISO 9001 Certified', zh: 'ISO 9001 认证', vi: 'Chứng nhận ISO 9001', th: 'ได้รับการรับรอง ISO 9001'},
-                {en: 'CE Certified', zh: 'CE 认证', vi: 'Chứng nhận CE', th: 'ได้รับการรับรอง CE'},
+                {en: 'ISO 14001 Certified', zh: 'ISO 14001 认证', vi: 'Chứng nhận ISO 14001', th: 'ได้รับการรับรอง ISO 14001'},
                 {en: '12+ Years Experience', zh: '12+ 年经验', vi: '12+ Năm Kinh Nghiệm', th: '12+ ปีประสบการณ์'},
                 {en: '30+ Countries Exported', zh: '出口 30+ 国家', vi: 'Xuất Khẩu 30+ Quốc Gia', th: 'ส่งออก 30+ ประเทศ'},
               ].map((badge) => (

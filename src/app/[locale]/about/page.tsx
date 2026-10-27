@@ -323,7 +323,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   // Dynamic badges from config with locale-aware text
   const badgeDefs = [
     { en: 'ISO 9001 / 14001 / 45001', zh: 'ISO 三体系认证', vi: 'Chứng nhận ISO 3 hệ thống', th: 'ใบรับรอง ISO 3 ระบบ' },
-    { en: 'CE Marking', zh: 'CE 认证', vi: 'Dấu CE', th: 'เครื่องหมาย CE' },
+    { en: 'CE Marking · Rockfall Nets', zh: 'CE 认证 · 落石防护网', vi: 'Dấu CE · Lưới chống đá rơi', th: 'เครื่องหมาย CE · ตะแกรงกันหินร่วง' },
     { en: `${statYears} Years Experience`, zh: `${statYears} 年经验`, vi: `${statYears} Năm Kinh Nghiệm`, th: `${statYears} ปีประสบการณ์` },
     { en: `${statCountries}+ Countries Exported`, zh: `出口 ${statCountries}+ 国家`, vi: `Xuất Khẩu ${statCountries}+ Quốc Gia`, th: `ส่งออก ${statCountries}+ ประเทศ` },
   ];

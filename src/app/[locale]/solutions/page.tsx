@@ -429,7 +429,7 @@ export default async function SolutionsPage({params}: {params: Promise<{locale: 
             <div className="flex flex-wrap gap-3 mt-8">
               {[
                 t('ISO 9001 Certified', 'ISO 9001 认证', 'Chứng nhận ISO 9001', 'รับรอง ISO 9001'),
-                t('CE Certified', 'CE 认证', 'Chứng nhận CE', 'รับรอง CE'),
+                t('ISO 14001 Certified', 'ISO 14001 认证', 'Chứng nhận ISO 14001', 'รับรอง ISO 14001'),
                 t('12+ Years Experience', '12+ 年经验', '12+ năm kinh nghiệm', '12+ ปีประสบการณ์'),
                 t('30+ Countries Exported', '出口 30+ 国家', 'Xuất khẩu 30+ quốc gia', 'ส่งออก 30+ ประเทศ'),
               ].map((tag, i) => (

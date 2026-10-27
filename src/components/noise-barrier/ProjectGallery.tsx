@@ -5,6 +5,7 @@ interface GalleryContent {
   title: string;
   subtitle: string;
   emptyText: string;
+  note: string;
 }
 
 const content: Record<string, GalleryContent> = {
@@ -12,21 +13,25 @@ const content: Record<string, GalleryContent> = {
     title: 'Dự Án Thực Tế',
     subtitle: 'Hình ảnh thi công thực tế từ các dự án đường cao tốc, nhà máy và cầu đã bàn giao',
     emptyText: 'Hình ảnh dự án đang được cập nhật. Vui lòng liên hệ để nhận portfolio đầy đủ.',
+    note: 'STC / NRC là chỉ số đánh giá của tấm panel theo phòng thí nghiệm, không phải mức giảm ồn đo tại công trường.',
   },
   th: {
     title: 'ผลงานจริง',
     subtitle: 'ภาพติดตั้งจริงจากโครงการทางด่วน โรงงาน และสะพานที่ส่งมอบแล้ว',
     emptyText: 'กำลังอัปเดตรูปภาพโครงการ กรุณาติดต่อเพื่อรับ portfolio เต็มรูปแบบ',
+    note: 'STC / NRC เป็นค่าที่ทดสอบจากแผงในห้องแล็บ ไม่ใช่ค่าระดับเสียงที่วัดหน้างาน',
   },
   en: {
     title: 'Real Project Gallery',
     subtitle: 'On-site installation photos from highway, factory, and bridge projects we have delivered',
     emptyText: 'Project photos are being updated. Contact us for the full project portfolio.',
+    note: 'STC / NRC are laboratory-rated properties of the panel build-up, not site-measured noise reduction.',
   },
   zh: {
     title: '实际案例',
     subtitle: '来自高速公路、工厂、桥梁项目的实拍安装图片',
     emptyText: '项目图片更新中，联系我们获取完整案例集。',
+    note: 'STC / NRC 为板材组合的实验室评级，非现场实测降噪量。',
   },
 };
 
@@ -90,6 +95,11 @@ export function ProjectGallery({
               </div>
             ))}
           </div>
+        )}
+
+        {/* 口径说明：案例卡只标产品评级，不标现场降噪量，避免与规格表的插入损失混淆 */}
+        {projects.length > 0 && (
+          <p className="mt-8 text-xs text-slate-400 text-center max-w-3xl mx-auto">{c.note}</p>
         )}
       </div>
     </section>
