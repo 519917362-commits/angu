@@ -23,7 +23,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     en: {
       metaTitle: 'Gabion Box Manufacturer — Galvanized & PVC Coated | Angu Wire Mesh',
       metaDesc:
-        'Factory-direct gabion boxes, reno mattresses and gabion retaining walls. Hot-dip galvanized wire 2.7–4.0 mm, zinc 240–275 g/m², mesh 80×100 mm. ISO 9001, CE.',
+        'Factory-direct gabion boxes, reno mattresses and gabion retaining walls. Hot-dip galvanized wire 2.7–4.0 mm, zinc 240–275 g/m², mesh 80×100 mm. ISO 9001.',
       h1: 'Gabion Boxes & Reno Mattresses',
       intro:
         'Gabion structures are the cheapest way to build a retaining wall, protect a river bank or stabilise a slope. We weave the hexagonal mesh in-house, hot-dip galvanize to 240–275 g/m² and assemble the boxes in our Anping plant — so you buy from the loom, not from a trading company.',
@@ -79,7 +79,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     vi: {
       metaTitle: 'Nhà sản xuất hộp gabion — Mạ kẽm nhúng nóng & phủ PVC | Angu',
       metaDesc:
-        'Hộp gabion, nệm reno và tường chắn gabion giá xuất xưởng. Dây mạ kẽm nhúng nóng 2,7–4,0 mm, lớp kẽm 240–275 g/m², lưới 80×100 mm. ISO 9001, CE.',
+        'Hộp gabion, nệm reno và tường chắn gabion giá xuất xưởng. Dây mạ kẽm nhúng nóng 2,7–4,0 mm, lớp kẽm 240–275 g/m², lưới 80×100 mm. ISO 9001.',
       h1: 'Hộp gabion và nệm reno',
       intro:
         'Kết cấu gabion là giải pháp rẻ nhất để làm tường chắn, bảo vệ bờ sông hoặc ổn định mái dốc. Chúng tôi tự đan lưới lục giác, mạ kẽm nhúng nóng 240–275 g/m² và lắp hộp ngay tại nhà máy An Bình — bạn mua trực tiếp từ xưởng, không qua trung gian.',
@@ -107,7 +107,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     th: {
       metaTitle: 'ผู้ผลิตกล่อง Gabion — ชุบกัลวาไนซ์ร้อน & เคลือบ PVC | Angu',
       metaDesc:
-        'กล่อง Gabion เบาะreno และกำแพงกันดิน Gabion ราคาโรงงาน ลวดชุบกัลวาไนซ์ร้อน 2.7–4.0 มม. ชั้นสังกะสี 240–275 g/m² ตาข่าย 80×100 มม. ISO 9001, CE',
+        'กล่อง Gabion เบาะreno และกำแพงกันดิน Gabion ราคาโรงงาน ลวดชุบกัลวาไนซ์ร้อน 2.7–4.0 มม. ชั้นสังกะสี 240–275 g/m² ตาข่าย 80×100 มม. ISO 9001',
       h1: 'กล่อง Gabion และเบาะ Reno',
       intro:
         'โครงสร้าง Gabion เป็นวิธีที่ประหยัดที่สุดสำหรับกำแพงกันดิน ป้องกันตลิ่ง และ stabilise ลาดชัน เราถักตาข่ายหกเหลี่ยมเอง ชุบกัลวาไนซ์ร้อน 240–275 g/m² และประกอบกล่องที่โรงงานอันผิง — ซื้อจากโรงงานโดยตรง',
@@ -138,7 +138,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     en: {
       metaTitle: 'Fencing Manufacturer — Chain Link, Cattle & Stadium Fence | Angu',
       metaDesc:
-        'Factory-direct fencing: chain link, cattle panels, stadium and crowd barriers, isolation fence. Galvanized or PVC coated, ISO 9001 & CE, MOQ from 50 m².',
+        'Factory-direct fencing: chain link, cattle panels, stadium and crowd barriers, isolation fence. Galvanized or PVC coated, ISO 9001, MOQ from 50 m².',
       h1: 'Fencing for Farms, Stadiums and Industry',
       intro:
         'One factory for chain link, field fence, cattle panels, crowd barriers and site hoarding — we draw the wire and weld the panels ourselves. That means one specification standard across the whole project, instead of five suppliers with five different tolerances.',
@@ -194,7 +194,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     vi: {
       metaTitle: 'Nhà sản xuất hàng rào — Lưới thép, hàng rào chăn nuôi, sân vận động | Angu',
       metaDesc:
-        'Hàng rào giá xuất xưởng: lưới mắt cáo, tấm chuồng bò, hàng rào sân vận động và rào chắn đám đông. Mạ kẽm hoặc phủ PVC, ISO 9001 & CE, MOQ từ 50 m².',
+        'Hàng rào giá xuất xưởng: lưới mắt cáo, tấm chuồng bò, hàng rào sân vận động và rào chắn đám đông. Mạ kẽm hoặc phủ PVC, ISO 9001, MOQ từ 50 m².',
       h1: 'Hàng rào cho nông trại, sân vận động và công nghiệp',
       intro:
         'Một nhà máy duy nhất cho lưới mắt cáo, hàng rào đồng cỏ, tấm chuồng bò, rào chắn đám đông và rào công trường — chúng tôi tự kéo dây và hàn tấm. Cả dự án dùng một tiêu chuẩn kỹ thuật, thay vì năm nhà cung cấp với năm dung sai khác nhau.',
@@ -222,7 +222,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     th: {
       metaTitle: 'ผู้ผลิตวัสดุกั้น — ลวดตาข่าย รั้วปศุสัตว์ รั้วสนามกีฬา | Angu',
       metaDesc:
-        'รั้วราคาโรงงาน: ลวดตาข่าย รั้วปศุสัตว์ รั้วสนามกีฬา และแผงกั้นฝูงชน ชุบกัลวาไนซ์หรือเคลือบ PVC ISO 9001 & CE สั่งขั้นต่ำ 50 ตร.ม.',
+        'รั้วราคาโรงงาน: ลวดตาข่าย รั้วปศุสัตว์ รั้วสนามกีฬา และแผงกั้นฝูงชน ชุบกัลวาไนซ์หรือเคลือบ PVC ISO 9001 สั่งขั้นต่ำ 50 ตร.ม.',
       h1: 'รั้วสำหรับฟาร์ม สนามกีฬา และอุตสาหกรรม',
       intro:
         'โรงงานเดียวสำหรับลวดตาข่าย รั้วทุ่ง แผงคอกวัว แผงกั้นฝูงชน และรั้วโครงการ — เราดึงลวดและเชื่อมแผงเอง ทั้งโครงการใช้มาตรฐานเดียว ไม่ใช่ห้าผู้ขายกับห้าค่าเผื่อที่ต่างกัน',
@@ -253,7 +253,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     en: {
       metaTitle: 'Wire Mesh Manufacturer — Welded, Crimped, Hexagonal, Barbed | Angu',
       metaDesc:
-        'Wire mesh direct from the mill: welded mesh, crimped mesh, hexagonal netting, holland mesh and barbed wire. Wire 0.5–12 mm, galvanized or stainless. ISO 9001 & CE.',
+        'Wire mesh direct from the mill: welded mesh, crimped mesh, hexagonal netting, holland mesh and barbed wire. Wire 0.5–12 mm, galvanized or stainless. ISO 9001.',
       h1: 'Wire Mesh — Welded, Crimped, Hexagonal, Barbed',
       intro:
         'Twelve mesh families under one roof, from 0.5 mm decorative crimped mesh to 12 mm barbed wire. Because we draw and weave in the same plant, mesh opening, wire diameter and coating stay consistent across repeat orders — the usual failure point when buying through traders.',
@@ -309,7 +309,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     vi: {
       metaTitle: 'Nhà sản xuất lưới thép — Hàn, dập nổi, lục giác, dây gai | Angu',
       metaDesc:
-        'Lưới thép trực tiếp từ xưởng: lưới hàn, lưới dập, lưới lục giác, lưới holland và dây gai. Dây 0,5–12 mm, mạ kẽm hoặc inox. ISO 9001 & CE.',
+        'Lưới thép trực tiếp từ xưởng: lưới hàn, lưới dập, lưới lục giác, lưới holland và dây gai. Dây 0,5–12 mm, mạ kẽm hoặc inox. ISO 9001.',
       h1: 'Lưới thép — hàn, dập nổi, lục giác, dây gai',
       intro:
         'Mười hai dòng lưới trong cùng một nhà máy, từ lưới dập trang trí 0,5 mm đến dây gai 12 mm. Vì kéo dây và đan lưới cùng một xưởng, ô lưới, đường kính dây và lớp mạ giữ nguyên qua các đơn hàng lặp lại — điểm hay sai nhất khi mua qua trung gian.',
@@ -337,7 +337,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     th: {
       metaTitle: 'ผู้ผลิตลวดตาข่าย — เชื่อม ถัก ลายหกเหลี่ยม ลวดหนาม | Angu',
       metaDesc:
-        'ลวดตาข่ายจากโรงงานโดยตรง: ตาข่ายเชื่อม ตาข่ายถัก ตาข่ายหกเหลี่ยม ตาข่ายฮอลแลนด์ และลวดหนาม ลวด 0.5–12 มม. ชุบกัลวาไนซ์หรือสแตนเลส ISO 9001 & CE',
+        'ลวดตาข่ายจากโรงงานโดยตรง: ตาข่ายเชื่อม ตาข่ายถัก ตาข่ายหกเหลี่ยม ตาข่ายฮอลแลนด์ และลวดหนาม ลวด 0.5–12 มม. ชุบกัลวาไนซ์หรือสแตนเลส ISO 9001',
       h1: 'ลวดตาข่าย — เชื่อม ถัก หกเหลี่ยม ลวดหนาม',
       intro:
         'สิบสองตระกูลตาข่ายในโรงงานเดียว ตั้งแต่ตาข่ายถักตกแต่ง 0.5 มม. ถึงลวดหนาม 12 มม. เพราะเราดึงลวดและถักในโรงงานเดียวกัน ขนาดช่อง ขนาดลวด และชั้นเคลือบจึงคงที่ทุกออร์เดอร์ — จุดที่มักผิดพลาดเมื่อซื้อผ่านคนกลาง',
@@ -368,7 +368,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     en: {
       metaTitle: 'Rockfall & Slope Protection Net Manufacturer | Angu Wire Mesh',
       metaDesc:
-        'Slope protection net, rockfall barriers and blast mitigation mesh. Galvanized steel wire rope net, energy class 500–3000 kJ, ISO 9001 & CE certified.',
+        'Slope protection net, rockfall barriers and blast mitigation mesh. Galvanized steel wire rope net, energy class 500–3000 kJ, ISO 9001 certified; CE (ETAG 027) for rockfall nets.',
       h1: 'Rockfall and Slope Protection Nets',
       intro:
         'A protection net is safety equipment, not fencing — the anchorage and energy absorption decide whether the system works. We supply ring nets, steel wire rope nets and drapery mesh together with anchors and lacing sized to the same load case, so the net is never the weak link.',
@@ -424,7 +424,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     vi: {
       metaTitle: 'Nhà sản xuất lưới chống đá rơi và bảo vệ mái dốc | Angu',
       metaDesc:
-        'Lưới bảo vệ mái dốc, lưới chắn đá rơi và lưới chống nổ. Lưới cáp thép mạ kẽm nhúng nóng, cấp năng lượng 500–3000 kJ, ISO 9001 & CE.',
+        'Lưới bảo vệ mái dốc, lưới chắn đá rơi và lưới chống nổ. Lưới cáp thép mạ kẽm nhúng nóng, cấp năng lượng 500–3000 kJ, ISO 9001, CE (ETAG 027) cho lưới chắn đá rơi.',
       h1: 'Lưới chống đá rơi và bảo vệ mái dốc',
       intro:
         'Lưới bảo vệ là thiết bị an toàn, không phải hàng rào — neo và khả năng hấp thụ năng lượng quyết định hệ có hiệu quả hay không. Chúng tôi cung cấp lưới vòng, lưới cáp thép và lưới phủ mái dốc kèm neo, dây khâu theo cùng một tổ hợp tải trọng.',
@@ -452,7 +452,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     th: {
       metaTitle: 'ผู้ผลิตตาข่ายกันหินตกและป้องกันลาดชัน | Angu',
       metaDesc:
-        'ตาข่ายป้องกันลาดชัน แผงกันหินตก และตาข่ายกันระเบิด ตาข่ายสลิงเหล็กชุบกัลวาไนซ์ร้อน ระดับพลังงาน 500–3000 kJ ISO 9001 & CE',
+        'ตาข่ายป้องกันลาดชัน แผงกันหินตก และตาข่ายกันระเบิด ตาข่ายสลิงเหล็กชุบกัลวาไนซ์ร้อน ระดับพลังงาน 500–3000 kJ ISO 9001 และ CE (ETAG 027) สำหรับแผงกันหินตก',
       h1: 'ตาข่ายกันหินตกและป้องกันลาดชัน',
       intro:
         'ตาข่ายป้องกันเป็นอุปกรณ์ความปลอดภัย ไม่ใช่รั้ว — สมอยึดและความสามารถดูดซับพลังงานเป็นตัวตัดสินว่าระบบได้ผลหรือไม่ เราจัดส่งตาข่ายวงแหวน ตาข่ายสลิงเหล็ก และตาข่ายคลุมลาดชัน พร้อมสมอและลวดเย็บที่คำนวณร่วมกัน',
