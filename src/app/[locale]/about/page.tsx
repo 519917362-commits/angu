@@ -121,22 +121,6 @@ function BreadcrumbNav({ locale, items }: { locale: string; items: { label: stri
   );
 }
 
-// ── Organization JSON-LD (GEO core) ──
-// Organization 全站只保留 layout.tsx 里那一个 @id=#organization 的完整节点。
-// 这里原先又输出了一份同 @id 但 @type 不同（含 schema.org 不存在的 Manufacturer）的节点，
-// 且 sameAs 指向并不存在的 LinkedIn 主页（实测 404）。同 @id 两个节点互相冲突，
-// 会削弱 AI / Google 对实体的一致性判定，因此改为纯引用。
-function OrganizationRef() {
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify({'@context': 'https://schema.org', '@id': 'https://www.angumesh.com/#organization'}),
-      }}
-    />
-  );
-}
-
 // ── About FAQ JSON-LD (GEO) ──
 function AboutFaqLd({ locale, config }: { locale: string; config: Record<string, { value_en: string; value_zh: string }> }) {
   const companyName = t(config, 'company_name_en', locale) || 'Angu Wire Mesh';
@@ -296,7 +280,6 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   return (
     <div className="min-h-screen bg-slate-50">
       {/* GEO: Organization JSON-LD */}
-      <OrganizationRef />
       {/* GEO: FAQ structured data */}
       <AboutFaqLd locale={locale} config={data.config} />
       {/* GEO: AboutPage JSON-LD */}
