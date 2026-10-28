@@ -21,6 +21,8 @@ export function FaqSection({ locale }: { locale: string }) {
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
             {locale === 'vi' ? 'Câu Hỏi Thường Gặp'
              : locale === 'th' ? 'คำถามที่พบบ่อย'
+             : locale === 'ms' ? 'Soalan Lazim'
+             : locale === 'ar' ? 'الأسئلة الشائعة'
              : locale === 'zh' ? '常见问题'
              : 'Frequently Asked Questions'}
           </h2>
@@ -29,6 +31,10 @@ export function FaqSection({ locale }: { locale: string }) {
               ? 'Những thắc mắc phổ biến nhất từ nhà thầu và nhà nhập khẩu'
               : locale === 'th'
               ? 'คำถามที่ผู้รับเหมาและผู้นำเข้าถามบ่อยที่สุด'
+              : locale === 'ms'
+              ? 'Soalan biasa daripada kontraktor dan pengimport'
+              : locale === 'ar'
+              ? 'أسئلة متكررة من المقاولين والمستوردين'
               : locale === 'zh'
               ? '承包商和进口商最常问的问题'
               : 'Common questions from contractors and importers'}

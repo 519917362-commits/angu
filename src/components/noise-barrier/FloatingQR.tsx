@@ -69,6 +69,8 @@ function buildChannels(locale: string, info: ContactInfo): ChannelDef[] {
     th: ['line', 'whatsapp', 'facebook', 'zalo'],
     en: ['whatsapp', 'facebook', 'zalo', 'line'],
     zh: ['whatsapp', 'zalo', 'line', 'facebook'],
+    ms: ['whatsapp', 'facebook', 'zalo', 'line'],
+    ar: ['whatsapp', 'facebook', 'zalo', 'line'],
   };
   const ord = order[locale] || order.en;
   return ord
@@ -81,6 +83,8 @@ const uiText: Record<string, { title: string; scanTip: string; chatNow: string; 
   th: { title: 'แชทกับเรา', scanTip: 'สแกน QR', chatNow: 'แชทเลย', chatLabel: 'แชท' },
   en: { title: 'Chat With Us', scanTip: 'Scan QR', chatNow: 'Chat Now', chatLabel: 'Chat' },
   zh: { title: '在线咨询', scanTip: '扫码沟通', chatNow: '立即沟通', chatLabel: '咨询' },
+  ms: { title: 'Sembang Dengan Kami', scanTip: 'Imbas QR', chatNow: 'Sembang Sekarang', chatLabel: 'Sembang' },
+  ar: { title: 'تحدّث معنا', scanTip: 'امسح رمز QR', chatNow: 'تحدّث الآن', chatLabel: 'محادثة' },
 };
 
 export function FloatingQR({ locale, contactInfo }: { locale: string; contactInfo: ContactInfo }) {

@@ -12,7 +12,13 @@ const languages = [
   {code: 'zh', label: '中文', flag: '🇨🇳'},
   {code: 'vi', label: 'Tiếng Việt', flag: '🇻🇳'},
   {code: 'th', label: 'ไทย', flag: '🇹🇭'},
+  {code: 'ms', label: 'Bahasa Malaysia', flag: '🇲🇾'},
+  {code: 'ar', label: 'العربية', flag: '🇸🇦'},
 ];
+
+// 只做了首页与声屏障落地页的语种：切过去时若当前路径没有译文，落到该语种首页
+const PARTIAL = ['ms', 'ar'];
+const TRANSLATED = ['', '/noise-barrier'];
 
 export function LanguageSwitcher({locale}: LanguageSwitcherProps) {
   const [open, setOpen] = useState(false);
@@ -22,8 +28,9 @@ export function LanguageSwitcher({locale}: LanguageSwitcherProps) {
 
   function switchLanguage(newLocale: string) {
     if (!pathname) return;
-    const newPath = pathname.replace(/^\/(en|zh|vi|th)/, `/${newLocale}`);
-    router.replace(newPath);
+    const stripped = pathname.replace(/^\/(en|zh|vi|th|ms|ar)(?=\/|$)/, '').replace(/\/+$/, '');
+    const target = PARTIAL.includes(newLocale) && !TRANSLATED.includes(stripped) ? '' : stripped;
+    router.replace(`/${newLocale}${target}`);
     setOpen(false);
   }
 

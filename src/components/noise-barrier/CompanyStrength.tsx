@@ -57,9 +57,31 @@ const content: Record<string, SectionContent> = {
     ],
     certTitle: '资质与检测',
   },
+  ms: {
+    title: 'Kilang Terus · Beroperasi Sejak 2014',
+    subtitle: 'Kemudahan 10,000 m² · Pengeluaran 5,000 t/tahun · 30+ negara eksport',
+    stats: [
+      { value: YEARS_LABEL, label: 'Tahun Beroperasi' },
+      { value: '10,000㎡', label: 'Keluasan Kilang' },
+      { value: '5,000 t', label: 'Pengeluaran/Tahun' },
+      { value: '30+', label: 'Negara' },
+    ],
+    certTitle: 'Pensijilan & Pengujian',
+  },
+  ar: {
+    title: 'مصنع مباشر · نعمل منذ 2014',
+    subtitle: 'منشأة 10,000 م² · إنتاج سنوي 5,000 طن · تصدير إلى 30+ دولة',
+    stats: [
+      { value: YEARS_LABEL, label: 'سنوات العمل' },
+      { value: '10,000㎡', label: 'مساحة المصنع' },
+      { value: '5,000 t', label: 'الإنتاج السنوي' },
+      { value: '30+', label: 'دولة' },
+    ],
+    certTitle: 'الشهادات والاختبارات',
+  },
 };
 
-function pickLocale(field: { en?: string; zh?: string; vi?: string; th?: string } | undefined, locale: string): string {
+function pickLocale(field: { en?: string; zh?: string; vi?: string; th?: string; ms?: string; ar?: string } | undefined, locale: string): string {
   if (!field) return '';
   return field[locale as keyof typeof field] || field.en || '';
 }

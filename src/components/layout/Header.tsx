@@ -46,7 +46,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
 
   // ─── Landing Page: Minimal Header ───
   if (isLanding) {
-    const ctaText = locale === 'vi' ? 'Nhận Báo Giá' : locale === 'th' ? 'ขอใบเสนอราคา' : locale === 'zh' ? '获取报价' : 'Get Quote';
+    const ctaText = locale === 'vi' ? 'Nhận Báo Giá' : locale === 'th' ? 'ขอใบเสนอราคา' : locale === 'ms' ? 'Dapatkan Sebut Harga' : locale === 'ar' ? 'اطلب عرض سعر' : locale === 'zh' ? '获取报价' : 'Get Quote';
 
     // Social channels for landing header.
     // 每个渠道都先过 src/lib/channels.ts 的判定：没有真实账号就不渲染，

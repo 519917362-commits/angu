@@ -1,4 +1,4 @@
-import { routing } from '@/lib/routing';
+import { locales as fullLocales, partialLocales, allLocales, translatedPaths } from '@/lib/routing';
 import { REVALIDATE_SECONDS, SITE_DATA_TAG } from '@/lib/api';
 import { PILLAR_SLUGS } from '@/lib/pillars';
 
@@ -26,13 +26,15 @@ function urlBlock(opts: {
   changefreq: string;
   priority: string;
   lastmod?: string;
+  /** hreflang 互指范围，默认四个全量语种；ms/ar 只参与已翻译页面的互指 */
+  altLocales?: readonly string[];
 }): string {
-  const locales = routing.locales;
+  const altLocales = opts.altLocales ?? fullLocales;
   const lines: string[] = [`  <url>`];
   const loc = `${BASE_URL}/${opts.locale}${opts.path}`;
   lines.push(`    <loc>${loc}</loc>`);
   // hreflang: self + all other locales
-  for (const l of locales) {
+  for (const l of altLocales) {
     if (l === opts.locale) continue;
     lines.push(xhtmlLink('alternate', l, `${BASE_URL}/${l}${opts.path}`));
   }
@@ -97,10 +99,12 @@ export async function GET() {
 
   const urls: string[] = [];
 
-  for (const locale of routing.locales) {
+  for (const locale of fullLocales) {
     // Static pages — all get site lastmod
     for (const [path, freq, pri] of pages) {
-      urls.push(urlBlock({ locale, path, changefreq: freq, priority: pri, lastmod: SITE_LASTMOD }));
+      // 首页与声屏障落地页已有 ms/ar 译文，hreflang 扩到全部六语
+      const altLocales = translatedPaths.includes(path) ? allLocales : undefined;
+      urls.push(urlBlock({ locale, path, changefreq: freq, priority: pri, lastmod: SITE_LASTMOD, altLocales }));
     }
     // Category filter pages (/products?category=xx) 不进 sitemap：
     // 这些页面的 canonical 指向 /products，提交它们与 canonical 自相矛盾且浪费抓取配额
@@ -122,6 +126,20 @@ export async function GET() {
         changefreq: 'monthly',
         priority: '0.7',
         lastmod: fmtDate(post.updated_at || post.publish_time || post.created_at) || SITE_LASTMOD,
+      }));
+    }
+  }
+
+  // partialLocales（ms / ar）：只提交真正翻译过的页面，其余路径由 proxy 308 回 /en
+  for (const locale of partialLocales) {
+    for (const path of translatedPaths) {
+      urls.push(urlBlock({
+        locale,
+        path,
+        changefreq: 'weekly',
+        priority: '0.8',
+        lastmod: SITE_LASTMOD,
+        altLocales: allLocales,
       }));
     }
   }

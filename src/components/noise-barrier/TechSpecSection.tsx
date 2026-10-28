@@ -37,18 +37,69 @@ const specContent: Record<string, SpecContent> = {
   },
 };
 
+/**
+ * ms / ar 的表格文案单独放一张映射表，按行序对应 specContent.common.rows。
+ * 这样加语种不用在 15 行 × 4 语种的对象里再复制一遍，行数与顺序改错的风险也小。
+ */
+const SPEC_LOCALIZED: Record<string, { header: string; subheader: string; rows: Array<[string, string]> }> = {
+  ms: {
+    header: 'Spesifikasi Teknikal',
+    subheader: 'Parameter kejuruteraan utama sistem penghadang bunyi kami. Helaian data penuh dan laporan makmal tersedia atas permintaan.',
+    rows: [
+      ['Jenis Panel', 'Menyerap bunyi (berlubang mikro)'],
+      ['Ketinggian Panel', '2.0m / 2.5m / 3.0m / 4.0m (tersuai)'],
+      ['Pekali Pengurangan Bunyi NRC', '0.85'],
+      ['Kadar STC', '32 – 34 dB'],
+      ['Kehilangan Sisipan', '10 – 15 dB(A)'],
+      ['Kulit Luar', 'Keluli tergalvani berlubang 0.8mm'],
+      ['Teras Bunyi', 'Bulu mineral 50–80mm, 80 kg/m³'],
+      ['Jenis Tiang', 'Keluli H 100×100×6×8 atau lebih besar'],
+      ['Jarak Tiang', 'Standard 2.0m'],
+      ['Rawatan Permukaan', 'Galvani hot-dip ≥150g/m² (panel) / ≥275g/m² (tiang)'],
+      ['Salutan Serbuk (Pilihan)', 'Poliester / PVDF, pilihan warna RAL'],
+      ['Kadar Ketahanan Api', 'A1 (tidak mudah terbakar)'],
+      ['Beban Angin', 'Standard ≥ 0.8 kPa, tersuai hingga 2.0 kPa'],
+      ['Standard Rujukan', 'EN 1793, GB/T 19884, ISO 10140 (kaedah ujian)'],
+    ],
+  },
+  ar: {
+    header: 'المواصفات الفنية',
+    subheader: 'المعايير الهندسية الأساسية لأنظمة الحواجز الصوتية لدينا. صحائف البيانات الكاملة وتقارير المختبر متاحة عند الطلب.',
+    rows: [
+      ['نوع اللوح', 'ماصّ للصوت (مثقب دقيق)'],
+      ['ارتفاع اللوح', '2.0 م / 2.5 م / 3.0 م / 4.0 م (حسب الطلب)'],
+      ['معامل تقليل الضوضاء NRC', '0.85'],
+      ['تصنيف STC', '32 – 34 ديسيبل'],
+      ['فقدان الإدخال', '10 – 15 dB(A)'],
+      ['السطح الخارجي', 'صلب مجلفن مثقب 0.8 مم'],
+      ['قلب الصوت', 'صوف معدني 50–80 مم، 80 كغ/م³'],
+      ['نوع العمود', 'صلب H 100×100×6×8 أو أكبر'],
+      ['تباعد الأعمدة', '2.0 م قياسي'],
+      ['معالجة السطح', 'جلفنة بالغمس الساخن ≥150 غ/م² (اللوح) / ≥275 غ/م² (العمود)'],
+      ['طلاء بودرة (اختياري)', 'بوليستر / PVDF بألوان RAL'],
+      ['تصنيف مقاومة الحريق', 'A1 (غير قابل للاحتراق)'],
+      ['حمل الرياح', '≥ 0.8 كيلوباسكال قياسي، حتى 2.0 كيلوباسكال حسب الطلب'],
+      ['المعايير المرجعية', 'EN 1793, GB/T 19884, ISO 10140 (طرق الاختبار)'],
+    ],
+  },
+};
+
 export function TechSpecSection({ locale }: { locale: string }) {
   const s = specContent.common;
+  const ms = SPEC_LOCALIZED[locale];
+  const rows = ms
+    ? ms.rows.map(([param, value]) => ({ param, value }))
+    : s.rows.map((row) => ({ param: row.param[locale] || row.param.en, value: row.value[locale] || row.value.en }));
 
   return (
     <section className="py-16 sm:py-20 bg-white">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
-            {s.header[locale] || s.header.en}
+            {ms?.header ?? (s.header[locale] || s.header.en)}
           </h2>
           <p className="mt-3 text-slate-500 max-w-2xl mx-auto">
-            {s.subheader[locale] || s.subheader.en}
+            {ms?.subheader ?? (s.subheader[locale] || s.subheader.en)}
           </p>
         </div>
 
@@ -56,19 +107,19 @@ export function TechSpecSection({ locale }: { locale: string }) {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-900 text-white">
-                <th className="text-left px-6 py-4 font-semibold w-2/5">
-                  {locale === 'vi' ? 'Thông Số' : locale === 'th' ? 'พารามิเตอร์' : locale === 'zh' ? '参数' : 'Parameter'}
+                <th className="text-start px-6 py-4 font-semibold w-2/5">
+                  {locale === 'vi' ? 'Thông Số' : locale === 'th' ? 'พารามิเตอร์' : locale === 'ms' ? 'Parameter' : locale === 'ar' ? 'المعيار' : locale === 'zh' ? '参数' : 'Parameter'}
                 </th>
-                <th className="text-left px-6 py-4 font-semibold w-3/5">
-                  {locale === 'vi' ? 'Giá Trị' : locale === 'th' ? 'ค่า' : locale === 'zh' ? '规格' : 'Specification'}
+                <th className="text-start px-6 py-4 font-semibold w-3/5">
+                  {locale === 'vi' ? 'Giá Trị' : locale === 'th' ? 'ค่า' : locale === 'ms' ? 'Nilai' : locale === 'ar' ? 'القيمة' : locale === 'zh' ? '规格' : 'Specification'}
                 </th>
               </tr>
             </thead>
             <tbody>
-              {s.rows.map((row, i) => (
+              {rows.map((row, i) => (
                 <tr key={i} className={`border-t border-slate-100 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-                  <td className="px-6 py-3.5 font-medium text-slate-700">{row.param[locale] || row.param.en}</td>
-                  <td className="px-6 py-3.5 text-slate-600">{row.value[locale] || row.value.en}</td>
+                  <td className="px-6 py-3.5 font-medium text-slate-700">{row.param}</td>
+                  <td className="px-6 py-3.5 text-slate-600">{row.value}</td>
                 </tr>
               ))}
             </tbody>
@@ -80,6 +131,8 @@ export function TechSpecSection({ locale }: { locale: string }) {
           <h3 className="text-lg font-bold text-slate-900 mb-2">
             {locale === 'vi' ? 'Tải Bảng Dữ Liệu & Báo Cáo Phòng Thí Nghiệm'
              : locale === 'th' ? 'ดาวน์โหลดเอกสารข้อมูลและรายงานห้องปฏิบัติการ'
+             : locale === 'ms' ? 'Muat Turun Helaian Data & Laporan Makmal'
+             : locale === 'ar' ? 'حمّل صحائف البيانات وتقارير المختبر'
              : locale === 'zh' ? '下载完整数据表和实验室报告'
              : 'Download Full Data Sheets & Lab Reports'}
           </h3>
@@ -88,6 +141,10 @@ export function TechSpecSection({ locale }: { locale: string }) {
               ? 'Bao gồm: kết quả kiểm tra âm học, báo cáo phun muối, chứng chỉ nguyên vật liệu. Gửi ngay sau khi nhận yêu cầu.'
               : locale === 'th'
               ? 'รวม: ผลทดสอบเสียง, รายงานพ่นเกลือ, ใบรับรองวัสดุ จัดส่งทันทีเมื่อขอ'
+              : locale === 'ms'
+              ? 'Termasuk: keputusan ujian akustik, laporan semburan garam, sijil bahan. Dihantar segera apabila diminta.'
+              : locale === 'ar'
+              ? 'تشمل: نتائج الاختبارات الصوتية، تقارير رشّ الملح، شهادات المواد. تُرسل فور الطلب.'
               : locale === 'zh'
               ? '包含：声学测试结果、盐雾报告、材料证书。收到请求后立即发送。'
               : 'Includes: acoustic test results, salt-spray reports, material certificates. Sent immediately upon request.'}
@@ -95,7 +152,8 @@ export function TechSpecSection({ locale }: { locale: string }) {
           <a href="#quote-form"
             className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors text-sm">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-            {locale === 'vi' ? 'Yêu Cầu Tài Liệu Kỹ Thuật →' : locale === 'th' ? 'ขอเอกสารทางเทคนิค →' : locale === 'zh' ? '申请技术文件 →' : 'Request Technical Documents →'}
+            {locale === 'vi' ? 'Yêu Cầu Tài Liệu Kỹ Thuật' : locale === 'th' ? 'ขอเอกสารทางเทคนิค' : locale === 'ms' ? 'Minta Dokumen Teknikal' : locale === 'ar' ? 'اطلب الوثائق الفنية' : locale === 'zh' ? '申请技术文件' : 'Request Technical Documents'}
+            <span aria-hidden="true" className="rtl:rotate-180">→</span>
           </a>
         </div>
       </div>

@@ -9,6 +9,7 @@
 import type {Metadata} from 'next';
 import {pageSeoDefaults, PageSeo} from './seo';
 import {REVALIDATE_SECONDS, SITE_DATA_TAG} from './api';
+import {locales as fullLocales} from './routing';
 
 export {pageSeoDefaults};
 export type {PageSeo};
@@ -87,7 +88,19 @@ export async function generatePageMeta(
   page: string,
   locale: string,
   path: string,
-  overrides?: {title?: string; description?: string; keywords?: string; image?: string; ogType?: 'website' | 'article'},
+  overrides?: {
+    title?: string;
+    description?: string;
+    keywords?: string;
+    image?: string;
+    ogType?: 'website' | 'article';
+    /**
+     * 覆盖 hreflang 列表。默认只声明四个全量翻译的语种；
+     * ms / ar 这类只做了部分页面的语种，由调用方显式传入 allLocales，
+     * 避免在没有对应译文的页面上互相声明 hreflang。
+     */
+    altLocales?: readonly string[];
+  },
 ): Promise<Metadata> {
   const seo = await getPageSeo(page, locale);
   const title = overrides?.title || seo.title;
@@ -100,25 +113,31 @@ export async function generatePageMeta(
   const configuredImage = defaultImageConfig?.seo_default_image?.[locale] || defaultImageConfig?.seo_default_image?.en || null;
   const seoDefaultImage = configuredImage || `${BASE_URL}/og-image.jpg`;
 
+  // 去掉语种前缀，得到与语种无关的路径
+  const barePath = path.replace(/^\/(en|zh|vi|th|ms|ar)(?=\/|$)/, '');
+  const altLocales = overrides?.altLocales ?? fullLocales;
+  const languages: Record<string, string> = {
+    'x-default': `${BASE_URL}/en${barePath}`,
+  };
+  for (const l of altLocales) {
+    languages[l] = `${BASE_URL}/${l}${barePath}`;
+  }
+
   return {
     title,
     description,
     alternates: {
       canonical: `${BASE_URL}${path}`,
-      languages: {
-        'x-default': `${BASE_URL}/en${path.replace(/^\/zh|^\/en|^\/vi|^\/th/, '')}`,
-        en: `${BASE_URL}/en${path.replace(/^\/zh|^\/en|^\/vi|^\/th/, '')}`,
-        zh: `${BASE_URL}/zh${path.replace(/^\/zh|^\/en|^\/vi|^\/th/, '')}`,
-        vi: `${BASE_URL}/vi${path.replace(/^\/zh|^\/en|^\/vi|^\/th/, '')}`,
-        th: `${BASE_URL}/th${path.replace(/^\/zh|^\/en|^\/vi|^\/th/, '')}`,
-      },
+      languages,
     },
     openGraph: {
       title,
       description,
       url: `${BASE_URL}${path}`,
       siteName: 'Angu Wire Mesh',
-      locale: {'en':'en_US','zh':'zh_CN','vi':'vi_VN','th':'th_TH'}[locale] || 'en_US',
+      locale:
+        {en: 'en_US', zh: 'zh_CN', vi: 'vi_VN', th: 'th_TH', ms: 'ms_MY', ar: 'ar_AE'}[locale] ||
+        'en_US',
       type: overrides?.ogType || 'website',
       ...(overrides?.image
         ? {images: [{url: overrides.image.startsWith('http') ? overrides.image : `${BASE_URL}${overrides.image}`}]}

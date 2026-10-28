@@ -11,7 +11,7 @@ import ProductGallery from '@/components/products/ProductGallery';
 import type {Product} from '@/types/product';
 import {tLabel} from '@/lib/i18n';
 import {renderMarkdown} from '@/lib/markdown';
-import {routing} from '@/lib/routing';
+import {routing, locales as fullLocales} from '@/lib/routing';
 import {QUOTE_NOTE_EN, QUOTE_NOTE_ZH, LEAD_TIME_NOTE_EN, LEAD_TIME_NOTE_ZH, MOQ_NOTE_EN, MOQ_NOTE_ZH} from '@/lib/company';
 
 /**
@@ -284,7 +284,9 @@ export async function generateStaticParams() {
   }
   const slugs = catalog.products.map(p => p.slug);
   const params: {locale: string; slug: string}[] = [];
-  const locales = routing.locales;
+  // 只用全量语种：ms / ar 是试水语种，没有产品页译文，
+  // 这些路径由 proxy 308 到 /en，不必浪费构建时间生成占位页
+  const locales = fullLocales;
   for (const locale of locales) {
     for (const slug of slugs) {
       params.push({locale, slug});

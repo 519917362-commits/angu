@@ -115,6 +115,58 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
       a: 'ได้ ขนาดแผงปรับได้ 2.0 / 2.5 / 3.0 / 4.0 ม. สีตาม RAL เคลือบสีฝุ่น polyester หรือ PVDF',
     },
   ],
+  ms: [
+    {
+      q: 'Berapa lama masa penghantaran ke Malaysia dan GCC?',
+      a: 'Pengeluaran 10–15 hari + pengangkutan laut 7–14 hari ke Pelabuhan Klang, Tanjung Pelepas, Jebel Ali atau Dammam. Jumlah masa dari pengesahan pesanan kira-kira 20–30 hari.',
+    },
+    {
+      q: 'Adakah anda menyediakan lukisan CAD dan pengiraan struktur?',
+      a: 'Ya. Kami menyediakan lukisan CAD, pengiraan beban angin dan analisis struktur secara percuma. Hantar sahaja spesifikasi projek anda kepada kami.',
+    },
+    {
+      q: 'Apakah yang termasuk dalam sebut harga?',
+      a: 'Sebut harga FOB atau CIF termasuk: panel akustik + tiang H + plat asas + bolt + kedap getah. Tidak termasuk pemasangan di tapak (sokongan jurutera lapangan tersedia dengan kos tambahan).',
+    },
+    {
+      q: 'Apakah Kuantiti Pesanan Minimum (MOQ)?',
+      a: 'MOQ 50 m² untuk panel akustik standard. Bagi projek besar (>5,000 m²) kami menawarkan harga diskaun khas dan penghantaran berperingkat.',
+    },
+    {
+      q: 'Apakah dasar jaminan?',
+      a: 'Jaminan 5 tahun terhadap karat pada galvanisasi hot-dip. Hayat reka bentuk 15+ tahun dalam keadaan iklim tropika dan gurun.',
+    },
+    {
+      q: 'Bolehkah saya menyesuaikan warna dan dimensi?',
+      a: 'Boleh. Dimensi panel boleh disesuaikan: 2.0m / 2.5m / 3.0m / 4.0m. Warna mengikut carta RAL, salutan serbuk poliester atau PVDF tersedia.',
+    },
+  ],
+  ar: [
+    {
+      q: 'ما مدة التسليم إلى دول الخليج؟',
+      a: 'إنتاج 10–15 يومًا + شحن بحري 7–14 يومًا إلى جبل علي أو الدمام أو جدة. إجمالي المدة من تأكيد الطلب نحو 20–30 يومًا.',
+    },
+    {
+      q: 'هل تقدمون رسومات CAD وحسابات إنشائية؟',
+      a: 'نعم. نقدم رسومات CAD وحسابات أحمال الرياح وتحليلًا إنشائيًا مجانًا. أرسل لنا مواصفات مشروعك فقط.',
+    },
+    {
+      q: 'ماذا يشمل عرض السعر؟',
+      a: 'عرض سعر FOB أو CIF يشمل: الألواح الصوتية + أعمدة H + قواعد التثبيت + المسامير + الحشوات المطاطية. لا يشمل التركيب في الموقع (يتوفر دعم مهندس ميداني بتكلفة إضافية).',
+    },
+    {
+      q: 'ما الحد الأدنى لكمية الطلب (MOQ)؟',
+      a: 'الحد الأدنى 50 م² للألواح الصوتية القياسية. وللمشاريع الكبيرة (أكثر من 5,000 م²) نقدم أسعارًا مخفضة وتسليمًا على مراحل.',
+    },
+    {
+      q: 'ما سياسة الضمان؟',
+      a: 'ضمان 5 سنوات ضد الصدأ للجلفنة بالغمس الساخن. العمر التصميمي 15+ سنة في ظروف المناخ الحار والغبار.',
+    },
+    {
+      q: 'هل يمكن تخصيص الألوان والأبعاد؟',
+      a: 'نعم. أبعاد الألواح قابلة للتخصيص: 2.0 م / 2.5 م / 3.0 م / 4.0 م. الألوان حسب مخطط RAL، ويتوفر طلاء بودرة بوليستر أو PVDF.',
+    },
+  ],
 };
 
 export function getNoiseBarrierFaqs(locale: string): FaqItem[] {

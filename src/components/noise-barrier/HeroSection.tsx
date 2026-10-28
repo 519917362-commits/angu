@@ -44,6 +44,22 @@ const heroContent: Record<string, HeroContent> = {
     ctaContact: '联系我们',
     ctaProducts: '浏览全部产品',
   },
+  ms: {
+    badge: 'Pengeluar Terus Kilang · Eksport ke Malaysia & GCC',
+    headline: 'Penghadang Bunyi Lebuh Raya & Industri — Harga Terus Kilang',
+    subheadline: 'STC 32–34 · NRC 0.85 · Galvani Hot-Dip 15+ Tahun · FOB/CIF ke Pelabuhan Klang & Jebel Ali',
+    trust: ['ISO 9001:2015', 'Diuji SGS', 'Pengeluaran 10-15 Hari', 'Sokongan CAD'],
+    ctaContact: 'Hubungi Kami',
+    ctaProducts: 'Lihat Semua Produk',
+  },
+  ar: {
+    badge: 'تصنيع مباشر من المصنع · تصدير إلى دول الخليج',
+    headline: 'حواجز صوتية للطرق السريعة والمناطق الصناعية — بسعر المصنع',
+    subheadline: 'STC 32–34 · NRC 0.85 · جلفنة بالغمس الساخن 15+ سنة · FOB/CIF إلى جبل علي والدمام',
+    trust: ['ISO 9001:2015', 'مُختبر من SGS', 'إنتاج 10-15 يومًا', 'دعم CAD'],
+    ctaContact: 'اتصل بنا',
+    ctaProducts: 'عرض جميع المنتجات',
+  },
 };
 
 export function HeroSection({ locale, heroImage }: { locale: string; heroImage?: string }) {

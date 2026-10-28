@@ -39,9 +39,23 @@ const content: Record<string, GalleryContent> = {
     note: 'STC / NRC 为板材组合的实验室评级，非现场实测降噪量。',
     originNote: '以上项目均位于中国境内（重庆、长沙、内蒙古、山西、广东、江苏），非目标市场本地项目。',
   },
+  ms: {
+    title: 'Galeri Projek Sebenar',
+    subtitle: 'Foto pemasangan sebenar daripada projek lebuh raya, kilang dan jambatan yang telah kami siapkan',
+    emptyText: 'Foto projek sedang dikemas kini. Hubungi kami untuk mendapatkan portfolio projek yang penuh.',
+    note: 'STC / NRC ialah penarafan makmal bagi binaan panel, bukan pengurangan bunyi yang diukur di tapak.',
+    originNote: 'Semua projek di atas disiapkan di dalam tanah besar China (Chongqing, Changsha, Inner Mongolia, Shanxi, Guangdong, Jiangsu) — ia bukan projek tempatan di Malaysia.',
+  },
+  ar: {
+    title: 'معرض مشاريع حقيقية',
+    subtitle: 'صور تركيب فعلية من مشاريع الطرق السريعة والمصانع والجسور التي سلّمناها',
+    emptyText: 'يجري تحديث صور المشاريع. اتصل بنا للحصول على ملف المشاريع الكامل.',
+    note: 'STC / NRC تصنيفات معملية لهيكل اللوح، وليست مقدار خفض الضوضاء المقاس في الموقع.',
+    originNote: 'جميع المشاريع أعلاه نُفِّذت داخل البرّ الرئيسي للصين (تشونغتشينغ، تشانغشا، منغوليا الداخلية، شانشي، قوانغدونغ، جيانغسو) — وليست مشاريع محلية في دول الخليج.',
+  },
 };
 
-function pickLocale(field: { en?: string; zh?: string; vi?: string; th?: string } | undefined, locale: string): string {
+function pickLocale(field: { en?: string; zh?: string; vi?: string; th?: string; ms?: string; ar?: string } | undefined, locale: string): string {
   if (!field) return '';
   return field[locale as keyof typeof field] || field.en || '';
 }

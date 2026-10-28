@@ -41,6 +41,16 @@ const seoContent: Record<string, { title: string; description: string; keywords:
     description: '高品质声屏障生产厂家：公路声屏障、工厂降噪墙、桥梁地铁隔音板。热镀锌防腐，STC 32–34，NRC 0.85。工厂直供价，出口越南泰国。',
     keywords: '声屏障, 隔音屏障, 隔音墙, 声屏障厂家, 公路声屏障, 高速声屏障, 工厂声屏障, 工厂降噪, 桥梁声屏障, 地铁声屏障, 反射型声屏障, 吸声型声屏障, 热镀锌声屏障, 铝板声屏障, 玻璃钢声屏障, 声屏障价格, 声屏障报价, 声屏障出口, 越南, 泰国, 东南亚, STC 32–34, NRC 0.85, MOQ 100平方米',
   },
+  ms: {
+    title: 'Penghadang Bunyi Lebuh Raya & Industri | Angu',
+    description: 'Pengeluar penghadang bunyi: dinding bunyi lebuh raya, penghadang akustik industri, panel jambatan & metro. Galvani hot-dip, STC 32–34, NRC 0.85. Harga terus kilang.',
+    keywords: 'penghadang bunyi, dinding bunyi, penghadang akustik, panel akustik, penghadang bunyi lebuh raya, penghadang bunyi industri, penghadang bunyi jambatan, penghadang bunyi metro, galvanis hot-dip, penghadang bunyi Malaysia, pembekal penghadang bunyi, harga penghadang bunyi, STC 32–34, NRC 0.85, MOQ 50m2, FOB CIF Pelabuhan Klang',
+  },
+  ar: {
+    title: 'حواجز صوتية للطرق السريعة والمناطق الصناعية | Angu',
+    description: 'مصنّع حواجز صوتية: جدران عازلة للطرق السريعة، حواجز أكوستيك صناعية، ألواح للجسور والمترو. جلفنة بالغمس الساخن، STC 32–34، NRC 0.85. أسعار المصنع.',
+    keywords: 'حاجز صوتي, جدار عازل للصوت, حاجز أكوستيك, لوح ماص للصوت, حواجز صوتية للطرق, عزل صوت المصانع, حاجز صوتي للجسور, حاجز صوتي للمترو, جلفنة بالغمس الساخن, حواجز صوتية السعودية الإمارات, مصنع حواجز صوتية, سعر حاجز صوتي, STC 32–34, NRC 0.85, MOQ 50m2, FOB CIF جبل علي',
+  },
 };
 
 
@@ -71,7 +81,7 @@ export async function generateMetadata({
   } catch { /* fallback to hardcoded */ }
 
   const ogLocaleMap: Record<string, string> = {
-    en: 'en_US', zh: 'zh_CN', vi: 'vi_VN', th: 'th_TH',
+    en: 'en_US', zh: 'zh_CN', vi: 'vi_VN', th: 'th_TH', ms: 'ms_MY', ar: 'ar_AE',
   };
   const ogLocale = ogLocaleMap[locale] || 'en_US';
   const altLocales = Object.entries(ogLocaleMap).filter(([l]) => l !== locale);
@@ -83,13 +93,10 @@ export async function generateMetadata({
     robots: { index: true, follow: true },
     alternates: {
       canonical: `https://www.angumesh.com/${locale}/noise-barrier`,
-      languages: {
-        'x-default': 'https://www.angumesh.com/en/noise-barrier',
-        en: 'https://www.angumesh.com/en/noise-barrier',
-        zh: 'https://www.angumesh.com/zh/noise-barrier',
-        vi: 'https://www.angumesh.com/vi/noise-barrier',
-        th: 'https://www.angumesh.com/th/noise-barrier',
-      },
+      languages: Object.fromEntries([
+        ['x-default', 'https://www.angumesh.com/en/noise-barrier'],
+        ...Object.keys(ogLocaleMap).map((l) => [l, `https://www.angumesh.com/${l}/noise-barrier`]),
+      ]),
     },
     openGraph: {
       title,
@@ -192,9 +199,11 @@ export default async function NoiseBarrierPage({
   // BreadcrumbList JSON-LD
   const breadcrumbLabels: Record<string, string> = {
     en: 'Noise Barrier', zh: '声屏障', vi: 'Tấm Cách Âm', th: 'แผงกั้นเสียง',
+    ms: 'Penghadang Bunyi', ar: 'حاجز صوتي',
   };
   const homeLabels: Record<string, string> = {
     en: 'Home', zh: '首页', vi: 'Trang chủ', th: 'หน้าแรก',
+    ms: 'Laman Utama', ar: 'الرئيسية',
   };
   const breadcrumbLd = {
     '@context': 'https://schema.org',

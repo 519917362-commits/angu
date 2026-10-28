@@ -4,10 +4,10 @@ interface StatItem { value: string; label: Record<string, string> }
 
 // 全部为可核验事实：成立年限由工商登记日期计算，产品数为当前在架 SKU 数
 const stats: StatItem[] = [
-  { value: YEARS_LABEL, label: { en: 'Years in Business', zh: '年制造经验', vi: 'Năm Hoạt Động', th: 'ปีดำเนินธุรกิจ' } },
-  { value: '30+', label: { en: 'Export Countries', zh: '出口国家', vi: 'Quốc Gia Xuất Khẩu', th: 'ประเทศส่งออก' } },
-  { value: '36', label: { en: 'Product Specifications', zh: '在架产品规格', vi: 'Mã Sản Phẩm', th: 'รายการสินค้า' } },
-  { value: '5,000 t', label: { en: 'Annual Output', zh: '年产能', vi: 'Sản Lượng/Năm', th: 'กำลังผลิต/ปี' } },
+  { value: YEARS_LABEL, label: { en: 'Years in Business', zh: '年制造经验', vi: 'Năm Hoạt Động', th: 'ปีดำเนินธุรกิจ', ms: 'Tahun Beroperasi', ar: 'سنوات العمل' } },
+  { value: '30+', label: { en: 'Export Countries', zh: '出口国家', vi: 'Quốc Gia Xuất Khẩu', th: 'ประเทศส่งออก', ms: 'Negara Eksport', ar: 'دولة تصدير' } },
+  { value: '36', label: { en: 'Product Specifications', zh: '在架产品规格', vi: 'Mã Sản Phẩm', th: 'รายการสินค้า', ms: 'Spesifikasi Produk', ar: 'مواصفات المنتجات' } },
+  { value: '5,000 t', label: { en: 'Annual Output', zh: '年产能', vi: 'Sản Lượng/Năm', th: 'กำลังผลิต/ปี', ms: 'Pengeluaran Tahunan', ar: 'الإنتاج السنوي' } },
 ];
 
 interface TrustPoint { title: string; body: string }
@@ -39,6 +39,18 @@ const trustPoints: Record<string, TrustPoint[]> = {
     { title: 'ดูตัวอย่างก่อนสั่งล็อตใหญ่', body: 'สั่งทดลองได้ตั้งแต่ 50 ตร.ม. ส่งตัวอย่างแผงที่ระบุน้ำหนักเคลือบและความหนาแน่นแกนจริงก่อนผลิตจำนวนมาก' },
     { title: 'FOB เทียนจิน ระบุเป็นลายลักษณ์อักษร', body: 'ราคาเป็น FOB เทียนจิน พร้อมระบุสเปก MOQ และเวลาส่งมอบเป็นลายลักษณ์อักษร มีรายงานตรวจสอบก่อนบรรทุกสินค้า' },
   ],
+  ms: [
+    { title: 'Sijil yang boleh anda semak', body: 'Sijil ISO 9001:2015 (06724Q20693R1S), ISO 14001:2015 (06724E20351R1S) dan ISO 45001:2018 (06724S30308R1S) diterbitkan di halaman Tentang Kami dan boleh disemak di platform CNCA China. Dokumen CE dihantar bersama sebut harga.' },
+    { title: 'Lawatan kilang dialu-alukan', body: 'Pemeriksaan pihak ketiga (SGS, BV, TÜV) dan lawatan kilang melalui video boleh diatur sebelum atau semasa pengeluaran mengikut pilihan pembeli.' },
+    { title: 'Sampel sebelum pesanan pukal', body: 'Pesanan percubaan bermula dari 50 m². Sampel panel dengan berat salutan dan ketumpatan teras sebenar dihantar sebelum pengeluaran besar-besaran.' },
+    { title: 'FOB Tianjin, didokumenkan', body: 'Harga disebut FOB Tianjin dengan spesifikasi, MOQ dan masa penghantaran dinyatakan secara bertulis. Laporan pemeriksaan sebelum penghantaran dikongsi sebelum pemuatan.' },
+  ],
+  ar: [
+    { title: 'شهادات يمكنك التحقق منها', body: 'شهادات ISO 9001:2015 (06724Q20693R1S) وISO 14001:2015 (06724E20351R1S) وISO 45001:2018 (06724S30308R1S) منشورة في صفحة «من نحن» ويمكن التحقق منها على منصة CNCA الصينية. وثائق CE تُرسل مع عرض السعر.' },
+    { title: 'نرحب بزيارة المصنع', body: 'يمكن ترتيب تفتيش طرف ثالث (SGS، BV، TÜV) أو جولة مصنع بالفيديو قبل الإنتاج أو خلاله حسب رغبة المشتري.' },
+    { title: 'عينات قبل الطلب الكمي', body: 'تبدأ الطلبات التجريبية من 50 م². تُرسل عينات ألواح بوزن الطلاء وكثافة القلب الفعلية قبل الإنتاج الكمي.' },
+    { title: 'FOB تيانجين، موثّق كتابيًا', body: 'تُسعَّر بـ FOB تيانجين مع ذكر المواصفات والحد الأدنى للطلب ومدة التسليم كتابيًا، وتُشارك تقارير الفحص قبل الشحن قبل التحميل.' },
+  ],
 };
 
 export function SocialProof({ locale }: { locale: string }) {
@@ -62,6 +74,8 @@ export function SocialProof({ locale }: { locale: string }) {
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
             {locale === 'vi' ? 'Cách Người Mua Xác Minh Chúng Tôi'
              : locale === 'th' ? 'วิธีที่ผู้ซื้อตรวจสอบเรา'
+             : locale === 'ms' ? 'Empat Perkara Yang Boleh Anda Sahkan'
+             : locale === 'ar' ? 'أربعة أمور يمكن للمشتري التحقق منها'
              : locale === 'zh' ? '采购方可核验的四件事'
              : 'Four Things Buyers Can Verify'}
           </h2>

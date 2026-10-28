@@ -12,6 +12,8 @@ export function CtaSection({
 }) {
   const isVi = locale === 'vi';
   const isTh = locale === 'th';
+  const isMs = locale === 'ms';
+  const isAr = locale === 'ar';
 
   return (
     <section className="py-16 sm:py-20 bg-gradient-to-br from-blue-600 to-blue-900 text-white">
@@ -19,6 +21,8 @@ export function CtaSection({
         <h2 className="text-3xl sm:text-4xl font-bold mb-4">
           {isVi ? 'Sẵn Sàng Bắt Đầu Dự Án Của Bạn?'
            : isTh ? 'พร้อมเริ่มโครงการของคุณหรือยัง?'
+           : isMs ? 'Sedia Memulakan Projek Anda?'
+           : isAr ? 'هل أنت مستعد لبدء مشروعك؟'
            : locale === 'zh' ? '准备启动您的项目了吗？'
            : 'Ready to Start Your Project?'}
         </h2>
@@ -27,6 +31,10 @@ export function CtaSection({
             ? 'Nhận báo giá trong 24 giờ. Gửi bản vẽ dự án của bạn — chúng tôi sẽ đề xuất giải pháp cách âm tối ưu và gửi báo giá FOB/CIF chi tiết.'
             : isTh
             ? 'รับใบเสนอราคาภายใน 24 ชั่วโมง ส่งแบบโครงการของคุณ — เราจะแนะนำโซลูชันกันเสียงที่ดีที่สุดและส่งใบเสนอราคา FOB/CIF โดยละเอียด'
+            : isMs
+            ? 'Dapatkan sebut harga dalam masa 24 jam. Hantar lukisan projek anda — kami akan cadangkan penyelesaian akustik optimum dan berikan sebut harga FOB/CIF yang terperinci.'
+            : isAr
+            ? 'احصل على عرض سعر خلال 24 ساعة. أرسل لنا رسومات مشروعك — سنقترح الحل الصوتي الأمثل ونقدم عرض سعر FOB/CIF مفصّلًا.'
             : locale === 'zh'
             ? '24小时内获取报价。发送您项目的图纸 — 我们将推荐最佳声学方案并提供详细的FOB/CIF报价。'
             : 'Get a quote within 24 hours. Send us your project drawings — we\'ll recommend the optimal acoustic solution and provide a detailed FOB/CIF quotation.'}
@@ -37,6 +45,8 @@ export function CtaSection({
             className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-900 font-bold rounded-lg hover:bg-blue-50 transition-colors text-lg">
             {isVi ? '📋 Nhận Báo Giá Ngay'
              : isTh ? '📋 ขอใบเสนอราคาเลย'
+             : isMs ? '📋 Dapatkan Sebut Harga'
+             : isAr ? '📋 احصل على عرض السعر'
              : locale === 'zh' ? '📋 获取报价'
              : '📋 Get Your Quote Now'}
           </a>
@@ -71,6 +81,8 @@ export function CtaSection({
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
             {isVi ? 'Về Trang Chủ'
              : isTh ? 'กลับหน้าหลัก'
+             : isMs ? 'Kembali ke Laman Utama'
+             : isAr ? 'العودة إلى الصفحة الرئيسية'
              : locale === 'zh' ? '返回官网首页'
              : 'Back to Homepage'}
           </a>

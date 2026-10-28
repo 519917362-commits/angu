@@ -3,7 +3,7 @@ import {notFound} from 'next/navigation';
 import '../globals.css';
 import {GoogleAnalytics} from '../GoogleAnalytics';
 import {AttributionCapture} from '@/components/AttributionCapture';
-import {routing} from '@/lib/routing';
+import {routing, rtlLocales} from '@/lib/routing';
 import {I18nProvider} from '@/lib/i18n-context';
 import {REVALIDATE_SECONDS, SITE_DATA_TAG} from '@/lib/api';
 import {COMPANY} from '@/lib/company';
@@ -35,6 +35,8 @@ const HTML_LANG: Record<string, string> = {
   zh: 'zh-CN',
   vi: 'vi',
   th: 'th',
+  ms: 'ms',
+  ar: 'ar',
 };
 
 export const metadata: Metadata = {
@@ -211,7 +213,11 @@ export default async function LocaleLayout({
   };
 
   return (
-    <html lang={HTML_LANG[locale] ?? 'en'} suppressHydrationWarning>
+    <html
+      lang={HTML_LANG[locale] ?? 'en'}
+      dir={rtlLocales.includes(locale) ? 'rtl' : 'ltr'}
+      suppressHydrationWarning
+    >
       {/* pb-16/sm:pb-0 给移动端底部常驻联系条留出高度，否则会盖住页脚最后一行 */}
       <body className="pb-16 sm:pb-0">
         <GoogleAnalytics />

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/types/product';
+import { localeHref } from '@/lib/routing';
 
 // 6 recommended noise-barrier products (top 6 by sort order)
 const displaySlugs = [
@@ -30,6 +31,8 @@ export function ProductMatrix({ locale, products }: { locale: string; products: 
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
             {locale === 'vi' ? 'Sản Phẩm Đề Xuất'
              : locale === 'th' ? 'ผลิตภัณฑ์แนะนำ'
+             : locale === 'ms' ? 'Produk Disyorkan'
+             : locale === 'ar' ? 'منتجات مقترحة'
              : locale === 'zh' ? '推荐产品'
              : 'Recommended Products'}
           </h2>
@@ -38,6 +41,10 @@ export function ProductMatrix({ locale, products }: { locale: string; products: 
               ? 'Từ đường cao tốc đến nhà máy — chúng tôi có giải pháp cách âm phù hợp cho từng dự án'
               : locale === 'th'
               ? 'ตั้งแต่ทางหลวงถึงโรงงาน — เรามีโซลูชันกันเสียงสำหรับทุกโครงการ'
+              : locale === 'ms'
+              ? 'Dari lebuh raya hingga kilang — ada penyelesaian kawalan bunyi untuk setiap projek'
+              : locale === 'ar'
+              ? 'من الطرق السريعة إلى المصانع — حل للتحكم في الضوضاء لكل مشروع'
               : locale === 'zh'
               ? '从高速公路到工厂 — 每个项目都有合适的声学解决方案'
               : 'From highways to factories — a noise control solution for every project'}
@@ -52,7 +59,7 @@ export function ProductMatrix({ locale, products }: { locale: string; products: 
             if (!name) return null;
 
             return (
-              <Link key={p.slug} href={`/${locale}/products/${p.slug}`}
+              <Link key={p.slug} href={localeHref(locale, `/products/${p.slug}`)}
                 className="group bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col">
                 {img && (
                   <div className="relative aspect-[16/10] bg-slate-100 overflow-hidden">
@@ -71,7 +78,8 @@ export function ProductMatrix({ locale, products }: { locale: string; products: 
                     <p className="text-sm text-slate-600 leading-relaxed flex-1 line-clamp-2">{desc}</p>
                   )}
                   <span className="mt-4 pt-4 border-t border-slate-50 block text-xs text-blue-600 font-medium">
-                    {locale === 'vi' ? 'Xem chi tiết →' : locale === 'th' ? 'ดูรายละเอียด →' : locale === 'zh' ? '查看详情 →' : 'View Details →'}
+                    {locale === 'vi' ? 'Xem chi tiết' : locale === 'th' ? 'ดูรายละเอียด' : locale === 'ms' ? 'Lihat Butiran' : locale === 'ar' ? 'عرض التفاصيل' : locale === 'zh' ? '查看详情' : 'View Details'}
+                    <span aria-hidden="true" className="rtl:rotate-180"> →</span>
                   </span>
                 </div>
               </Link>

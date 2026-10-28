@@ -4,6 +4,7 @@ import type {Metadata} from 'next';
 import {getCatalog, getSiteConfig} from '@/lib/api';
 import {  pickLocale, tLabel  } from '@/lib/i18n';;
 import {YEARS_LABEL} from '@/lib/company';
+import {localeHref} from '@/lib/routing';
 import {ProductCard} from '@/components/products/ProductCard';
 
 // ── Metadata ──
@@ -19,6 +20,10 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
       ? 'Nhà Sản Xuất Lưới Thép & Tấm Chắn Ồn | Angu'
       : locale === 'th'
       ? 'ผู้ผลิตตะแกรงลวด & แผงกั้นเสียง | Angu'
+      : locale === 'ms'
+      ? 'Pengeluar Jaringan Dawai & Penghadang Bunyi | Angu'
+      : locale === 'ar'
+      ? 'مصنّع شبكات معدنية وحواجز صوتية | Angu'
       : 'Wire Mesh & Noise Barrier Manufacturer | Angu',
     description: locale === 'zh'
       ? 'ISO 9001 认证丝网制品厂家，主营声屏障、石笼网箱、边坡防护网、护栏网、电焊网。安平工厂直供，出口 30+ 国家，10–15 天交货。'
@@ -26,6 +31,10 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
       ? 'Nhà sản xuất ISO 9001: tấm chắn ồn, rọ đá, lưới chống rơi đá, hàng rào. Nhà máy Anping, xuất khẩu 30+ quốc gia, giao 10–15 ngày.'
       : locale === 'th'
       ? 'ผู้ผลิตตะแกรงลวด ISO 9001: แผงกั้นเสียง ตะกร้าเกเบี้ยน ตาข่ายกันหินตก รั้ว ตะแกรงเชื่อม โรงงานตรงอันผิง ส่งออก 30+ ประเทศ ผลิต 10–15 วัน'
+      : locale === 'ms'
+      ? 'Pengeluar ISO 9001: penghadang bunyi, kotak gabion, jaringan batu jatuh, pagar. Kilang Anping, eksport 30+ negara, pengeluaran 10–15 hari.'
+      : locale === 'ar'
+      ? 'مصنّع ISO 9001: حواجز صوتية، صناديق جابيون، شبكات حماية الصخور، سياجات. مصنع أنبينغ، تصدير 30+ دولة، إنتاج 10–15 يومًا.'
       : 'ISO 9001 manufacturer of noise barriers, gabion, rockfall nets and fencing. Factory-direct from Anping, China. 30+ countries, 10–15 day production.',
     // 不再输出 meta keywords：Google 自 2009 年起完全忽略，Bing 仅作作弊信号，
     // 唯一确定的效果是每页多几百字节。
@@ -38,6 +47,8 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
         zh: 'https://www.angumesh.com/zh',
         vi: 'https://www.angumesh.com/vi',
         th: 'https://www.angumesh.com/th',
+        ms: 'https://www.angumesh.com/ms',
+        ar: 'https://www.angumesh.com/ar',
       },
     },
     openGraph: {
@@ -47,6 +58,10 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
         ? 'Nhà Sản Xuất Lưới Thép & Tấm Chắn Ồn | Angu'
         : locale === 'th'
         ? 'ผู้ผลิตตะแกรงลวด & แผงกั้นเสียง | Angu'
+        : locale === 'ms'
+        ? 'Pengeluar Jaringan Dawai & Penghadang Bunyi | Angu'
+        : locale === 'ar'
+        ? 'مصنّع شبكات معدنية وحواجز صوتية | Angu'
         : 'Wire Mesh & Noise Barrier Manufacturer | Angu',
       description: locale === 'zh'
         ? 'ISO 9001 认证，声屏障 / 石笼网 / 防护网 / 护栏网工厂直供，出口 30+ 国家。'
@@ -54,14 +69,18 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
         ? 'ISO 9001: tấm chắn ồn, rọ đá, lưới chống rơi đá, hàng rào. Trực tiếp nhà máy, 30+ quốc gia.'
         : locale === 'th'
         ? 'ISO 9001: แผงกั้นเสียง ตะกร้าเกเบี้ยน ตาข่ายกันหินตก รั้ว โรงงานตรง 30+ ประเทศ'
+        : locale === 'ms'
+        ? 'ISO 9001: penghadang bunyi, kotak gabion, jaringan batu jatuh, pagar — terus kilang, 30+ negara.'
+        : locale === 'ar'
+        ? 'ISO 9001: حواجز صوتية، صناديق جابيون، شبكات حماية الصخور، سياجات — مباشرة من المصنع، 30+ دولة.'
         : 'ISO 9001 certified. Noise barriers, gabion, rockfall nets, fencing — factory-direct, 30+ countries.',
       type: 'website',
-      locale: locale === 'zh' ? 'zh_CN' : locale === 'vi' ? 'vi_VN' : locale === 'th' ? 'th_TH' : 'en_US',
+      locale: locale === 'zh' ? 'zh_CN' : locale === 'vi' ? 'vi_VN' : locale === 'th' ? 'th_TH' : locale === 'ms' ? 'ms_MY' : locale === 'ar' ? 'ar_AE' : 'en_US',
       siteName: locale === 'zh' ? '安固丝网' : 'Angu Wire Mesh',
       url: `https://www.angumesh.com/${locale}`,
       images: [{url: 'https://www.angumesh.com/images/products/highway-noise-barrier.jpg', width: 1200, height: 630, alt: locale === 'zh' ? '公路声屏障' : 'Highway Noise Barrier'}],
     },
-    twitter: {card: 'summary_large_image', title: locale === 'zh' ? '丝网制品厂家 — 声屏障·石笼网·护栏网' : locale === 'vi' ? 'Nhà Sản Xuất Lưới Thép & Tấm Chắn Ồn' : locale === 'th' ? 'ผู้ผลิตตะแกรงลวด & แผงกั้นเสียง' : 'Wire Mesh & Noise Barrier Manufacturer', description: locale === 'zh' ? '声屏障/石笼网/防护网/护栏网工厂直供，ISO 9001。' : locale === 'vi' ? 'Tấm chắn ồn, rọ đá, lưới chống rơi đá — nhà máy trực tiếp, ISO 9001.' : locale === 'th' ? 'แผงกั้นเสียง เกเบี้ยน ตาข่ายกันหินตก โรงงานตรง ISO 9001' : 'Noise barriers, gabion, rockfall nets, fencing — factory-direct, ISO 9001.'},
+    twitter: {card: 'summary_large_image', title: locale === 'zh' ? '丝网制品厂家 — 声屏障·石笼网·护栏网' : locale === 'vi' ? 'Nhà Sản Xuất Lưới Thép & Tấm Chắn Ồn' : locale === 'th' ? 'ผู้ผลิตตะแกรงลวด & แผงกั้นเสียง' : locale === 'ms' ? 'Pengeluar Jaringan Dawai & Penghadang Bunyi' : locale === 'ar' ? 'مصنّع شبكات معدنية وحواجز صوتية' : 'Wire Mesh & Noise Barrier Manufacturer', description: locale === 'zh' ? '声屏障/石笼网/防护网/护栏网工厂直供，ISO 9001。' : locale === 'vi' ? 'Tấm chắn ồn, rọ đá, lưới chống rơi đá — nhà máy trực tiếp, ISO 9001.' : locale === 'th' ? 'แผงกั้นเสียง เกเบี้ยน ตาข่ายกันหินตก โรงงานตรง ISO 9001' : locale === 'ms' ? 'Penghadang bunyi, gabion, jaringan batu jatuh — terus kilang, ISO 9001.' : locale === 'ar' ? 'حواجز صوتية، جابيون، شبكات حماية الصخور — مباشرة من المصنع، ISO 9001.' : 'Noise barriers, gabion, rockfall nets, fencing — factory-direct, ISO 9001.'},
     robots: {index: true, follow: true},
     other: {'geo.region': 'CN-HE', 'geo.placename': 'Anping County, Hengshui, Hebei'},
   };
@@ -110,13 +129,68 @@ function BreadcrumbLd({locale}: {locale: string}) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      {'@type': 'ListItem', position: 1, name: locale === 'zh' ? '首页' : 'Home', item: `https://www.angumesh.com/${locale}`},
+      {'@type': 'ListItem', position: 1, name: locale === 'zh' ? '首页' : locale === 'ms' ? 'Laman Utama' : locale === 'ar' ? 'الرئيسية' : 'Home', item: `https://www.angumesh.com/${locale}`},
     ],
   };
   return <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(ld)}} />;
 }
 
 // ── Page Component ──
+
+/**
+ * ms / ar 试水语种：site_config 表里只有 en/zh/vi/th 四列，
+ * 这两语的首页文案在这里整体覆盖，避免掉回英文。
+ * 键名与下面 cfg() 调用一一对应。
+ */
+const HOME_PARTIAL: Record<string, Record<string, string>> = {
+  ms: {
+    hero_badge: 'Pengeluar Bertauliah ISO 9001:2015',
+    hero_title_prefix_en: 'Angu Wire Mesh — Penghadang Bunyi · Gabion · Pagar Kilang',
+    hero_subtitle_en: 'Anping, China · 12 Tahun Pengalaman · Harga Terus Kilang',
+    hero_cta_en: 'Dapatkan Sebut Harga',
+    home_company_title: 'Tentang Angu Wire Mesh',
+    home_company_desc1: 'Angu Wire Mesh berpangkalan di Anping, Hebei — ibu kota jaringan dawai China — dengan pengalaman pembuatan sejak 2014. Kilang kami dilengkapi mesin tenunan heksagon automatik dan talian salutan PVC, menghasilkan 3 juta m² jaringan dawai setahun, dan dieksport ke 30+ negara di Asia Tenggara, Timur Tengah, Eropah, Afrika serta Amerika Selatan.',
+    home_company_desc2: 'Kami memegang pensijilan ISO 9001 merentas 9 kategori produk dan 28 siri: kotak gabion, jaringan perlindungan batu jatuh, pagar, penghadang bunyi, dawai berduri dan grating keluli — untuk pembinaan, lebuh raya, perlombongan dan pertanian.',
+    home_featured_title: 'Produk Pilihan',
+    home_featured_desc: 'Produk jaringan dawai terus kilang, bersijil ISO, boleh disesuaikan.',
+    home_categories_title: 'Kategori Produk',
+    home_categories_desc: 'Sembilan kategori, perolehan sehenti.',
+    home_why_us_title: 'Mengapa Pilih Angu?',
+    home_applications_title: 'Aplikasi Kejuruteraan',
+    home_applications_desc: 'Produk Angu merangkumi 9 bidang aplikasi dan menyediakan penyelesaian jaringan logam sehenti di seluruh dunia:',
+    home_faq_title: 'Soalan Lazim',
+    home_faq_desc: 'Soalan biasa tentang produk Angu Wire Mesh',
+    home_cta_title: 'Sedia Mendapatkan Sebut Harga Percuma?',
+    home_cta_desc: 'Beritahu keperluan anda dan dapatkan sebut harga terperinci dalam masa 24 jam.',
+    home_cta_button: 'Minta Sebut Harga',
+    home_crosslinks_title: 'Navigasi Pantas',
+    home_seo_intro: 'Angu Wire Mesh — pengeluar jaringan dawai bertauliah ISO 9001: kotak gabion, jaringan perlindungan cerun, pagar, penghadang bunyi, dawai berduri. Terus kilang, dieksport ke 30+ negara.',
+  },
+  ar: {
+    hero_badge: 'مصنّع معتمد ISO 9001:2015',
+    hero_title_prefix_en: 'Angu Wire Mesh — حواجز صوتية · جابيون · سياجات',
+    hero_subtitle_en: 'أنبينغ، الصين · خبرة 12 عامًا · أسعار المصنع',
+    hero_cta_en: 'اطلب عرض سعر',
+    home_company_title: 'عن Angu Wire Mesh',
+    home_company_desc1: 'تقع Angu Wire Mesh في أنبينغ بمقاطعة خبي — عاصمة شبكات الأسلاك في الصين — وتعمل في التصنيع منذ عام 2014. مصنعنا مجهّز بماكينات نسج سداسية آلية وخطوط تغليف PVC، وينتج 3 ملايين م² من الشبكات المعدنية سنويًا، ويصدّر إلى أكثر من 30 دولة في جنوب شرق آسيا والشرق الأوسط وأوروبا وأفريقيا وأمريكا الجنوبية.',
+    home_company_desc2: 'نحمل شهادة ISO 9001 عبر 9 فئات منتجات و28 سلسلة: صناديق الجابيون، شبكات الحماية من سقوط الصخور، السياجات، الحواجز الصوتية، الأسلاك الشائكة والشبكات الفولاذية — لخدمة قطاعات الإنشاء والطرق السريعة والتعدين والزراعة.',
+    home_featured_title: 'منتجات مختارة',
+    home_featured_desc: 'منتجات شبكية مباشرة من المصنع، معتمدة ISO وقابلة للتخصيص.',
+    home_categories_title: 'فئات المنتجات',
+    home_categories_desc: 'تسع فئات، توريد متكامل.',
+    home_why_us_title: 'لماذا تختار Angu؟',
+    home_applications_title: 'التطبيقات الهندسية',
+    home_applications_desc: 'تغطي منتجات Angu تسعة مجالات تطبيق وتقدم حلولًا متكاملة للشبكات المعدنية عالميًا:',
+    home_faq_title: 'الأسئلة الشائعة',
+    home_faq_desc: 'أسئلة متكررة حول منتجات Angu Wire Mesh',
+    home_cta_title: 'هل أنت مستعد للحصول على عرض سعر مجاني؟',
+    home_cta_desc: 'أخبرنا بمتطلباتك واحصل على عرض سعر مفصّل خلال 24 ساعة.',
+    home_cta_button: 'اطلب عرض سعر',
+    home_crosslinks_title: 'تنقّل سريع',
+    home_seo_intro: 'Angu Wire Mesh — مصنّع شبكات معدنية معتمد ISO 9001: صناديق جابيون، شبكات حماية المنحدرات، سياجات، حواجز صوتية، أسلاك شائكة. مباشرة من المصنع، تصدير إلى 30+ دولة.',
+  },
+};
+
 export default async function HomePage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
   const {products, categories} = await getCatalog();
@@ -125,7 +199,9 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
   const siteConfig = await getSiteConfig();
   const config_ = siteConfig?.config || {};
   // Read i18n value from site_config table
+  const partialCfg = HOME_PARTIAL[locale];
   const cfg = (key: string, fbEn: string, fbZh?: string) => {
+    if (partialCfg && partialCfg[key]) return partialCfg[key];
     const raw = config_[key];
     if (raw === undefined || raw === null) return locale === 'zh' ? (fbZh ?? fbEn) : fbEn;
     if (typeof raw === 'object' && raw !== null) {
@@ -257,19 +333,19 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
               {heroBadge}
             </div>
             <div className="flex flex-wrap gap-4">
-              <Link href={`/${locale}/contact`}>
+              <Link href={localeHref(locale, '/contact')}>
                 <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-base transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
                   {bannerCta}
                 </button>
               </Link>
-              <Link href={`/${locale}/noise-barrier`}>
+              <Link href={localeHref(locale, '/noise-barrier')}>
                 <button className="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold text-base backdrop-blur-sm transition-all hover:-translate-y-0.5">
-                  {locale === 'zh' ? '声屏障专题' : locale === 'vi' ? 'Chuyên Đề Cách Âm' : locale === 'th' ? 'หน้าแผงกั้นเสียง' : 'Noise Barrier'}
+                  {locale === 'zh' ? '声屏障专题' : locale === 'vi' ? 'Chuyên Đề Cách Âm' : locale === 'th' ? 'หน้าแผงกั้นเสียง' : locale === 'ms' ? 'Penghadang Bunyi' : locale === 'ar' ? 'الحواجز الصوتية' : 'Noise Barrier'}
                 </button>
               </Link>
-              <Link href={`/${locale}/products`}>
+              <Link href={localeHref(locale, '/products')}>
                 <button className="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold text-base backdrop-blur-sm transition-all hover:-translate-y-0.5">
-                  {locale === 'zh' ? '浏览产品' : locale === 'vi' ? 'Xem sản phẩm' : locale === 'th' ? 'ดูสินค้า' : 'View Products'}
+                  {locale === 'zh' ? '浏览产品' : locale === 'vi' ? 'Xem sản phẩm' : locale === 'th' ? 'ดูสินค้า' : locale === 'ms' ? 'Lihat Produk' : locale === 'ar' ? 'عرض المنتجات' : 'View Products'}
                 </button>
               </Link>
             </div>
@@ -281,10 +357,10 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {[
-                {num: YEARS_LABEL, label: locale === 'zh' ? '年制造经验' : locale === 'vi' ? 'Năm hoạt động' : locale === 'th' ? 'ปีดำเนินธุรกิจ' : 'Years in Business'},
-                {num: '30+', label: locale === 'zh' ? '出口国家' : locale === 'vi' ? 'Quốc gia xuất khẩu' : locale === 'th' ? 'ประเทศส่งออก' : 'Countries Exported'},
-                {num: '36', label: locale === 'zh' ? '在架产品规格' : locale === 'vi' ? 'Mã sản phẩm' : locale === 'th' ? 'รายการสินค้า' : 'Product Specifications'},
-                {num: '9', label: locale === 'zh' ? '产品线' : locale === 'vi' ? 'Dòng sản phẩm' : locale === 'th' ? 'กลุ่มสินค้า' : 'Product Lines'},
+                {num: YEARS_LABEL, label: locale === 'zh' ? '年制造经验' : locale === 'vi' ? 'Năm hoạt động' : locale === 'th' ? 'ปีดำเนินธุรกิจ' : locale === 'ms' ? 'Tahun Beroperasi' : locale === 'ar' ? 'سنوات العمل' : 'Years in Business'},
+                {num: '30+', label: locale === 'zh' ? '出口国家' : locale === 'vi' ? 'Quốc gia xuất khẩu' : locale === 'th' ? 'ประเทศส่งออก' : locale === 'ms' ? 'Negara Eksport' : locale === 'ar' ? 'دولة تصدير' : 'Countries Exported'},
+                {num: '36', label: locale === 'zh' ? '在架产品规格' : locale === 'vi' ? 'Mã sản phẩm' : locale === 'th' ? 'รายการสินค้า' : locale === 'ms' ? 'Spesifikasi Produk' : locale === 'ar' ? 'مواصفات المنتجات' : 'Product Specifications'},
+                {num: '9', label: locale === 'zh' ? '产品线' : locale === 'vi' ? 'Dòng sản phẩm' : locale === 'th' ? 'กลุ่มสินค้า' : locale === 'ms' ? 'Barisan Produk' : locale === 'ar' ? 'خطوط المنتجات' : 'Product Lines'},
               ].map((stat) => (
                 <div key={stat.label}>
                   <div className="text-2xl md:text-3xl font-bold text-blue-600">{stat.num}</div>
@@ -317,12 +393,12 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
               {[
                 {en: 'ISO 9001 Certified', zh: 'ISO 9001 认证', vi: 'Chứng nhận ISO 9001', th: 'ได้รับการรับรอง ISO 9001'},
                 {en: 'ISO 14001 Certified', zh: 'ISO 14001 认证', vi: 'Chứng nhận ISO 14001', th: 'ได้รับการรับรอง ISO 14001'},
-                {en: '12+ Years Experience', zh: '12+ 年经验', vi: '12+ Năm Kinh Nghiệm', th: '12+ ปีประสบการณ์'},
-                {en: '30+ Countries Exported', zh: '出口 30+ 国家', vi: 'Xuất Khẩu 30+ Quốc Gia', th: 'ส่งออก 30+ ประเทศ'},
+                {en: '12+ Years Experience', zh: '12+ 年经验', vi: '12+ Năm Kinh Nghiệm', th: '12+ ปีประสบการณ์', ms: 'Pengalaman 12+ Tahun', ar: 'خبرة 12+ عامًا'},
+                {en: '30+ Countries Exported', zh: '出口 30+ 国家', vi: 'Xuất Khẩu 30+ Quốc Gia', th: 'ส่งออก 30+ ประเทศ', ms: 'Eksport ke 30+ Negara', ar: 'تصدير إلى 30+ دولة'},
               ].map((badge) => (
                 <span key={badge.en} className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 text-xs font-medium px-3 py-1.5 rounded-full border border-blue-200">
                   <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
-                  {locale === 'zh' ? badge.zh : locale === 'vi' ? badge.vi || badge.en : locale === 'th' ? badge.th || badge.en : badge.en}
+                  {(badge as Record<string, string>)[locale] || badge.en}
                 </span>
               ))}
             </div>
@@ -332,7 +408,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
             <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 shadow-lg">
               <img
                 src={aboutImage}
-                alt={locale === 'zh' ? '安固工厂车间' : locale === 'vi' ? 'Xưởng Angu' : locale === 'th' ? 'โรงงาน Angu' : 'Angu factory workshop'}
+                alt={locale === 'zh' ? '安固工厂车间' : locale === 'vi' ? 'Xưởng Angu' : locale === 'th' ? 'โรงงาน Angu' : locale === 'ms' ? 'Kilang Angu' : locale === 'ar' ? 'مصنع Angu' : 'Angu factory workshop'}
                 className="w-full h-full object-cover"
                 width={600}
                 height={450}
@@ -340,7 +416,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
               />
             </div>
             {/* Floating stat card */}
-            <div className="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-xl p-4 border border-slate-100">
+            <div className="absolute -bottom-4 -start-4 bg-white rounded-xl shadow-xl p-4 border border-slate-100">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
                   <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
@@ -372,7 +448,8 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
         <div className="text-center mt-12">
           <Link href={`/${locale}/products`}>
             <button className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-xl font-semibold transition-all">
-              {locale === 'zh' ? '查看全部产品 →' : locale === 'vi' ? 'Xem tất cả sản phẩm →' : locale === 'th' ? 'ดูสินค้าทั้งหมด →' : 'View All Products →'}
+              {locale === 'zh' ? '查看全部产品' : locale === 'vi' ? 'Xem tất cả sản phẩm' : locale === 'th' ? 'ดูสินค้าทั้งหมด' : locale === 'ms' ? 'Lihat Semua Produk' : locale === 'ar' ? 'عرض جميع المنتجات' : 'View All Products'}
+              <span aria-hidden="true" className="rtl:rotate-180"> →</span>
             </button>
           </Link>
         </div>
@@ -416,7 +493,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
           </h2>
           <div className="w-16 h-1 bg-blue-600 mx-auto mb-4" />
           <p className="text-slate-500 max-w-xl mx-auto">
-            {locale === 'zh' ? '浏览我们全面的金属丝网和防护产品系列。' : locale === 'vi' ? 'Duyệt dải sản phẩm lưới thép và bảo vệ toàn diện của chúng tôi.' : locale === 'th' ? 'เรียกดูผลิตภัณฑ์ตะแกรงลวดและการป้องกันครบถ้วนของเรา' : 'Browse our comprehensive range of wire mesh and protection products.'}
+            {locale === 'zh' ? '浏览我们全面的金属丝网和防护产品系列。' : locale === 'vi' ? 'Duyệt dải sản phẩm lưới thép và bảo vệ toàn diện của chúng tôi.' : locale === 'th' ? 'เรียกดูผลิตภัณฑ์ตะแกรงลวดและการป้องกันครบถ้วนของเรา' : locale === 'ms' ? 'Terokai rangkaian produk jaringan dawai dan perlindungan kami yang menyeluruh.' : locale === 'ar' ? 'تصفّح مجموعتنا الشاملة من منتجات الشبكات المعدنية والحماية.' : 'Browse our comprehensive range of wire mesh and protection products.'}
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
@@ -444,7 +521,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
                   </p>
                   {cat.productCount && (
                     <p className="text-xs text-slate-400 mt-2">
-                      {cat.productCount} {locale === 'zh' ? '款产品' : locale === 'vi' ? 'sản phẩm' : locale === 'th' ? 'สินค้า' : 'products'}
+                      {cat.productCount} {locale === 'zh' ? '款产品' : locale === 'vi' ? 'sản phẩm' : locale === 'th' ? 'สินค้า' : locale === 'ms' ? 'produk' : locale === 'ar' ? 'منتجًا' : 'products'}
                     </p>
                   )}
                 </div>
@@ -533,7 +610,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
               rel="noopener noreferrer"
             >
               <button className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl font-bold text-base transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
-                <span aria-hidden="true">💬</span> {locale === 'zh' ? 'WhatsApp咨询' : locale === 'vi' ? 'Trò chuyện trên WhatsApp' : locale === 'th' ? 'แชทบน WhatsApp' : 'Chat on WhatsApp'}
+                <span aria-hidden="true">💬</span> {locale === 'zh' ? 'WhatsApp咨询' : locale === 'vi' ? 'Trò chuyện trên WhatsApp' : locale === 'th' ? 'แชทบน WhatsApp' : locale === 'ms' ? 'Sembang di WhatsApp' : locale === 'ar' ? 'تحدّث على واتساب' : 'Chat on WhatsApp'}
               </button>
             </a>
           </div>
