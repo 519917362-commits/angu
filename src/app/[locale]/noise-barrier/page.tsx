@@ -22,24 +22,24 @@ export function generateStaticParams() {
 
 const seoContent: Record<string, { title: string; description: string; keywords: string }> = {
   vi: {
-    title: 'Tấm Cách Âm & Tường Chắn Âm Đường Cao Tốc — Nhà Máy Trực Tiếp | Angu',
-    description: 'Nhà sản xuất tấm cách âm chất lượng cao: tấm tiêu âm đường cao tốc, tường cách âm nhà máy, tấm chắn ồn cầu & metro. Mạ kẽm nhúng nóng, STC 32–34 dB, NRC 0.85. Giá xuất xưởng, giao cảng Việt Nam.',
-    keywords: 'tấm cách âm, vách cách âm, tường tiêu âm, tấm chắn ồn, tấm tiêu âm, chắn ồn đường cao tốc, giảm tiếng ồn nhà máy, cách âm cầu, cách âm metro, rào chắn tiếng ồn, tấm hấp âm kim loại, mạ kẽm nhúng nóng, tấm cách âm nhôm, tấm cách âm sợi thủy tinh, xuất khẩu Việt Nam, nhà sản xuất tấm cách âm Trung Quốc, giá tấm cách âm, báo giá tấm tiêu âm, STC 32dB, NRC 0.85, MOQ 100m2, FOB CIF Hải Phòng Hồ Chí Minh',
+    title: 'Tấm Cách Âm & Tường Chắn Âm — Nhà Máy Trực Tiếp | Angu',
+    description: 'Nhà sản xuất tấm cách âm chất lượng cao: tấm tiêu âm đường cao tốc, tường cách âm nhà máy, tấm chắn ồn cầu & metro. Mạ kẽm nhúng nóng, STC 32–34, NRC 0.85. Giá xuất xưởng, giao cảng Việt Nam.',
+    keywords: 'tấm cách âm, vách cách âm, tường tiêu âm, tấm chắn ồn, tấm tiêu âm, chắn ồn đường cao tốc, giảm tiếng ồn nhà máy, cách âm cầu, cách âm metro, rào chắn tiếng ồn, tấm hấp âm kim loại, mạ kẽm nhúng nóng, tấm cách âm nhôm, tấm cách âm sợi thủy tinh, xuất khẩu Việt Nam, nhà sản xuất tấm cách âm Trung Quốc, giá tấm cách âm, báo giá tấm tiêu âm, STC 32–34, NRC 0.85, MOQ 100m2, FOB CIF Hải Phòng Hồ Chí Minh',
   },
   th: {
-    title: 'แผงกั้นเสียง & กำแพงกันเสียง ทางหลวง — โรงงานโดยตรงจากจีน | Angu',
-    description: 'ผู้ผลิตแผงกั้นเสียงคุณภาพสูง: แผงซับเสียงทางด่วน กำแพงกันเสียงโรงงาน แผงกั้นเสียงสะพานและรถไฟฟ้า ชุบกัลวาไนซ์ร้อน STC 32–34 dB NRC 0.85 ราคาหน้าโรงงาน ส่งออกไทย',
-    keywords: 'แผงกั้นเสียง, กำแพงกันเสียง, แผงซับเสียง, แผงดูดซับเสียง, กันเสียงทางด่วน, ลดเสียงโรงงาน, กั้นเสียงสะพาน, กั้นเสียงรถไฟฟ้า, รั้วกันเสียง, แผงกั้นเสียงโลหะ, ชุบกัลวาไนซ์ร้อน, แผงกั้นเสียงอลูมิเนียม, แผงกั้นเสียงไฟเบอร์กลาส, ส่งออกประเทศไทย, โรงงานแผงกั้นเสียงจีน, ราคาแผงกั้นเสียง, STC 32dB, NRC 0.85, MOQ 100ตรม, FOB CIF ลาดบัญชิดเกต',
+    title: 'แผงกั้นเสียง & กำแพงกันเสียง ทางหลวง | Angu',
+    description: 'ผู้ผลิตแผงกั้นเสียงคุณภาพสูง: แผงซับเสียงทางด่วน กำแพงกันเสียงโรงงาน แผงกั้นเสียงสะพานและรถไฟฟ้า ชุบกัลวาไนซ์ร้อน STC 32–34 NRC 0.85 ราคาหน้าโรงงาน ส่งออกไทย',
+    keywords: 'แผงกั้นเสียง, กำแพงกันเสียง, แผงซับเสียง, แผงดูดซับเสียง, กันเสียงทางด่วน, ลดเสียงโรงงาน, กั้นเสียงสะพาน, กั้นเสียงรถไฟฟ้า, รั้วกันเสียง, แผงกั้นเสียงโลหะ, ชุบกัลวาไนซ์ร้อน, แผงกั้นเสียงอลูมิเนียม, แผงกั้นเสียงไฟเบอร์กลาส, ส่งออกประเทศไทย, โรงงานแผงกั้นเสียงจีน, ราคาแผงกั้นเสียง, STC 32–34, NRC 0.85, MOQ 100ตรม, FOB CIF ลาดบัญชิดเกต',
   },
   en: {
-    title: 'Highway & Industrial Noise Barrier Manufacturer — Direct Factory China | Angu',
-    description: 'High-quality noise barrier manufacturer: highway sound barriers, industrial acoustic walls, bridge & metro noise panels. Hot-dip galvanized, STC 32–34 dB, NRC 0.85. Factory-direct pricing, shipping to Vietnam & Thailand.',
-    keywords: 'noise barrier, sound barrier, acoustic barrier, sound wall, noise wall, acoustic panel, sound absorbing panel, highway noise barrier, industrial noise barrier, bridge noise barrier, metro noise barrier, reflective noise barrier, absorptive noise barrier, hot-dip galvanized noise barrier, aluminum noise barrier, fiberglass acoustic panel, noise barrier manufacturer China, noise barrier supplier, noise barrier price, STC 32dB, NRC 0.85, MOQ 100sqm, FOB CIF Vietnam Thailand Southeast Asia',
+    title: 'Noise Barrier Manufacturer — Highway, Rail & Bridge | Angu',
+    description: 'Noise barrier manufacturer: highway sound walls, industrial acoustic barriers, bridge & metro panels. Hot-dip galvanized, STC 32–34, NRC 0.85. Factory-direct, ships to Vietnam & Thailand.',
+    keywords: 'noise barrier, sound barrier, acoustic barrier, sound wall, noise wall, acoustic panel, sound absorbing panel, highway noise barrier, industrial noise barrier, bridge noise barrier, metro noise barrier, reflective noise barrier, absorptive noise barrier, hot-dip galvanized noise barrier, aluminum noise barrier, fiberglass acoustic panel, noise barrier manufacturer China, noise barrier supplier, noise barrier price, STC 32–34, NRC 0.85, MOQ 100sqm, FOB CIF Vietnam Thailand Southeast Asia',
   },
   zh: {
     title: '公路与工业声屏障生产厂家 — 中国工厂直供 | 安固丝网',
-    description: '高品质声屏障生产厂家：公路声屏障、工厂降噪墙、桥梁地铁隔音板。热镀锌防腐，STC 32–34 dB，NRC 0.85。工厂直供价，出口越南泰国。',
-    keywords: '声屏障, 隔音屏障, 隔音墙, 声屏障厂家, 公路声屏障, 高速声屏障, 工厂声屏障, 工厂降噪, 桥梁声屏障, 地铁声屏障, 反射型声屏障, 吸声型声屏障, 热镀锌声屏障, 铝板声屏障, 玻璃钢声屏障, 声屏障价格, 声屏障报价, 声屏障出口, 越南, 泰国, 东南亚, STC 32dB, NRC 0.85, MOQ 100平方米',
+    description: '高品质声屏障生产厂家：公路声屏障、工厂降噪墙、桥梁地铁隔音板。热镀锌防腐，STC 32–34，NRC 0.85。工厂直供价，出口越南泰国。',
+    keywords: '声屏障, 隔音屏障, 隔音墙, 声屏障厂家, 公路声屏障, 高速声屏障, 工厂声屏障, 工厂降噪, 桥梁声屏障, 地铁声屏障, 反射型声屏障, 吸声型声屏障, 热镀锌声屏障, 铝板声屏障, 玻璃钢声屏障, 声屏障价格, 声屏障报价, 声屏障出口, 越南, 泰国, 东南亚, STC 32–34, NRC 0.85, MOQ 100平方米',
   },
 };
 
@@ -231,6 +231,32 @@ export default async function NoiseBarrierPage({
     })),
   };
 
+  // 项目案例 JSON-LD
+  // schema.org 并没有 CaseStudy 这个类型（和之前的 Manufacturer 一样属误用），
+  // 用 Article + locationCreated 表达「某地交付了什么规格的项目」，
+  // 不写 Review / aggregateRating —— 没有真实评价就不虚构评分。
+  const pick = (rec: Record<string, string | undefined>, key: string) =>
+    rec[`${key}_${locale}`] || rec[`${key}_en`] || '';
+  const caseStudyLd = projects.map((p) => {
+    const rec = p as unknown as Record<string, string | undefined>;
+    const title = pick(rec, 'title');
+    const location = pick(rec, 'location');
+    const spec = pick(rec, 'spec');
+    const img = p.image_url;
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: `${title} — ${location}`,
+      articleSection: 'Case Study',
+      abstract: spec,
+      about: { '@type': 'Product', name: 'Noise Barrier', category: 'Noise Barrier' },
+      locationCreated: { '@type': 'Place', name: location },
+      ...(img ? { image: `https://www.angumesh.com${img}` } : {}),
+      publisher: { '@id': 'https://www.angumesh.com/#organization' },
+      mainEntityOfPage: `https://www.angumesh.com/${locale}/noise-barrier#projects`,
+    };
+  });
+
   return (
     <main className="min-h-screen">
       <script
@@ -245,6 +271,13 @@ export default async function NoiseBarrierPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }}
       />
+      {caseStudyLd.map((ld, i) => (
+        <script
+          key={`case-${i}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
+        />
+      ))}
 
       {/* 1. Hero — pure display, no form */}
       <HeroSection locale={locale} heroImage={heroImage} />

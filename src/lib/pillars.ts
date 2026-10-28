@@ -45,7 +45,7 @@ export interface PillarCopy {
 export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
   gabion: {
     en: {
-      metaTitle: 'Gabion Box Manufacturer — Galvanized & PVC Coated | Angu Wire Mesh',
+      metaTitle: 'Gabion Box Manufacturer — Galvanized & PVC Coated | Angu',
       metaDesc:
         'Factory-direct gabion boxes, reno mattresses and gabion retaining walls. Hot-dip galvanized wire 2.7–4.0 mm, zinc 240–275 g/m², mesh 80×100 mm. ISO 9001.',
       h1: 'Gabion Boxes & Reno Mattresses',
@@ -160,7 +160,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
 
   fence: {
     en: {
-      metaTitle: 'Fencing Manufacturer — Chain Link, Cattle & Stadium Fence | Angu',
+      metaTitle: 'Fencing Manufacturer — Chain Link, Cattle & Stadium | Angu',
       metaDesc:
         'Factory-direct fencing: chain link, cattle panels, stadium and crowd barriers, isolation fence. Galvanized or PVC coated, ISO 9001, MOQ from 50 m².',
       h1: 'Fencing for Farms, Stadiums and Industry',
@@ -216,7 +216,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
       ],
     },
     vi: {
-      metaTitle: 'Nhà sản xuất hàng rào — Lưới thép, hàng rào chăn nuôi, sân vận động | Angu',
+      metaTitle: 'Nhà sản xuất hàng rào — lưới B40, 358, sân vận động | Angu',
       metaDesc:
         'Hàng rào giá xuất xưởng: lưới mắt cáo, tấm chuồng bò, hàng rào sân vận động và rào chắn đám đông. Mạ kẽm hoặc phủ PVC, ISO 9001, MOQ từ 50 m².',
       h1: 'Hàng rào cho nông trại, sân vận động và công nghiệp',
@@ -275,7 +275,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
 
   'wire-mesh': {
     en: {
-      metaTitle: 'Wire Mesh Manufacturer — Welded, Crimped, Hexagonal, Barbed | Angu',
+      metaTitle: 'Wire Mesh Manufacturer — Welded, Crimped, Hexagonal | Angu',
       metaDesc:
         'Wire mesh direct from the mill: welded mesh, crimped mesh, hexagonal netting, holland mesh and barbed wire. Wire 0.5–12 mm, galvanized or stainless. ISO 9001.',
       h1: 'Wire Mesh — Welded, Crimped, Hexagonal, Barbed',
@@ -331,7 +331,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
       ],
     },
     vi: {
-      metaTitle: 'Nhà sản xuất lưới thép — Hàn, dập nổi, lục giác, dây gai | Angu',
+      metaTitle: 'Nhà sản xuất lưới thép — hàn, lục giác, dây gai | Angu',
       metaDesc:
         'Lưới thép trực tiếp từ xưởng: lưới hàn, lưới dập, lưới lục giác, lưới holland và dây gai. Dây 0,5–12 mm, mạ kẽm hoặc inox. ISO 9001.',
       h1: 'Lưới thép — hàn, dập nổi, lục giác, dây gai',
@@ -390,9 +390,9 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
 
   'protection-net': {
     en: {
-      metaTitle: 'Rockfall & Slope Protection Net Manufacturer | Angu Wire Mesh',
+      metaTitle: 'Rockfall & Slope Protection Net Manufacturer | Angu',
       metaDesc:
-        'Slope protection net, rockfall barriers and blast mitigation mesh. Galvanized steel wire rope net, energy class 500–3000 kJ, ISO 9001 certified; CE (ETAG 027) for rockfall nets.',
+        'Slope protection, rockfall and blast-mitigation nets. Galvanized steel wire rope, energy class 500–3000 kJ, ISO 9001; CE (ETAG 027) for rockfall nets.',
       h1: 'Rockfall and Slope Protection Nets',
       intro:
         'A protection net is safety equipment, not fencing — the anchorage and energy absorption decide whether the system works. We supply ring nets, steel wire rope nets and drapery mesh together with anchors and lacing sized to the same load case, so the net is never the weak link.',
@@ -448,7 +448,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     vi: {
       metaTitle: 'Nhà sản xuất lưới chống đá rơi và bảo vệ mái dốc | Angu',
       metaDesc:
-        'Lưới bảo vệ mái dốc, lưới chắn đá rơi và lưới chống nổ. Lưới cáp thép mạ kẽm nhúng nóng, cấp năng lượng 500–3000 kJ, ISO 9001, CE (ETAG 027) cho lưới chắn đá rơi.',
+        'Bảo vệ mái dốc, lưới chắn đá rơi và lưới chống nổ. Cáp thép mạ kẽm nhúng nóng, cấp năng lượng 500–3000 kJ, ISO 9001, CE (ETAG 027) cho lưới chắn đá rơi.',
       h1: 'Lưới chống đá rơi và bảo vệ mái dốc',
       intro:
         'Lưới bảo vệ là thiết bị an toàn, không phải hàng rào — neo và khả năng hấp thụ năng lượng quyết định hệ có hiệu quả hay không. Chúng tôi cung cấp lưới vòng, lưới cáp thép và lưới phủ mái dốc kèm neo, dây khâu theo cùng một tổ hợp tải trọng.',

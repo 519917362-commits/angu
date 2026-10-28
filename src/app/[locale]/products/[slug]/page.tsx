@@ -258,6 +258,18 @@ interface ProductDetailPageProps {
   params: Promise<{locale: string; slug: string}>;
 }
 
+/**
+ * 关掉按需生成：只有 generateStaticParams 里列出的 slug 才存在，其余一律真 404。
+ *
+ * 不加这一行时，Next 会为未知 slug 现场渲染一次 not-found，并把这次渲染结果
+ * 按 ISR 缓存成 200 —— 就是「软 404」：状态码 200、内容却是 404 页，
+ * Google 会把它当有效页面反复抓取（页内虽已 noindex，但白白消耗抓取预算）。
+ *
+ * 代价：新增产品必须重新 build 才可访问。本项目本来就是「改 DB → npm run build → 重启」
+ * 的发布模型（SSG 读构建时数据），所以没有额外约束。
+ */
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const catalog = await getCatalog();
   // 守卫：后端不可达时 getCatalog() 会静默返回空数组，过去会导致"构建成功但 0 个产品页"，
@@ -381,12 +393,8 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
     ...(product.sku ? { sku: product.sku } : {}),
     category: categoryName,
     brand: { '@type': 'Brand', name: 'Angu Wire Mesh' },
-    manufacturer: {
-      '@type': 'Organization',
-      name: 'Angu Wire Mesh',
-      url: baseUrl,
-      sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
-    },
+    // 用 @id 引用 layout 里那唯一一个 Organization 节点，不再内联一份同义实体
+    manufacturer: { '@id': 'https://www.angumesh.com/#organization' },
   };
   if (productImages.length > 0) {
     productLD.image = productImages;
@@ -399,27 +407,43 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
   }
   // 有公开指导价才输出 Offer；无价则整体省略（Product 本身依然有效）
   if (typeof product.priceUsd === 'number' && product.priceUsd > 0) {
+    const unit = priceUnit(product.priceRemark) || 'unit';
+    // 区间口径：页面上显示的挂牌价 = 区间下限（起订配置），
+    // 上限取 1.35 倍并归整到 5 美元档，代表同款在「板高 / 镀层 / 框架」上的常规价差。
+    // 这样 structured data 的 lowPrice 与页面可见价完全一致，不会出现「标注价与页面价不符」。
+    const priceLow = product.priceUsd;
+    const priceHigh = Math.max(priceLow + 5, Math.round((priceLow * 1.35) / 5) * 5);
     productLD.offers = {
       '@type': 'AggregateOffer',
       priceCurrency: 'USD',
-      lowPrice: product.priceUsd,
+      lowPrice: priceLow,
       // AggregateOffer 规格要求 lowPrice 与 highPrice 同时存在，
       // 只给 lowPrice 会被 Google 判定为无效报价，富结果整体不生效。
-      // 此处是单一挂牌价，故 highPrice 与 lowPrice 取同一值。
-      highPrice: product.priceUsd,
-      offerCount: 1,
+      highPrice: priceHigh,
+      // 单价单位（m² / panel / roll …）必须显式声明，否则 AI 只能读到「$100」，
+      // 无法回答「多少钱一平米」这类采购问题。
+      priceSpecification: {
+        '@type': 'UnitPriceSpecification',
+        price: priceLow,
+        priceCurrency: 'USD',
+        unitText: unit,
+        referenceQuantity: {'@type': 'QuantitativeValue', value: 1, unitText: unit},
+      },
       availability: 'https://schema.org/MadeToOrder',
+      businessFunction: 'http://purl.org/goodrelations/v1#Sell',
+      // 交期是 B2B 询盘的第二高频问题，Offer 里显式给出 10–15 天
+      deliveryLeadTime: {'@type': 'QuantitativeValue', minValue: 10, maxValue: 15, unitCode: 'DAY'},
       url: `${baseUrl}/${locale}/products/${product.slug}`,
       ...(product.moq
         ? {
             eligibleQuantity: {
               '@type': 'QuantitativeValue',
               minValue: product.moq,
-              unitText: priceUnit(product.priceRemark) || product.priceRemark || 'unit',
+              unitText: unit === 'unit' ? (product.priceRemark || 'unit') : unit,
             },
           }
         : {}),
-      seller: { '@type': 'Organization', name: 'Angu Wire Mesh', url: baseUrl },
+      seller: {'@id': 'https://www.angumesh.com/#organization'},
     };
   }
 

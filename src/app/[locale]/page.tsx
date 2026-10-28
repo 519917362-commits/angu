@@ -10,20 +10,23 @@ import {ProductCard} from '@/components/products/ProductCard';
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
   const {locale} = await params;
   return {
+    // 首页是「全站总入口」，标题必须覆盖全品类。
+    // 之前首页 title 与 /en/noise-barrier 完全同名，等于两个页面抢同一个词，
+    // 首页权重再高也无法把品类词让给落地页。声屏障词交给 /{locale}/noise-barrier。
     title: locale === 'zh'
-      ? '声屏障厂家 — 公路·工业隔音屏障 | 安固丝网'
+      ? '丝网制品厂家 — 声屏障·石笼网·护栏网 | 安固丝网'
       : locale === 'vi'
-      ? 'Nhà Sản Xuất Tấm Chắn Ồn — Đường Cao Tốc & Công Nghiệp | Angu'
+      ? 'Nhà Sản Xuất Lưới Thép & Tấm Chắn Ồn | Angu'
       : locale === 'th'
-      ? 'ผู้ผลิตแผงกั้นเสียง — ทางหลวง & อุตสาหกรรม | Angu'
-      : 'Noise Barrier Manufacturer — Highway & Industrial | Angu',
+      ? 'ผู้ผลิตตะแกรงลวด & แผงกั้นเสียง | Angu'
+      : 'Wire Mesh & Noise Barrier Manufacturer | Angu',
     description: locale === 'zh'
-      ? '工厂直供公路、工业、轨道交通、桥梁声屏障。ISO 9001认证，12年制造经验，出口30+国家。'
+      ? 'ISO 9001 认证丝网制品厂家，主营声屏障、石笼网箱、边坡防护网、护栏网、电焊网。安平工厂直供，出口 30+ 国家，10–15 天交货。'
       : locale === 'vi'
-      ? 'Tấm chắn ồn trực tiếp từ nhà máy cho đường cao tốc, công nghiệp, đường sắt và cầu. Chứng nhận ISO 9001, 12 năm kinh nghiệm, xuất khẩu 30+ quốc gia.'
+      ? 'Nhà sản xuất đạt ISO 9001: tấm chắn ồn, rọ đá, lưới chống rơi đá, hàng rào, lưới thép hàn. Trực tiếp từ nhà máy Anping, xuất khẩu 30+ quốc gia, giao 10–15 ngày.'
       : locale === 'th'
-      ? 'แผงกั้นเสียงจากโรงงานโดยตรงสำหรับทางหลวง อุตสาหกรรม ระบบราง และสะพาน รับรอง ISO 9001 ประสบการณ์ 12 ปี ส่งออก 30+ ประเทศ'
-      : 'Factory-direct noise barriers for highways, industry, rail and bridges. ISO 9001 certified, manufacturing since 2014, shipped to 30+ countries.',
+      ? 'ผู้ผลิตตะแกรงลวด ISO 9001: แผงกั้นเสียง ตะกร้าเกเบี้ยน ตาข่ายกันหินตก รั้ว ตะแกรงเชื่อม โรงงานตรงอันผิง ส่งออก 30+ ประเทศ ผลิต 10–15 วัน'
+      : 'ISO 9001 manufacturer of noise barriers, gabion boxes, rockfall nets, fencing and welded wire mesh. Factory-direct from Anping, China. 30+ countries, 10–15 day production.',
     // 不再输出 meta keywords：Google 自 2009 年起完全忽略，Bing 仅作作弊信号，
     // 唯一确定的效果是每页多几百字节。
     alternates: {
@@ -39,26 +42,26 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
     },
     openGraph: {
       title: locale === 'zh'
-        ? '声屏障厂家 — 公路·工业隔音屏障 | 安固丝网'
+        ? '丝网制品厂家 — 声屏障·石笼网·护栏网 | 安固丝网'
         : locale === 'vi'
-        ? 'Tấm Chắn Ồn — Đường Cao Tốc & Công Nghiệp | Angu'
+        ? 'Nhà Sản Xuất Lưới Thép & Tấm Chắn Ồn | Angu'
         : locale === 'th'
-        ? 'แผงกั้นเสียง — ทางหลวง & อุตสาหกรรม | Angu'
-        : 'Noise Barrier Manufacturer — Highway & Industrial | Angu',
+        ? 'ผู้ผลิตตะแกรงลวด & แผงกั้นเสียง | Angu'
+        : 'Wire Mesh & Noise Barrier Manufacturer | Angu',
       description: locale === 'zh'
-        ? '工厂直供公路、工业、轨道交通、桥梁声屏障。ISO 9001认证，12年经验。'
+        ? 'ISO 9001 认证，声屏障 / 石笼网 / 防护网 / 护栏网工厂直供，出口 30+ 国家。'
         : locale === 'vi'
-        ? 'Tấm chắn ồn trực tiếp từ nhà máy cho đường cao tốc, công nghiệp, đường sắt và cầu. Chứng nhận ISO 9001, 12 năm kinh nghiệm.'
+        ? 'ISO 9001: tấm chắn ồn, rọ đá, lưới chống rơi đá, hàng rào. Trực tiếp nhà máy, 30+ quốc gia.'
         : locale === 'th'
-        ? 'แผงกั้นเสียงจากโรงงานโดยตรงสำหรับทางหลวง อุตสาหกรรม ระบบราง และสะพาน รับรอง ISO 9001 ประสบการณ์ 12 ปี'
-        : 'Factory-direct noise barriers for highways, industry, rail and bridges. ISO 9001 certified, manufacturing since 2014.',
+        ? 'ISO 9001: แผงกั้นเสียง ตะกร้าเกเบี้ยน ตาข่ายกันหินตก รั้ว โรงงานตรง 30+ ประเทศ'
+        : 'ISO 9001 certified. Noise barriers, gabion, rockfall nets, fencing — factory-direct, 30+ countries.',
       type: 'website',
       locale: locale === 'zh' ? 'zh_CN' : locale === 'vi' ? 'vi_VN' : locale === 'th' ? 'th_TH' : 'en_US',
       siteName: locale === 'zh' ? '安固丝网' : 'Angu Wire Mesh',
       url: `https://www.angumesh.com/${locale}`,
       images: [{url: 'https://www.angumesh.com/images/products/highway-noise-barrier.jpg', width: 1200, height: 630, alt: locale === 'zh' ? '公路声屏障' : 'Highway Noise Barrier'}],
     },
-    twitter: {card: 'summary_large_image', title: locale === 'zh' ? '声屏障厂家 — 公路·工业隔音屏障' : locale === 'vi' ? 'Nhà Sản Xuất Tấm Chắn Ồn' : locale === 'th' ? 'ผู้ผลิตแผงกั้นเสียง' : 'Noise Barrier Manufacturer', description: locale === 'zh' ? '工厂直供公路/工业声屏障，ISO 9001认证。' : locale === 'vi' ? 'Tấm chắn ồn trực tiếp nhà máy, ISO 9001.' : locale === 'th' ? 'แผงกั้นเสียงโรงงานตรง ISO 9001' : 'Factory-direct noise barriers, ISO 9001 certified.'},
+    twitter: {card: 'summary_large_image', title: locale === 'zh' ? '丝网制品厂家 — 声屏障·石笼网·护栏网' : locale === 'vi' ? 'Nhà Sản Xuất Lưới Thép & Tấm Chắn Ồn' : locale === 'th' ? 'ผู้ผลิตตะแกรงลวด & แผงกั้นเสียง' : 'Wire Mesh & Noise Barrier Manufacturer', description: locale === 'zh' ? '声屏障/石笼网/防护网/护栏网工厂直供，ISO 9001。' : locale === 'vi' ? 'Tấm chắn ồn, rọ đá, lưới chống rơi đá — nhà máy trực tiếp, ISO 9001.' : locale === 'th' ? 'แผงกั้นเสียง เกเบี้ยน ตาข่ายกันหินตก โรงงานตรง ISO 9001' : 'Noise barriers, gabion, rockfall nets, fencing — factory-direct, ISO 9001.'},
     robots: {index: true, follow: true},
     other: {'geo.region': 'CN-HE', 'geo.placename': 'Anping County, Hengshui, Hebei'},
   };
@@ -169,6 +172,49 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
     desc: (s.description as Record<string, string>)?.[locale] || s.description.en || '',
     slugs: s.categorySlugs || [],
   }));
+
+  // ─── 品类入口卡（首页是这四个落地页唯一的高权重入口）───
+  // 顺序固定：声屏障优先（转化主品类），其余按产品线铺开。
+  // 链接一律走 categoryHref() 指向静态落地页 /{locale}/{slug}：
+  // 参数页 /products?category=xx 的 canonical 只能指向 /products，拿不到品类词排名。
+  const PILLAR_ORDER = ['noise-barrier', 'gabion', 'fence', 'protection-net', 'wire-mesh'];
+  const pillarCards = PILLAR_ORDER
+    .map((slug) => categories.find((c: {slug: string}) => c.slug === slug))
+    .filter((c): c is NonNullable<typeof c> => Boolean(c));
+
+  const pillarBlurb: Record<string, Record<string, string>> = {
+    'noise-barrier': {
+      en: 'Highway, rail, bridge and industrial sound walls — metal, transparent acrylic and fully enclosed.',
+      zh: '公路、轨道、桥梁、工业声屏障 — 金属、透明亚克力、全封闭三种形式。',
+      vi: 'Tường chắn ồn đường cao tốc, đường sắt, cầu và công nghiệp — kim loại, acrylic trong suốt, kín hoàn toàn.',
+      th: 'กำแพงกันเสียงทางหลวง รถไฟ สะพาน และโรงงาน — โลหะ อะคริลิกใส และแบบปิดล้อม',
+    },
+    gabion: {
+      en: 'Gabion boxes, reno mattresses and retaining walls. Wire 2.7–4.0 mm, zinc 240–275 g/m², mesh 80×100 mm.',
+      zh: '石笼网箱、雷诺护垫与挡土墙。钢丝 2.7–4.0 mm，锌层 240–275 g/m²，网孔 80×100 mm。',
+      vi: 'Rọ đá, nệm Reno và tường chắn đất. Dây 2.7–4.0 mm, kẽm 240–275 g/m², mắt lưới 80×100 mm.',
+      th: 'ตะกร้าเกเบี้ยน ฟูก Reno และกำแพงกันดิน ลวด 2.7–4.0 mm สังกะสี 240–275 g/m² ช่อง 80×100 mm',
+    },
+    fence: {
+      en: '358 anti-climb, chain link, temporary and crowd barriers for perimeter security.',
+      zh: '358 防攀爬、勾花网、临时围栏与人群隔离栏，用于周界安防。',
+      vi: 'Rào 358 chống leo, lưới mắt cáo, rào tạm và rào chắn đám đông cho an ninh vành đai.',
+      th: 'รั้ว 358 กันปีน ตะแกรงถัก รั้วชั่วคราว และแผงกั้นฝูงชน สำหรับความปลอดภัยรอบเขต',
+    },
+    'protection-net': {
+      en: 'Active drapery nets and passive ring-net barriers for rockfall and slope protection.',
+      zh: '主动覆盖网与被动环形网屏障，用于落石与边坡防护。',
+      vi: 'Lưới phủ chủ động và rào vòng thụ động cho chống rơi đá và bảo vệ taluy.',
+      th: 'ตาข่ายคลุมแบบแอคทีฟและแนวรั้ววงแหวนแบบพาสซีฟ สำหรับกันหินตกและป้องกันไหล่เขา',
+    },
+    'wire-mesh': {
+      en: 'Welded, hexagonal and crimped mesh plus barbed wire, cut and packed to your specification.',
+      zh: '电焊网、六角网、轧花网与刺绳，按规格裁切包装。',
+      vi: 'Lưới hàn, lưới lục giác, lưới dập sóng và dây thép gai, cắt và đóng gói theo yêu cầu.',
+      th: 'ตะแกรงเชื่อม ตะแกรงหกเหลี่ยม ตะแกรงรีดลอน และลวดหนาม ตัดและบรรจุตามสเปก',
+    },
+  };
+
 
   return (
     <>
@@ -373,10 +419,10 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
             {locale === 'zh' ? '浏览我们全面的金属丝网和防护产品系列。' : locale === 'vi' ? 'Duyệt dải sản phẩm lưới thép và bảo vệ toàn diện của chúng tôi.' : locale === 'th' ? 'เรียกดูผลิตภัณฑ์ตะแกรงลวดและการป้องกันครบถ้วนของเรา' : 'Browse our comprehensive range of wire mesh and protection products.'}
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.slice(0, 4).map((cat) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+          {pillarCards.map((cat) => (
             <Link key={cat.id} href={categoryHref(locale, cat.slug)}>
-              <article className="group bg-white rounded-xl overflow-hidden border border-slate-100 hover:border-blue-300 hover:shadow-lg transition-all duration-300">
+              <article className="group h-full bg-white rounded-xl overflow-hidden border border-slate-100 hover:border-blue-300 hover:shadow-lg transition-all duration-300">
                 <div className="aspect-[4/3] overflow-hidden bg-slate-100">
                   {cat.image && (
                     <img
@@ -393,8 +439,11 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
                   <h3 className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
                     {cat.names[locale] || cat.names.en}
                   </h3>
+                  <p className="text-xs text-slate-500 leading-relaxed mt-1.5">
+                    {pillarBlurb[cat.slug]?.[locale] || pillarBlurb[cat.slug]?.en || ''}
+                  </p>
                   {cat.productCount && (
-                    <p className="text-xs text-slate-400 mt-1">
+                    <p className="text-xs text-slate-400 mt-2">
                       {cat.productCount} {locale === 'zh' ? '款产品' : locale === 'vi' ? 'sản phẩm' : locale === 'th' ? 'สินค้า' : 'products'}
                     </p>
                   )}

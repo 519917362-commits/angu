@@ -6,6 +6,8 @@ interface GalleryContent {
   subtitle: string;
   emptyText: string;
   note: string;
+  /** 项目所在地说明：现有 6 个案例全部在中国境内，必须写明，不能暗示成目标市场本地项目 */
+  originNote: string;
 }
 
 const content: Record<string, GalleryContent> = {
@@ -14,24 +16,28 @@ const content: Record<string, GalleryContent> = {
     subtitle: 'Hình ảnh thi công thực tế từ các dự án đường cao tốc, nhà máy và cầu đã bàn giao',
     emptyText: 'Hình ảnh dự án đang được cập nhật. Vui lòng liên hệ để nhận portfolio đầy đủ.',
     note: 'STC / NRC là chỉ số đánh giá của tấm panel theo phòng thí nghiệm, không phải mức giảm ồn đo tại công trường.',
+    originNote: 'Các dự án trên đều nằm trong lãnh thổ Trung Quốc (Trùng Khánh, Trường Sa, Nội Mông, Sơn Tây, Quảng Đông, Giang Tô) — không phải dự án tại thị trường Việt Nam.',
   },
   th: {
     title: 'ผลงานจริง',
     subtitle: 'ภาพติดตั้งจริงจากโครงการทางด่วน โรงงาน และสะพานที่ส่งมอบแล้ว',
     emptyText: 'กำลังอัปเดตรูปภาพโครงการ กรุณาติดต่อเพื่อรับ portfolio เต็มรูปแบบ',
     note: 'STC / NRC เป็นค่าที่ทดสอบจากแผงในห้องแล็บ ไม่ใช่ค่าระดับเสียงที่วัดหน้างาน',
+    originNote: 'โครงการทั้งหมดข้างต้นอยู่ในประเทศจีน (ฉงชิ่ง ฉางซา มองโกเลียใน ซานซี กวางตุ้ง เจียงซู) ไม่ใช่โครงการในประเทศไทย',
   },
   en: {
     title: 'Real Project Gallery',
     subtitle: 'On-site installation photos from highway, factory, and bridge projects we have delivered',
     emptyText: 'Project photos are being updated. Contact us for the full project portfolio.',
     note: 'STC / NRC are laboratory-rated properties of the panel build-up, not site-measured noise reduction.',
+    originNote: 'All projects shown were delivered inside mainland China (Chongqing, Changsha, Inner Mongolia, Shanxi, Guangdong, Jiangsu) — they are not local projects in your market.',
   },
   zh: {
     title: '实际案例',
     subtitle: '来自高速公路、工厂、桥梁项目的实拍安装图片',
     emptyText: '项目图片更新中，联系我们获取完整案例集。',
     note: 'STC / NRC 为板材组合的实验室评级，非现场实测降噪量。',
+    originNote: '以上项目均位于中国境内（重庆、长沙、内蒙古、山西、广东、江苏），非目标市场本地项目。',
   },
 };
 
@@ -99,7 +105,10 @@ export function ProjectGallery({
 
         {/* 口径说明：案例卡只标产品评级，不标现场降噪量，避免与规格表的插入损失混淆 */}
         {projects.length > 0 && (
-          <p className="mt-8 text-xs text-slate-400 text-center max-w-3xl mx-auto">{c.note}</p>
+          <div className="mt-8 space-y-1.5 text-center max-w-3xl mx-auto">
+            <p className="text-xs text-slate-400">{c.note}</p>
+            <p className="text-xs text-slate-400">{c.originNote}</p>
+          </div>
         )}
       </div>
     </section>

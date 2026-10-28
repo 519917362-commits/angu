@@ -334,37 +334,17 @@ export default async function SolutionsPage({params}: {params: Promise<{locale: 
   };
 
   // Service JSON-LD for each solution
+  // provider 只引用 layout 里的唯一 Organization 节点（@id），
+  // 不再每条 Service 内联一份完整机构信息——9 份重复实体等于向 Google 声明 9 家公司。
   const serviceSchema = solutions.map((sol) => ({
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: getValue(sol.title, locale, sol.title),
     description: getValue(sol.description, locale, sol.description),
-    provider: {
-      '@type': 'Organization',
-      name: 'Angu Wire Mesh',
-      url: 'https://www.angumesh.com',
-      sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
-    },
+    provider: {'@id': 'https://www.angumesh.com/#organization'},
     serviceType: getValue(sol.title, locale, sol.title),
     areaServed: 'Global',
     url: `https://www.angumesh.com/${locale}/solutions#${sol.slug}`,
-  }));
-
-  // HowTo JSON-LD for each solution (implementation steps)
-  const howToSchemas = solutions.map((sol) => ({
-    '@context': 'https://schema.org',
-    '@type': 'HowTo',
-    name: getValue(sol.title, locale, sol.title),
-    description: getValue(sol.description, locale, sol.description),
-    step: getValue(sol.implementation, locale, sol.implementation).map((step, si) => ({
-      '@type': 'HowToStep',
-      position: si + 1,
-      name: step.split(/[：:]/)[0] || step.substring(0, 60),
-      itemListElement: {
-        '@type': 'HowToDirection',
-        text: step,
-      },
-    })),
   }));
 
   // ItemList JSON-LD for the solutions collection
@@ -398,13 +378,6 @@ export default async function SolutionsPage({params}: {params: Promise<{locale: 
       {serviceSchema.map((schema, i) => (
         <script
           key={`svc-${i}`}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}}
-        />
-      ))}
-      {howToSchemas.map((schema, i) => (
-        <script
-          key={`ht-${i}`}
           type="application/ld+json"
           dangerouslySetInnerHTML={{__html: JSON.stringify(schema)}}
         />
