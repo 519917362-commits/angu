@@ -27,7 +27,7 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
     .replace(/\s*[|｜]\s*(Angu(\s+Wire\s+Mesh)?|安固(丝网)?)\s*$/i, '')
     .trim();
   return generatePageMeta('blog', locale, `/${locale}/blog/${slug}`, {
-    title: `${cleanTitle} | ${locale === 'zh' ? '安固丝网' : 'Angu Wire Mesh'}`,
+    title: `${cleanTitle} | ${locale === 'zh' ? '安固' : 'Angu'}`,
     description,
     image: post.cover_image || undefined,
   });

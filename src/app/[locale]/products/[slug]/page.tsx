@@ -310,7 +310,9 @@ export async function generateMetadata({params}: ProductDetailPageProps): Promis
   const stripBrand = (t: string) =>
     t.replace(/\s*[|｜]\s*(Angu(\s+Wire\s+Mesh)?|安固(丝网)?)\s*$/i, '').trim();
   const metaTitle = stripBrand(seoTitle) || name;
-  const brandSuffix = locale === 'zh' ? '安固丝网' : 'Angu Wire Mesh';
+  // 品牌尾巴统一用短形「| Angu」：全站品类页也是这个写法，
+  // 且能保证「标题本体 + 尾巴」落在 60 字符内（CSV 里就是按含尾巴算的长）。
+  const brandSuffix = locale === 'zh' ? '安固' : 'Angu';
   // GEO: prefer seoDescription (product-specific) over shortDescriptions
   const seoDesc = product.seoDescription?.[locale] || product.seoDescription?.en || '';
   const desc = seoDesc || product.shortDescriptions[locale] || product.shortDescriptions.en || '';
