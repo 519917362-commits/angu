@@ -32,7 +32,7 @@ const specContent: Record<string, SpecContent> = {
       { param: { en: 'Powder Coating (Optional)', zh: '粉末喷涂（可选）', vi: 'Sơn Tĩnh Điện (Tùy Chọn)', th: 'เคลือบสีฝุ่น (เสริม)' }, value: { en: 'Polyester / PVDF, RAL color options', zh: '聚酯/氟碳，可选RAL色卡', vi: 'Polyester / PVDF, tùy chọn màu RAL', th: 'โพลีเอสเตอร์ / PVDF, เลือกสี RAL' } },
       { param: { en: 'Fire Rating', zh: '防火等级', vi: 'Cấp Chống Cháy', th: 'ระดับการทนไฟ' }, value: { en: 'A1 (non-combustible)', zh: 'A1 (不燃)', vi: 'A1 (không cháy)', th: 'A1 (ไม่ติดไฟ)' } },
       { param: { en: 'Wind Load', zh: '抗风荷载', vi: 'Tải Trọng Gió', th: 'แรงลม' }, value: { en: '≥ 0.8 kPa standard, up to 2.0 kPa custom', zh: '标准 ≥ 0.8 kPa，可定制至 2.0 kPa', vi: 'Tiêu chuẩn ≥ 0.8 kPa, tùy chỉnh đến 2.0 kPa', th: 'มาตรฐาน ≥ 0.8 kPa, สั่งทำถึง 2.0 kPa' } },
-      { param: { en: 'Standards', zh: '适用标准', vi: 'Tiêu Chuẩn Áp Dụng', th: 'มาตรฐาน' }, value: { en: 'EN 1793, GB/T 19884, ISO 10140', zh: 'EN 1793, GB/T 19884, ISO 10140', vi: 'EN 1793, GB/T 19884, ISO 10140', th: 'EN 1793, GB/T 19884, ISO 10140' } },
+      { param: { en: 'Reference Standards', zh: '参照标准', vi: 'Tiêu Chuẩn Tham Chiếu', th: 'มาตรฐานอ้างอิง' }, value: { en: 'EN 1793, GB/T 19884, ISO 10140 (test methods)', zh: 'EN 1793, GB/T 19884, ISO 10140（试验方法）', vi: 'EN 1793, GB/T 19884, ISO 10140 (phương pháp thử)', th: 'EN 1793, GB/T 19884, ISO 10140 (วิธีการทดสอบ)' } },
     ],
   },
 };
