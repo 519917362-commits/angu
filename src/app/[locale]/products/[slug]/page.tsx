@@ -305,14 +305,19 @@ export async function generateMetadata({params}: ProductDetailPageProps): Promis
   const name = product.names[locale] || product.names.en || '';
   // GEO: prefer seoTitle (question-style) for meta title
   const seoTitle = product.seoTitle?.[locale] || product.seoTitle?.en || '';
-  const metaTitle = seoTitle || name;
+  // 后台导入的 seo_title 常带自己的品牌尾巴（… | Angu / … | 安固），
+  // 这里再拼一次就成了「… | Angu | Angu Wire Mesh」。先剥掉再统一拼。
+  const stripBrand = (t: string) =>
+    t.replace(/\s*[|｜]\s*(Angu(\s+Wire\s+Mesh)?|安固(丝网)?)\s*$/i, '').trim();
+  const metaTitle = stripBrand(seoTitle) || name;
+  const brandSuffix = locale === 'zh' ? '安固丝网' : 'Angu Wire Mesh';
   // GEO: prefer seoDescription (product-specific) over shortDescriptions
   const seoDesc = product.seoDescription?.[locale] || product.seoDescription?.en || '';
   const desc = seoDesc || product.shortDescriptions[locale] || product.shortDescriptions.en || '';
   const keywords = product.seoKeywords?.[locale] || product.seoKeywords?.en || '';
 
   return generatePageMeta('products', locale, `/${locale}/products/${slug}`, {
-    title: `${metaTitle} | Angu Wire Mesh`,
+    title: `${metaTitle} | ${brandSuffix}`,
     description: desc,
     ...(keywords ? { keywords } : {}),
     image: product.images?.[0],

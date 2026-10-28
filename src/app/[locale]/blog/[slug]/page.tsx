@@ -22,8 +22,12 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
     .trim()
     .slice(0, 160) || 'Industry insights on wire mesh, gabion construction, and rockfall protection.';
   const seoTitle = locale === 'zh' ? post.seo_title_zh : locale === 'vi' ? (post.seo_title_vi || post.seo_title_en) : locale === 'th' ? (post.seo_title_th || post.seo_title_en) : post.seo_title_en;
+  // 后台标题可能自带品牌尾巴，先剥再拼，避免「… | Angu | Angu Wire Mesh」
+  const cleanTitle = (seoTitle || title || 'Blog Post')
+    .replace(/\s*[|｜]\s*(Angu(\s+Wire\s+Mesh)?|安固(丝网)?)\s*$/i, '')
+    .trim();
   return generatePageMeta('blog', locale, `/${locale}/blog/${slug}`, {
-    title: `${seoTitle || title || 'Blog Post'} | Angu Wire Mesh`,
+    title: `${cleanTitle} | ${locale === 'zh' ? '安固丝网' : 'Angu Wire Mesh'}`,
     description,
     image: post.cover_image || undefined,
   });
