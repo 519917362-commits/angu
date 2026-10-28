@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import type { NoiseBarrierFactoryImage, NoiseBarrierCertification, LocaleText } from '@/lib/api';
 import {YEARS_LABEL} from '@/lib/company';
+import {CERT_PARTIAL} from '@/lib/partial-content';
 
 interface SectionContent {
   title: string;
@@ -96,6 +97,8 @@ export function CompanyStrength({
   certifications: NoiseBarrierCertification[];
 }) {
   const c = content[locale] || content.en;
+  // 认证卡英文原文来自后端兜底数据，只有 en/zh/vi/th：试水语种按英文名匹配覆盖层
+  const certOverlay = CERT_PARTIAL[locale];
 
   // Fallback images if DB is empty
   const images = factoryImages.length > 0
@@ -157,19 +160,22 @@ export function CompanyStrength({
           <div className="mt-10">
             <h3 className="text-center text-lg font-semibold text-slate-700 mb-6">{c.certTitle}</h3>
             <div className="flex flex-wrap justify-center gap-4">
-              {certifications.map((cert) => (
+              {certifications.map((cert) => {
+                const ov = certOverlay?.[cert.name_en];
+                return (
                 <div key={cert.id} className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-lg shadow-sm">
                   <span className="text-xl">{cert.icon || '📋'}</span>
                   <div>
                     <div className="text-sm font-semibold text-slate-800">
-                      {pickLocale({ en: cert.name_en, zh: cert.name_zh, vi: cert.name_vi, th: cert.name_th }, locale)}
+                      {ov?.name || pickLocale({ en: cert.name_en, zh: cert.name_zh, vi: cert.name_vi, th: cert.name_th }, locale)}
                     </div>
                     <div className="text-xs text-slate-400">
-                      {pickLocale({ en: cert.desc_en, zh: cert.desc_zh, vi: cert.desc_vi, th: cert.desc_th }, locale)}
+                      {ov?.desc || pickLocale({ en: cert.desc_en, zh: cert.desc_zh, vi: cert.desc_vi, th: cert.desc_th }, locale)}
                     </div>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

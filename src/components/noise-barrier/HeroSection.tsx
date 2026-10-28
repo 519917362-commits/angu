@@ -131,7 +131,7 @@ export function HeroSection({ locale, heroImage }: { locale: string; heroImage?:
               <div className="w-px bg-slate-200" />
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600">15+</div>
-                <div className="text-xs text-slate-500">{locale === 'vi' ? 'Năm tuổi thọ mạ' : locale === 'th' ? 'ปีอายุเคลือบ' : locale === 'zh' ? '年防腐' : 'Coating Years'}</div>
+                <div className="text-xs text-slate-500">{locale === 'vi' ? 'Năm tuổi thọ mạ' : locale === 'th' ? 'ปีอายุเคลือบ' : locale === 'ms' ? 'Tahun Ketahanan Salutan' : locale === 'ar' ? 'سنة عمر الطلاء' : locale === 'zh' ? '年防腐' : 'Coating Years'}</div>
               </div>
             </div>
           </div>

@@ -42,7 +42,9 @@ export function HeaderLanding({ locale, logoUrl, email, phone, ctaText, socials 
             )}
             <div className="hidden sm:block">
               <div className="font-bold text-base text-slate-900 leading-tight">Angu Wire Mesh</div>
-              <div className="text-[11px] text-slate-400 leading-tight">Factory-Direct Noise Barriers</div>
+              <div className="text-[11px] text-slate-400 leading-tight">
+                {locale === 'ms' ? 'Penghadang Bunyi Terus Kilang' : locale === 'ar' ? 'حواجز صوتية مباشرة من المصنع' : 'Factory-Direct Noise Barriers'}
+              </div>
             </div>
           </Link>
 
@@ -101,7 +103,7 @@ export function HeaderLanding({ locale, logoUrl, email, phone, ctaText, socials 
                         />
                       </div>
                       <div className="text-[10px] text-slate-400 text-center mt-1.5">
-                        {locale === 'vi' ? 'Quét mã để liên hệ' : locale === 'th' ? 'สแกนเพื่อติดต่อ' : locale === 'zh' ? '扫码联系' : 'Scan to contact'}
+                        {locale === 'vi' ? 'Quét mã để liên hệ' : locale === 'th' ? 'สแกนเพื่อติดต่อ' : locale === 'ms' ? 'Imbas untuk hubungi' : locale === 'ar' ? 'امسح للتواصل' : locale === 'zh' ? '扫码联系' : 'Scan to contact'}
                       </div>
                     </div>
                   )}

@@ -25,7 +25,7 @@ export function ProductCard({product, locale}: ProductCardProps) {
           />
           {product.moq && (
             <span className="absolute top-3 start-3 bg-blue-600 text-white text-xs px-2 py-1 rounded-md">
-              {locale === 'zh' ? `起订量: ${product.moq}` : locale === 'vi' ? `SL tối thiểu: ${product.moq}` : locale === 'th' ? `ขั้นต่ำ: ${product.moq}` : `MOQ: ${product.moq}`}
+              {locale === 'zh' ? `起订量: ${product.moq}` : locale === 'vi' ? `SL tối thiểu: ${product.moq}` : locale === 'th' ? `ขั้นต่ำ: ${product.moq}` : locale === 'ms' ? `MOQ: ${product.moq}` : locale === 'ar' ? `الحد الأدنى: ${product.moq}` : `MOQ: ${product.moq}`}
             </span>
           )}
           {product.isFeatured && (

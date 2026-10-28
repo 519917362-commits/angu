@@ -7,7 +7,12 @@ import {X, Menu, MessageCircle, Globe} from 'lucide-react';
 import {LANGUAGE_FLAGS} from '@/lib/flags';
 import { tLabel } from '@/lib/i18n';
 
-const LOCALES = ['en', 'zh'] as const;
+const LOCALES = ['en', 'zh', 'vi', 'th', 'ms', 'ar'] as const;
+
+// 与 LanguageSwitcher 保持一致：ms / ar 只翻了首页与声屏障落地页，
+// 其它路径切过去会 308 回 /en，所以直接落到该语种首页更顺。
+const PARTIAL = ['ms', 'ar'];
+const TRANSLATED = ['', '/noise-barrier'];
 
 interface MobileNavProps {
   locale: string;
@@ -34,8 +39,9 @@ export function MobileNav({locale, whatsapp = '8618803189797'}: MobileNavProps) 
 
   function handleLangSelect(newLocale: string) {
     if (!pathname) return;
-    const newPathname = pathname.replace(/^\/[a-z]{2}/, `/${newLocale}`);
-    router.replace(newPathname);
+    const stripped = pathname.replace(/^\/(en|zh|vi|th|ms|ar)(?=\/|$)/, '').replace(/\/+$/, '');
+    const target = PARTIAL.includes(newLocale) && !TRANSLATED.includes(stripped) ? '' : stripped;
+    router.replace(`/${newLocale}${target}`);
     setIsLangOpen(false);
     setIsOpen(false);
   }
@@ -67,7 +73,9 @@ export function MobileNav({locale, whatsapp = '8618803189797'}: MobileNavProps) 
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-slate-100">
-          <span className="font-bold text-lg text-slate-900">Menu</span>
+          <span className="font-bold text-lg text-slate-900">
+            {locale === 'ms' ? 'Menu' : locale === 'ar' ? 'القائمة' : 'Menu'}
+          </span>
           <button
             onClick={() => setIsOpen(false)}
             className="p-2 hover:bg-slate-100 rounded-full transition-colors"
@@ -127,7 +135,7 @@ export function MobileNav({locale, whatsapp = '8618803189797'}: MobileNavProps) 
             className="flex items-center justify-center gap-2 w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-semibold transition-colors"
           >
             <MessageCircle className="w-5 h-5" />
-            WhatsApp Us
+            {locale === 'ms' ? 'WhatsApp Kami' : locale === 'ar' ? 'راسلنا على واتساب' : 'WhatsApp Us'}
           </a>
         </div>
       </div>

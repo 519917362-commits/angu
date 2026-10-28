@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/types/product';
 import { localeHref } from '@/lib/routing';
+import { PRODUCT_PARTIAL } from '@/lib/partial-content';
 
 // 6 recommended noise-barrier products (top 6 by sort order)
 const displaySlugs = [
@@ -53,8 +54,10 @@ export function ProductMatrix({ locale, products }: { locale: string; products: 
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {selected.map((p) => {
-            const name = pickLocale(p.names || {}, locale);
-            const desc = pickLocale(p.shortDescriptions || {}, locale);
+            // products 表无 ms/ar 列：按 slug 套覆盖层，没有则回落英文
+            const ov = PRODUCT_PARTIAL[locale]?.[p.slug];
+            const name = ov?.name || pickLocale(p.names || {}, locale);
+            const desc = ov?.desc || pickLocale(p.shortDescriptions || {}, locale);
             const img = p.images?.[0];
             if (!name) return null;
 

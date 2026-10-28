@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import type { NoiseBarrierProject } from '@/lib/api';
+import { PROJECT_PARTIAL } from '@/lib/partial-content';
 
 interface GalleryContent {
   title: string;
@@ -68,6 +69,8 @@ export function ProjectGallery({
   projects: NoiseBarrierProject[];
 }) {
   const c = content[locale] || content.en;
+  // noise_barrier_projects 表只有 en/zh/vi/th：试水语种按英文标题匹配覆盖层
+  const overlay = PROJECT_PARTIAL[locale];
 
   return (
     <section id="projects" className="py-16 sm:py-20 bg-slate-50 scroll-mt-20">
@@ -83,13 +86,18 @@ export function ProjectGallery({
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((p) => (
+            {projects.map((p) => {
+              const ov = overlay?.[p.title_en];
+              const pTitle = ov?.title || pickLocale({ en: p.title_en, zh: p.title_zh, vi: p.title_vi, th: p.title_th }, locale);
+              const pLocation = ov?.location || pickLocale({ en: p.location_en, zh: p.location_zh, vi: p.location_vi, th: p.location_th }, locale);
+              const pSpec = ov?.spec || pickLocale({ en: p.spec_en, zh: p.spec_zh, vi: p.spec_vi, th: p.spec_th }, locale);
+              return (
               <div key={p.id} className="group bg-white rounded-2xl border border-slate-100 hover:shadow-lg transition-all duration-300 overflow-hidden">
                 <div className="relative aspect-[4/3] bg-slate-100 overflow-hidden">
                   {p.image_url ? (
                     <Image
                       src={p.image_url}
-                      alt={pickLocale({ en: p.title_en, zh: p.title_zh, vi: p.title_vi, th: p.title_th }, locale)}
+                      alt={pTitle}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -102,18 +110,19 @@ export function ProjectGallery({
                 </div>
                 <div className="p-5">
                   <h3 className="text-base font-bold text-slate-900 mb-1">
-                    {pickLocale({ en: p.title_en, zh: p.title_zh, vi: p.title_vi, th: p.title_th }, locale)}
+                    {pTitle}
                   </h3>
                   <p className="text-sm text-slate-500 mb-2">
-                    <svg className="w-3.5 h-3.5 inline mr-1 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                    {pickLocale({ en: p.location_en, zh: p.location_zh, vi: p.location_vi, th: p.location_th }, locale)}
+                    <svg className="w-3.5 h-3.5 inline mr-1 text-slate-400 rtl:ml-1 rtl:mr-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                    {pLocation}
                   </p>
                   <p className="text-xs text-blue-600 font-medium">
-                    {pickLocale({ en: p.spec_en, zh: p.spec_zh, vi: p.spec_vi, th: p.spec_th }, locale)}
+                    {pSpec}
                   </p>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
