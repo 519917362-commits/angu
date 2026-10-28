@@ -1,4 +1,5 @@
 import type {Metadata} from 'next';
+import { categoryHref } from '@/lib/pillars';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {getProduct, getCatalog} from '@/lib/api';
@@ -429,7 +430,7 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: locale === 'zh' ? '首页' : locale === 'vi' ? 'Trang chủ' : locale === 'th' ? 'หน้าแรก' : 'Home', item: `${baseUrl}/${locale}` },
       { '@type': 'ListItem', position: 2, name: locale === 'zh' ? '产品中心' : locale === 'vi' ? 'Sản phẩm' : locale === 'th' ? 'สินค้า' : 'Products', item: `${baseUrl}/${locale}/products` },
-      { '@type': 'ListItem', position: 3, name: categoryName, item: `${baseUrl}/${locale}/products?category=${product.categorySlug}` },
+      { '@type': 'ListItem', position: 3, name: categoryName, item: `${baseUrl}` + categoryHref(locale, product.categorySlug) },
       { '@type': 'ListItem', position: 4, name, item: `${baseUrl}/${locale}/products/${product.slug}` },
     ],
   };
@@ -466,7 +467,7 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
             <span>/</span>
             <Link href={`/${locale}/products`} className="hover:text-blue-600 transition-colors">{locale === 'zh' ? '产品' : locale === 'vi' ? 'Sản phẩm' : locale === 'th' ? 'สินค้า' : 'Products'}</Link>
             <span>/</span>
-            <Link href={`/${locale}/products?category=${product.categorySlug}`} className="hover:text-blue-600 transition-colors">{categoryName}</Link>
+            <Link href={categoryHref(locale, product.categorySlug)} className="hover:text-blue-600 transition-colors">{categoryName}</Link>
             <span>/</span>
             <span className="text-slate-900 truncate max-w-xs">{name}</span>
           </nav>

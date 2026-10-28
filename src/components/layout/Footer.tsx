@@ -1,6 +1,7 @@
 'use client';
 
 import {useState} from 'react';
+import { categoryHref } from '@/lib/pillars';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
 import {Mail, Phone, MapPin} from 'lucide-react';
@@ -112,7 +113,7 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
             <ul className="space-y-3 text-sm">
               {categories.length > 0 ? categories.map((cat) => (
                 <li key={cat.slug}>
-                  <Link href={`/${locale}/products?category=${cat.slug}`} className="text-slate-400 hover:text-white transition-colors">
+                  <Link href={categoryHref(locale, cat.slug)} className="text-slate-400 hover:text-white transition-colors">
                     {cat.names[locale as 'en'|'zh'] || cat.names.en}
                   </Link>
                 </li>

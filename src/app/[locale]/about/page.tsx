@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { categoryHref } from '@/lib/pillars';
 import Link from 'next/link';
 import { generatePageMeta } from '@/lib/seo-utils';
 import { SITE_DATA_TAG } from '@/lib/api';
@@ -121,67 +122,19 @@ function BreadcrumbNav({ locale, items }: { locale: string; items: { label: stri
 }
 
 // ── Organization JSON-LD (GEO core) ──
-function OrganizationLd({ locale, config }: { locale: string; config: Record<string, { value_en: string; value_zh: string }> }) {
-  const name = t(config, 'company_name_en', locale) || 'Angu Wire Mesh';
-  const desc = t(config, 'company_desc_en', locale) || '';
-  const phone = t(config, 'phone', locale) || '+86 188 0318 9797';
-  const email = t(config, 'email', locale) || 'annie@angumesh.com';
-  const address = t(config, 'address', locale) || 'Anping County, Hengshui, Hebei, China';
-  const logo = t(config, 'logo_url', locale) || '/uploads/1782284361461-934403953.png';
-
-  const ld = {
-    '@context': 'https://schema.org',
-    '@type': ['Organization', 'Manufacturer', 'HomeAndConstructionBusiness'],
-    '@id': 'https://www.angumesh.com/#organization',
-    name,
-    alternateName: ['Angu Wire Mesh', '安固丝网'],
-    description: desc || undefined,
-    url: 'https://www.angumesh.com',
-    logo: `https://www.angumesh.com${logo}`,
-    image: 'https://www.angumesh.com/og-image.jpg',
-    telephone: phone,
-    email,
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Anping County',
-      addressRegion: 'Hebei',
-      addressCountry: {'@type': 'Country', name: 'CN'},
-      postalCode: '053600',
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: 38.235,
-      longitude: 115.520,
-    },
-    foundingDate: COMPANY.foundedISO,
-    foundingLocation: {
-      '@type': 'Place',
-      name: 'Anping County, Hebei, China',
-      geo: {'@type': 'GeoCoordinates', latitude: 38.235, longitude: 115.520},
-    },
-    contactPoint: {
-      '@type': 'ContactPoint',
-      telephone: phone,
-      contactType: 'sales',
-      availableLanguage: ['English', 'Chinese', 'Vietnamese', 'Thai'],
-    },
-    hasCertification: [
-      ...certificationLd(),
-      {'@type': 'Certification', name: 'CE Marking', description: 'EU Market Compliance — Rockfall Protection Nets'},
-    ],
-    naics: '332618',
-    areaServed: [
-      {'@type': 'Continent', name: 'Asia'},
-      {'@type': 'Continent', name: 'Europe'},
-      {'@type': 'Continent', name: 'Africa'},
-      {'@type': 'Continent', name: 'South America'},
-      {'@type': 'Continent', name: 'North America'},
-    ],
-    sameAs: [
-      'https://www.linkedin.com/company/angu-wire-mesh',
-    ],
-  };
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />;
+// Organization 全站只保留 layout.tsx 里那一个 @id=#organization 的完整节点。
+// 这里原先又输出了一份同 @id 但 @type 不同（含 schema.org 不存在的 Manufacturer）的节点，
+// 且 sameAs 指向并不存在的 LinkedIn 主页（实测 404）。同 @id 两个节点互相冲突，
+// 会削弱 AI / Google 对实体的一致性判定，因此改为纯引用。
+function OrganizationRef() {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({'@context': 'https://schema.org', '@id': 'https://www.angumesh.com/#organization'}),
+      }}
+    />
+  );
 }
 
 // ── About FAQ JSON-LD (GEO) ──
@@ -343,7 +296,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   return (
     <div className="min-h-screen bg-slate-50">
       {/* GEO: Organization JSON-LD */}
-      <OrganizationLd locale={locale} config={data.config} />
+      <OrganizationRef />
       {/* GEO: FAQ structured data */}
       <AboutFaqLd locale={locale} config={data.config} />
       {/* GEO: AboutPage JSON-LD */}
@@ -449,7 +402,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                   {geoCategories.map((cat) => (
                     <Link
                       key={cat.slug}
-                      href={`/${locale}/products?category=${cat.slug}`}
+                      href={categoryHref(locale, cat.slug)}
                       className="inline-flex items-center text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-700 transition-colors border border-slate-200"
                     >
                       {locale === 'zh' ? cat.zh : locale === 'vi' ? (cat as any).vi || cat.en : locale === 'th' ? (cat as any).th || cat.en : cat.en}
@@ -675,7 +628,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                   q_vi: `${companyName} có những chứng nhận nào?`,
                   q_th: `${companyName} ได้รับการรับรองอะไรบ้าง?`,
                   a_en: `Yes — ISO 9001:2015 quality management, CE certification, and ETAG 027 (rockfall protection). SGS/BV third-party inspection available.`,
-                  a_zh: `ISO 9001:2015质量管理体系、CE产品认证、ETAG 027欧洲技术认证（边坡防护网）。支持SGS/BV第三方检验。`,
+                  a_zh: `ISO 9001:2015质量管理体系；落石防护网持 CE 认证与 ETAG 027 欧洲技术认证。支持SGS/BV第三方检验。`,
                   a_vi: `Có — ISO 9001:2015 quản lý chất lượng, chứng nhận CE, và ETAG 027 (chống đá rơi). Kiểm tra bên thứ ba SGS/BV có sẵn.`,
                   a_th: `มี — การจัดการคุณภาพ ISO 9001:2015, การรับรอง CE, และ ETAG 027 (การป้องกันหินร่วง) ตรวจสอบโดยบุคคลที่สาม SGS/BV ได้`,
                 },

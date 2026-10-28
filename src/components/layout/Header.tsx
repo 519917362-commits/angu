@@ -1,6 +1,7 @@
 'use client';
 import { IconWhatsApp, IconZalo, IconLINE, IconFacebook } from '../icons';
 
+import { categoryHref } from '@/lib/pillars';
 import {useState, useEffect} from 'react';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
@@ -169,7 +170,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
                   {categories.map((cat) => (
                     <Link
                       key={cat.slug}
-                      href={`/${locale}/products?category=${cat.slug}`}
+                      href={categoryHref(locale, cat.slug)}
                       className="block px-4 py-2.5 text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-colors border-b border-slate-50 last:border-0"
                     >
                       {cat.names[locale] || cat.names.en}

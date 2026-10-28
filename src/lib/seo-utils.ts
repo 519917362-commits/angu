@@ -92,7 +92,9 @@ export async function generatePageMeta(
   const seo = await getPageSeo(page, locale);
   const title = overrides?.title || seo.title;
   const description = overrides?.description || seo.description;
-  const keywords = overrides?.keywords || seo.keywords;
+  // 不再输出 <meta name="keywords">：Google 自 2009 年起完全忽略该标签，
+  // Bing 也仅作为作弊信号参考，唯一确定的效果是每页多几百字节 HTML。
+  // PageSeo 里保留 keywords 字段仅为兼容后台表单，不再渲染到页面。
   // Global fallback OG image from site_config (1200x630, shipped in /public)
   const defaultImageConfig = await loadSiteConfig();
   const configuredImage = defaultImageConfig?.seo_default_image?.[locale] || defaultImageConfig?.seo_default_image?.en || null;
@@ -101,7 +103,6 @@ export async function generatePageMeta(
   return {
     title,
     description,
-    keywords,
     alternates: {
       canonical: `${BASE_URL}${path}`,
       languages: {

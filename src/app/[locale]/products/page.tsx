@@ -1,4 +1,5 @@
 import { generatePageMeta } from '@/lib/seo-utils';
+import { categoryHref, PILLARS } from '@/lib/pillars';
 import { getCatalog, getSiteConfig } from '@/lib/api';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -7,10 +8,27 @@ import { ProductCard } from '@/components/products/ProductCard';
 import { tLabel } from '@/lib/i18n';
 import { YEARS_LABEL } from '@/lib/company';
 
-export async function generateMetadata({ params }: {
+export async function generateMetadata({ params, searchParams }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const { category } = await searchParams;
+  const slug = typeof category === 'string' ? category : undefined;
+
+  // /products?category=xx 只是筛选视图，没有独立内容，canonical 必须指向
+  // 对应的品类落地页（/en/gabion 等），否则它会和 /products 抢同一批词、
+  // 并且把「自己指向父页」的自我否决信号发给 Google。
+  // 这里刻意不用 301：广告最终到达网址可能带 gclid，重定向会丢掉归因参数。
+  if (slug) {
+    const landing = `/${locale}/${slug}`;
+    const pillar = (PILLARS as Record<string, Record<string, {metaTitle: string; metaDesc: string}>>)[slug]?.[locale]
+      ?? (PILLARS as Record<string, Record<string, {metaTitle: string; metaDesc: string}>>)[slug]?.en;
+    return generatePageMeta('products', locale, landing, pillar
+      ? { title: pillar.metaTitle, description: pillar.metaDesc }
+      : undefined);
+  }
+
   return generatePageMeta('products', locale, `/${locale}/products`);
 }
 
@@ -50,7 +68,7 @@ function CategorySidebar({
           {categories.map((cat) => (
             <li key={cat.id}>
               <Link
-                href={`/${locale}/products?category=${cat.slug}`}
+                href={categoryHref(locale, cat.slug)}
                 className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${
                   currentSlug === cat.slug
                     ? 'bg-blue-50 text-blue-600 font-semibold'
@@ -97,7 +115,7 @@ function MobileCategoryBar({
         {categories.map((cat) => (
           <Link
             key={cat.id}
-            href={`/${locale}/products?category=${cat.slug}`}
+            href={categoryHref(locale, cat.slug)}
             className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               currentSlug === cat.slug
                 ? 'bg-blue-600 text-white'
@@ -152,7 +170,7 @@ export default async function ProductsPage({
   const headerBreadcrumb = v('products_header_breadcrumb', 'Products', '产品中心');
   const seoIntro = v('products_seo_intro',
     `Angu Wire Mesh is a professional wire mesh manufacturer based in Anping, Hebei — the "Wire Mesh Capital" of China. With ${YEARS_LABEL} years of industry experience, we are ISO 9001 certified. We offer ${sortedCategories.length} product categories with ${products.length} product series. All products are factory-direct with no middleman markup. We export to 30+ countries.`,
-    `安固丝网是河北安平专业的丝网产品制造商，拥有${YEARS_LABEL}年行业经验，通过ISO 9001质量管理体系认证和CE产品认证。我们提供${sortedCategories.length}大品类、${products.length}款丝网产品。所有产品工厂直供，无中间商加价。出口全球30+国家和地区。`
+    `安固丝网是河北安平专业的丝网产品制造商，拥有${YEARS_LABEL}年行业经验，通过ISO 9001质量管理体系认证。我们提供${sortedCategories.length}大品类、${products.length}款丝网产品。所有产品工厂直供，无中间商加价。出口全球30+国家和地区。`
   );
   const faqTitle = v('products_faq_title', 'Frequently Asked Questions', '常见问题');
   const faqDesc = v('products_faq_desc', 'Common questions about Angu Wire Mesh products and procurement', '关于安固丝网产品和采购的常见疑问解答');

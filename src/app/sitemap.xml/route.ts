@@ -90,7 +90,8 @@ export async function GET() {
     ['/noise-barrier', 'weekly', '0.9'],
     // 四个品类支柱页（/gabion、/fence、/wire-mesh、/protection-net）
     ...PILLAR_SLUGS.map((s) => [`/${s}`, 'weekly', '0.9'] as [string, string, string]),
-    ['/privacy', 'yearly', '0.3'],
+    // /privacy 页面自身输出 noindex（法务页不需要排名），不应出现在 sitemap 里：
+    // sitemap 收录 + 页面 noindex 是互相矛盾的信号，会浪费抓取预算并拉低 sitemap 可信度。
     ['/terms', 'yearly', '0.3'],
   ];
 

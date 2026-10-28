@@ -9,6 +9,30 @@
 export const PILLAR_SLUGS = ['gabion', 'fence', 'wire-mesh', 'protection-net'] as const;
 export type PillarSlug = (typeof PILLAR_SLUGS)[number];
 
+/**
+ * 品类落地页路径表。
+ *
+ * 后端 products.category_slug 一共 5 个取值，全部已有独立落地页：
+ * 4 个走 app/[locale]/[category]，noise-barrier 走 app/[locale]/noise-barrier。
+ *
+ * 站内所有「按品类浏览」的链接都必须走这里，指向静态落地页而不是
+ * /products?category=xx —— 参数页的 canonical 只能指向 /products，
+ * 自己拿不到排名，等于把品类词全部让掉。
+ */
+export const CATEGORY_LANDING = {
+  gabion: 'gabion',
+  fence: 'fence',
+  'wire-mesh': 'wire-mesh',
+  'protection-net': 'protection-net',
+  'noise-barrier': 'noise-barrier',
+} as const;
+
+/** 品类链接：有落地页走落地页，没有则回落参数页（后端新增品类时不会 404）。 */
+export function categoryHref(locale: string, slug: string): string {
+  const landing = (CATEGORY_LANDING as Record<string, string>)[slug];
+  return landing ? `/${locale}/${landing}` : `/${locale}/products?category=${slug}`;
+}
+
 export interface PillarCopy {
   metaTitle: string;
   metaDesc: string;
