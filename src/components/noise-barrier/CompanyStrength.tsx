@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import type { NoiseBarrierFactoryImage, NoiseBarrierCertification, LocaleText } from '@/lib/api';
 import {YEARS_LABEL} from '@/lib/company';
-import {CERT_PARTIAL} from '@/lib/partial-content';
+import {CERT_PARTIAL, FACTORY_ALT_PARTIAL} from '@/lib/partial-content';
 
 interface SectionContent {
   title: string;
@@ -99,6 +99,9 @@ export function CompanyStrength({
   const c = content[locale] || content.en;
   // 认证卡英文原文来自后端兜底数据，只有 en/zh/vi/th：试水语种按英文名匹配覆盖层
   const certOverlay = CERT_PARTIAL[locale];
+  const altOverlay = FACTORY_ALT_PARTIAL[locale];
+  const imgAlt = (img: {alt_en?: string; alt_zh?: string; alt_vi?: string; alt_th?: string}, i: number) =>
+    altOverlay?.[img.alt_en || ''] || pickLocale({ en: img.alt_en, zh: img.alt_zh, vi: img.alt_vi, th: img.alt_th }, locale) || `Factory ${i + 1}`;
 
   // Fallback images if DB is empty
   const images = factoryImages.length > 0
@@ -126,7 +129,7 @@ export function CompanyStrength({
               {img.image_url ? (
                 <Image
                   src={img.image_url}
-                  alt={pickLocale({ en: img.alt_en, zh: img.alt_zh, vi: img.alt_vi, th: img.alt_th }, locale) || `Factory ${i + 1}`}
+                  alt={imgAlt(img, i)}
                   fill
                   sizes="(max-width: 640px) 50vw, 25vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -138,7 +141,7 @@ export function CompanyStrength({
               )}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
                 <p className="text-white text-xs font-medium">
-                  {pickLocale({ en: img.alt_en, zh: img.alt_zh, vi: img.alt_vi, th: img.alt_th }, locale) || `Factory ${i + 1}`}
+                  {imgAlt(img, i)}
                 </p>
               </div>
             </div>

@@ -429,8 +429,8 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
             </p>
             <div className="flex flex-wrap gap-3 mt-6">
               {[
-                {en: 'ISO 9001 Certified', zh: 'ISO 9001 认证', vi: 'Chứng nhận ISO 9001', th: 'ได้รับการรับรอง ISO 9001'},
-                {en: 'ISO 14001 Certified', zh: 'ISO 14001 认证', vi: 'Chứng nhận ISO 14001', th: 'ได้รับการรับรอง ISO 14001'},
+                {en: 'ISO 9001 Certified', zh: 'ISO 9001 认证', vi: 'Chứng nhận ISO 9001', th: 'ได้รับการรับรอง ISO 9001', ms: 'Bertauliah ISO 9001', ar: 'معتمد ISO 9001'},
+                {en: 'ISO 14001 Certified', zh: 'ISO 14001 认证', vi: 'Chứng nhận ISO 14001', th: 'ได้รับการรับรอง ISO 14001', ms: 'Bertauliah ISO 14001', ar: 'معتمد ISO 14001'},
                 {en: '12+ Years Experience', zh: '12+ 年经验', vi: '12+ Năm Kinh Nghiệm', th: '12+ ปีประสบการณ์', ms: 'Pengalaman 12+ Tahun', ar: 'خبرة 12+ عامًا'},
                 {en: '30+ Countries Exported', zh: '出口 30+ 国家', vi: 'Xuất Khẩu 30+ Quốc Gia', th: 'ส่งออก 30+ ประเทศ', ms: 'Eksport ke 30+ Negara', ar: 'تصدير إلى 30+ دولة'},
               ].map((badge) => (

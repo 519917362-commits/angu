@@ -333,6 +333,22 @@ export const PRODUCT_PARTIAL: Record<string, Record<string, {name: string; desc:
   },
 };
 
+/** 声屏障页工厂实拍图的说明文字：键 = noise_barrier_factory_images.alt_en */
+export const FACTORY_ALT_PARTIAL: Record<string, Record<string, string>> = {
+  ms: {
+    'Rail Transit Noise Barrier': 'Penghadang Bunyi Transit Rel',
+    'Bridge Noise Barrier': 'Penghadang Bunyi Jambatan',
+    'Factory Noise Barrier': 'Penghadang Bunyi Kilang',
+    'Highway Noise Barrier': 'Penghadang Bunyi Lebuh Raya',
+  },
+  ar: {
+    'Rail Transit Noise Barrier': 'حاجز صوتي للسكك الحديدية',
+    'Bridge Noise Barrier': 'حاجز صوتي للجسور',
+    'Factory Noise Barrier': 'حاجز صوتي للمصانع',
+    'Highway Noise Barrier': 'حاجز صوتي للطرق السريعة',
+  },
+};
+
 /** 该语种是否为「试水语种」（决定要不要套覆盖层） */
 export function hasPartialContent(locale: string): boolean {
   return locale === 'ms' || locale === 'ar';
