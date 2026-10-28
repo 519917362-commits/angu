@@ -7,6 +7,8 @@ import {WHATSAPP_NUMBER} from '@/lib/contact';
 export function InquiryButton() {
   const pathname = usePathname();
   const isLanding = pathname?.includes('/noise-barrier');
+  const locale = pathname?.match(/^\/(en|zh|vi|th|ms|ar)(?=\/|$)/)?.[1] || 'en';
+  const label = locale === 'zh' ? 'WhatsApp 咨询' : locale === 'vi' ? 'Trò chuyện trên WhatsApp' : locale === 'th' ? 'แชทบน WhatsApp' : locale === 'ms' ? 'Sembang di WhatsApp' : locale === 'ar' ? 'تحدّث على واتساب' : 'Chat on WhatsApp';
 
   if (isLanding) return null;
 
@@ -17,10 +19,10 @@ export function InquiryButton() {
       target="_blank"
       rel="noopener noreferrer"
       className="hidden sm:flex fixed bottom-6 right-6 z-40 items-center gap-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all group"
-      aria-label="Chat on WhatsApp"
+      aria-label={label}
     >
       <MessageCircle className="w-5 h-5 flex-shrink-0" />
-      <span className="font-medium text-sm">Chat on WhatsApp</span>
+      <span className="font-medium text-sm">{label}</span>
     </a>
   );
 }

@@ -155,7 +155,7 @@ export function FloatingQR({ locale, contactInfo }: { locale: string; contactInf
                     style={isActive ? { borderColor: ch.color } : { borderColor: 'transparent' }}
                   >
                     <span style={{ color: ch.color }}>{ch.icon}</span>
-                    <span className="flex-1 text-left">{ch.shortLabel}</span>
+                    <span className="flex-1 text-start">{ch.shortLabel}</span>
                     <svg className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${isActive ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>

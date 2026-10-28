@@ -10,6 +10,8 @@ const T: Record<string, {whatsapp: string; quote: string}> = {
   zh: {whatsapp: 'WhatsApp', quote: '获取报价'},
   vi: {whatsapp: 'WhatsApp', quote: 'Nhận báo giá'},
   th: {whatsapp: 'WhatsApp', quote: 'ขอใบเสนอราคา'},
+  ms: {whatsapp: 'WhatsApp', quote: 'Minta Sebut Harga'},
+  ar: {whatsapp: 'واتساب', quote: 'اطلب عرض سعر'},
 };
 
 /**
