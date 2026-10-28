@@ -23,10 +23,10 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
     description: locale === 'zh'
       ? 'ISO 9001 认证丝网制品厂家，主营声屏障、石笼网箱、边坡防护网、护栏网、电焊网。安平工厂直供，出口 30+ 国家，10–15 天交货。'
       : locale === 'vi'
-      ? 'Nhà sản xuất đạt ISO 9001: tấm chắn ồn, rọ đá, lưới chống rơi đá, hàng rào, lưới thép hàn. Trực tiếp từ nhà máy Anping, xuất khẩu 30+ quốc gia, giao 10–15 ngày.'
+      ? 'Nhà sản xuất ISO 9001: tấm chắn ồn, rọ đá, lưới chống rơi đá, hàng rào. Nhà máy Anping, xuất khẩu 30+ quốc gia, giao 10–15 ngày.'
       : locale === 'th'
       ? 'ผู้ผลิตตะแกรงลวด ISO 9001: แผงกั้นเสียง ตะกร้าเกเบี้ยน ตาข่ายกันหินตก รั้ว ตะแกรงเชื่อม โรงงานตรงอันผิง ส่งออก 30+ ประเทศ ผลิต 10–15 วัน'
-      : 'ISO 9001 manufacturer of noise barriers, gabion boxes, rockfall nets, fencing and welded wire mesh. Factory-direct from Anping, China. 30+ countries, 10–15 day production.',
+      : 'ISO 9001 manufacturer of noise barriers, gabion, rockfall nets and fencing. Factory-direct from Anping, China. 30+ countries, 10–15 day production.',
     // 不再输出 meta keywords：Google 自 2009 年起完全忽略，Bing 仅作作弊信号，
     // 唯一确定的效果是每页多几百字节。
     alternates: {
