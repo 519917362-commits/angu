@@ -1,4 +1,5 @@
 import type {ReactNode} from 'react';
+import Link from 'next/link';
 
 /**
  * 共享 Markdown 渲染器。
@@ -7,38 +8,92 @@ import type {ReactNode} from 'react';
  * 产品详情页与博客详情页共用。
  */
 
+/**
+ * 正文插链上下文（目前只有博客详情页会传）。
+ *
+ * 不传时渲染行为与之前完全一致，产品页无需改动。
+ * 传入后只在「正文段落」和「列表项」里做关键词替换，标题 / 表格 / 引用 / 已有链接一律不动。
+ */
+export interface ProductLinkContext {
+  /** 关键词规则，按优先级排列 */
+  rules: Array<{pattern: RegExp; slug: string}>;
+  /** 已插入过的产品 slug，跨段落共享，保证同一产品全篇只插一次 */
+  used: Set<string>;
+  /** 全篇插入次数上限 */
+  max: number;
+  /** 由调用方决定链接地址（带上语种前缀） */
+  hrefFor: (slug: string) => string;
+}
+
+const PRODUCT_LINK_CLASS =
+  'text-blue-600 underline decoration-blue-300 hover:text-blue-800 hover:decoration-blue-600 font-medium';
+
+/**
+ * 在纯文本片段里插入一个产品链接。
+ * 命中则返回拆分后的节点数组，未命中返回 null（调用方回退成原文本）。
+ */
+function injectProductLink(text: string, ctx: ProductLinkContext, keyBase: number): ReactNode[] | null {
+  if (!text.trim()) return null;
+  if (ctx.used.size >= ctx.max) return null;
+
+  for (const rule of ctx.rules) {
+    if (ctx.used.has(rule.slug)) continue;
+    const match = rule.pattern.exec(text);
+    if (!match || match.index === undefined) continue;
+
+    const before = text.slice(0, match.index);
+    const anchorText = match[0];
+    const after = text.slice(match.index + anchorText.length);
+    ctx.used.add(rule.slug);
+
+    return [
+      before,
+      <Link key={`pl-${keyBase}-${rule.slug}`} href={ctx.hrefFor(rule.slug)} className={PRODUCT_LINK_CLASS}>
+        {anchorText}
+      </Link>,
+      after,
+    ].filter((n) => n !== '');
+  }
+  return null;
+}
+
 // 行内渲染：<strong> HTML、**粗体**、*斜体*、链接、图片
-export function renderInline(text: string): ReactNode[] {
+export function renderInline(text: string, ctx?: ProductLinkContext): ReactNode[] {
   const parts = text.split(
     /(<strong>.*?<\/strong>|\*\*[^*]+\*\*|\*[^*]+\*|!\[[^\]]*\]\([^)]+\)|\[[^\]]*\]\([^)]+\))/g
   );
-  return parts.map((part, i) => {
+  return parts.flatMap((part, i) => {
     if (part.startsWith('<strong>') && part.endsWith('</strong>')) {
-      return <strong key={i} className="font-bold">{part.slice(8, -9)}</strong>;
+      return [<strong key={i} className="font-bold">{part.slice(8, -9)}</strong>];
     }
     if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
-      return <strong key={i} className="font-bold">{part.slice(2, -2)}</strong>;
+      return [<strong key={i} className="font-bold">{part.slice(2, -2)}</strong>];
     }
     if (part.startsWith('*') && part.endsWith('*') && part.length > 2) {
-      return <em key={i}>{part.slice(1, -1)}</em>;
+      return [<em key={i}>{part.slice(1, -1)}</em>];
     }
     const imgMatch = part.match(/!\[([^\]]*)\]\(([^)]+)\)/);
     if (imgMatch) {
-      return <img key={i} src={imgMatch[2]} alt={imgMatch[1]} className="max-w-full rounded-lg my-4" loading="lazy" decoding="async" />;
+      return [<img key={i} src={imgMatch[2]} alt={imgMatch[1]} className="max-w-full rounded-lg my-4" loading="lazy" decoding="async" />];
     }
     const linkMatch = part.match(/\[([^\]]*)\]\(([^)]+)\)/);
     if (linkMatch) {
-      return (
+      // 正文里原有的链接保留不动，也不在锚文本里再套链接
+      return [
         <a key={i} href={linkMatch[2]} className="text-blue-600 underline hover:text-blue-800" target="_blank" rel="noopener noreferrer">
           {linkMatch[1]}
-        </a>
-      );
+        </a>,
+      ];
     }
-    return part;
+    if (ctx) {
+      const injected = injectProductLink(part, ctx, i);
+      if (injected) return injected;
+    }
+    return [part];
   });
 }
 
-export function renderMarkdown(content: string | undefined): ReactNode[] | null {
+export function renderMarkdown(content: string | undefined, ctx?: ProductLinkContext): ReactNode[] | null {
   if (!content) return null;
   const lines = content.split('\n');
   const elements: ReactNode[] = [];
@@ -121,14 +176,14 @@ export function renderMarkdown(content: string | undefined): ReactNode[] | null 
       flushTable(`table-${i}`);
       if (listType && listType !== 'ul') flushList(`list-${i}`);
       listType = 'ul';
-      listItems.push(<li key={i}>{renderInline(trimmed.slice(2))}</li>);
+      listItems.push(<li key={i}>{renderInline(trimmed.slice(2), ctx)}</li>);
       return;
     }
     if (/^\d+\./.test(trimmed)) {
       flushTable(`table-${i}`);
       if (listType && listType !== 'ol') flushList(`list-${i}`);
       listType = 'ol';
-      listItems.push(<li key={i}>{renderInline(trimmed.replace(/^\d+\.\s*/, ''))}</li>);
+      listItems.push(<li key={i}>{renderInline(trimmed.replace(/^\d+\.\s*/, ''), ctx)}</li>);
       return;
     }
     if (trimmed.startsWith('#')) {
@@ -142,7 +197,7 @@ export function renderMarkdown(content: string | undefined): ReactNode[] | null 
     }
     flushList(`list-${i}`);
     flushTable(`table-${i}`);
-    elements.push(<p key={i} className="text-slate-600 leading-relaxed mb-3">{renderInline(trimmed)}</p>);
+    elements.push(<p key={i} className="text-slate-600 leading-relaxed mb-3">{renderInline(trimmed, ctx)}</p>);
   });
 
   flushList('list-final');

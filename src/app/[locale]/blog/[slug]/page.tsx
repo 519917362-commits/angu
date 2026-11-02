@@ -1,10 +1,14 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
-import {getBlogPost, getBlogPosts} from '@/lib/api';
+import {getBlogPost, getBlogPosts, getCatalog} from '@/lib/api';
 import { tLabel } from '@/lib/i18n';
 import {generatePageMeta} from '@/lib/seo-utils';
-import {renderMarkdown} from '@/lib/markdown';
+import {renderMarkdown, type ProductLinkContext} from '@/lib/markdown';
+import {availableBlogLocales, hasBlogTranslation} from '@/lib/blog-locales';
+import {getBlogProductLinks, MAX_INLINE_PRODUCT_LINKS, RELATED_PRODUCTS_LABEL} from '@/lib/blog-product-links';
+import {localeHref} from '@/lib/routing';
+import type {Product} from '@/types/product';
 
 interface Props {
   params: Promise<{locale: string; slug: string}>;
@@ -26,10 +30,21 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
   const cleanTitle = (seoTitle || title || 'Blog Post')
     .replace(/\s*[|｜]\s*(Angu(\s+Wire\s+Mesh)?|安固(丝网)?)\s*$/i, '')
     .trim();
+
+  // hreflang 只能声明真有译文的语种。长文类文章多数只填了 en（部分连 zh 都有），
+  // vi / th 的正文其实是英文回落；把这类语种写进 hreflang 会让整簇互指失效。
+  const translatedLocales = availableBlogLocales(post);
+  // 当前语种没有译文时，canonical 让给英文原版，避免英文正文被判重复内容
+  const canonicalOverride = hasBlogTranslation(post, locale)
+    ? undefined
+    : `https://www.angumesh.com/en/blog/${slug}`;
+
   return generatePageMeta('blog', locale, `/${locale}/blog/${slug}`, {
     title: `${cleanTitle} | ${locale === 'zh' ? '安固' : 'Angu'}`,
     description,
     image: post.cover_image || undefined,
+    altLocales: translatedLocales.length ? translatedLocales : ['en'],
+    canonical: canonicalOverride,
   });
 }
 
@@ -57,6 +72,30 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
   // 相关文章（同语言、排除当前、最多 3 篇）
   const allPosts = await getBlogPosts();
   const related = allPosts.filter(p => p.id !== post.id && p.status === 'published').slice(0, 3);
+
+  // ── 产品内链：正文插链 + 页尾卡片 ──
+  // 9 篇文章此前一个产品链接都没有，访客读完深度文章无处可去，Google 也收不到权重传递。
+  const {rules: productLinkRules, related: relatedProductSlugs} = getBlogProductLinks(slug);
+  let catalogProducts: Product[] = [];
+  try {
+    const {products} = await getCatalog();
+    catalogProducts = products;
+  } catch {
+    // 目录接口异常不能连累文章页渲染，退化成「无相关产品」即可
+    catalogProducts = [];
+  }
+  const productBySlug = new Map(catalogProducts.map((p) => [p.slug, p]));
+  // 每次渲染新建 ctx：used 集合必须按请求隔离，否则并发时会漏插
+  const productLinkCtx: ProductLinkContext = {
+    rules: productLinkRules,
+    used: new Set<string>(),
+    max: MAX_INLINE_PRODUCT_LINKS,
+    hrefFor: (targetSlug) => localeHref(locale, `/products/${targetSlug}`),
+  };
+  const relatedProducts = relatedProductSlugs
+    .map((s) => productBySlug.get(s))
+    .filter((p): p is Product => Boolean(p));
+  const relatedProductsHeading = RELATED_PRODUCTS_LABEL[locale] || RELATED_PRODUCTS_LABEL.en;
 
   // ── JSON-LD Structured Data ──
   const breadcrumbSchema = {
@@ -161,9 +200,53 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
           {/* Content */}
           <div className="bg-white rounded-2xl shadow-sm p-8 sm:p-10">
             <div className="prose prose-slate max-w-none">
-              {renderMarkdown(content)}
+              {renderMarkdown(content, productLinkCtx)}
             </div>
           </div>
+
+          {/* Related products —— 文章下的产品导流，同时建立 博客 → 产品 的内链 */}
+          {relatedProducts.length > 0 && (
+            <div className="mt-12">
+              <h3 className="text-lg font-bold text-slate-900 mb-6">{relatedProductsHeading}</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {relatedProducts.map((rp) => {
+                  const rpName = rp.names?.[locale] || rp.names?.en || rp.slug;
+                  const rpImage = rp.images?.[0];
+                  return (
+                    <Link
+                      key={rp.slug}
+                      href={localeHref(locale, `/products/${rp.slug}`)}
+                      className="group block bg-white rounded-xl overflow-hidden border border-slate-100 hover:border-blue-200 shadow-sm hover:shadow-md transition-all"
+                    >
+                      <div className="aspect-[4/3] overflow-hidden bg-slate-50">
+                        {rpImage ? (
+                          <img
+                            src={rpImage}
+                            alt={rpName}
+                            width={320}
+                            height={240}
+                            loading="lazy"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-300 text-xs">
+                            {rpName}
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-4">
+                        <h4 className="font-semibold text-slate-800 text-sm group-hover:text-blue-600 line-clamp-2">{rpName}</h4>
+                        <span className="mt-2 inline-flex items-center gap-1 text-xs text-blue-600 font-medium">
+                          {tLabel('查看详情', 'View details', locale)}
+                          <span aria-hidden="true">→</span>
+                        </span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Tags */}
           {keywords && (

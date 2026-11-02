@@ -80,6 +80,10 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
               <button
                 key={i}
                 onClick={() => setActiveIndex(i)}
+                // 缩略图是装饰性的（主图已有 alt），可访问名称放在按钮上，
+                // 否则屏幕阅读器只会念出「按钮」，不知道是第几张图
+                aria-label={`Show image ${i + 1} of ${images.length}`}
+                aria-current={i === activeIndex ? 'true' : undefined}
                 className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all ${
                   i === activeIndex
                     ? 'border-blue-500 ring-1 ring-blue-200'

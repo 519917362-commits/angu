@@ -1,4 +1,5 @@
 import { locales as fullLocales, partialLocales, allLocales, translatedPaths } from '@/lib/routing';
+import { availableBlogLocales } from '@/lib/blog-locales';
 import { REVALIDATE_SECONDS, SITE_DATA_TAG } from '@/lib/api';
 import { PILLAR_SLUGS } from '@/lib/pillars';
 
@@ -6,7 +7,16 @@ const BACKEND = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const BASE_URL = 'https://www.angumesh.com';
 
 interface Product { slug: string; createdAt?: string; updatedAt?: string }
-interface BlogPost { slug: string; updated_at?: string; publish_time?: string; created_at?: string }
+interface BlogPost {
+  slug: string;
+  updated_at?: string;
+  publish_time?: string;
+  created_at?: string;
+  content_en?: string | null;
+  content_zh?: string | null;
+  content_vi?: string | null;
+  content_th?: string | null;
+}
 interface Category { slug: string }
 
 // Safe date formatting (YYYY-MM-DD)
@@ -119,13 +129,19 @@ export async function GET() {
       }));
     }
     // Blog detail pages — use updated_at or publish_time or created_at
+    // 只收录该语种真有正文的文章：长文类文章多数只有 en（部分有 zh），
+    // vi / th 的正文是英文回落，提交进 sitemap 等于自报重复内容。
     for (const post of blogPosts) {
+      const translated = availableBlogLocales(post);
+      if (!translated.includes(locale)) continue;
       urls.push(urlBlock({
         locale,
         path: `/blog/${post.slug}`,
         changefreq: 'monthly',
         priority: '0.7',
         lastmod: fmtDate(post.updated_at || post.publish_time || post.created_at) || SITE_LASTMOD,
+        // hreflang 同样只用真实译文，否则整簇互指会被 Google 忽略
+        altLocales: translated,
       }));
     }
   }

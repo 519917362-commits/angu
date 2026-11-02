@@ -100,6 +100,11 @@ export async function generatePageMeta(
      * 避免在没有对应译文的页面上互相声明 hreflang。
      */
     altLocales?: readonly string[];
+    /**
+     * 覆盖 canonical。用于「该语种其实没有译文、正文回落到英文」的页面，
+     * 把权重让给英文原版，避免被判重复内容。
+     */
+    canonical?: string;
   },
 ): Promise<Metadata> {
   const seo = await getPageSeo(page, locale);
@@ -127,7 +132,7 @@ export async function generatePageMeta(
     title,
     description,
     alternates: {
-      canonical: `${BASE_URL}${path}`,
+      canonical: overrides?.canonical || `${BASE_URL}${path}`,
       languages,
     },
     openGraph: {
