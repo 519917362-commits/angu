@@ -330,6 +330,57 @@ const upload = multer({
   }
 });
 
+// ── 上传图片压缩 ──
+// 站点实际最大展示 1920px，但后台传上来的照片动辄 1–2MB（一张 1500×1500 PNG 能到 2.4MB）。
+// 不压的话 Next 的图片管线每次冷启动都要解码大图——2.5MB PNG 解码要几百毫秒，
+// 小机器上会直接拖慢首屏。历史上 191 张图里有 44 张超 1MB，就是没这一步导致的。
+// sharp 用 try/catch 引入：万一依赖没装上，上传功能照常可用，只是不压缩。
+let sharp = null;
+try {
+  sharp = require('sharp');
+} catch (err) {
+  console.warn('[upload] sharp 不可用，上传图片保持原图:', err.message);
+}
+
+const UPLOAD_MAX_EDGE = 1920;
+const UPLOAD_JPEG_QUALITY = 82;
+const UPLOAD_PNG_QUALITY = 88;
+
+async function optimizeUploadedImage(filePath) {
+  if (!sharp) return;
+  const ext = path.extname(filePath).toLowerCase();
+  if (ext === '.gif') return; // 动图重编码会丢帧，跳过
+
+  const before = fs.statSync(filePath).size;
+  const meta = await sharp(filePath).metadata();
+  const longest = Math.max(meta.width || 0, meta.height || 0);
+
+  let pipeline = sharp(filePath);
+  if (longest > UPLOAD_MAX_EDGE) {
+    pipeline = pipeline.resize({
+      width: UPLOAD_MAX_EDGE,
+      height: UPLOAD_MAX_EDGE,
+      fit: 'inside',
+      withoutEnlargement: true
+    });
+  }
+
+  let buf;
+  if (ext === '.png') {
+    buf = await pipeline.png({ compressionLevel: 9, quality: UPLOAD_PNG_QUALITY, palette: true, effort: 7 }).toBuffer();
+  } else if (ext === '.webp') {
+    buf = await pipeline.webp({ quality: UPLOAD_JPEG_QUALITY }).toBuffer();
+  } else {
+    buf = await pipeline.jpeg({ quality: UPLOAD_JPEG_QUALITY, mozjpeg: true }).toBuffer();
+  }
+
+  // 只有真的变小才覆盖，避免个别已优化过的图反被写大
+  if (buf.length < before) {
+    fs.writeFileSync(filePath, buf);
+    console.log(`[upload] 压缩 ${path.basename(filePath)}: ${(before / 1024).toFixed(0)}KB -> ${(buf.length / 1024).toFixed(0)}KB`);
+  }
+}
+
 const dbPath = path.join(__dirname, 'inquiries.db');
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
@@ -1013,8 +1064,15 @@ function authMiddleware(req, res, next) {
 }
 
 // Image upload endpoint
-app.post('/api/admin/upload', authMiddleware, upload.single('image'), (req, res) => {
+app.post('/api/admin/upload', authMiddleware, upload.single('image'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No image file provided' });
+  const filePath = path.join(uploadsDir, req.file.filename);
+  try {
+    await optimizeUploadedImage(filePath);
+  } catch (err) {
+    // 压缩失败不影响上传本身：保留原图，接口照常返回地址
+    console.error('[upload] 压缩失败，保留原图:', err.message);
+  }
   const url = `/uploads/${req.file.filename}`;
   res.json({ url });
 });
