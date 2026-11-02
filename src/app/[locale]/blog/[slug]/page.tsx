@@ -85,13 +85,17 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
     catalogProducts = [];
   }
   const productBySlug = new Map(catalogProducts.map((p) => [p.slug, p]));
-  // 每次渲染新建 ctx：used 集合必须按请求隔离，否则并发时会漏插
-  const productLinkCtx: ProductLinkContext = {
-    rules: productLinkRules,
-    used: new Set<string>(),
-    max: MAX_INLINE_PRODUCT_LINKS,
-    hrefFor: (targetSlug) => localeHref(locale, `/products/${targetSlug}`),
-  };
+  // 每次渲染新建 ctx：used 集合必须按请求隔离，否则并发时会漏插。
+  // 该语种没有正文译文时（vi / th 回落到英文）不插正文链——这些页面 canonical
+  // 已经指向英文版，正文里再堆一层英文锚文本没有意义，只保留页尾产品卡。
+  const productLinkCtx: ProductLinkContext | undefined = hasBlogTranslation(post, locale)
+    ? {
+        rules: productLinkRules,
+        used: new Set<string>(),
+        max: MAX_INLINE_PRODUCT_LINKS,
+        hrefFor: (targetSlug) => localeHref(locale, `/products/${targetSlug}`),
+      }
+    : undefined;
   const relatedProducts = relatedProductSlugs
     .map((s) => productBySlug.get(s))
     .filter((p): p is Product => Boolean(p));
@@ -236,9 +240,10 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
                       </div>
                       <div className="p-4">
                         <h4 className="font-semibold text-slate-800 text-sm group-hover:text-blue-600 line-clamp-2">{rpName}</h4>
-                        <span className="mt-2 inline-flex items-center gap-1 text-xs text-blue-600 font-medium">
-                          {tLabel('查看详情', 'View details', locale)}
-                          <span aria-hidden="true">→</span>
+                        {/* 只留箭头，不写「View details」——整张卡片是一个链接，
+                            任何额外文字都会被算进锚文本，稀释产品名 */}
+                        <span className="mt-2 inline-flex items-center gap-1 text-xs text-blue-600 font-medium" aria-hidden="true">
+                          →
                         </span>
                       </div>
                     </Link>

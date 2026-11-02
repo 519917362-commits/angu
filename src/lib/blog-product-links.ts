@@ -40,73 +40,79 @@ const BARBED_WIRE = 'steel-barbed-wire-12x14';
 const ACTIVE_NET = 'active-slope-protection-net-dns50';
 const PASSIVE_BARRIER = 'passive-slope-protection-barrier-gl100';
 
+/**
+ * 关键词一律用产品特有用语，不用 gabion、fence、镀锌、丝网 这类泛词，
+ * 避免把正文里无关的句子变成链接锚文本。
+ * 中文没有 \b 词边界，靠「用词足够具体」来防误伤（石笼网箱 而不是 网箱）。
+ */
 export const BLOG_PRODUCT_LINKS: Record<string, BlogProductLinks> = {
   'gabion-retaining-wall-cost-2026': {
     rules: [
-      {pattern: /\bgabion (?:box|boxes|basket|baskets)\b/i, slug: GABION_BOX},
-      {pattern: /\breno mattress(?:es)?\b/i, slug: RENO_MATTRESS},
-      {pattern: /\bPVC[- ]coated gabion\b/i, slug: PVC_GABION},
+      {pattern: /\bgabion (?:box|boxes|basket|baskets)\b|石笼网箱|石笼箱/i, slug: GABION_BOX},
+      {pattern: /\breno mattress(?:es)?\b|雷诺护垫|雷诺垫/i, slug: RENO_MATTRESS},
+      {pattern: /\bPVC[- ]coated gabion\b|包塑石笼/i, slug: PVC_GABION},
     ],
     related: [GABION_BOX, RENO_MATTRESS, PVC_GABION],
   },
   'gabion-vs-concrete-retaining-wall': {
     rules: [
-      {pattern: /\bgabion (?:box|boxes|basket|baskets)\b/i, slug: GABION_BOX},
-      {pattern: /\breno mattress(?:es)?\b/i, slug: RENO_MATTRESS},
-      {pattern: /\bPVC[- ]coated\b/i, slug: PVC_GABION},
+      {pattern: /\bgabion (?:box|boxes|basket|baskets)\b|石笼网箱|石笼箱/i, slug: GABION_BOX},
+      {pattern: /\breno mattress(?:es)?\b|雷诺护垫|雷诺垫/i, slug: RENO_MATTRESS},
+      {pattern: /\bPVC[- ]coated\b|包塑石笼/i, slug: PVC_GABION},
     ],
     related: [GABION_BOX, RENO_MATTRESS, PVC_GABION],
   },
   'how-to-install-gabion-retaining-wall': {
     rules: [
-      {pattern: /\bgabion (?:box|boxes|basket|baskets)\b/i, slug: GABION_BOX},
-      {pattern: /\breno mattress(?:es)?\b/i, slug: RENO_MATTRESS},
+      {pattern: /\bgabion (?:box|boxes|basket|baskets)\b|石笼网箱|石笼箱/i, slug: GABION_BOX},
+      {pattern: /\breno mattress(?:es)?\b|雷诺护垫|雷诺垫/i, slug: RENO_MATTRESS},
     ],
     related: [GABION_BOX, RENO_MATTRESS],
   },
   'gabion-retaining-wall-guide': {
     rules: [
-      {pattern: /\bgabion (?:box|boxes|basket|baskets)\b/i, slug: GABION_BOX},
-      {pattern: /\breno mattress(?:es)?\b/i, slug: RENO_MATTRESS},
+      {pattern: /\bgabion (?:box|boxes|basket|baskets)\b|石笼网箱|石笼箱/i, slug: GABION_BOX},
+      {pattern: /\breno mattress(?:es)?\b|雷诺护垫|雷诺垫/i, slug: RENO_MATTRESS},
     ],
     related: [GABION_BOX, RENO_MATTRESS, PVC_GABION],
   },
   'galvanized-vs-pvc-vs-galfan-wire-coating': {
     rules: [
-      {pattern: /\bchain[- ]link (?:fence|mesh)\b/i, slug: CHAIN_LINK},
-      {pattern: /\bwelded wire mesh\b/i, slug: WELDED_MESH},
-      {pattern: /\bPVC[- ]coated gabion\b/i, slug: PVC_GABION},
+      {pattern: /\bchain[- ]link (?:fence|mesh)\b|勾花网|菱形网/i, slug: CHAIN_LINK},
+      {pattern: /\bwelded wire mesh\b|电焊网|焊接网/i, slug: WELDED_MESH},
+      {pattern: /\bhexagonal (?:wire )?mesh\b|六角网|拧花网/i, slug: HEX_MESH},
     ],
     related: [CHAIN_LINK, WELDED_MESH, PVC_GABION],
   },
   'chain-link-fence-specification-guide': {
     rules: [
-      {pattern: /\bchain[- ]link (?:fence|mesh)\b/i, slug: CHAIN_LINK},
-      {pattern: /\bbarbed wire\b/i, slug: BARBED_WIRE},
-      {pattern: /\bhexagonal (?:wire )?mesh\b/i, slug: HEX_MESH},
+      {pattern: /\bchain[- ]link (?:fence|mesh)\b|勾花网|菱形网/i, slug: CHAIN_LINK},
+      {pattern: /\bbarbed wire\b|刺绳|刺铁丝/i, slug: BARBED_WIRE},
+      {pattern: /\bwelded wire mesh\b|电焊网|焊接网/i, slug: WELDED_MESH},
     ],
     related: [CHAIN_LINK, BARBED_WIRE, WELDED_MESH],
   },
   'active-vs-passive-rockfall-protection': {
     rules: [
-      {pattern: /\bpassive (?:rockfall )?barrier\b/i, slug: PASSIVE_BARRIER},
-      {pattern: /\bactive (?:slope )?protection\b/i, slug: ACTIVE_NET},
-      {pattern: /\bring net\b/i, slug: PASSIVE_BARRIER},
+      {pattern: /\bpassive (?:rockfall )?barrier\b|被动防护|被动拦石/i, slug: PASSIVE_BARRIER},
+      {pattern: /\bactive (?:slope )?protection\b|主动防护|主动拦石/i, slug: ACTIVE_NET},
+      {pattern: /\bring net\b|环形网/i, slug: PASSIVE_BARRIER},
     ],
     related: [ACTIVE_NET, PASSIVE_BARRIER],
   },
   'rockfall-protection-net-systems': {
     rules: [
-      {pattern: /\bpassive (?:rockfall )?barrier\b/i, slug: PASSIVE_BARRIER},
-      {pattern: /\bactive (?:slope )?protection\b/i, slug: ACTIVE_NET},
+      {pattern: /\bpassive (?:rockfall )?barrier\b|被动防护|被动拦石/i, slug: PASSIVE_BARRIER},
+      {pattern: /\bactive (?:slope )?protection\b|主动防护|主动拦石/i, slug: ACTIVE_NET},
+      {pattern: /\bring net\b|环形网/i, slug: PASSIVE_BARRIER},
     ],
     related: [ACTIVE_NET, PASSIVE_BARRIER],
   },
   'wire-mesh-supplier-china-guide': {
     rules: [
-      {pattern: /\bchain[- ]link (?:fence|mesh)\b/i, slug: CHAIN_LINK},
-      {pattern: /\bwelded wire mesh\b/i, slug: WELDED_MESH},
-      {pattern: /\bhexagonal (?:wire )?mesh\b/i, slug: HEX_MESH},
+      {pattern: /\bchain[- ]link (?:fence|mesh)\b|勾花网|菱形网/i, slug: CHAIN_LINK},
+      {pattern: /\bwelded wire mesh\b|电焊网|焊接网/i, slug: WELDED_MESH},
+      {pattern: /\bhexagonal (?:wire )?mesh\b|六角网|拧花网/i, slug: HEX_MESH},
     ],
     related: [CHAIN_LINK, WELDED_MESH, HEX_MESH],
   },
