@@ -62,35 +62,47 @@ export function renderInline(text: string, ctx?: ProductLinkContext): ReactNode[
   const parts = text.split(
     /(<strong>.*?<\/strong>|\*\*[^*]+\*\*|\*[^*]+\*|!\[[^\]]*\]\([^)]+\)|\[[^\]]*\]\([^)]+\))/g
   );
-  return parts.flatMap((part, i) => {
+  // 用显式数组而不是 flatMap：Next 构建期的类型检查不接受 flatMap 推断出的
+  // ReactNode（含 string），会报 "not assignable to readonly (Element|null|undefined)[]"
+  const nodes: ReactNode[] = [];
+  parts.forEach((part, i) => {
     if (part.startsWith('<strong>') && part.endsWith('</strong>')) {
-      return [<strong key={i} className="font-bold">{part.slice(8, -9)}</strong>];
+      nodes.push(<strong key={i} className="font-bold">{part.slice(8, -9)}</strong>);
+      return;
     }
     if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
-      return [<strong key={i} className="font-bold">{part.slice(2, -2)}</strong>];
+      nodes.push(<strong key={i} className="font-bold">{part.slice(2, -2)}</strong>);
+      return;
     }
     if (part.startsWith('*') && part.endsWith('*') && part.length > 2) {
-      return [<em key={i}>{part.slice(1, -1)}</em>];
+      nodes.push(<em key={i}>{part.slice(1, -1)}</em>);
+      return;
     }
     const imgMatch = part.match(/!\[([^\]]*)\]\(([^)]+)\)/);
     if (imgMatch) {
-      return [<img key={i} src={imgMatch[2]} alt={imgMatch[1]} className="max-w-full rounded-lg my-4" loading="lazy" decoding="async" />];
+      nodes.push(<img key={i} src={imgMatch[2]} alt={imgMatch[1]} className="max-w-full rounded-lg my-4" loading="lazy" decoding="async" />);
+      return;
     }
     const linkMatch = part.match(/\[([^\]]*)\]\(([^)]+)\)/);
     if (linkMatch) {
       // 正文里原有的链接保留不动，也不在锚文本里再套链接
-      return [
+      nodes.push(
         <a key={i} href={linkMatch[2]} className="text-blue-600 underline hover:text-blue-800" target="_blank" rel="noopener noreferrer">
           {linkMatch[1]}
         </a>,
-      ];
+      );
+      return;
     }
     if (ctx) {
       const injected = injectProductLink(part, ctx, i);
-      if (injected) return injected;
+      if (injected) {
+        nodes.push(...injected);
+        return;
+      }
     }
-    return [part];
+    nodes.push(part);
   });
+  return nodes;
 }
 
 export function renderMarkdown(content: string | undefined, ctx?: ProductLinkContext): ReactNode[] | null {
