@@ -15,6 +15,15 @@ import {routing, locales as fullLocales} from '@/lib/routing';
 import {QUOTE_NOTE_EN, QUOTE_NOTE_ZH, LEAD_TIME_NOTE_EN, LEAD_TIME_NOTE_ZH, MOQ_NOTE_EN, MOQ_NOTE_ZH} from '@/lib/company';
 
 /**
+ * 后台导入的 seo_title 常自带品牌尾巴（… | Angu / … | 安固）。
+ * 拼 <title> 和渲染 <h1> 前都要先剥掉，否则会变成「… | Angu | Angu Wire Mesh」，
+ * 或者让 h1 里堆一层跟产品无关的品牌名。
+ */
+function stripBrandSuffix(t: string): string {
+  return t.replace(/\s*[|｜]\s*(Angu(\s+Wire\s+Mesh)?|安固(丝网)?)\s*$/i, '').trim();
+}
+
+/**
  * 从 priceRemark（如 "FOB Tianjin, per m2"）解析计价单位。
  * 旧版前台把单位硬编码成 "/unit"，导致 $100/m² 被显示成 $100/件。
  */
@@ -309,9 +318,7 @@ export async function generateMetadata({params}: ProductDetailPageProps): Promis
   const seoTitle = product.seoTitle?.[locale] || product.seoTitle?.en || '';
   // 后台导入的 seo_title 常带自己的品牌尾巴（… | Angu / … | 安固），
   // 这里再拼一次就成了「… | Angu | Angu Wire Mesh」。先剥掉再统一拼。
-  const stripBrand = (t: string) =>
-    t.replace(/\s*[|｜]\s*(Angu(\s+Wire\s+Mesh)?|安固(丝网)?)\s*$/i, '').trim();
-  const metaTitle = stripBrand(seoTitle) || name;
+  const metaTitle = stripBrandSuffix(seoTitle) || name;
   // 品牌尾巴统一用短形「| Angu」：全站品类页也是这个写法，
   // 且能保证「标题本体 + 尾巴」落在 60 字符内（CSV 里就是按含尾巴算的长）。
   const brandSuffix = locale === 'zh' ? '安固' : 'Angu';
@@ -336,7 +343,11 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
 
   const name = product.names[locale] || product.names.en || '';
   // GEO-friendly: use seoTitle as display title (question-style) if available
-  const displayTitle = product.seoTitle?.[locale] || product.seoTitle?.en || name;
+  // h1 不承载品牌尾巴：品牌是 <title> 的事，h1 该留给产品词本身。
+  // 后台 seo_title 里普遍带着「… | Angu」，直接输出会让 h1 变成
+  // "Welded Wire Mesh 50mm — 50mm, reinforcement | Angu" 这种堆砌。
+  const rawDisplayTitle = product.seoTitle?.[locale] || product.seoTitle?.en || name;
+  const displayTitle = stripBrandSuffix(rawDisplayTitle) || name;
   const shortDesc = product.shortDescriptions[locale] || product.shortDescriptions.en || '';
   const fullDesc = product.fullDescriptions[locale] || product.fullDescriptions.en || '';
   // specs: pick the language-specific override if available, fallback en
