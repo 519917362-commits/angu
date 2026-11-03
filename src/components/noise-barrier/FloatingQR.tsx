@@ -38,6 +38,12 @@ interface ChannelDef {
   qrUrl: (info: ContactInfo) => string;
   /** 有没有真实账号 —— 没有就整个渠道不渲染，避免点开是死链 */
   available: (info: ContactInfo) => boolean;
+  /**
+   * 点击直接跳转，不展开二维码面板。
+   * 只有「扫到手机上有意义」的渠道才需要二维码（WhatsApp：PC 上看页、手机上聊）。
+   * 邮箱是 mailto、Facebook 是网页主页，弹一张二维码出来纯属多一步。
+   */
+  direct?: boolean;
 }
 
 function buildChannels(locale: string, info: ContactInfo): ChannelDef[] {
@@ -51,7 +57,8 @@ function buildChannels(locale: string, info: ContactInfo): ChannelDef[] {
       href: (i) => `mailto:${i.email}`,
       display: (i) => i.email,
       qrUrl: () => '',
-      available: (i) => /.+@.+\..+/.test(i.email || '') },
+      available: (i) => /.+@.+\..+/.test(i.email || ''),
+      direct: true },
     { key: 'zalo', label: 'Zalo', shortLabel: 'Zalo', icon: <IconZalo />, color: brandColors.zalo,
       href: (i) => `https://zalo.me/${i.zalo.replace(/[^0-9]/g, '')}`,
       display: (i) => i.zalo,
@@ -66,7 +73,8 @@ function buildChannels(locale: string, info: ContactInfo): ChannelDef[] {
       href: (i) => i.facebook,
       display: () => 'Angu Wire Mesh',
       qrUrl: (i) => i.qrFacebook || '',
-      available: (i) => facebookUrl(i.facebook) !== '' },
+      available: (i) => facebookUrl(i.facebook) !== '',
+      direct: true },
   ];
 
   // Locale priority order —— WhatsApp 与邮箱是当前真实可用的主渠道，
@@ -103,9 +111,11 @@ export function FloatingQR({ locale, contactInfo }: { locale: string; contactInf
   const t = uiText[locale] || uiText.en;
 
   // Set default tab based on locale priority
+  // 默认展开第一个「可扫码」渠道：Email / Facebook 是直接跳转型，展开它们没有意义
   useEffect(() => {
     if (!activeTab && channels.length > 0) {
-      setActiveTab(channels[0].key);
+      const firstQr = channels.find((c) => !c.direct) || channels[0];
+      setActiveTab(firstQr.key);
     }
   }, [locale]);
 
@@ -119,7 +129,8 @@ export function FloatingQR({ locale, contactInfo }: { locale: string; contactInf
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const activeChannel = channels.find(c => c.key === activeTab) || channels[0];
+  const activeChannel =
+    channels.find((c) => c.key === activeTab && !c.direct) || channels.find((c) => !c.direct);
 
   // 没有任何可用渠道（后台全没配）就不显示悬浮按钮，免得点开是个空面板
   if (!visible || !activeChannel) return null;
@@ -150,6 +161,26 @@ export function FloatingQR({ locale, contactInfo }: { locale: string; contactInf
           <div className="py-1.5">
             {channels.map((ch) => {
               const isActive = activeTab === ch.key;
+
+              // 直接跳转型渠道（Email / Facebook）：点一下就出去，不展开二维码
+              if (ch.direct) {
+                const isMail = ch.key === 'email';
+                return (
+                  <a
+                    key={ch.key}
+                    href={ch.href(contactInfo)}
+                    {...(isMail ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+                    className="w-full flex items-center gap-3 px-5 py-3 text-sm font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-50 transition-colors border-l-4 border-l-transparent"
+                  >
+                    <span style={{ color: ch.color }}>{ch.icon}</span>
+                    <span className="flex-1 text-start">{ch.shortLabel}</span>
+                    <svg className="w-3.5 h-3.5 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H8M17 7v9" />
+                    </svg>
+                  </a>
+                );
+              }
+
               return (
                 <div key={ch.key}>
                   <button

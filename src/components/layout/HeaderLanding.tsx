@@ -63,13 +63,17 @@ export function HeaderLanding({ locale, logoUrl, email, phone, ctaText, socials 
 
           {/* Right: socials with hover QR + CTA */}
           <div className="flex items-center gap-1.5">
-            {/* Social icons — 后台没配真实账号时 socials 为空，整块不渲染 */}
+            {/* Social icons — 后台没配真实账号时 socials 为空，整块不渲染
+                Facebook 是网页主页，点击直接跳转；只有需要「扫到手机上」的
+                聊天类渠道才在 hover 时弹二维码。 */}
             <div className="hidden sm:flex items-center gap-0.5">
-              {socials.map((s) => (
+              {socials.map((s) => {
+                const showQr = s.key !== 'facebook';
+                return (
                 <div
                   key={s.key}
                   className="relative"
-                  onMouseEnter={() => setHoveredKey(s.key)}
+                  onMouseEnter={() => showQr && setHoveredKey(s.key)}
                   onMouseLeave={() => setHoveredKey(null)}
                 >
                   <a
@@ -85,7 +89,7 @@ export function HeaderLanding({ locale, logoUrl, email, phone, ctaText, socials 
                   </a>
 
                   {/* QR popover */}
-                  {hoveredKey === s.key && (
+                  {showQr && hoveredKey === s.key && (
                     <div className="absolute top-full right-0 mt-1 z-50 bg-white rounded-xl shadow-2xl border border-slate-100 p-3 w-[180px]">
                       <div className="text-xs font-semibold text-slate-700 mb-2 flex items-center gap-1.5">
                         <span style={{ color: s.color }}>{s.icon}</span>
@@ -108,7 +112,8 @@ export function HeaderLanding({ locale, logoUrl, email, phone, ctaText, socials 
                     </div>
                   )}
                 </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* CTA */}
