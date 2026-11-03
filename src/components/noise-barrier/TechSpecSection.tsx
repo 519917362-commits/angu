@@ -15,8 +15,8 @@ const specContent: Record<string, SpecContent> = {
     subheader: {
       en: 'Key engineering parameters for our noise barrier systems. Full data sheets and lab reports available on request.',
       zh: '声屏障系统核心工程参数。完整数据表和实验室报告可应要求提供。',
-      vi: 'Các thông số kỹ thuật chính của hệ thống tấm cách âm. Bảng dữ liệu đầy đủ và báo cáo phòng thí nghiệm có sẵn theo yêu cầu.',
-      th: 'พารามิเตอร์ทางวิศวกรรมหลักของระบบแผงกั้นเสียง เอกสารข้อมูลฉบับเต็มและรายงานห้องปฏิบัติการพร้อมให้เมื่อขอ',
+      vi: 'Các thông số kỹ thuật chính của hệ thống tường chắn âm: tấm chắn âm, trụ thép H và phụ kiện. Bảng dữ liệu đầy đủ và báo cáo phòng thí nghiệm có sẵn theo yêu cầu.',
+      th: 'พารามิเตอร์ทางวิศวกรรมหลักของระบบกำแพงกันเสียง ทั้งแผงกั้นเสียง เสาเหล็ก H และอุปกรณ์ยึด เอกสารข้อมูลฉบับเต็มและรายงานห้องปฏิบัติการพร้อมให้เมื่อขอ',
     },
     rows: [
       { param: { en: 'Panel Type', zh: '面板类型', vi: 'Loại Tấm', th: 'ประเภทแผง' }, value: { en: 'Sound-absorbing (louvered / micro-perforated)', zh: '吸声型（百叶/微孔）', vi: 'Hấp thụ âm (tấm thanh / đục lỗ siêu nhỏ)', th: 'ดูดซับเสียง (เกล็ด / เจาะรูขนาดไมโคร)' } },

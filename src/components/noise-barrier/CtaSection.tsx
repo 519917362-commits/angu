@@ -28,9 +28,9 @@ export function CtaSection({
         </h2>
         <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
           {isVi
-            ? 'Nhận báo giá trong 24 giờ. Gửi bản vẽ dự án của bạn — chúng tôi sẽ đề xuất giải pháp cách âm tối ưu và gửi báo giá FOB/CIF chi tiết.'
+            ? 'Nhận báo giá trong 24 giờ. Gửi bản vẽ dự án của bạn — chúng tôi sẽ đề xuất tường chắn âm phù hợp với lưu lượng xe và mặt bằng, kèm báo giá FOB/CIF chi tiết.'
             : isTh
-            ? 'รับใบเสนอราคาภายใน 24 ชั่วโมง ส่งแบบโครงการของคุณ — เราจะแนะนำโซลูชันกันเสียงที่ดีที่สุดและส่งใบเสนอราคา FOB/CIF โดยละเอียด'
+            ? 'รับใบเสนอราคาภายใน 24 ชั่วโมง ส่งแบบโครงการของคุณ — เราจะแนะนำโซลูชันกำแพงกันเสียงที่เหมาะกับสภาพจราจรและพื้นที่ และส่งใบเสนอราคา FOB/CIF โดยละเอียด'
             : isMs
             ? 'Dapatkan sebut harga dalam masa 24 jam. Hantar lukisan projek anda — kami akan cadangkan penyelesaian akustik optimum dan berikan sebut harga FOB/CIF yang terperinci.'
             : isAr

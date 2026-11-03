@@ -1,7 +1,7 @@
 import type {Metadata} from 'next';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
-import {CheckCircle2, Mail, MessageCircle, FileText, Clock} from 'lucide-react';
+import {CheckCircle2, Mail, MessageCircle, FileText, Clock, Download, Building2} from 'lucide-react';
 import {routing} from '@/lib/routing';
 import {COMPANY} from '@/lib/company';
 
@@ -48,6 +48,33 @@ const content = {
     email: 'Email us',
     catalog: 'Browse product catalog',
     home: 'Back to homepage',
+    // 感谢页是唯一 100% 到达、且意图最高的页面（刚提交完询盘），
+    // 之前只有「看产品目录 / 回首页」两个出口，等于把最热的访客放走。
+    // 这三项都是站上真实存在的内容：规格锚点、案例锚点、可直接下载的证书 PDF。
+    whileTitle: 'While you wait — three things worth opening',
+    whileBody:
+      'You do not need to wait for our reply. These are the documents buyers usually ask for next.',
+    whileItems: [
+      {
+        title: 'Technical specifications',
+        body: 'Panel build-up, STC 32–34, NRC 0.85, wind load and coating weight.',
+        cta: 'Open the spec table',
+        href: '/noise-barrier#specs',
+      },
+      {
+        title: 'Delivered projects',
+        body: 'Highway, factory and bridge installations with on-site photos.',
+        cta: 'See project gallery',
+        href: '/noise-barrier#projects',
+      },
+      {
+        title: 'ISO certificates',
+        body: 'ISO 9001 / 14001 / 45001 in one PDF. Direct download, no form.',
+        cta: 'Download PDF',
+        href: '/downloads/angu-iso-three-system-certificates.pdf',
+        external: true,
+      },
+    ],
     note: 'Sent by mistake? Reply to the confirmation email and we will delete your data.',
   },
   zh: {
@@ -79,6 +106,29 @@ const content = {
     email: '发邮件',
     catalog: '浏览产品目录',
     home: '返回首页',
+    whileTitle: '等回信的这段时间，可以先看这三样',
+    whileBody: '不必等我们回复。这三份是买家通常会接着索要的资料，站上都能直接打开。',
+    whileItems: [
+      {
+        title: '技术参数与规格',
+        body: '面板构造、STC 32–34、NRC 0.85、抗风荷载与镀层重量。',
+        cta: '打开参数表',
+        href: '/noise-barrier#specs',
+      },
+      {
+        title: '已交付项目',
+        body: '公路、工厂、桥梁的现场安装实拍照片。',
+        cta: '查看案例',
+        href: '/noise-barrier#projects',
+      },
+      {
+        title: 'ISO 三体系证书',
+        body: 'ISO 9001 / 14001 / 45001 合成一份 PDF，直接下载，无需填表。',
+        cta: '下载 PDF',
+        href: '/downloads/angu-iso-three-system-certificates.pdf',
+        external: true,
+      },
+    ],
     note: '如果是误提交，请直接回复确认邮件，我们会删除您的资料。',
   },
   vi: {
@@ -111,6 +161,30 @@ const content = {
     email: 'Gửi email',
     catalog: 'Xem danh mục sản phẩm',
     home: 'Về trang chủ',
+    whileTitle: 'Trong lúc chờ — ba mục nên mở trước',
+    whileBody:
+      'Bạn không cần chờ phản hồi của chúng tôi. Đây là những tài liệu khách hàng thường yêu cầu tiếp theo và đều có sẵn trên trang.',
+    whileItems: [
+      {
+        title: 'Thông số kỹ thuật',
+        body: 'Cấu tạo tấm chắn âm, STC 32–34, NRC 0.85, tải trọng gió và khối lượng lớp mạ.',
+        cta: 'Mở bảng thông số',
+        href: '/noise-barrier#specs',
+      },
+      {
+        title: 'Công trình đã bàn giao',
+        body: 'Ảnh thi công thực tế tại đường cao tốc, nhà máy và cầu.',
+        cta: 'Xem công trình',
+        href: '/noise-barrier#projects',
+      },
+      {
+        title: 'Chứng nhận ISO',
+        body: 'ISO 9001 / 14001 / 45001 gộp trong một PDF. Tải trực tiếp, không cần điền form.',
+        cta: 'Tải PDF',
+        href: '/downloads/angu-iso-three-system-certificates.pdf',
+        external: true,
+      },
+    ],
     note: 'Nếu gửi nhầm, hãy trả lời email xác nhận và chúng tôi sẽ xóa dữ liệu của bạn.',
   },
   th: {
@@ -142,6 +216,30 @@ const content = {
     email: 'ส่งอีเมล',
     catalog: 'ดูแคตตาล็อกสินค้า',
     home: 'กลับหน้าแรก',
+    whileTitle: 'ระหว่างรอ — สามอย่างที่ควรเปิดดูก่อน',
+    whileBody:
+      'ไม่ต้องรอการตอบกลับจากเรา สามรายการนี้คือเอกสารที่ลูกค้ามักขอกันต่อ และเปิดได้ทันทีจากหน้าเว็บ',
+    whileItems: [
+      {
+        title: 'ข้อมูลทางเทคนิค',
+        body: 'โครงสร้างแผงกั้นเสียง, STC 32–34, NRC 0.85, แรงลม และน้ำหนักเคลือบ',
+        cta: 'เปิดตารางสเปค',
+        href: '/noise-barrier#specs',
+      },
+      {
+        title: 'โครงการที่ส่งมอบแล้ว',
+        body: 'ภาพติดตั้งจริงจากทางด่วน โรงงาน และสะพาน',
+        cta: 'ดูผลงาน',
+        href: '/noise-barrier#projects',
+      },
+      {
+        title: 'ใบรับรอง ISO',
+        body: 'ISO 9001 / 14001 / 45001 รวมในไฟล์ PDF เดียว ดาวน์โหลดได้เลย ไม่ต้องกรอกฟอร์ม',
+        cta: 'ดาวน์โหลด PDF',
+        href: '/downloads/angu-iso-three-system-certificates.pdf',
+        external: true,
+      },
+    ],
     note: 'หากส่งโดยไม่ตั้งใจ เพียงตอบกลับอีเมลยืนยัน แล้วเราจะลบข้อมูลของคุณ',
   },
 } as const;
@@ -248,6 +346,40 @@ export default async function ThankYouPage({
             </li>
           ))}
         </ol>
+      </section>
+
+      {/* While you wait —— 三个真实可打开的出口。
+          不放会落空的东西：规格与案例都是站内锚点，证书是确实存在的 PDF。 */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-14">
+        <h2 className="text-xl font-bold text-slate-900 mb-2">{c.whileTitle}</h2>
+        <p className="text-sm text-slate-500 mb-6 leading-relaxed">{c.whileBody}</p>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {c.whileItems.map((item, i) => {
+            // 站内锚点要补 locale 前缀；/downloads 是 public 下的静态文件，不能加前缀
+            const isStaticFile = item.href.includes('/downloads/');
+            const href = isStaticFile ? item.href : `/${locale}${item.href}`;
+            return (
+              <a
+                key={item.title}
+                href={href}
+                className="group flex flex-col bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:border-blue-300 hover:shadow-md transition-all"
+              >
+                {i === 0 ? (
+                  <FileText className="w-5 h-5 text-blue-600 mb-3" aria-hidden="true" />
+                ) : i === 1 ? (
+                  <Building2 className="w-5 h-5 text-blue-600 mb-3" aria-hidden="true" />
+                ) : (
+                  <Download className="w-5 h-5 text-blue-600 mb-3" aria-hidden="true" />
+                )}
+                <h3 className="font-semibold text-slate-900 mb-1 text-sm">{item.title}</h3>
+                <p className="text-xs text-slate-500 leading-relaxed flex-1">{item.body}</p>
+                <span className="mt-3 text-xs font-semibold text-blue-700 group-hover:underline">
+                  {item.cta} →
+                </span>
+              </a>
+            );
+          })}
+        </div>
       </section>
 
       {/* Urgent */}

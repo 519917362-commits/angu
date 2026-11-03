@@ -65,54 +65,66 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
   ],
   vi: [
     {
-      q: 'Thời gian giao hàng đến Việt Nam là bao lâu?',
-      a: 'Từ 10–15 ngày sản xuất + 7–14 ngày vận chuyển biển đến cảng Hồ Chí Minh hoặc Hải Phòng. Tổng thời gian thực tế khoảng 20–30 ngày kể từ khi xác nhận đơn.',
+      q: 'Thời gian giao hàng tường chắn âm đến Việt Nam là bao lâu?',
+      a: 'Từ 10–15 ngày sản xuất + 7–14 ngày vận chuyển biển đến cảng Hồ Chí Minh hoặc Hải Phòng. Tổng thời gian thực tế khoảng 20–30 ngày kể từ khi xác nhận đơn hàng tường chắn âm.',
+    },
+    {
+      // 越南买家确实分不清这两个词（tấm cách âm 在本地常指室内隔音板/棉），
+      // 用一问一答把「墙体」与「单块板」分开，两个主词各出现多次且不显堆砌。
+      q: 'Tường chắn âm và tấm cách âm khác nhau thế nào?',
+      a: 'Tường chắn âm là cả hệ thống hoàn chỉnh: các tấm chắn âm gắn lên trụ thép H, neo xuống móng bê tông, dùng cho mặt đường cao tốc, vành đai khu công nghiệp và cầu — đây là hạng mục trong hồ sơ dự án. Tấm cách âm (tấm chắn âm) chỉ là một tấm panel đơn lẻ dày 80–100mm mà chúng tôi sản xuất, khách có thể mua riêng để thay thế hoặc tự lắp. Nếu bạn đang làm dự án giảm ồn, hãy đặt cả tường chắn âm; nếu chỉ cần vật liệu, đặt tấm là đủ.',
     },
     {
       q: 'Có hỗ trợ bản vẽ CAD và tính toán kết cấu không?',
-      a: 'Có. Chúng tôi cung cấp miễn phí bản vẽ CAD, tính toán tải trọng gió, và phân tích kết cấu cho dự án của bạn. Chỉ cần gửi yêu cầu với thông số dự án.',
+      a: 'Có. Chúng tôi cung cấp miễn phí bản vẽ CAD, tính toán tải trọng gió, và phân tích kết cấu cho tường chắn âm của dự án bạn. Chỉ cần gửi yêu cầu kèm thông số dự án.',
     },
     {
       q: 'Báo giá bao gồm những gì?',
-      a: 'Báo giá FOB hoặc CIF bao gồm: tấm cách âm + trụ H + đế bản + bu lông + gioăng cao su. Không bao gồm phí lắp dựng tại công trường (có thể hỗ trợ kỹ sư hiện trường với chi phí phụ).',
+      a: 'Báo giá FOB hoặc CIF bao gồm: tấm chắn âm + trụ H + đế bản + bu lông + gioăng cao su. Không bao gồm phí lắp dựng tại công trường (có thể cử kỹ sư giám sát với chi phí phụ).',
     },
     {
       q: 'Số lượng đặt hàng tối thiểu (MOQ) là bao nhiêu?',
-      a: 'MOQ: 500 m² cho tấm tiêu âm tiêu chuẩn. Với dự án lớn (>5000 m²), chúng tôi cung cấp giá chiết khấu đặc biệt và hỗ trợ giao hàng theo đợt.',
+      a: 'MOQ: 500 m² cho tấm chắn âm tiêu chuẩn. Với dự án lớn (>5000 m²), chúng tôi cung cấp giá chiết khấu đặc biệt và hỗ trợ giao hàng theo đợt.',
     },
     {
       q: 'Chính sách bảo hành như thế nào?',
-      a: 'Bảo hành 5 năm cho mạ kẽm nhúng nóng chống rỉ sét. Tuổi thọ thiết kế 15+ năm trong điều kiện khí hậu nhiệt đới tại Việt Nam.',
+      a: 'Bảo hành 5 năm cho lớp mạ kẽm nhúng nóng chống rỉ sét. Tuổi thọ thiết kế của tường chắn âm là 15+ năm trong điều kiện khí hậu nhiệt đới tại Việt Nam.',
     },
     {
-      q: 'Có thể tùy chỉnh màu sắc và kích thước không?',
-      a: 'Có. Kích thước tấm có thể tùy chỉnh 2.0m / 2.5m / 3.0m / 4.0m. Màu sắc theo bảng RAL, sơn tĩnh điện polyester hoặc PVDF.',
+      q: 'Có thể tùy chỉnh màu sắc và kích thước tấm không?',
+      a: 'Có. Kích thước tấm chắn âm tùy chỉnh 2.0m / 2.5m / 3.0m / 4.0m. Màu sắc theo bảng RAL, sơn tĩnh điện polyester hoặc PVDF.',
     },
   ],
   th: [
     {
-      q: 'ระยะเวลาจัดส่งถึงประเทศไทยนานเท่าไหร่?',
-      a: 'ผลิต 10–15 วัน + ขนส่งทางเรือ 7–14 วัน ถึงท่าเรือกรุงเทพฯ หรือแหลมฉบัง รวมประมาณ 20–30 วันนับจากยืนยันคำสั่ง',
+      q: 'จัดส่งกำแพงกันเสียงถึงประเทศไทยใช้เวลานานเท่าไหร่?',
+      a: 'ผลิต 10–15 วัน + ขนส่งทางเรือ 7–14 วัน ถึงท่าเรือกรุงเทพฯ หรือแหลมฉบัง รวมประมาณ 20–30 วันนับจากยืนยันคำสั่งซื้อกำแพงกันเสียง',
+    },
+    {
+      // 泰语里 แผงกั้นเสียง（单块屏障板）与 กำแพงกันเสียง（整道隔音墙）是两个词，
+      // 询盘里最常被混用。用一问一答把差别讲清，两个词各自获得自然词频。
+      q: 'กำแพงกันเสียง กับแผงกั้นเสียง ต่างกันอย่างไร?',
+      a: 'กำแพงกันเสียง คือระบบที่ประกอบเสร็จสมบูรณ์ ทั้งแนวกำแพงที่ยึดแผงเข้ากับเสาเหล็ก H แล้วยึดลงฐานคอนกรีต ใช้ริมทางหลวง เขตโรงงาน และสะพาน ซึ่งเป็นรายการในแบบก่อสร้างของโครงการ ส่วนแผงกั้นเสียง คือแผงเดี่ยวหนา 80–100 มม. ที่เราผลิต ลูกค้าซื้อแยกเพื่อเปลี่ยนของเดิมหรือนำไปติดตั้งเองได้ หากต้องการแก้ปัญหาเสียงทั้งโครงการ ควรสั่งเป็นกำแพงกันเสียง ถ้าต้องการเพียงวัสดุ สั่งแผงอย่างเดียวพอ',
     },
     {
       q: 'มีบริการแบบ CAD และคำนวณโครงสร้างไหม?',
-      a: 'มี เราให้บริการแบบ CAD คำนวณแรงลม และวิเคราะห์โครงสร้างฟรี เพียงส่งข้อมูลโครงการมาให้เรา',
+      a: 'มี เราให้บริการแบบ CAD คำนวณแรงลม และวิเคราะห์โครงสร้างสำหรับกำแพงกันเสียงของโครงการฟรี เพียงส่งข้อมูลโครงการมาให้เรา',
     },
     {
       q: 'ใบเสนอราคารวมอะไรบ้าง?',
-      a: 'FOB/CIF รวม: แผงกั้นเสียง + เสา H + แผ่นฐาน + นอต + ปะเก็นยาง ไม่รวมค่าติดตั้งที่หน้างาน (สามารถส่งวิศวกรไปได้โดยมีค่าใช้จ่ายเพิ่ม)',
+      a: 'FOB/CIF รวม: แผงกั้นเสียง + เสา H + แผ่นฐาน + นอต + ปะเก็นยาง ไม่รวมค่าติดตั้งที่หน้างาน (สามารถส่งวิศวกรไปควบคุมได้โดยมีค่าใช้จ่ายเพิ่ม)',
     },
     {
       q: 'จำนวนสั่งซื้อขั้นต่ำ (MOQ) เท่าไหร่?',
-      a: 'MOQ: 500 ตร.ม. สำหรับแผงมาตรฐาน โครงการใหญ่ (>5000 ตร.ม.) มีส่วนลดพิเศษและจัดส่งเป็นงวด',
+      a: 'MOQ: 500 ตร.ม. สำหรับแผงกั้นเสียงมาตรฐาน โครงการใหญ่ (>5000 ตร.ม.) มีส่วนลดพิเศษและจัดส่งเป็นงวด',
     },
     {
       q: 'นโยบายรับประกันเป็นอย่างไร?',
-      a: 'รับประกัน 5 ปี สำหรับการชุบกัลวาไนซ์กันสนิม อายุการใช้งานออกแบบ 15+ ปี ในสภาพอากาศร้อนชื้นของไทย',
+      a: 'รับประกัน 5 ปี สำหรับการชุบกัลวาไนซ์กันสนิม และอายุการใช้งานออกแบบของกำแพงกันเสียง 15+ ปี ในสภาพอากาศร้อนชื้นของไทย',
     },
     {
-      q: 'สามารถสั่งสีและขนาดพิเศษได้ไหม?',
-      a: 'ได้ ขนาดแผงปรับได้ 2.0 / 2.5 / 3.0 / 4.0 ม. สีตาม RAL เคลือบสีฝุ่น polyester หรือ PVDF',
+      q: 'สามารถสั่งสีและขนาดแผงพิเศษได้ไหม?',
+      a: 'ได้ ขนาดแผงกั้นเสียงปรับได้ 2.0 / 2.5 / 3.0 / 4.0 ม. สีตาม RAL เคลือบสีฝุ่น polyester หรือ PVDF',
     },
   ],
   ms: [

@@ -12,8 +12,9 @@ interface HeroContent {
 const heroContent: Record<string, HeroContent> = {
   vi: {
     badge: 'Nhà Sản Xuất Trực Tiếp · Xuất Khẩu Sang Việt Nam',
-    // H1 同时覆盖「tấm cách âm」（板材）与「tường chắn âm」（墙体）两个越南语高频叫法
-    headline: 'Tấm Cách Âm & Tường Chắn Âm Đường Cao Tốc, Công Nghiệp — Giá Xuất Xưởng',
+    // H1 以「tường chắn âm」（整道隔音墙，工程招标用词）领起，
+    // 再带「tấm chắn âm」（声屏障板，比 tấm cách âm 更准确 —— 后者在越南多指室内隔音板/棉）
+    headline: 'Tường Chắn Âm & Tấm Chắn Âm Đường Cao Tốc, Công Nghiệp — Giá Xuất Xưởng',
     subheadline: 'STC 32–34 · NRC 0.85 · Mạ Kẽm Nhúng Nóng 15+ Năm · Giao Cảng Hồ Chí Minh / Hải Phòng',
     trust: ['ISO 9001:2015', 'SGS Tested', 'Sản Xuất 10-15 Ngày', 'Hỗ Trợ CAD'],
     ctaPrimary: 'Nhận Báo Giá Trong 24h',
@@ -21,8 +22,9 @@ const heroContent: Record<string, HeroContent> = {
   },
   th: {
     badge: 'ผู้ผลิตโดยตรง · ส่งออกสู่ประเทศไทย',
-    // H1 同时覆盖「แผงกั้นเสียง」（声屏障板）与「กำแพงกันเสียง」（隔音墙）两个泰语高频叫法
-    headline: 'แผงกั้นเสียง & กำแพงกันเสียง สำหรับทางหลวงและอุตสาหกรรม — ราคาหน้าโรงงาน',
+    // H1 以「กำแพงกันเสียง」（整道隔音墙）领起，与广告主词和 meta title 对齐，
+    // 「แผงกั้นเสียง」（单块屏障板）随后并列，两个词都留在首屏
+    headline: 'กำแพงกันเสียง & แผงกั้นเสียง สำหรับทางหลวงและอุตสาหกรรม — ราคาหน้าโรงงาน',
     subheadline: 'STC 32–34 · NRC 0.85 · ชุบกัลวาไนซ์ร้อน 15+ ปี · ส่งท่าเรือกรุงเทพฯ / แหลมฉบัง',
     trust: ['ISO 9001:2015', 'SGS Tested', 'ผลิต 10-15 วัน', 'รองรับ CAD'],
     ctaPrimary: 'ขอใบเสนอราคาภายใน 24 ชม.',

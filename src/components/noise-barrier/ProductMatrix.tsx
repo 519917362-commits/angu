@@ -39,9 +39,9 @@ export function ProductMatrix({ locale, products }: { locale: string; products: 
           </h2>
           <p className="mt-3 text-slate-500 max-w-2xl mx-auto">
             {locale === 'vi'
-              ? 'Từ đường cao tốc đến nhà máy — chúng tôi có giải pháp cách âm phù hợp cho từng dự án'
+              ? 'Từ đường cao tốc đến nhà máy — chúng tôi có giải pháp tường chắn âm phù hợp cho từng dự án'
               : locale === 'th'
-              ? 'ตั้งแต่ทางหลวงถึงโรงงาน — เรามีโซลูชันกันเสียงสำหรับทุกโครงการ'
+              ? 'ตั้งแต่ทางหลวงถึงโรงงาน — เรามีโซลูชันกำแพงกันเสียงที่เหมาะกับทุกรูปแบบโครงการ'
               : locale === 'ms'
               ? 'Dari lebuh raya hingga kilang — ada penyelesaian kawalan bunyi untuk setiap projek'
               : locale === 'ar'

@@ -13,15 +13,15 @@ interface GalleryContent {
 
 const content: Record<string, GalleryContent> = {
   vi: {
-    title: 'Dự Án Thực Tế',
-    subtitle: 'Hình ảnh thi công thực tế từ các dự án đường cao tốc, nhà máy và cầu đã bàn giao',
+    title: 'Dự Án Tường Chắn Âm Thực Tế',
+    subtitle: 'Hình ảnh thi công tường chắn âm thực tế từ các dự án đường cao tốc, nhà máy và cầu đã bàn giao',
     emptyText: 'Hình ảnh dự án đang được cập nhật. Vui lòng liên hệ để nhận portfolio đầy đủ.',
     note: 'STC / NRC là chỉ số đánh giá của tấm panel theo phòng thí nghiệm, không phải mức giảm ồn đo tại công trường.',
     originNote: 'Các dự án trên đều nằm trong lãnh thổ Trung Quốc (Trùng Khánh, Trường Sa, Nội Mông, Sơn Tây, Quảng Đông, Giang Tô) — không phải dự án tại thị trường Việt Nam.',
   },
   th: {
-    title: 'ผลงานจริง',
-    subtitle: 'ภาพติดตั้งจริงจากโครงการทางด่วน โรงงาน และสะพานที่ส่งมอบแล้ว',
+    title: 'ผลงานกำแพงกันเสียงจริง',
+    subtitle: 'ภาพติดตั้งกำแพงกันเสียงจริงจากโครงการทางด่วน โรงงาน และสะพานที่ส่งมอบแล้ว',
     emptyText: 'กำลังอัปเดตรูปภาพโครงการ กรุณาติดต่อเพื่อรับ portfolio เต็มรูปแบบ',
     note: 'STC / NRC เป็นค่าที่ทดสอบจากแผงในห้องแล็บ ไม่ใช่ค่าระดับเสียงที่วัดหน้างาน',
     originNote: 'โครงการทั้งหมดข้างต้นอยู่ในประเทศจีน (ฉงชิ่ง ฉางซา มองโกเลียใน ซานซี กวางตุ้ง เจียงซู) ไม่ใช่โครงการในประเทศไทย',
