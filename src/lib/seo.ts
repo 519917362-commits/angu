@@ -238,27 +238,27 @@ export const pageSeoDefaults: Record<string, LocaleSeo> = {
 
   download: {
     en: {
-      title: 'Downloads — Product Catalog & Technical Sheets | Angu',
+      title: 'Downloads — ISO Certificates & Technical Data Sheets | Angu',
       description:
-        'Download Angu Wire Mesh product catalog, technical data sheets, and specifications. PDF downloads for gabion boxes, wire mesh fences, and protection net products.',
+        'Download our ISO 9001, ISO 14001 and ISO 45001 certificates directly. Technical data sheets and specifications for gabion, fencing, protection net and noise barrier products are sent on request within 24 hours.',
       keywords: 'wire mesh catalog download, gabion specs PDF, technical data sheet, product brochure',
     },
     zh: {
-      title: '下载中心 — 产品目录与技术资料 | 安固丝网',
+      title: '下载中心 — ISO 认证证书与技术资料 | 安固丝网',
       description:
-        '下载安固丝网产品目录、技术参数表与规格说明。提供石笼网箱、护栏网、防护网等产品的PDF资料下载。',
+        '可直接下载安固丝网 ISO 9001 / ISO 14001 / ISO 45001 三体系证书。石笼网箱、护栏网、防护网与声屏障的技术参数表、规格书按需索取，24 小时内发送。',
       keywords: '丝网目录下载, 石笼网规格PDF, 技术参数表, 产品手册',
     },
     vi: {
-      title: 'Tải Xuống — Catalog Sản Phẩm & Tài Liệu Kỹ Thuật | Angu',
+      title: 'Tải Xuống — Chứng Nhận ISO & Tài Liệu Kỹ Thuật | Angu',
       description:
-        'Tải catalog sản phẩm, bảng thông số kỹ thuật và tài liệu của Angu Wire Mesh. Tài liệu PDF cho lồng rọ đá, hàng rào lưới thép và sản phẩm lưới bảo vệ.',
+        'Tải trực tiếp chứng nhận ISO 9001, ISO 14001 và ISO 45001. Bảng thông số kỹ thuật cho rọ đá, hàng rào, lưới bảo vệ và tấm chắn âm được gửi theo yêu cầu trong 24 giờ.',
       keywords: 'tải catalog lưới thép, thông số rọ đá PDF, tài liệu kỹ thuật, brochure sản phẩm',
     },
     th: {
-      title: 'ดาวน์โหลด — แคตตาล็อกสินค้า & เอกสารทางเทคนิค | Angu',
+      title: 'ดาวน์โหลด — ใบรับรอง ISO & เอกสารทางเทคนิค | Angu',
       description:
-        'ดาวน์โหลดแคตตาล็อกผลิตภัณฑ์ ตารางข้อมูลทางเทคนิค และเอกสารข้อมูลของ Angu Wire Mesh เอกสาร PDF สำหรับกล่องเกเบี้ยน รั้วลวดตาข่าย และผลิตภัณฑ์ตาข่ายป้องกัน',
+        'ดาวน์โหลดใบรับรอง ISO 9001, ISO 14001 และ ISO 45001 ได้ทันที ตารางข้อมูลทางเทคนิคสำหรับเกเบี้ยน รั้ว ตะแกรงป้องกัน และแผงกั้นเสียง ส่งตามคำขอภายใน 24 ชั่วโมง',
       keywords: 'ดาวน์โหลดแคตตาล็อกลวดตาข่าย, ข้อมูลเกเบี้ยน PDF, เอกสารทางเทคนิค, โบรชัวร์ผลิตภัณฑ์',
     },
   },

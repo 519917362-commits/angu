@@ -28,6 +28,18 @@ const ADS_FORM_CONV =
   ENV_ADS_FORM_CONV && !/X{4,}/i.test(ENV_ADS_FORM_CONV) ? ENV_ADS_FORM_CONV : BUILTIN_ADS_FORM_CONV;
 const ADS_CONTACT_CONV = process.env.NEXT_PUBLIC_ADS_WHATSAPP_CONVERSION;
 
+// 第三类转化：资料/目录下载（只收一个邮箱的微转化）。
+//
+// ⚠️ 必须与正式询盘分开，这是本文件里最重要的一条约束。
+// 如果「留邮箱换资料」和「填完项目规格询价」共用同一个 send_to，
+// 智能出价会去找最便宜的转化——永远是前者。账户跑两周就会自我
+// 优化成一台目录下载机：CPA 漂亮，询盘质量归零。
+//
+// 该转化动作必须建在 Ads 后台，并设为「次要转化（不参与出价）」。
+// 未配置时为 null → 这类来源只发 GA4，不发 Ads 转化（安全默认值：
+// 宁可少一个次要信号，也不要把脏数据喂给出价模型）。
+const ADS_CATALOG_CONV = process.env.NEXT_PUBLIC_ADS_CATALOG_CONVERSION;
+
 /** GA4 衡量 ID 是否已配置真实值（G-XXXXXXXXXX） */
 export function isGaConfigured(): boolean {
   if (!GA_ID) return false;
@@ -53,7 +65,11 @@ function isValidSendTo(id: string | undefined): id is string {
 
 /** Google Ads 转化是否已配置（任一转化配好即可） */
 export function isAdsConfigured(): boolean {
-  return isValidSendTo(ADS_FORM_CONV) || isValidSendTo(ADS_CONTACT_CONV);
+  return (
+    isValidSendTo(ADS_FORM_CONV) ||
+    isValidSendTo(ADS_CONTACT_CONV) ||
+    isValidSendTo(ADS_CATALOG_CONV)
+  );
 }
 
 /**
@@ -85,9 +101,24 @@ export type LeadParams = {
 } & Record<string, unknown>;
 
 /**
+ * 线索深度决定这条转化算不算「出价信号」。
+ * - quote：填完项目信息的正式询盘，唯一主转化
+ * - document：只留一个邮箱换资料，次要转化，不参与出价
+ * - contact：点 WhatsApp/电话，次要转化
+ */
+type LeadDepth = 'quote' | 'document' | 'contact';
+
+function depthOf(source: string | undefined): LeadDepth {
+  if (source === 'contact_click') return 'contact';
+  // exit_popup 只收邮箱，见 ADS_CATALOG_CONV 的注释
+  if (source === 'exit_popup') return 'document';
+  return 'quote';
+}
+
+/**
  * 上报一条线索转化。
  * - 始终发送 GA4 事件（便于 DebugView 验证与受众分析）
- * - 仅当配置了真实 Ads 转化 ID 时才发送 Google Ads 转化
+ * - 仅当配置了对应深度的真实 Ads 转化 ID 时才发送 Google Ads 转化
  * - gtag 未加载时静默返回，不抛错
  */
 export function trackLead(params: LeadParams = {}): void {
@@ -98,21 +129,26 @@ export function trackLead(params: LeadParams = {}): void {
   if (typeof w.gtag !== 'function') return;
 
   const { source, productInterest, method, ...rest } = params;
+  const depth = depthOf(source);
   const payload = {
     lead_source: source ?? 'unknown',
+    lead_depth: depth,
     ...(productInterest ? { product_interest: productInterest } : {}),
     ...(method ? { contact_method: method } : {}),
     ...rest,
   };
 
-  if (source !== 'contact_click') {
-    w.gtag('event', 'generate_lead', payload);
-  } else {
+  // GA4 侧统一叫 generate_lead（便于把「询盘」作为一个整体看），
+  // 深度差异走 lead_depth 参数区分；联系方式点击另开一个事件名。
+  if (depth === 'contact') {
     w.gtag('event', 'contact_click', payload);
+  } else {
+    w.gtag('event', 'generate_lead', payload);
   }
 
-  // 表单线索与联系方式点击使用不同的 Ads 转化，便于分别优化出价
-  const sendTo = source === 'contact_click' ? ADS_CONTACT_CONV : ADS_FORM_CONV;
+  // 三类触点的 Ads 转化完全分开，互不污染。
+  const sendTo =
+    depth === 'contact' ? ADS_CONTACT_CONV : depth === 'document' ? ADS_CATALOG_CONV : ADS_FORM_CONV;
   if (isValidSendTo(sendTo)) {
     // 不传 value / currency：账户币种是人民币，这里写死 USD 会让价值报表失真。
     // 留空即采用转化操作里配置的默认值（1 CNY）。

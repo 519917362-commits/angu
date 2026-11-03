@@ -5,8 +5,8 @@ interface HeroContent {
   headline: string;
   subheadline: string;
   trust: string[];
-  ctaContact: string;
-  ctaProducts: string;
+  ctaPrimary: string;
+  ctaSecondary: string;
 }
 
 const heroContent: Record<string, HeroContent> = {
@@ -16,8 +16,8 @@ const heroContent: Record<string, HeroContent> = {
     headline: 'Tấm Cách Âm & Tường Chắn Âm Đường Cao Tốc, Công Nghiệp — Giá Xuất Xưởng',
     subheadline: 'STC 32–34 · NRC 0.85 · Mạ Kẽm Nhúng Nóng 15+ Năm · Giao Cảng Hồ Chí Minh / Hải Phòng',
     trust: ['ISO 9001:2015', 'SGS Tested', 'Sản Xuất 10-15 Ngày', 'Hỗ Trợ CAD'],
-    ctaContact: 'Liên Hệ Chúng Tôi',
-    ctaProducts: 'Xem Tất Cả Sản Phẩm',
+    ctaPrimary: 'Nhận Báo Giá Trong 24h',
+    ctaSecondary: 'Xem Thông Số Kỹ Thuật',
   },
   th: {
     badge: 'ผู้ผลิตโดยตรง · ส่งออกสู่ประเทศไทย',
@@ -25,40 +25,40 @@ const heroContent: Record<string, HeroContent> = {
     headline: 'แผงกั้นเสียง & กำแพงกันเสียง สำหรับทางหลวงและอุตสาหกรรม — ราคาหน้าโรงงาน',
     subheadline: 'STC 32–34 · NRC 0.85 · ชุบกัลวาไนซ์ร้อน 15+ ปี · ส่งท่าเรือกรุงเทพฯ / แหลมฉบัง',
     trust: ['ISO 9001:2015', 'SGS Tested', 'ผลิต 10-15 วัน', 'รองรับ CAD'],
-    ctaContact: 'ติดต่อเรา',
-    ctaProducts: 'ดูสินค้าทั้งหมด',
+    ctaPrimary: 'ขอใบเสนอราคาภายใน 24 ชม.',
+    ctaSecondary: 'ดูสเปคทางเทคนิค',
   },
   en: {
     badge: 'Direct Factory Export · Shipping to Vietnam & Thailand',
     headline: 'Highway & Industrial Noise Barrier — Factory-Direct Pricing',
     subheadline: 'STC 32–34 · NRC 0.85 · Hot-Dip Galvanized 15+ Years · FOB/CIF to Southeast Asia',
     trust: ['ISO 9001:2015', 'SGS Tested', '10-15 Day Production', 'CAD Support'],
-    ctaContact: 'Contact Us',
-    ctaProducts: 'View All Products',
+    ctaPrimary: 'Get a Quote in 24h',
+    ctaSecondary: 'See Technical Specs',
   },
   zh: {
     badge: '中国工厂直供 · 出口越南与泰国',
     headline: '公路与工业声屏障 — 工厂直供价',
     subheadline: 'STC 32–34 · NRC 0.85 · 热镀锌防腐 15+ 年 · FOB/CIF 胡志明/海防/曼谷',
     trust: ['ISO 9001:2015', 'SGS 检测', '10-15 天生产', 'CAD 技术支持'],
-    ctaContact: '联系我们',
-    ctaProducts: '浏览全部产品',
+    ctaPrimary: '24 小时内获取报价',
+    ctaSecondary: '查看技术参数',
   },
   ms: {
     badge: 'Pengeluar Terus Kilang · Eksport ke Malaysia & GCC',
     headline: 'Penghadang Bunyi Lebuh Raya & Industri — Harga Terus Kilang',
     subheadline: 'STC 32–34 · NRC 0.85 · Galvani Hot-Dip 15+ Tahun · FOB/CIF ke Pelabuhan Klang & Jebel Ali',
     trust: ['ISO 9001:2015', 'Diuji SGS', 'Pengeluaran 10-15 Hari', 'Sokongan CAD'],
-    ctaContact: 'Hubungi Kami',
-    ctaProducts: 'Lihat Semua Produk',
+    ctaPrimary: 'Dapatkan Sebut Harga 24 Jam',
+    ctaSecondary: 'Lihat Spesifikasi Teknikal',
   },
   ar: {
     badge: 'تصنيع مباشر من المصنع · تصدير إلى دول الخليج',
     headline: 'حواجز صوتية للطرق السريعة والمناطق الصناعية — بسعر المصنع',
     subheadline: 'STC 32–34 · NRC 0.85 · جلفنة بالغمس الساخن 15+ سنة · FOB/CIF إلى جبل علي والدمام',
     trust: ['ISO 9001:2015', 'مُختبر من SGS', 'إنتاج 10-15 يومًا', 'دعم CAD'],
-    ctaContact: 'اتصل بنا',
-    ctaProducts: 'عرض جميع المنتجات',
+    ctaPrimary: 'احصل على عرض سعر خلال 24 ساعة',
+    ctaSecondary: 'اطلع على المواصفات الفنية',
   },
 };
 
@@ -94,12 +94,16 @@ export function HeroSection({ locale, heroImage }: { locale: string; heroImage?:
                 </span>
               ))}
             </div>
+            {/* 主 CTA 必须留在本页：付费流量一旦跳到 /contact（另一套 8 控件表单），
+                GA4/Ads 的落地页维度会被拆成两条，样本被稀释，跳出率还记在落地页头上。
+                次 CTA 同理 —— 之前指向 30 个跨品类产品目录，等于把声屏障流量
+                送去石笼网/围栏页。现在两个按钮都只在本页内跳转。 */}
             <div className="flex flex-wrap gap-3 pt-2">
-              <a href={`/${locale}/contact`} className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors text-sm">
-                {c.ctaContact} →
+              <a href="#quote-form" className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors text-sm">
+                {c.ctaPrimary} →
               </a>
-              <a href={`/${locale}/products`} className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 font-semibold rounded-lg transition-colors text-sm">
-                {c.ctaProducts}
+              <a href="#specs" className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 font-semibold rounded-lg transition-colors text-sm">
+                {c.ctaSecondary}
               </a>
             </div>
           </div>

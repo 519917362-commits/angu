@@ -8,6 +8,15 @@ import { PILLARS, PILLAR_SLUGS, PILLAR_OG_IMAGE, type PillarSlug } from '@/lib/p
 import { ogImageEntry } from '@/lib/seo-utils';
 import { COMPANY } from '@/lib/company';
 
+// ISR 缓存窗口（显式覆盖 Next 默认的一年）。
+// 之前只有 fetch 级 revalidate=300，页面级 expireTime 用默认值 1 年，
+// 响应头就成了 `s-maxage=300, stale-while-revalidate=31535700` —— 改完文案
+// 最长一年都可能继续吐旧 HTML。投放期每次改文案都会被误判成"没生效"。
+// 压到 1 天后最多 24 小时自动收敛；要立刻生效走 /api/revalidate。
+export const revalidate = 300;
+export const expireTime = 86400;
+
+
 /**
  * 品类支柱页：/en/gabion、/en/fence、/en/wire-mesh、/en/protection-net（× 四语）。
  *
