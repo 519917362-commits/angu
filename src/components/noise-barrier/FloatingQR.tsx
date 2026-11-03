@@ -1,5 +1,5 @@
 'use client';
-import { IconWhatsApp, IconZalo, IconLINE, IconFacebook, IconClose, IconChat } from '../icons';
+import { IconWhatsApp, IconZalo, IconLINE, IconFacebook, IconEmail, IconClose, IconChat } from '../icons';
 
 import { useState, useEffect } from 'react';
 import { whatsappNumber, zaloId, lineId, facebookUrl } from '@/lib/channels';
@@ -21,6 +21,7 @@ interface ContactInfo {
 
 const brandColors: Record<string, string> = {
   whatsapp: '#25D366',
+  email: '#1e40af',
   zalo: '#0068FF',
   line: '#06C755',
   facebook: '#1877F2',
@@ -46,6 +47,11 @@ function buildChannels(locale: string, info: ContactInfo): ChannelDef[] {
       display: (i) => i.whatsapp,
       qrUrl: (i) => i.qrWhatsApp || '',
       available: (i) => whatsappNumber(i.whatsapp) !== '' },
+    { key: 'email', label: 'Email', shortLabel: 'Email', icon: <IconEmail />, color: brandColors.email,
+      href: (i) => `mailto:${i.email}`,
+      display: (i) => i.email,
+      qrUrl: () => '',
+      available: (i) => /.+@.+\..+/.test(i.email || '') },
     { key: 'zalo', label: 'Zalo', shortLabel: 'Zalo', icon: <IconZalo />, color: brandColors.zalo,
       href: (i) => `https://zalo.me/${i.zalo.replace(/[^0-9]/g, '')}`,
       display: (i) => i.zalo,
@@ -63,14 +69,15 @@ function buildChannels(locale: string, info: ContactInfo): ChannelDef[] {
       available: (i) => facebookUrl(i.facebook) !== '' },
   ];
 
-  // Locale priority order
+  // Locale priority order —— WhatsApp 与邮箱是当前真实可用的主渠道，
+  // Zalo / LINE 尚未注册，排在后面（没有账号时会被 available() 过滤掉）。
   const order: Record<string, string[]> = {
-    vi: ['zalo', 'whatsapp', 'line', 'facebook'],
-    th: ['line', 'whatsapp', 'facebook', 'zalo'],
-    en: ['whatsapp', 'facebook', 'zalo', 'line'],
-    zh: ['whatsapp', 'zalo', 'line', 'facebook'],
-    ms: ['whatsapp', 'facebook', 'zalo', 'line'],
-    ar: ['whatsapp', 'facebook', 'zalo', 'line'],
+    vi: ['whatsapp', 'email', 'zalo', 'line', 'facebook'],
+    th: ['whatsapp', 'email', 'line', 'zalo', 'facebook'],
+    en: ['whatsapp', 'email', 'facebook', 'zalo', 'line'],
+    zh: ['whatsapp', 'email', 'zalo', 'line', 'facebook'],
+    ms: ['whatsapp', 'email', 'facebook', 'zalo', 'line'],
+    ar: ['whatsapp', 'email', 'facebook', 'zalo', 'line'],
   };
   const ord = order[locale] || order.en;
   return ord

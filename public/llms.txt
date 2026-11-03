@@ -88,7 +88,7 @@ industrial distributors worldwide.
 - Type: Google Ads landing page
 - Products: 6 noise barrier models (highway, industrial, factory, rail transit, bridge, blast barrier)
 - Key Features: STC 32–34 dB, NRC 0.85, hot-dip galvanized, 15+ year lifespan
-- Form: Quote request (name, email, phone, message) — submission to /api/inquiry
-- Target Markets: Vietnam (Zalo), Thailand (LINE), Southeast Asia (WhatsApp)
+- Form: Quote request (name, email, country, message; optional WhatsApp/company/quantity) — submission to /api/inquiry
+- Contact Channels: WhatsApp +86-188-0318-9797 and email annie@angumesh.com (primary, all markets). Zalo and LINE accounts are not yet registered.
 - SEO: hreflang 4-language, FAQPage/BreadcrumbList/ItemList JSON-LD
 - Privacy Policy: /privacy (all 4 languages)

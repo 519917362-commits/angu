@@ -365,7 +365,7 @@ export default async function NoiseBarrierPage({
           原来它排在规格表之后（桌面 6085 / 8882 ≈ 68%，移动 11712 / 15203 ≈ 77%），
           中段近万像素没有一个表单，全靠吸底条兜底。产品看完就是最自然的
           "报价"时机，规格表留给真正要核参数的人往下翻。 */}
-      <QuoteForm locale={locale} />
+      <QuoteForm locale={locale} whatsapp={contactInfo.whatsapp} email={contactInfo.email} />
 
       {/* 8. Tech Spec */}
       <TechSpecSection locale={locale} />
@@ -385,6 +385,7 @@ export default async function NoiseBarrierPage({
       <CtaSection
         locale={locale}
         whatsapp={contactInfo.whatsapp}
+        email={contactInfo.email}
         zalo={contactInfo.zalo}
         lineId={contactInfo.lineId}
       />

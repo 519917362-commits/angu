@@ -36,6 +36,10 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
       q: 'Can I customize colors and dimensions?',
       a: 'Yes. Panel dimensions customizable: 2.0m / 2.5m / 3.0m / 4.0m. Colors per RAL chart, polyester or PVDF powder coating available.',
     },
+    {
+      q: 'How can I reach your team quickly?',
+      a: 'WhatsApp and email are our primary channels. WhatsApp +86 188 0318 9797 (answered during working hours, Mon–Fri 8:30–18:00 and Sat 9:00–13:00 UTC+8) or email annie@angumesh.com, which we reply to within 24 hours. The quote form on this page reaches the same inbox.',
+    },
   ],
   zh: [
     {
@@ -61,6 +65,10 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
     {
       q: '可以定制颜色和尺寸吗？',
       a: '可以。面板尺寸可选 2.0m / 2.5m / 3.0m / 4.0m。颜色按 RAL 色卡，聚酯或氟碳粉末喷涂。',
+    },
+    {
+      q: '怎样最快联系到你们？',
+      a: 'WhatsApp 与邮箱是我们的主要渠道。WhatsApp：+86 188 0318 9797，工作时间内（周一至周五 8:30–18:00，周六 9:00–13:00，UTC+8）直接应答；邮箱：annie@angumesh.com，24 小时内回复。本页的报价表单会进入同一个收件箱。',
     },
   ],
   vi: [
@@ -94,6 +102,10 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
       q: 'Có thể tùy chỉnh màu sắc và kích thước tấm không?',
       a: 'Có. Kích thước tấm chắn âm tùy chỉnh 2.0m / 2.5m / 3.0m / 4.0m. Màu sắc theo bảng RAL, sơn tĩnh điện polyester hoặc PVDF.',
     },
+    {
+      q: 'Làm sao để liên hệ nhanh nhất với quý công ty?',
+      a: 'WhatsApp và email là hai kênh chính của chúng tôi. WhatsApp: +86 188 0318 9797 (trả lời trong giờ làm việc, thứ Hai–thứ Sáu 8:30–18:00, thứ Bảy 9:00–13:00, UTC+8). Email: annie@angumesh.com, phản hồi trong 24 giờ. Biểu mẫu báo giá trên trang này cũng gửi về cùng hộp thư đó.',
+    },
   ],
   th: [
     {
@@ -126,6 +138,10 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
       q: 'สามารถสั่งสีและขนาดแผงพิเศษได้ไหม?',
       a: 'ได้ ขนาดแผงกั้นเสียงปรับได้ 2.0 / 2.5 / 3.0 / 4.0 ม. สีตาม RAL เคลือบสีฝุ่น polyester หรือ PVDF',
     },
+    {
+      q: 'ติดต่อทีมงานได้เร็วที่สุดทางไหน?',
+      a: 'WhatsApp และอีเมลเป็นช่องทางหลักของเรา WhatsApp: +86 188 0318 9797 (ตอบในเวลาทำการ จ.–ศ. 8:30–18:00, ส. 9:00–13:00, UTC+8) อีเมล: annie@angumesh.com ตอบกลับภายใน 24 ชั่วโมง แบบฟอร์มขอใบเสนอราคาบนหน้านี้ส่งเข้าไปยังอีเมลเดียวกัน',
+    },
   ],
   ms: [
     {
@@ -152,6 +168,10 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
       q: 'Bolehkah saya menyesuaikan warna dan dimensi?',
       a: 'Boleh. Dimensi panel boleh disesuaikan: 2.0m / 2.5m / 3.0m / 4.0m. Warna mengikut carta RAL, salutan serbuk poliester atau PVDF tersedia.',
     },
+    {
+      q: 'Bagaimana cara menghubungi pasukan anda dengan cepat?',
+      a: 'WhatsApp dan e-mel ialah saluran utama kami. WhatsApp: +86 188 0318 9797 (dijawab dalam waktu pejabat, Isnin–Jumaat 8:30–18:00, Sabtu 9:00–13:00, UTC+8). E-mel: annie@angumesh.com, kami balas dalam 24 jam. Borang sebut harga di halaman ini masuk ke peti masuk yang sama.',
+    },
   ],
   ar: [
     {
@@ -177,6 +197,10 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
     {
       q: 'هل يمكن تخصيص الألوان والأبعاد؟',
       a: 'نعم. أبعاد الألواح قابلة للتخصيص: 2.0 م / 2.5 م / 3.0 م / 4.0 م. الألوان حسب مخطط RAL، ويتوفر طلاء بودرة بوليستر أو PVDF.',
+    },
+    {
+      q: 'كيف يمكنني التواصل مع فريقكم بسرعة؟',
+      a: 'واتساب والبريد الإلكتروني هما قناتنا الأساسية. واتساب: ‎+86 188 0318 9797 (نرد خلال ساعات العمل، الاثنين–الجمعة 8:30–18:00 والسبت 9:00–13:00 بتوقيت UTC+8). البريد: annie@angumesh.com، نرد خلال 24 ساعة. نموذج طلب عرض السعر في هذه الصفحة يصل إلى صندوق البريد نفسه.',
     },
   ],
 };

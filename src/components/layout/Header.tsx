@@ -73,9 +73,10 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
       href: fbUrl, qrImg: qrFb, icon: <IconFacebook className="w-5 h-5" /> });
 
     // Locale-based order: first one is most prominent（缺渠道时自动跳过）
+    // WhatsApp 排第一：Zalo / LINE 尚未注册，不能顶掉真实可用的渠道。
     const localeOrder: Record<string, string[]> = {
-      vi: ['zalo', 'whatsapp', 'line', 'facebook'],
-      th: ['line', 'whatsapp', 'facebook', 'zalo'],
+      vi: ['whatsapp', 'zalo', 'line', 'facebook'],
+      th: ['whatsapp', 'line', 'zalo', 'facebook'],
       en: ['whatsapp', 'facebook', 'zalo', 'line'],
       zh: ['whatsapp', 'zalo', 'line', 'facebook'],
     };

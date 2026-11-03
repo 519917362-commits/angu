@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Mail, MessageCircle } from 'lucide-react';
 import { submitInquiryLead } from '@/lib/inquiry';
+import { WHATSAPP_NUMBER, CONTACT_EMAIL } from '@/lib/contact';
 
 /**
  * 落地页报价单。
@@ -36,6 +37,8 @@ interface FormContent {
   privacyNote: string;
   moreToggle: string;
   optional: string;
+  /** 表单下方的低摩擦出口文案（WhatsApp / 邮箱） */
+  directLabel: string;
 }
 
 const formContent: Record<string, FormContent> = {
@@ -44,7 +47,7 @@ const formContent: Record<string, FormContent> = {
     subtitle: 'FOB/CIF · Miễn phí bản vẽ kỹ thuật',
     nameLabel: 'Họ và Tên *',
     emailLabel: 'Email *',
-    phoneLabel: 'Zalo / WhatsApp',
+    phoneLabel: 'WhatsApp / Điện thoại',
     companyLabel: 'Công ty',
     countryLabel: 'Quốc gia / Khu vực *',
     qtyLabel: 'Số lượng (m / m²)',
@@ -54,13 +57,14 @@ const formContent: Record<string, FormContent> = {
     privacyNote: 'Bằng việc gửi form, bạn đồng ý với chính sách bảo mật.',
     moreToggle: 'Thêm thông tin dự án',
     optional: '(không bắt buộc)',
+    directLabel: 'Không muốn điền form? Liên hệ trực tiếp:',
   },
   th: {
     title: 'รับใบเสนอราคาใน 24 ชั่วโมง',
     subtitle: 'FOB/CIF · แบบวิศวกรรมฟรี',
     nameLabel: 'ชื่อ-นามสกุล *',
     emailLabel: 'อีเมล *',
-    phoneLabel: 'LINE / WhatsApp',
+    phoneLabel: 'WhatsApp / โทรศัพท์',
     companyLabel: 'บริษัท',
     countryLabel: 'ประเทศ / ภูมิภาค *',
     qtyLabel: 'จำนวน (ม. / ตร.ม.)',
@@ -70,6 +74,7 @@ const formContent: Record<string, FormContent> = {
     privacyNote: 'การส่งฟอร์มถือว่าท่านยอมรับนโยบายความเป็นส่วนตัว',
     moreToggle: 'เพิ่มข้อมูลโครงการ',
     optional: '(ไม่บังคับ)',
+    directLabel: 'ไม่สะดวกกรอกแบบฟอร์ม? ติดต่อเราโดยตรง:',
   },
   en: {
     title: 'Get a Quote Within 24 Hours',
@@ -86,6 +91,7 @@ const formContent: Record<string, FormContent> = {
     privacyNote: 'By submitting, you agree to our privacy policy.',
     moreToggle: 'Add project details',
     optional: '(optional)',
+    directLabel: 'Prefer not to fill a form? Message us directly:',
   },
   zh: {
     title: '24 小时内获取报价',
@@ -102,6 +108,7 @@ const formContent: Record<string, FormContent> = {
     privacyNote: '提交即表示您同意我们的隐私政策。',
     moreToggle: '补充项目信息',
     optional: '（可选）',
+    directLabel: '不想填表？直接联系我们：',
   },
   ms: {
     title: 'Dapatkan Sebut Harga Dalam 24 Jam',
@@ -118,6 +125,7 @@ const formContent: Record<string, FormContent> = {
     privacyNote: 'Dengan menghantar borang ini, anda bersetuju dengan dasar privasi kami.',
     moreToggle: 'Tambah butiran projek',
     optional: '(pilihan)',
+    directLabel: 'Tidak mahu isi borang? Hubungi kami terus:',
   },
   ar: {
     title: 'احصل على عرض سعر خلال 24 ساعة',
@@ -134,6 +142,7 @@ const formContent: Record<string, FormContent> = {
     privacyNote: 'بإرسال هذا النموذج فإنك توافق على سياسة الخصوصية.',
     moreToggle: 'أضف تفاصيل المشروع',
     optional: '(اختياري)',
+    directLabel: 'لا ترغب في تعبئة النموذج؟ تواصل معنا مباشرة:',
   },
 };
 
@@ -150,7 +159,15 @@ const COUNTRIES = [
 const fieldCls =
   'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-sm';
 
-export function QuoteForm({ locale }: { locale: string }) {
+export function QuoteForm({
+  locale,
+  whatsapp = WHATSAPP_NUMBER,
+  email = CONTACT_EMAIL,
+}: {
+  locale: string;
+  whatsapp?: string;
+  email?: string;
+}) {
   const c = formContent[locale] || formContent.en;
   const router = useRouter();
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -261,9 +278,34 @@ export function QuoteForm({ locale }: { locale: string }) {
             {status === 'error' && (
               <p className="text-xs text-red-600 text-center" role="alert">
                 {locale === 'zh' ? '提交未成功，请稍后重试，或直接发邮件至 ' : 'Could not send. Please try again or email '}
-                <a href="mailto:annie@angumesh.com" className="underline">annie@angumesh.com</a>
+                <a href={`mailto:${email}`} className="underline">{email}</a>
               </p>
             )}
+
+            {/* 低摩擦出口：不愿意填表的人，直接 WhatsApp / 邮件走。
+                Zalo / LINE 尚未注册，暂不作为主渠道（见 src/lib/channels.ts）。 */}
+            <div className="pt-2 text-center border-t border-slate-100">
+              <p className="text-xs text-slate-500 mt-3">{c.directLabel}</p>
+              <div className="mt-2 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
+                <a
+                  href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Hello, I would like a quotation for noise barriers.')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 font-medium text-[#128C7E] hover:underline"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  WhatsApp
+                </a>
+                <a
+                  href={`mailto:${email}`}
+                  className="inline-flex items-center gap-1.5 font-medium text-blue-700 hover:underline"
+                >
+                  <Mail className="w-4 h-4" />
+                  {email}
+                </a>
+              </div>
+            </div>
+
             <p className="text-xs text-slate-400 text-center">
               <Link href={`/${locale}/privacy`} className="text-blue-600 hover:underline">{c.privacyNote}</Link>
             </p>

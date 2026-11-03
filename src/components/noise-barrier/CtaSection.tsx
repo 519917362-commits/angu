@@ -2,11 +2,13 @@ import { IconWhatsApp } from '@/components/icons';
 export function CtaSection({
   locale,
   whatsapp,
+  email,
   zalo,
   lineId,
 }: {
   locale: string;
   whatsapp: string;
+  email: string;
   zalo: string;
   lineId: string;
 }) {
@@ -51,26 +53,40 @@ export function CtaSection({
              : '📋 Get Your Quote Now'}
           </a>
 
-          {/* 越南语优先 Zalo、泰语优先 LINE，但只有后台真的配了账号才显示。
-              没有就一律回落 WhatsApp —— 以前这里直接拿手机号拼 zalo.me / line.me，
-              泰国页甚至会拼出 line.me/ti/p/~8618803189797，点开必然找不到人。 */}
-          {isVi && zalo ? (
+          {/* WhatsApp 是常驻渠道：Zalo / LINE 目前尚未注册，不能让它们顶掉 WhatsApp 的位置。
+              账号填进 site_config 后，Zalo / LINE 会作为次级入口追加在下面（见下方链接行）。 */}
+          <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('Hello, I would like a quotation for noise barriers.')}`} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-green-500/20 border border-green-300/30 text-white font-semibold rounded-lg hover:bg-green-500/30 transition-colors">
+            <IconWhatsApp className="w-5 h-5" />
+            {isVi ? 'Chat WhatsApp'
+             : isTh ? 'แชท WhatsApp'
+             : isMs ? 'Sembang WhatsApp'
+             : isAr ? 'واتساب'
+             : locale === 'zh' ? 'WhatsApp 咨询'
+             : 'Chat on WhatsApp'}
+          </a>
+        </div>
+
+        {/* 次级渠道：邮箱（常驻）+ 已注册的 Zalo / LINE */}
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-blue-100">
+          <a href={`mailto:${email}`}
+            className="inline-flex items-center gap-1.5 hover:text-white underline underline-offset-4 decoration-blue-300/40 transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l9 6 9-6M4 5h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1z" />
+            </svg>
+            {email}
+          </a>
+
+          {isVi && zalo && (
             <a href={`https://zalo.me/${zalo}`} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-blue-500/20 border border-blue-300/30 text-white font-semibold rounded-lg hover:bg-blue-500/30 transition-colors">
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
-              Chat Zalo
+              className="inline-flex items-center gap-1.5 hover:text-white underline underline-offset-4 decoration-blue-300/40 transition-colors">
+              Zalo
             </a>
-          ) : isTh && lineId ? (
+          )}
+          {isTh && lineId && (
             <a href={`https://line.me/ti/p/~${lineId}`} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-green-500/20 border border-green-300/30 text-white font-semibold rounded-lg hover:bg-green-500/30 transition-colors">
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="6"/></svg>
-              Chat LINE
-            </a>
-          ) : (
-            <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-green-500/20 border border-green-300/30 text-white font-semibold rounded-lg hover:bg-green-500/30 transition-colors">
-              <IconWhatsApp className="w-5 h-5" />
-              Chat WhatsApp
+              className="inline-flex items-center gap-1.5 hover:text-white underline underline-offset-4 decoration-blue-300/40 transition-colors">
+              LINE
             </a>
           )}
         </div>
