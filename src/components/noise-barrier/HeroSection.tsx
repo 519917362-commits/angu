@@ -2,6 +2,8 @@ import Image from 'next/image';
 
 interface HeroContent {
   badge: string;
+  /** 首屏图替代文本：描述照片里真的有什么，而不是重复 H1 或写「Noise Barrier — Angu」 */
+  alt: string;
   headline: string;
   subheadline: string;
   trust: string[];
@@ -12,6 +14,7 @@ interface HeroContent {
 const heroContent: Record<string, HeroContent> = {
   vi: {
     badge: 'Nhà Sản Xuất Trực Tiếp · Xuất Khẩu Sang Việt Nam',
+    alt: 'Tường chắn âm đường cao tốc đã lắp đặt — tấm thép tiêu âm 3 m trên trụ thép chữ H',
     // H1 以「tường chắn âm」（整道隔音墙，工程招标用词）领起，
     // 再带「tấm chắn âm」（声屏障板，比 tấm cách âm 更准确 —— 后者在越南多指室内隔音板/棉）
     headline: 'Tường Chắn Âm & Tấm Chắn Âm Đường Cao Tốc, Công Nghiệp — Giá Xuất Xưởng',
@@ -22,6 +25,7 @@ const heroContent: Record<string, HeroContent> = {
   },
   th: {
     badge: 'ผู้ผลิตโดยตรง · ส่งออกสู่ประเทศไทย',
+    alt: 'กำแพงกันเสียงทางหลวงที่ติดตั้งแล้ว — แผงเหล็กซับเสียง 3 ม. บนเสาเหล็ก H',
     // H1 以「กำแพงกันเสียง」（整道隔音墙）领起，与广告主词和 meta title 对齐，
     // 「แผงกั้นเสียง」（单块屏障板）随后并列，两个词都留在首屏
     headline: 'กำแพงกันเสียง & แผงกั้นเสียง สำหรับทางหลวงและอุตสาหกรรม — ราคาหน้าโรงงาน',
@@ -32,6 +36,7 @@ const heroContent: Record<string, HeroContent> = {
   },
   en: {
     badge: 'Direct Factory Export · Shipping to Vietnam & Thailand',
+    alt: 'Installed highway noise barrier — 3 m absorptive steel panels on H-beam posts',
     headline: 'Highway & Industrial Noise Barrier — Factory-Direct Pricing',
     subheadline: 'STC 32–34 · NRC 0.85 · Hot-Dip Galvanized 15+ Years · FOB/CIF to Southeast Asia',
     trust: ['ISO 9001:2015', 'SGS Tested', '10-15 Day Production', 'CAD Support'],
@@ -40,6 +45,7 @@ const heroContent: Record<string, HeroContent> = {
   },
   zh: {
     badge: '中国工厂直供 · 出口越南与泰国',
+    alt: '公路声屏障安装实景 — 3 米吸声钢板安装在 H 型钢立柱上',
     headline: '公路与工业声屏障 — 工厂直供价',
     subheadline: 'STC 32–34 · NRC 0.85 · 热镀锌防腐 15+ 年 · FOB/CIF 胡志明/海防/曼谷',
     trust: ['ISO 9001:2015', 'SGS 检测', '10-15 天生产', 'CAD 技术支持'],
@@ -48,6 +54,7 @@ const heroContent: Record<string, HeroContent> = {
   },
   ms: {
     badge: 'Pengeluar Terus Kilang · Eksport ke Malaysia & GCC',
+    alt: 'Penghadang bunyi lebuh raya yang telah dipasang — panel keluli menyerap bunyi 3 m pada tiang H',
     headline: 'Penghadang Bunyi Lebuh Raya & Industri — Harga Terus Kilang',
     subheadline: 'STC 32–34 · NRC 0.85 · Galvani Hot-Dip 15+ Tahun · FOB/CIF ke Pelabuhan Klang & Jebel Ali',
     trust: ['ISO 9001:2015', 'Diuji SGS', 'Pengeluaran 10-15 Hari', 'Sokongan CAD'],
@@ -56,6 +63,7 @@ const heroContent: Record<string, HeroContent> = {
   },
   ar: {
     badge: 'تصنيع مباشر من المصنع · تصدير إلى دول الخليج',
+    alt: 'حاجز صوتي مثبَّت على طريق سريع — ألواح فولاذية ماصة للصوت بارتفاع 3 أمتار على أعمدة H',
     headline: 'حواجز صوتية للطرق السريعة والمناطق الصناعية — بسعر المصنع',
     subheadline: 'STC 32–34 · NRC 0.85 · جلفنة بالغمس الساخن 15+ سنة · FOB/CIF إلى جبل علي والدمام',
     trust: ['ISO 9001:2015', 'مُختبر من SGS', 'إنتاج 10-15 يومًا', 'دعم CAD'],
@@ -115,7 +123,7 @@ export function HeroSection({ locale, heroImage }: { locale: string; heroImage?:
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10">
               <Image
                 src={img}
-                alt="Noise Barrier — Angu"
+                alt={c.alt}
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"

@@ -20,7 +20,16 @@ function pickLocale(obj: Record<string, string | undefined>, locale: string): st
   return obj[locale] || obj['en'] || '';
 }
 
-export function ProductMatrix({ locale, products }: { locale: string; products: Product[] }) {
+export function ProductMatrix({
+  locale,
+  products,
+  moreProducts = [],
+}: {
+  locale: string;
+  products: Product[];
+  /** 同品类里没进「推荐」的其余型号，以一行紧凑链接兜底 */
+  moreProducts?: { slug: string; name: string }[];
+}) {
   const selected = displaySlugs
     .map(slug => products.find(p => p.slug === slug))
     .filter((p): p is Product => !!p);
@@ -89,6 +98,35 @@ export function ProductMatrix({ locale, products }: { locale: string; products: 
             );
           })}
         </div>
+
+        {/* 品类里还有 3 款没进推荐位：工厂隔音墙 4m、设备隔声罩 2.5m、全封闭式。
+            这三款的买家（工业园区、厂界降噪）恰好是投放的主要客群，
+            却因为 slug 是硬编码的 6 个而在这页完全不可达。
+            不塞进上面的 3×3 网格 —— 那会把表单往下推一整行；
+            用一行文字链接补齐，滚动成本几乎为零。 */}
+        {moreProducts.length > 0 && (
+          <p className="mt-8 text-sm text-slate-500 text-center leading-relaxed">
+            <span className="text-slate-400">
+              {locale === 'vi' ? 'Cùng dòng sản phẩm: '
+               : locale === 'th' ? 'ในกลุ่มเดียวกัน: '
+               : locale === 'ms' ? 'Dalam barisan ini: '
+               : locale === 'ar' ? 'ضمن نفس الفئة: '
+               : locale === 'zh' ? '同品类还有：'
+               : 'Also in this range: '}
+            </span>
+            {moreProducts.map((mp, i) => (
+              <span key={mp.slug}>
+                {i > 0 && <span className="text-slate-300"> · </span>}
+                <Link
+                  href={localeHref(locale, `/products/${mp.slug}`)}
+                  className="text-blue-600 hover:underline underline-offset-2 font-medium"
+                >
+                  {mp.name}
+                </Link>
+              </span>
+            ))}
+          </p>
+        )}
       </div>
     </section>
   );

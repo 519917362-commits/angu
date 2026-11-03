@@ -344,6 +344,50 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
             </div>
           )}
 
+          {/* 回链品类落地页 —— 这 4 篇声屏障长文此前一条都不指向 /noise-barrier，
+              文章→产品页的内链是有的，但商业意图最强的那个页面一分权重都拿不到。
+              按分类统一插入，新写的同分类文章自动带上，不用逐篇改正文。 */}
+          {post.category_slug === 'noise-barrier' && (
+            <Link
+              href={localeHref(locale, '/noise-barrier')}
+              className="mt-10 block rounded-2xl bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 p-6 sm:p-8 text-white hover:shadow-xl transition-shadow"
+            >
+              <p className="text-xs font-semibold tracking-widest uppercase text-blue-300">
+                {locale === 'zh' ? '声屏障' : locale === 'vi' ? 'Tường chắn âm' : locale === 'th' ? 'กำแพงกันเสียง' : locale === 'ms' ? 'Penghadang bunyi' : locale === 'ar' ? 'حاجز الضوضاء' : 'Noise barrier'}
+              </p>
+              <p className="mt-2 text-lg sm:text-xl font-bold leading-snug">
+                {locale === 'zh'
+                  ? '看实际型号与 FOB 参考价'
+                  : locale === 'vi'
+                  ? 'Xem các model thực tế và giá FOB tham khảo'
+                  : locale === 'th'
+                  ? 'ดูรุ่นจริงและราคา FOB อ้างอิง'
+                  : locale === 'ms'
+                  ? 'Lihat model sebenar dan harga FOB rujukan'
+                  : locale === 'ar'
+                  ? 'اطلع على الطرازات الفعلية وسعر FOB الاسترشادي'
+                  : 'See the actual models and indicative FOB prices'}
+              </p>
+              <p className="mt-2 text-sm text-slate-300">
+                {locale === 'zh'
+                  ? '9 款在产型号、STC / NRC 实测参数、起订量与交期，一页看完。'
+                  : locale === 'vi'
+                  ? '9 mẫu đang sản xuất, thông số STC / NRC, MOQ và thời gian giao hàng trong một trang.'
+                  : locale === 'th'
+                  ? '9 รุ่นที่ผลิตอยู่ สเปค STC / NRC, MOQ และระยะเวลาจัดส่ง ครบในหน้าเดียว'
+                  : locale === 'ms'
+                  ? '9 model dalam pengeluaran, spesifikasi STC / NRC, MOQ dan masa penghantaran dalam satu halaman.'
+                  : locale === 'ar'
+                  ? '9 طرازات قيد الإنتاج، مواصفات STC / NRC، الحد الأدنى للطلب ومدة التسليم في صفحة واحدة.'
+                  : 'Nine models in production, measured STC / NRC, MOQ and lead times — on one page.'}
+              </p>
+              <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-300">
+                {locale === 'zh' ? '打开声屏障页' : locale === 'vi' ? 'Mở trang tường chắn âm' : locale === 'th' ? 'เปิดหน้ากำแพงกันเสียง' : locale === 'ms' ? 'Buka halaman penghadang bunyi' : locale === 'ar' ? 'افتح صفحة حاجز الضوضاء' : 'Open the noise barrier page'}
+                <span aria-hidden="true">→</span>
+              </span>
+            </Link>
+          )}
+
           {/* Tags */}
           {keywords && (
             <div className="mt-8 flex flex-wrap gap-2">

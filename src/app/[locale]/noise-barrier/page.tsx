@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { routing } from '@/lib/routing';
-import { getSiteConfig, getCatalog, getNoiseBarrierData } from '@/lib/api';
+import { getSiteConfig, getCatalog, getNoiseBarrierData, getBlogPosts } from '@/lib/api';
 import { HeroSection } from '@/components/noise-barrier/HeroSection';
 import { TrustBadges } from '@/components/noise-barrier/TrustBadges';
 import { ValueProposition } from '@/components/noise-barrier/ValueProposition';
@@ -12,6 +12,7 @@ import { CtaSection } from '@/components/noise-barrier/CtaSection';
 import { CompanyStrength } from '@/components/noise-barrier/CompanyStrength';
 import { ProjectGallery } from '@/components/noise-barrier/ProjectGallery';
 import { QuoteForm } from '@/components/noise-barrier/QuoteForm';
+import { RelatedReading } from '@/components/noise-barrier/RelatedReading';
 import { NoiseBarrierClient } from '@/components/noise-barrier/NoiseBarrierClient';
 import { whatsappNumber, zaloId, lineId, facebookUrl } from '@/lib/channels';
 import { getNoiseBarrierFaqs } from '@/lib/noiseBarrierFaq';
@@ -139,13 +140,57 @@ export default async function NoiseBarrierPage({
   ];
 
   // Parallel data fetching
-  const [catalog, siteConfig, nbData] = await Promise.all([
+  const [catalog, siteConfig, nbData, blogPosts] = await Promise.all([
     getCatalog(),
     getSiteConfig(),
     getNoiseBarrierData(),
+    // 技术文章：用于「技术资料」区块（此前落地页一条博客链接都没有）
+    getBlogPosts().catch(() => []),
   ]);
 
   const noiseProducts = (catalog?.products || []).filter((p: any) => noiseSlugs.includes(p.slug));
+
+  // 品类下未进「推荐产品」的其余型号。原来只硬编码了 6 个 slug，
+  // 工厂隔音墙 / 设备隔声罩 / 全封闭式这三款（恰是工业客户最常要的）
+  // 在落地页上完全不可达。
+  const moreProducts = (catalog?.products || [])
+    .filter((p: any) => p.category_slug === 'noise-barrier' && !noiseSlugs.includes(p.slug))
+    .map((p: any) => ({
+      slug: p.slug,
+      name: p.names?.[locale] || p.names?.en || p.name_en || p.slug,
+    }))
+    .filter((p: { name: string }) => !!p.name);
+
+  // 阅读顺序：先按内容策划的优先级，再补齐同分类其它文章
+  const READING_ORDER = [
+    'noise-barrier-types-comparison',
+    'noise-barrier-cost-per-square-meter',
+    'noise-barrier-insertion-loss-design',
+    'noise-barrier-installation-guide',
+  ];
+  const pickField = (post: any, key: string): string => {
+    const localized = post?.[`${key}_${locale}`];
+    return localized || post?.[`${key}_en`] || '';
+  };
+  const readingPosts = (blogPosts || [])
+    .filter((p: any) => (p.category_slug || p.categorySlug) === 'noise-barrier')
+    .sort((a: any, b: any) => {
+      const ia = READING_ORDER.indexOf(a.slug);
+      const ib = READING_ORDER.indexOf(b.slug);
+      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    })
+    .slice(0, 4)
+    .map((p: any) => {
+      const body = pickField(p, 'content').replace(/[#>*_`\[\]()]/g, ' ');
+      const words = body.split(/\s+/).filter(Boolean).length;
+      return {
+        slug: p.slug,
+        title: pickField(p, 'title'),
+        abstract: pickField(p, 'abstract'),
+        // 中文/泰文按字符估（~450 字/分钟），拉丁语系按词估（~200 词/分钟）
+        minutes: Math.max(3, Math.round(['zh', 'th'].includes(locale) ? body.length / 450 : words / 200)),
+      };
+    });
 
   // Get phone from site config
   let phone = '8618803189797';
@@ -247,8 +292,11 @@ export default async function NoiseBarrierPage({
   };
 
   // 项目案例 JSON-LD
-  // schema.org 并没有 CaseStudy 这个类型（和之前的 Manufacturer 一样属误用），
-  // 用 Article + locationCreated 表达「某地交付了什么规格的项目」，
+  // schema.org 没有 CaseStudy 这个类型，之前用 Article 代替其实是错的：
+  // Article 富结果要求 author + datePublished，而项目库只有 title/location/spec
+  // 和一个创建时间，编不出「发表日期」，Search Console 只会一直报缺字段。
+  // 改成 CreativeWork —— 同样能表达「某地交付了什么规格的项目」，
+  // 不假装是文章，也就不欠 Google 那两个字段。
   // 不写 Review / aggregateRating —— 没有真实评价就不虚构评分。
   const pick = (rec: Record<string, string | undefined>, key: string) =>
     rec[`${key}_${locale}`] || rec[`${key}_en`] || '';
@@ -260,10 +308,9 @@ export default async function NoiseBarrierPage({
     const img = p.image_url;
     return {
       '@context': 'https://schema.org',
-      '@type': 'Article',
-      headline: `${title} — ${location}`,
-      articleSection: 'Case Study',
-      abstract: spec,
+      '@type': 'CreativeWork',
+      name: `${title} — ${location}`,
+      description: spec,
       about: { '@type': 'Product', name: 'Noise Barrier', category: 'Noise Barrier' },
       locationCreated: { '@type': 'Place', name: location },
       ...(img ? { image: `https://www.angumesh.com${img}` } : {}),
@@ -310,7 +357,7 @@ export default async function NoiseBarrierPage({
       <ValueProposition locale={locale} />
 
       {/* 6. Product Matrix */}
-      <ProductMatrix locale={locale} products={noiseProducts} />
+      <ProductMatrix locale={locale} products={noiseProducts} moreProducts={moreProducts} />
 
       {/* 7. Quote Form — 上移到产品矩阵之后。
           原来它排在规格表之后（桌面 6085 / 8882 ≈ 68%，移动 11712 / 15203 ≈ 77%），
@@ -320,6 +367,11 @@ export default async function NoiseBarrierPage({
 
       {/* 8. Tech Spec */}
       <TechSpecSection locale={locale} />
+
+      {/* 8b. 技术文章 —— 原本这里一条博客链接都没有。
+          放在规格表之后：往下翻到这个位置的人，正是想深挖参数和造价的，
+          给出四条能直接解答「选哪种 / 多少钱 / 怎么设计 / 怎么装」的长文。 */}
+      <RelatedReading locale={locale} posts={readingPosts} />
 
       {/* 9. Social Proof */}
       <SocialProof locale={locale} />
