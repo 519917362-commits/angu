@@ -39,6 +39,13 @@ const HEX_MESH = 'hexagonal-wire-mesh-25mm';
 const BARBED_WIRE = 'steel-barbed-wire-12x14';
 const ACTIVE_NET = 'active-slope-protection-net-dns50';
 const PASSIVE_BARRIER = 'passive-slope-protection-barrier-gl100';
+const HIGHWAY_NB = 'highway-noise-barrier-3m';
+const FACTORY_NB = 'factory-noise-barrier-4m';
+const BRIDGE_NB = 'bridge-noise-barrier';
+const UPRIGHT_NB = 'metal-upright-noise-barrier';
+const CURVED_NB = 'metal-bent-curved-noise-barrier';
+const TRANSPARENT_NB = 'transparent-acrylic-glass-noise-barrier';
+const ENCLOSED_NB = 'fully-enclosed-noise-barrier';
 
 /**
  * 关键词一律用产品特有用语，不用 gabion、fence、镀锌、丝网 这类泛词，
@@ -115,6 +122,38 @@ export const BLOG_PRODUCT_LINKS: Record<string, BlogProductLinks> = {
       {pattern: /\bhexagonal (?:wire )?mesh\b|六角网|拧花网/i, slug: HEX_MESH},
     ],
     related: [CHAIN_LINK, WELDED_MESH, HEX_MESH],
+  },
+  'noise-barrier-types-comparison': {
+    rules: [
+      {pattern: /\bmetal (?:absorptive )?upright\b|\bvertical noise barrier\b|金属直立|直立式声屏障/i, slug: UPRIGHT_NB},
+      {pattern: /\b(?:bent|curved)[- ]top\b|弧形声屏障|弧形顶|折角顶/i, slug: CURVED_NB},
+      {pattern: /\btransparent (?:PC |polycarbonate )?(?:noise )?barrier\b|透明声屏障|透明屏体|聚碳酸酯板/i, slug: TRANSPARENT_NB},
+    ],
+    related: [UPRIGHT_NB, CURVED_NB, TRANSPARENT_NB, ENCLOSED_NB, HIGHWAY_NB],
+  },
+  'noise-barrier-cost-per-square-meter': {
+    rules: [
+      {pattern: /\bhighway noise barrier\b|公路声屏障/i, slug: HIGHWAY_NB},
+      {pattern: /\bpolycarbonate (?:panel|sheet)\b|聚碳酸酯板/i, slug: TRANSPARENT_NB},
+      {pattern: /\bfully enclosed\b|全封闭声屏障|全封闭式/i, slug: ENCLOSED_NB},
+    ],
+    related: [HIGHWAY_NB, TRANSPARENT_NB, ENCLOSED_NB, FACTORY_NB],
+  },
+  'noise-barrier-insertion-loss-design': {
+    rules: [
+      {pattern: /\bhighway noise barrier\b|公路声屏障/i, slug: HIGHWAY_NB},
+      {pattern: /\b(?:bent|curved)[- ]top\b|弧形顶|弧形声屏障/i, slug: CURVED_NB},
+      {pattern: /\bviaduct\b|\bbridge deck\b|高架桥|桥面/i, slug: BRIDGE_NB},
+    ],
+    related: [HIGHWAY_NB, CURVED_NB, BRIDGE_NB],
+  },
+  'noise-barrier-installation-guide': {
+    rules: [
+      {pattern: /\bH[- ]section post\b|H\s?型钢立柱|H\s?型立柱/i, slug: UPRIGHT_NB},
+      {pattern: /\bhighway noise barrier\b|公路声屏障/i, slug: HIGHWAY_NB},
+      {pattern: /\bfactory noise barrier\b|厂界声屏障|厂房声屏障/i, slug: FACTORY_NB},
+    ],
+    related: [UPRIGHT_NB, HIGHWAY_NB, FACTORY_NB, BRIDGE_NB],
   },
 };
 
