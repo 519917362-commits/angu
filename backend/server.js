@@ -142,6 +142,38 @@ https://www.angumesh.com`,
 2014 年建厂 · ISO 9001:2015 · CE
 https://www.angumesh.com`,
   },
+  vi: {
+    subject: (no) => `Đã nhận yêu cầu ${no} — Angu Wire Mesh`,
+    body: (name, no, product) => `Kính gửi ${name},
+
+Cảm ơn bạn đã liên hệ Angu Wire Mesh. Yêu cầu ${no}${product ? ` về ${product}` : ''} đã được tiếp nhận.
+
+Đội ngũ xuất khẩu của chúng tôi sẽ phản hồi trong vòng 24 giờ làm việc, thường kèm báo giá chính thức gồm thông số kỹ thuật, MOQ, thời gian sản xuất và giá FOB Thiên Tân.
+
+Nếu dự án gấp, liên hệ trực tiếp:
+- Email: ${SMTP_USER}
+- WhatsApp / Điện thoại: +86 188 0318 9797
+
+Angu Wire Mesh (Anping County Angu Metal Wire Mesh Products Co., Ltd.)
+Sản xuất từ 2014 · ISO 9001:2015 · CE
+https://www.angumesh.com`,
+  },
+  th: {
+    subject: (no) => `ได้รับคำขอ ${no} แล้ว — Angu Wire Mesh`,
+    body: (name, no, product) => `เรียนคุณ ${name},
+
+ขอบคุณที่ติดต่อ Angu Wire Mesh เราได้รับคำขอ ${no}${product ? ` เกี่ยวกับ ${product}` : ''} แล้ว
+
+ทีมส่งออกของเราจะตอบกลับภายใน 24 ชั่วโมงในวันทำการ โดยปกติพร้อมใบเสนอราคาอย่างเป็นทางการซึ่งระบุสเปค MOQ ระยะเวลาผลิต และราคา FOB เทียนจิน
+
+หากโครงการเร่งด่วน ติดต่อเราได้โดยตรง:
+- อีเมล: ${SMTP_USER}
+- WhatsApp / โทร: +86 188 0318 9797
+
+Angu Wire Mesh (Anping County Angu Metal Wire Mesh Products Co., Ltd.)
+ผลิตตั้งแต่ปี 2014 · ISO 9001:2015 · CE
+https://www.angumesh.com`,
+  },
 };
 
 async function sendInquiryNotification(inquiry) {
@@ -244,7 +276,7 @@ async function sendInquiryNotification(inquiry) {
 
 async function sendAutoReply(inquiry) {
   if (!mailer || !AUTO_REPLY_ON) return;
-  const locale = ['en', 'zh'].includes(inquiry.locale) ? inquiry.locale : 'en';
+  const locale = ['en', 'zh', 'vi', 'th'].includes(inquiry.locale) ? inquiry.locale : 'en';
   const copy = AUTO_REPLY_COPY[locale];
   const productLabel = inquiry.product_label || '';
   try {

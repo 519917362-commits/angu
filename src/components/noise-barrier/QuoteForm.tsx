@@ -3,7 +3,23 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { ChevronDown } from 'lucide-react';
 import { submitInquiryLead } from '@/lib/inquiry';
+
+/**
+ * 落地页报价单。
+ *
+ * 字段策略（2026-11-03 调整）：
+ * 首屏接触只显 4 个 —— 姓名 / 邮箱 / 国家 / 需求，其余（WhatsApp、公司、数量）
+ * 收进「补充项目信息（可选）」折叠区。
+ *
+ * 依据：B2B 首次接触 4–5 个字段的提交率普遍高于 7 个；而 phone/company/quantity
+ * 对报价并非前置必需（有邮箱就能回、有需求就能报）。折叠区不是删字段，
+ * 愿意填的人照样填，只是不再用视觉成本劝退所有人。
+ *
+ * 折叠区用 CSS hidden 而不是条件渲染：收起时输入框仍在 DOM 里，
+ * 用户填了一半又收起不会丢值。
+ */
 
 interface FormContent {
   title: string;
@@ -18,6 +34,8 @@ interface FormContent {
   submitBtn: string;
   successMsg: string;
   privacyNote: string;
+  moreToggle: string;
+  optional: string;
 }
 
 const formContent: Record<string, FormContent> = {
@@ -34,6 +52,8 @@ const formContent: Record<string, FormContent> = {
     submitBtn: 'Gửi Yêu Cầu Báo Giá',
     successMsg: '✓ Đã gửi! Chúng tôi sẽ phản hồi trong 24 giờ.',
     privacyNote: 'Bằng việc gửi form, bạn đồng ý với chính sách bảo mật.',
+    moreToggle: 'Thêm thông tin dự án',
+    optional: '(không bắt buộc)',
   },
   th: {
     title: 'รับใบเสนอราคาใน 24 ชั่วโมง',
@@ -48,6 +68,8 @@ const formContent: Record<string, FormContent> = {
     submitBtn: 'ส่งคำขอใบเสนอราคา',
     successMsg: '✓ ส่งแล้ว! เราจะตอบกลับภายใน 24 ชั่วโมง',
     privacyNote: 'การส่งฟอร์มถือว่าท่านยอมรับนโยบายความเป็นส่วนตัว',
+    moreToggle: 'เพิ่มข้อมูลโครงการ',
+    optional: '(ไม่บังคับ)',
   },
   en: {
     title: 'Get a Quote Within 24 Hours',
@@ -62,6 +84,8 @@ const formContent: Record<string, FormContent> = {
     submitBtn: 'Request Quotation',
     successMsg: '✓ Sent! We will respond within 24 hours.',
     privacyNote: 'By submitting, you agree to our privacy policy.',
+    moreToggle: 'Add project details',
+    optional: '(optional)',
   },
   zh: {
     title: '24 小时内获取报价',
@@ -76,6 +100,8 @@ const formContent: Record<string, FormContent> = {
     submitBtn: '提交询价',
     successMsg: '✓ 已提交！我们将在 24 小时内回复。',
     privacyNote: '提交即表示您同意我们的隐私政策。',
+    moreToggle: '补充项目信息',
+    optional: '（可选）',
   },
   ms: {
     title: 'Dapatkan Sebut Harga Dalam 24 Jam',
@@ -90,6 +116,8 @@ const formContent: Record<string, FormContent> = {
     submitBtn: 'Minta Sebut Harga',
     successMsg: '✓ Dihantar! Kami akan membalas dalam masa 24 jam.',
     privacyNote: 'Dengan menghantar borang ini, anda bersetuju dengan dasar privasi kami.',
+    moreToggle: 'Tambah butiran projek',
+    optional: '(pilihan)',
   },
   ar: {
     title: 'احصل على عرض سعر خلال 24 ساعة',
@@ -104,13 +132,29 @@ const formContent: Record<string, FormContent> = {
     submitBtn: 'اطلب عرض السعر',
     successMsg: '✓ تم الإرسال! سنرد خلال 24 ساعة.',
     privacyNote: 'بإرسال هذا النموذج فإنك توافق على سياسة الخصوصية.',
+    moreToggle: 'أضف تفاصيل المشروع',
+    optional: '(اختياري)',
   },
 };
+
+const COUNTRIES = [
+  'Vietnam', 'Thailand', 'Malaysia', 'Indonesia', 'Philippines', 'Singapore',
+  'Cambodia', 'Myanmar', 'Laos', 'India', 'Bangladesh', 'Sri Lanka',
+  'Pakistan', 'United Arab Emirates', 'Saudi Arabia', 'Qatar',
+  'Australia', 'New Zealand', 'United States', 'Mexico', 'Brazil',
+  'Chile', 'Peru', 'Nigeria', 'Kenya', 'South Africa', 'Egypt',
+  'Turkey', 'Poland', 'Germany', 'United Kingdom', 'Spain', 'Italy',
+  'Russia', 'Kazakhstan', 'Japan', 'South Korea',
+];
+
+const fieldCls =
+  'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-sm';
 
 export function QuoteForm({ locale }: { locale: string }) {
   const c = formContent[locale] || formContent.en;
   const router = useRouter();
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [showMore, setShowMore] = useState(false);
 
   return (
     <section id="quote-form" className="py-16 sm:py-20 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white scroll-mt-20">
@@ -156,48 +200,49 @@ export function QuoteForm({ locale }: { locale: string }) {
               style={{ position: 'absolute', opacity: 0, pointerEvents: 'none' }} />
 
             <input type="text" name="name" required autoComplete="name"
-              placeholder={c.nameLabel}
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-sm" />
+              placeholder={c.nameLabel} className={fieldCls} />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <input type="email" name="email" required
-                placeholder={c.emailLabel}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-sm" />
-              <input type="text" name="phone"
-                placeholder={c.phoneLabel}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-sm" />
-            </div>
+            <input type="email" name="email" required autoComplete="email"
+              placeholder={c.emailLabel} className={fieldCls} />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <input type="text" name="company" autoComplete="organization"
-                placeholder={c.companyLabel}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-sm" />
-              {/* 国家是外贸报价的前置信息（运费/关税/标准都按国别定），
-                  用 datalist 给常用市场做提示，同时允许手填任何国家 */}
-              <input type="text" name="country" required autoComplete="country-name"
-                list="angu-country-options"
-                placeholder={c.countryLabel}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-sm" />
-              <datalist id="angu-country-options">
-                {['Vietnam', 'Thailand', 'Malaysia', 'Indonesia', 'Philippines', 'Singapore',
-                  'Cambodia', 'Myanmar', 'Laos', 'India', 'Bangladesh', 'Sri Lanka',
-                  'Pakistan', 'United Arab Emirates', 'Saudi Arabia', 'Qatar',
-                  'Australia', 'New Zealand', 'United States', 'Mexico', 'Brazil',
-                  'Chile', 'Peru', 'Nigeria', 'Kenya', 'South Africa', 'Egypt',
-                  'Turkey', 'Poland', 'Germany', 'United Kingdom', 'Spain', 'Italy',
-                  'Russia', 'Kazakhstan', 'Japan', 'South Korea'].map((n) => (
-                  <option key={n} value={n} />
-                ))}
-              </datalist>
-            </div>
-
-            <input type="text" name="quantity"
-              placeholder={c.qtyLabel}
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-sm" />
+            {/* 国家是外贸报价的前置信息（运费/关税/标准都按国别定），
+                用 datalist 给常用市场做提示，同时允许手填任何国家 */}
+            <input type="text" name="country" required autoComplete="country-name"
+              list="angu-country-options"
+              placeholder={c.countryLabel} className={fieldCls} />
+            <datalist id="angu-country-options">
+              {COUNTRIES.map((n) => (
+                <option key={n} value={n} />
+              ))}
+            </datalist>
 
             <textarea name="message" rows={3}
-              placeholder={c.msgLabel}
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-sm resize-none" />
+              placeholder={c.msgLabel} className={`${fieldCls} resize-none`} />
+
+            {/* 可选区：默认收起，只留一行提示 */}
+            <div>
+              <button
+                type="button"
+                onClick={() => setShowMore((v) => !v)}
+                aria-expanded={showMore}
+                aria-controls="angu-optional-fields"
+                className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-blue-600 transition-colors"
+              >
+                <ChevronDown className={`w-4 h-4 transition-transform ${showMore ? 'rotate-180' : ''}`} />
+                {c.moreToggle} <span className="text-slate-400">{c.optional}</span>
+              </button>
+
+              <div id="angu-optional-fields" className={`mt-3 space-y-3 ${showMore ? '' : 'hidden'}`}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <input type="text" name="phone" autoComplete="tel"
+                    placeholder={c.phoneLabel} className={fieldCls} />
+                  <input type="text" name="company" autoComplete="organization"
+                    placeholder={c.companyLabel} className={fieldCls} />
+                </div>
+                <input type="text" name="quantity"
+                  placeholder={c.qtyLabel} className={fieldCls} />
+              </div>
+            </div>
 
             <input type="hidden" name="source" value="google_ads_noise_barrier" />
             <input type="hidden" name="locale" value={locale} />
@@ -213,7 +258,15 @@ export function QuoteForm({ locale }: { locale: string }) {
                 {status === 'loading' ? '...' : c.submitBtn} →
               </button>
             )}
-            <p className="text-xs text-slate-400 text-center"><Link href={`/${locale}/privacy`} className="text-blue-600 hover:underline">{c.privacyNote}</Link></p>
+            {status === 'error' && (
+              <p className="text-xs text-red-600 text-center" role="alert">
+                {locale === 'zh' ? '提交未成功，请稍后重试，或直接发邮件至 ' : 'Could not send. Please try again or email '}
+                <a href="mailto:annie@angumesh.com" className="underline">annie@angumesh.com</a>
+              </p>
+            )}
+            <p className="text-xs text-slate-400 text-center">
+              <Link href={`/${locale}/privacy`} className="text-blue-600 hover:underline">{c.privacyNote}</Link>
+            </p>
           </form>
         </div>
       </div>

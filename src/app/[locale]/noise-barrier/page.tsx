@@ -312,11 +312,14 @@ export default async function NoiseBarrierPage({
       {/* 6. Product Matrix */}
       <ProductMatrix locale={locale} products={noiseProducts} />
 
-      {/* 7. Tech Spec */}
-      <TechSpecSection locale={locale} />
-
-      {/* 8. Quote Form — post-trust, high conversion */}
+      {/* 7. Quote Form — 上移到产品矩阵之后。
+          原来它排在规格表之后（桌面 6085 / 8882 ≈ 68%，移动 11712 / 15203 ≈ 77%），
+          中段近万像素没有一个表单，全靠吸底条兜底。产品看完就是最自然的
+          "报价"时机，规格表留给真正要核参数的人往下翻。 */}
       <QuoteForm locale={locale} />
+
+      {/* 8. Tech Spec */}
+      <TechSpecSection locale={locale} />
 
       {/* 9. Social Proof */}
       <SocialProof locale={locale} />
