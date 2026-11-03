@@ -21,6 +21,8 @@ export interface BlogPost {
   coverImage?: string;  // legacy
   publish_time?: string; // from API
   publishTime?: string;   // legacy
+  /** SQLite CURRENT_TIMESTAMP，格式 "YYYY-MM-DD HH:MM:SS"（UTC 无时区） */
+  updated_at?: string;
   status?: string;
   category_slug?: string;
   seo_title_en?: string;

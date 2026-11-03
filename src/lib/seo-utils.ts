@@ -7,6 +7,8 @@
  */
 
 import type {Metadata} from 'next';
+import fs from 'node:fs';
+import nodePath from 'node:path';
 import {pageSeoDefaults, PageSeo} from './seo';
 import {REVALIDATE_SECONDS, SITE_DATA_TAG} from './api';
 import {locales as fullLocales} from './routing';
@@ -17,6 +19,51 @@ export type {PageSeo};
 const BASE_URL = 'https://www.angumesh.com';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
+/**
+ * 读取 public/ 下图片的真实像素尺寸。
+ *
+ * 为什么需要：og:image 缺少 width/height 时，LinkedIn / Facebook 的抓取器
+ * 必须先下载整张图才知道比例，冷启动常退回小图卡或纯文本卡；声明准确尺寸后
+ * 首屏就能按大图卡排版。仓库里的封面既有 1200×675 也有 800×533，
+ * 写死一个数字反而会让平台按错误比例裁切，所以从文件头真实解析。
+ *
+ * 只处理站内 /images、/ 开头的静态资源；/uploads 由后端进程托管，这里拿不到文件，
+ * 返回 null 让调用方省略尺寸字段。
+ */
+const _sizeCache = new Map<string, {width: number; height: number} | null>();
+
+function localImageSize(urlPath: string): {width: number; height: number} | null {
+  if (_sizeCache.has(urlPath)) return _sizeCache.get(urlPath)!;
+  let out: {width: number; height: number} | null = null;
+  try {
+    const clean = urlPath.split('?')[0];
+    const file = nodePath.join(process.cwd(), 'public', clean.replace(/^\//, ''));
+    if (fs.existsSync(file)) {
+      const buf = fs.readFileSync(file);
+      if (buf.length > 24 && buf.toString('ascii', 1, 4) === 'PNG') {
+        out = {width: buf.readUInt32BE(16), height: buf.readUInt32BE(20)};
+      } else if (buf.length > 4 && buf[0] === 0xff && buf[1] === 0xd8) {
+        // 逐段扫描 JPEG 的 SOF0/SOF1/SOF2 段取宽高
+        let i = 2;
+        while (i < buf.length - 9) {
+          if (buf[i] !== 0xff) { i += 1; continue; }
+          const marker = buf[i + 1];
+          if (marker >= 0xc0 && marker <= 0xc3) {
+            out = {height: buf.readUInt16BE(i + 5), width: buf.readUInt16BE(i + 7)};
+            break;
+          }
+          if (marker === 0xd8 || marker === 0xd9 || (marker >= 0xd0 && marker <= 0xd7)) { i += 2; continue; }
+          i += 2 + buf.readUInt16BE(i + 2);
+        }
+      }
+    }
+  } catch {
+    out = null;
+  }
+  _sizeCache.set(urlPath, out);
+  return out;
+}
 
 interface SiteConfig {
   config: Record<string, Record<string, string | undefined>>;
@@ -105,6 +152,10 @@ export async function generatePageMeta(
      * 把权重让给英文原版，避免被判重复内容。
      */
     canonical?: string;
+    /** og:type=article 时输出 article:published_time（ISO 8601） */
+    publishedTime?: string;
+    /** og:type=article 时输出 article:modified_time（ISO 8601） */
+    modifiedTime?: string;
   },
 ): Promise<Metadata> {
   const seo = await getPageSeo(page, locale);
@@ -128,6 +179,14 @@ export async function generatePageMeta(
     languages[l] = `${BASE_URL}/${l}${barePath}`;
   }
 
+  const ogImageUrl = overrides?.image
+    ? (overrides.image.startsWith('http') ? overrides.image : `${BASE_URL}${overrides.image}`)
+    : seoDefaultImage || null;
+  // 站内图解析真实宽高，外链 / uploads 图拿不到尺寸就不写这两个字段
+  const ogImageSize = ogImageUrl
+    ? localImageSize(ogImageUrl.startsWith(BASE_URL) ? ogImageUrl.slice(BASE_URL.length) : '')
+    : null;
+
   return {
     title,
     description,
@@ -144,16 +203,32 @@ export async function generatePageMeta(
         {en: 'en_US', zh: 'zh_CN', vi: 'vi_VN', th: 'th_TH', ms: 'ms_MY', ar: 'ar_AE'}[locale] ||
         'en_US',
       type: overrides?.ogType || 'website',
-      ...(overrides?.image
-        ? {images: [{url: overrides.image.startsWith('http') ? overrides.image : `${BASE_URL}${overrides.image}`}]}
-        : seoDefaultImage
-        ? {images: [{url: seoDefaultImage}]}
+      ...(ogImageUrl
+        ? {
+            images: [
+              {
+                url: ogImageUrl,
+                // alt 同时喂给读屏与部分平台的卡片描述，缺省时用页面标题
+                alt: title,
+                ...(ogImageSize
+                  ? {width: ogImageSize.width, height: ogImageSize.height}
+                  : {}),
+              },
+            ],
+          }
+        : {}),
+      ...(overrides?.publishedTime && overrides?.ogType === 'article'
+        ? {publishedTime: overrides.publishedTime}
+        : {}),
+      ...(overrides?.modifiedTime && overrides?.ogType === 'article'
+        ? {modifiedTime: overrides.modifiedTime}
         : {}),
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      ...(ogImageUrl ? {images: [ogImageUrl]} : {}),
     },
     robots: {
       index: true,

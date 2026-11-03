@@ -2,8 +2,10 @@ import type {Metadata} from 'next';
 import { categoryHref } from '@/lib/pillars';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
-import {getProduct, getCatalog} from '@/lib/api';
+import {getProduct, getCatalog, getBlogPosts} from '@/lib/api';
 import {generatePageMeta} from '@/lib/seo-utils';
+import {getProductRelatedPosts, RELATED_READING_LABEL} from '@/lib/blog-product-links';
+import {hasBlogTranslation} from '@/lib/blog-locales';
 import {InquiryButtonLarge} from '@/components/inquiry/InquiryButtonLarge';
 import {ProductQuoteForm} from '@/components/products/ProductQuoteForm';
 import {ProductCard} from '@/components/products/ProductCard';
@@ -375,6 +377,35 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
   // Product-specific FAQs — 数据源唯一：全部来自后台/数据库（36/36 产品已覆盖）
   const productFaqs = product.faq?.[locale] || product.faq?.en || [];
 
+  // ── 延伸阅读：产品 → 博客的反向内链 ──
+  // 产品页是全站权重最高的商业页，上一个版本一条通往长文的链接都没有。
+  // 这里按 blog-product-links 的反向索引取文章；没有对应文章的 21 个产品
+  // 直接不渲染该区块，不留空壳。
+  let relatedReading: {slug: string; title: string; href: string}[] = [];
+  const relatedPostSlugs = getProductRelatedPosts(product.slug);
+  if (relatedPostSlugs.length > 0) {
+    try {
+      const allPosts = await getBlogPosts();
+      relatedReading = relatedPostSlugs
+        .map((postSlug) => allPosts.find((p) => p.slug === postSlug && p.status === 'published'))
+        .filter((p): p is NonNullable<typeof p> => Boolean(p))
+        .map((p) => {
+          const postTitle =
+            locale === 'zh' ? p.title_zh
+            : locale === 'vi' ? p.title_vi || p.title_en
+            : locale === 'th' ? p.title_th || p.title_en
+            : p.title_en;
+          // 该语种没有真实译文时，链到英文原版而不是渲染混合语言页
+          const href = hasBlogTranslation(p, locale)
+            ? `/${locale}/blog/${p.slug}`
+            : `/en/blog/${p.slug}`;
+          return {slug: p.slug, title: postTitle, href};
+        });
+    } catch {
+      relatedReading = [];
+    }
+  }
+
   const baseUrl = 'https://www.angumesh.com';
 
   // ── JSON-LD: Thing (B2B — no e-commerce pricing, not a merchant site) ──
@@ -720,6 +751,38 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
                 <ProductCard key={p.id} product={p} locale={locale} />
               ))}
             </div>
+          </div>
+        )}
+
+        {/* 延伸阅读：产品 → 文章的反向内链，只在有对应文章时出现 */}
+        {relatedReading.length > 0 && (
+          <div className="mt-16">
+            <h2 className="text-2xl font-bold text-slate-900 mb-6">
+              {RELATED_READING_LABEL[locale] || RELATED_READING_LABEL.en}
+            </h2>
+            <ul className="divide-y divide-slate-200 bg-white rounded-xl border border-slate-200 overflow-hidden">
+              {relatedReading.map((post) => (
+                <li key={post.slug}>
+                  <Link
+                    href={post.href}
+                    className="flex items-center justify-between gap-4 px-5 py-4 hover:bg-slate-50 transition-colors group"
+                  >
+                    <span className="text-sm md:text-base font-medium text-slate-800 group-hover:text-blue-600 transition-colors">
+                      {post.title}
+                    </span>
+                    <svg
+                      className="w-4 h-4 flex-shrink-0 text-slate-400 group-hover:text-blue-600 transition-colors"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>

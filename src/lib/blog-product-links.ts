@@ -123,6 +123,37 @@ export function getBlogProductLinks(slug: string): BlogProductLinks {
   return BLOG_PRODUCT_LINKS[slug] || {rules: [], related: []};
 }
 
+/**
+ * 反向索引：产品 slug → 引用过它的文章 slug 列表。
+ *
+ * 上一轮只做了「博客 → 产品」单向链接。产品页本身是权重最高的商业页，
+ * 却一条指向深度文章的链接都没有，形成孤岛：30 个产品页 × 4 语种
+ * 全部没有通往那 9 篇长文的路径，Google 也读不出「这些文章围绕哪些产品」。
+ * 这里由 BLOG_PRODUCT_LINKS 反推，不用维护第二份映射表，避免两边不同步。
+ */
+const PRODUCT_RELATED_POSTS: Record<string, string[]> = Object.entries(BLOG_PRODUCT_LINKS).reduce(
+  (acc, [postSlug, cfg]) => {
+    for (const productSlug of cfg.related) {
+      (acc[productSlug] ||= []).push(postSlug);
+    }
+    return acc;
+  },
+  {} as Record<string, string[]>,
+);
+
+/** 取某个产品关联的文章 slug（未登记返回空数组） */
+export function getProductRelatedPosts(productSlug: string): string[] {
+  return PRODUCT_RELATED_POSTS[productSlug] || [];
+}
+
+/** 产品页「延伸阅读」区块标题 */
+export const RELATED_READING_LABEL: Record<string, string> = {
+  en: 'Further reading',
+  zh: '延伸阅读',
+  vi: 'Đọc thêm',
+  th: 'อ่านเพิ่มเติม',
+};
+
 /** 页尾卡片的区块标题 */
 export const RELATED_PRODUCTS_LABEL: Record<string, string> = {
   en: 'Related products',

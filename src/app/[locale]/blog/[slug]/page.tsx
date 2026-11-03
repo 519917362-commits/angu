@@ -14,6 +14,21 @@ interface Props {
   params: Promise<{locale: string; slug: string}>;
 }
 
+/**
+ * SQLite 的 CURRENT_TIMESTAMP 存成 "YYYY-MM-DD HH:MM:SS"（UTC，无时区后缀），
+ * 直接写进 schema.org 会被判为非 ISO 8601（dateModified 与 datePublished 格式不一致），
+ * 这里统一补成带 T 与 Z 的 ISO 串。
+ */
+function toIsoUtc(value?: string | null): string | undefined {
+  if (!value) return undefined;
+  const s = String(value).trim();
+  if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(s)) {
+    return `${s.replace(' ', 'T')}.000Z`;
+  }
+  const d = new Date(s);
+  return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+}
+
 export async function generateMetadata({params}: Props): Promise<Metadata> {
   const {locale, slug} = await params;
   const post = await getBlogPost(slug);
@@ -39,12 +54,24 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
     ? undefined
     : `https://www.angumesh.com/en/blog/${slug}`;
 
+  // 品牌尾巴按剩余长度条件拼接：SERP 只显示约 60 个字符，
+  // 硬拼「| Angu」会把 9 篇文章的主题词（Cost / Comparison / Guide）挤出可见区，
+  // 标题里出现两次品牌也不划算。超长时丢品牌，保留完整主题。
+  const brandSuffix = locale === 'zh' ? '安固' : 'Angu';
+  const titledWithBrand = `${cleanTitle} | ${brandSuffix}`;
+  const finalTitle = titledWithBrand.length <= 62 ? titledWithBrand : cleanTitle;
+
   return generatePageMeta('blog', locale, `/${locale}/blog/${slug}`, {
-    title: `${cleanTitle} | ${locale === 'zh' ? '安固' : 'Angu'}`,
+    title: finalTitle,
     description,
     image: post.cover_image || undefined,
     altLocales: translatedLocales.length ? translatedLocales : ['en'],
     canonical: canonicalOverride,
+    // 详情页之前在 og:type 里输出的是 website，LinkedIn / Facebook 据此按站点卡片渲染，
+    // 不会显示文章标题层级与发布时间，分享点击率明显低于 article 卡片。
+    ogType: 'article',
+    publishedTime: toIsoUtc(post.publish_time),
+    modifiedTime: toIsoUtc(post.updated_at),
   });
 }
 
@@ -118,9 +145,11 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
     headline: seoTitle || title,
     description: seoDesc || abstract?.slice(0, 160) || '',
     url: canonicalUrl,
-    datePublished: post.publish_time || undefined,
-    dateModified: (post as any).updated_at || post.publish_time || undefined,
-    ...(post.cover_image ? {image: post.cover_image} : {}),
+    datePublished: toIsoUtc(post.publish_time),
+    dateModified: toIsoUtc(post.updated_at) || toIsoUtc(post.publish_time),
+    ...(post.cover_image
+      ? {image: post.cover_image.startsWith('http') ? post.cover_image : `https://www.angumesh.com${post.cover_image}`}
+      : {}),
     author: {
       '@type': 'Organization',
       name: 'Angu Wire Mesh',
@@ -132,7 +161,11 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
       name: 'An Gu Wire Mesh Products Co., Ltd.',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://www.angumesh.com/images/logo.png',
+        // Google 要求出版方 logo 至少 112×112，公开目录里只有 80×80 的 favicon 尺寸版本，
+        // 会直接让 Article 富结果不可用，所以另出一份 512×512 专供结构化数据。
+        url: 'https://www.angumesh.com/images/logo-512.png',
+        width: 512,
+        height: 512,
       },
       sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },

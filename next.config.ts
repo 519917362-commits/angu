@@ -3,6 +3,8 @@ import type {NextConfig} from 'next';
 const nextConfig: NextConfig = {
   // Static export disabled to support dynamic admin routes
   // output: 'export',  // ⚠️ Commented out — re-enable before static build
+  // 不输出 X-Powered-By: Next.js —— 对访客无用，只是把框架版本告诉扫描器
+  poweredByHeader: false,
   turbopack: {
     root: __dirname,
   },

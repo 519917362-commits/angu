@@ -66,7 +66,10 @@ export default async function BlogPage({params}: {params: Promise<{locale: strin
       name: 'An Gu Wire Mesh Products Co., Ltd.',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://www.angumesh.com/images/logo.png',
+        // 112×112 是 Article/Blog 富结果对出版方 logo 的下限，public 里的 logo.png 只有 80×80
+        url: 'https://www.angumesh.com/images/logo-512.png',
+        width: 512,
+        height: 512,
       },
       sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },
@@ -84,7 +87,9 @@ export default async function BlogPage({params}: {params: Promise<{locale: strin
           name: 'An Gu Wire Mesh Products Co., Ltd.',
           sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
         },
-        ...(post.cover_image ? {image: post.cover_image} : {}),
+        ...(post.cover_image
+          ? {image: post.cover_image.startsWith('http') ? post.cover_image : `https://www.angumesh.com${post.cover_image}`}
+          : {}),
       };
     }),
   };
