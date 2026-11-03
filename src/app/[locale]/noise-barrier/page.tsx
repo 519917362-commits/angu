@@ -30,12 +30,12 @@ const seoContent: Record<string, { title: string; description: string; keywords:
   vi: {
     title: 'Tường Chắn Âm & Tấm Chắn Âm Đường Cao Tốc | Angu',
     description: 'Nhà sản xuất tường chắn âm và tấm chắn âm cho đường cao tốc, khu công nghiệp, cầu và metro: STC 32–34, NRC 0.85, mạ kẽm nhúng nóng 15+ năm. Giá xuất xưởng, giao cảng Hồ Chí Minh và Hải Phòng.',
-    keywords: 'tường chắn âm, tấm chắn âm, tấm cách âm, tường cách âm, tấm tiêu âm, chắn ồn đường cao tốc, giảm tiếng ồn nhà máy, cách âm cầu, cách âm metro, rào chắn tiếng ồn, tấm hấp âm kim loại, mạ kẽm nhúng nóng, panel chắn âm, xuất khẩu Việt Nam, nhà sản xuất tường chắn âm Trung Quốc, giá tường chắn âm, báo giá tấm chắn âm, STC 32–34, NRC 0.85, MOQ 500m2, FOB CIF Hải Phòng Hồ Chí Minh',
+    keywords: 'tường chắn âm, tấm chắn âm, tấm cách âm, tường cách âm, tấm tiêu âm, chắn ồn đường cao tốc, giảm tiếng ồn nhà máy, cách âm cầu, cách âm metro, rào chắn tiếng ồn, tấm hấp âm kim loại, mạ kẽm nhúng nóng, panel chắn âm, xuất khẩu Việt Nam, nhà sản xuất tường chắn âm Trung Quốc, giá tường chắn âm, báo giá tấm chắn âm, STC 32–34, NRC 0.85, MOQ 50m2, FOB CIF Hải Phòng Hồ Chí Minh',
   },
   th: {
     title: 'กำแพงกันเสียง & แผงกั้นเสียง ทางหลวง | Angu',
     description: 'ผู้ผลิตกำแพงกันเสียงและแผงกั้นเสียงสำหรับทางหลวง นิคมอุตสาหกรรม สะพาน และรถไฟฟ้า: STC 32–34, NRC 0.85, ชุบกัลวาไนซ์ร้อนอายุ 15+ ปี ราคาหน้าโรงงาน ส่งท่าเรือกรุงเทพฯ และแหลมฉบัง',
-    keywords: 'กำแพงกันเสียง, แผงกั้นเสียง, แผงซับเสียง, แผงดูดซับเสียง, กำแพงกันเสียงทางด่วน, ลดเสียงโรงงาน, กั้นเสียงสะพาน, กั้นเสียงรถไฟฟ้า, รั้วกันเสียง, แผงกั้นเสียงโลหะ, ชุบกัลวาไนซ์ร้อน, แผงกั้นเสียงอลูมิเนียม, แผงกั้นเสียงไฟเบอร์กลาส, ส่งออกประเทศไทย, โรงงานกำแพงกันเสียงจีน, ราคากำแพงกันเสียง, STC 32–34, NRC 0.85, MOQ 500ตรม, FOB CIF แหลมฉบัง กรุงเทพ',
+    keywords: 'กำแพงกันเสียง, แผงกั้นเสียง, แผงซับเสียง, แผงดูดซับเสียง, กำแพงกันเสียงทางด่วน, ลดเสียงโรงงาน, กั้นเสียงสะพาน, กั้นเสียงรถไฟฟ้า, รั้วกันเสียง, แผงกั้นเสียงโลหะ, ชุบกัลวาไนซ์ร้อน, แผงกั้นเสียงอลูมิเนียม, แผงกั้นเสียงไฟเบอร์กลาส, ส่งออกประเทศไทย, โรงงานกำแพงกันเสียงจีน, ราคากำแพงกันเสียง, STC 32–34, NRC 0.85, MOQ 50ตรม, FOB CIF แหลมฉบัง กรุงเทพ',
   },
   en: {
     title: 'Noise Barrier Manufacturer — Highway, Rail & Bridge | Angu',

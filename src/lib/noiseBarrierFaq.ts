@@ -26,7 +26,7 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
     },
     {
       q: 'What is the Minimum Order Quantity (MOQ)?',
-      a: 'MOQ: 500 m² for standard acoustic panels. For large projects (>5000 m²), we offer special discounted pricing and phased delivery.',
+      a: 'MOQ starts at 50 m² for standard acoustic panels; most specifications are 100 m². For large projects (>5,000 m²) we offer discounted pricing and phased delivery.',
     },
     {
       q: 'What is the warranty policy?',
@@ -52,7 +52,7 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
     },
     {
       q: '最小起订量 (MOQ) 是多少？',
-      a: '标准吸声板 MOQ：500 平方米。大型项目（>5000 平方米）提供特别折扣和分批发货。',
+      a: '标准吸声板 MOQ 50 平方米起，主流规格 100 平方米。大型项目（>5,000 平方米）提供折扣与分批发货。',
     },
     {
       q: '保修政策是什么？',
@@ -84,7 +84,7 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
     },
     {
       q: 'Số lượng đặt hàng tối thiểu (MOQ) là bao nhiêu?',
-      a: 'MOQ: 500 m² cho tấm chắn âm tiêu chuẩn. Với dự án lớn (>5000 m²), chúng tôi cung cấp giá chiết khấu đặc biệt và hỗ trợ giao hàng theo đợt.',
+      a: 'MOQ từ 50 m² cho tấm chắn âm tiêu chuẩn, các mã phổ biến 100 m². Với dự án lớn (>5.000 m²), chúng tôi có giá chiết khấu và giao hàng theo đợt.',
     },
     {
       q: 'Chính sách bảo hành như thế nào?',
@@ -116,7 +116,7 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
     },
     {
       q: 'จำนวนสั่งซื้อขั้นต่ำ (MOQ) เท่าไหร่?',
-      a: 'MOQ: 500 ตร.ม. สำหรับแผงกั้นเสียงมาตรฐาน โครงการใหญ่ (>5000 ตร.ม.) มีส่วนลดพิเศษและจัดส่งเป็นงวด',
+      a: 'MOQ เริ่ม 50 ตร.ม. สำหรับแผงกั้นเสียงมาตรฐาน รุ่นที่ใช้บ่อย 100 ตร.ม. โครงการใหญ่ (>5,000 ตร.ม.) มีส่วนลดพิเศษและจัดส่งเป็นงวด',
     },
     {
       q: 'นโยบายรับประกันเป็นอย่างไร?',
