@@ -154,7 +154,9 @@ export default async function NoiseBarrierPage({
   // 工厂隔音墙 / 设备隔声罩 / 全封闭式这三款（恰是工业客户最常要的）
   // 在落地页上完全不可达。
   const moreProducts = (catalog?.products || [])
-    .filter((p: any) => p.category_slug === 'noise-barrier' && !noiseSlugs.includes(p.slug))
+    // 注意：/api/catalog 返回的是驼峰 categorySlug，不是数据库列名 category_slug。
+    // 写成 category_slug 会静默筛出 0 条 —— 这种错不报错，只是区块不渲染。
+    .filter((p: any) => (p.categorySlug || p.category_slug) === 'noise-barrier' && !noiseSlugs.includes(p.slug))
     .map((p: any) => ({
       slug: p.slug,
       name: p.names?.[locale] || p.names?.en || p.name_en || p.slug,
