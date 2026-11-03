@@ -1434,6 +1434,10 @@ app.get('/api/catalog', (req, res) => {
       isFeatured: row.is_featured === 1,
       sortWeight: row.sort_weight || 0,
       createdAt: row.created_at,
+      // sitemap 的 lastmod 依赖这个字段。此前只暴露 createdAt，
+      // 结果是「今天重写了 30 个产品的文案，sitemap 仍写着 6 月创建日」，
+      // 搜索引擎据此判断页面没变，改过的内容迟迟不进重抓队列。
+      updatedAt: row.updated_at || row.created_at,
     }));
 
     db.all("SELECT * FROM product_categories WHERE status = 'published' ORDER BY sort_weight", [], (err2, catRows) => {
@@ -1490,6 +1494,7 @@ app.get('/api/catalog/:slug', (req, res) => {
       isFeatured: row.is_featured === 1,
       sortWeight: row.sort_weight || 0,
       createdAt: row.created_at,
+      updatedAt: row.updated_at || row.created_at,
     };
 
     res.json(product);

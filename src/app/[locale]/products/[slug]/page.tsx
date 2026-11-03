@@ -26,6 +26,27 @@ function stripBrandSuffix(t: string): string {
 }
 
 /**
+ * Markdown → 纯文本，用于结构化数据。
+ * 只做「去标记」不改变语义：代码块、图片、链接目标、标题井号、强调符号、表格竖线。
+ * 顺序有讲究——链接要在强调符号之前处理，否则 [**粗体**](url) 会留下空括号。
+ */
+function plainText(md: string, max: number): string {
+  return (md || '')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^>\s?/gm, '')
+    .replace(/^\s*[-*+]\s+/gm, '')
+    .replace(/\|/g, ' ')
+    .replace(/[*_`~]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, max)
+    .trim();
+}
+
+/**
  * 从 priceRemark（如 "FOB Tianjin, per m2"）解析计价单位。
  * 旧版前台把单位硬编码成 "/unit"，导致 $100/m² 被显示成 $100/件。
  */
@@ -439,7 +460,9 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
     '@context': 'https://schema.org',
     '@type': 'Product',
     name,
-    description: fullDesc.slice(0, 500) || shortDesc,
+    // 正文是 Markdown：直接 slice 会把 "## Why this panel"、"**"、"|" 带进富结果，
+    // Google 抓到的就是一堆井号和星号。结构化数据必须是纯文本，这里先剥标记再截断。
+    description: plainText(fullDesc, 320) || shortDesc,
     url: `${baseUrl}/${locale}/products/${product.slug}`,
     ...(product.sku ? { sku: product.sku } : {}),
     category: categoryName,

@@ -43,6 +43,8 @@ const CONTENT = {
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center py-16">
+      <title>Page Not Found — Angu Wire Mesh</title>
+      <meta name="description" content="This page does not exist. Continue in English, Chinese, Vietnamese or Thai." />
       <div className="text-center px-4 max-w-2xl">
         <div className="text-8xl font-bold text-slate-200 mb-4" aria-hidden="true">
           404

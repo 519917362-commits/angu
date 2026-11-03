@@ -29,6 +29,30 @@ function toIsoUtc(value?: string | null): string | undefined {
   return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
 }
 
+/**
+ * 相关文章打分用的词元。
+ * 英文按整词（≥4 字母，去掉 the/and/how 这类虚词），中文按二字滑窗——
+ * 中文没有空格，整句比对永远不重合，只有切成 bigram 才能算出「石笼」「防护」这种共享主题。
+ */
+const STOP_WORDS = new Set([
+  'the', 'and', 'for', 'with', 'from', 'that', 'this', 'your', 'you', 'are',
+  'how', 'what', 'when', 'why', 'vs', 'guide', 'best', 'top', 'buy', 'into',
+  'can', 'does', 'not', 'but', 'its', 'their', 'about', 'than', 'then',
+]);
+
+function titleTokens(t: string): string[] {
+  const out = new Set<string>();
+  for (const w of (t || '').toLowerCase().split(/[^a-z0-9\u4e00-\u9fff]+/)) {
+    if (!w) continue;
+    if (/^[a-z0-9]+$/.test(w)) {
+      if (w.length >= 4 && !STOP_WORDS.has(w)) out.add(w);
+    } else if (w.length >= 2) {
+      for (let i = 0; i + 2 <= w.length; i++) out.add(w.slice(i, i + 2));
+    }
+  }
+  return [...out];
+}
+
 export async function generateMetadata({params}: Props): Promise<Metadata> {
   const {locale, slug} = await params;
   const post = await getBlogPost(slug);
@@ -98,7 +122,35 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
 
   // 相关文章（同语言、排除当前、最多 3 篇）
   const allPosts = await getBlogPosts();
-  const related = allPosts.filter(p => p.id !== post.id && p.status === 'published').slice(0, 3);
+  // 旧写法是 allPosts.filter(...).slice(0, 3)，等于「最新三篇」：
+  // 一篇石笼施工指南的页尾挂着声屏障选型，锚文本和正文毫无关系，读者点进去也不是他要的。
+  // 现按「同品类 3 分 / SEO 关键词重合 2 分 / 标题词重合 1 分」排序，
+  // 并列时优先该语种真有译文的，再按发布时间；全部分数为 0 才退回最新（下方标题随之改为「最新文章」）。
+  const postKeywords = new Set(
+    (post.seo_keywords_en || '').toLowerCase().split(/[,;，；]/).map((k) => k.trim()).filter(Boolean)
+  );
+  const postTitleTokens = new Set(titleTokens(post.title_en || ''));
+  const scoredRelated = allPosts
+    .filter((p) => p.id !== post.id && p.status === 'published')
+    .map((p) => {
+      let score = 0;
+      if (p.category_slug && p.category_slug === post.category_slug) score += 3;
+      for (const k of (p.seo_keywords_en || '').toLowerCase().split(/[,;，；]/)) {
+        const kk = k.trim();
+        if (kk && postKeywords.has(kk)) score += 2;
+      }
+      for (const t of titleTokens(p.title_en || '')) {
+        if (postTitleTokens.has(t)) score += 1;
+      }
+      return {post: p, score};
+    })
+    .sort((a, b) =>
+      b.score - a.score ||
+      Number(hasBlogTranslation(b.post, locale)) - Number(hasBlogTranslation(a.post, locale)) ||
+      String(b.post.publish_time || '').localeCompare(String(a.post.publish_time || ''))
+    );
+  const related = scoredRelated.slice(0, 3).map((x) => x.post);
+  const relatedIsRelevant = (scoredRelated[0]?.score ?? 0) > 0;
 
   // ── 产品内链：正文插链 + 页尾卡片 ──
   // 9 篇文章此前一个产品链接都没有，访客读完深度文章无处可去，Google 也收不到权重传递。
@@ -300,7 +352,7 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
           {/* Related Posts */}
           {related.length > 0 && (
             <div className="mt-12 pt-8 border-t border-slate-200">
-              <h3 className="text-lg font-bold text-slate-900 mb-6">{tLabel('相关文章', 'Related Posts', locale)}</h3>
+              <h3 className="text-lg font-bold text-slate-900 mb-6">{relatedIsRelevant ? tLabel('相关文章', 'Related Posts', locale) : tLabel('最新文章', 'Latest Articles', locale)}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {related.map(rp => {
                   const rTitle = locale === 'zh' ? rp.title_zh : locale === 'vi' ? (rp.title_vi || rp.title_en) : locale === 'th' ? (rp.title_th || rp.title_en) : rp.title_en;

@@ -21,6 +21,10 @@ const LANGS = [
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+      {/* 这个文件渲染在「没有 layout」的错误文档壳里，拿不到 layout 的 metadata，
+          浏览器标签此前是一整片空白。React 19 会把 <title>/<meta> 提升到 head。 */}
+      <title>Page Not Found — Angu Wire Mesh</title>
+      <meta name="description" content="This address does not exist. Browse Angu Wire Mesh products in English, Chinese, Vietnamese or Thai." />
       <div className="text-center max-w-lg">
         <div className="text-8xl font-bold text-slate-200 mb-4" aria-hidden="true">
           404

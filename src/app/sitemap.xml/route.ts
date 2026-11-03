@@ -88,7 +88,9 @@ export async function GET() {
   }
 
   // lastmod for static pages — use the date of the last significant site update
-  const SITE_LASTMOD = '2026-09-01';
+  // 手维常量：只有静态页面的可见文案真的改了才动它。写成 new Date() 会让每次
+  // 构建都刷新全部 lastmod，Google 会把这种「天天全站更新」当成噪音而忽略该字段。
+  const SITE_LASTMOD = '2026-11-03';
   const pages: [string, string, string][] = [
     ['', 'weekly', '1.0'],
     ['/products', 'daily', '0.9'],

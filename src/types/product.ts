@@ -88,6 +88,9 @@ export interface Product {
   seoDescription?: Record<string, string>;
   faq?: Record<string, Array<{q: string; a: string}>>;
   createdAt: string;
+  /** 内容最后修改时间。sitemap 的 lastmod 用它，缺了就只能退回 createdAt，
+   *  改过文案的页面会一直显示建站日期，搜索引擎因此不会优先重抓。 */
+  updatedAt?: string;
   sortWeight?: number;
   category_name_en?: string;
   category_name_zh?: string;

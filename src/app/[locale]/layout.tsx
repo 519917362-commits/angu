@@ -113,7 +113,14 @@ export default async function LocaleLayout({
       value: COMPANY.creditCode,
     },
     url: 'https://www.angumesh.com',
-    logo: 'https://www.angumesh.com/images/logo.png',
+    // 80×80 的原图低于 Google 对 Organization / Article logo 的 112×112 下限，
+    // 结构化数据统一改用 512×512 版本（页面上的 favicon 仍用 80×80 那个小文件）
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://www.angumesh.com/images/logo-512.png',
+      width: 512,
+      height: 512,
+    },
     image: 'https://www.angumesh.com/og-image.jpg',
     description: 'ISO 9001 / 14001 / 45001 certified manufacturer of gabion boxes, rockfall protection nets, hexagonal wire mesh, chain link fence, and wire mesh products. Factory-direct pricing from Anping, China.',
     foundingDate: COMPANY.foundedISO,
