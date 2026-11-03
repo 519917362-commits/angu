@@ -16,7 +16,10 @@ export async function generateMetadata({ params, searchParams }: {
   const { category, search } = await searchParams;
   const slug = typeof category === 'string' ? category : undefined;
 
-  const meta = (() => {
+  // 注意 generatePageMeta 是 async 的：这里必须 await 再展开。
+  // 直接 {...generatePageMeta(...)} 展开的是 Promise（自身无可枚举属性），
+  // 结果只剩下面追加的 robots，title / description / canonical 全部消失。
+  const meta = await (async () => {
     // /products?category=xx 只是筛选视图，没有独立内容，canonical 必须指向
     // 对应的品类落地页（/en/gabion 等），否则它会和 /products 抢同一批词、
     // 并且把「自己指向父页」的自我否决信号发给 Google。
