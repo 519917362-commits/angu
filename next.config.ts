@@ -5,6 +5,13 @@ const nextConfig: NextConfig = {
   // output: 'export',  // ⚠️ Commented out — re-enable before static build
   // 不输出 X-Powered-By: Next.js —— 对访客无用，只是把框架版本告诉扫描器
   poweredByHeader: false,
+  // ISR 的 stale-while-revalidate 窗口。
+  // Next 默认 31536000（1 年），于是响应头是
+  // `s-maxage=300, stale-while-revalidate=31535700` —— 改完文案最长一年
+  // 都可能继续吐旧 HTML，"代码改了线上没变"基本都是这个。
+  // 压到 1 天后最多 24 小时自动收敛；要立刻生效走 /api/revalidate。
+  // 注意：Next 16 已废弃路由级的 `export const expireTime`，只能在这里配。
+  expireTime: 86400,
   turbopack: {
     root: __dirname,
   },
