@@ -42,6 +42,18 @@ export interface PillarCopy {
   faq: { q: string; a: string }[];
 }
 
+/**
+ * 分类落地页的分享图（与语种无关，所以单独一张表，不在 4 个语种的 copy 里重复）。
+ * 这四个页面是品类词的主要着陆点，此前 og:image 完全缺失，
+ * 在 LinkedIn / WhatsApp 里转发只有纯文字，没有缩略图。
+ */
+export const PILLAR_OG_IMAGE: Record<PillarSlug, string> = {
+  gabion: '/images/products/gabion-box.jpg',
+  fence: '/images/products/chain-link.jpg',
+  'wire-mesh': '/images/products/welded-wire-mesh.jpg',
+  'protection-net': '/images/products/protection-net.jpg',
+};
+
 export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
   gabion: {
     en: {

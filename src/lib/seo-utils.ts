@@ -61,6 +61,21 @@ function localImageSize(urlPath: string): {width: number; height: number} | null
           if (marker === 0xd8 || marker === 0xd9 || (marker >= 0xd0 && marker <= 0xd7)) { i += 2; continue; }
           i += 2 + buf.readUInt16BE(i + 2);
         }
+      } else if (
+        buf.length > 30 &&
+        buf.toString('ascii', 0, 4) === 'RIFF' &&
+        buf.toString('ascii', 8, 12) === 'WEBP'
+      ) {
+        // 后台导入的老文章封面有 .webp，不解析的话这些页会缺 og:image 尺寸
+        const fmt = buf.toString('ascii', 12, 16);
+        if (fmt === 'VP8 ') {
+          out = {width: buf.readUInt16LE(26) & 0x3fff, height: buf.readUInt16LE(28) & 0x3fff};
+        } else if (fmt === 'VP8L') {
+          const bits = buf.readUInt32LE(21);
+          out = {width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1};
+        } else if (fmt === 'VP8X') {
+          out = {width: buf.readUIntLE(24, 3) + 1, height: buf.readUIntLE(27, 3) + 1};
+        }
       }
     }
   } catch {
@@ -68,6 +83,21 @@ function localImageSize(urlPath: string): {width: number; height: number} | null
   }
   _sizeCache.set(urlPath, out);
   return out;
+}
+
+/**
+ * 构造 openGraph.images 的单条目（相对路径自动补域名，站内图自动带真实宽高）。
+ * 手写 generateMetadata 的页面（分类落地页等）直接复用，避免再出现「有 OG 但没有图」。
+ */
+export function ogImageEntry(imagePath: string, alt: string): {
+  url: string;
+  alt: string;
+  width?: number;
+  height?: number;
+} {
+  const url = imagePath.startsWith('http') ? imagePath : `${BASE_URL}${imagePath}`;
+  const size = localImageSize(url.startsWith(BASE_URL) ? url.slice(BASE_URL.length) : '');
+  return {url, alt, ...(size ? {width: size.width, height: size.height} : {})};
 }
 
 interface SiteConfig {

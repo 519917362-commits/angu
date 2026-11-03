@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ogImageEntry } from '@/lib/seo-utils';
 
 export async function generateMetadata({
   params,
@@ -26,6 +27,9 @@ export async function generateMetadata({
     },
   };
   const c = content[locale] || content.en;
+  // 之前这里只输出 title/description/canonical，分享到 LinkedIn 或 WhatsApp 时
+  // 完全没有缩略图（og:image 缺失），转出去是一条裸链接。
+  const ogImage = ogImageEntry('/og-image.jpg', c.title);
 
   return {
     title: c.title,
@@ -39,6 +43,20 @@ export async function generateMetadata({
         vi: 'https://www.angumesh.com/vi/terms',
         th: 'https://www.angumesh.com/th/terms',
       },
+    },
+    openGraph: {
+      title: c.title,
+      description: c.description,
+      url: `https://www.angumesh.com/${locale}/terms`,
+      siteName: 'Angu Wire Mesh',
+      type: 'website',
+      images: [ogImage],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: c.title,
+      description: c.description,
+      images: [ogImage.url],
     },
   };
 }

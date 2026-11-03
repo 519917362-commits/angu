@@ -4,7 +4,8 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/lib/routing';
 import { getCatalog } from '@/lib/api';
 import { ProductCard } from '@/components/products/ProductCard';
-import { PILLARS, PILLAR_SLUGS, type PillarSlug } from '@/lib/pillars';
+import { PILLARS, PILLAR_SLUGS, PILLAR_OG_IMAGE, type PillarSlug } from '@/lib/pillars';
+import { ogImageEntry } from '@/lib/seo-utils';
 import { COMPANY } from '@/lib/company';
 
 /**
@@ -35,6 +36,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const copy = PILLARS[category as PillarSlug]?.[locale] ?? PILLARS[category as PillarSlug]?.en;
   if (!copy) return {};
 
+  const img = PILLAR_OG_IMAGE[category as PillarSlug];
+  const ogImage = img ? ogImageEntry(img, copy.metaTitle) : undefined;
+
   return {
     title: copy.metaTitle,
     description: copy.metaDesc,
@@ -49,7 +53,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: copy.metaTitle,
       description: copy.metaDesc,
       url: `${BASE_URL}/${locale}/${category}`,
+      siteName: 'Angu Wire Mesh',
       type: 'website',
+      ...(ogImage ? {images: [ogImage]} : {}),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: copy.metaTitle,
+      description: copy.metaDesc,
+      ...(ogImage ? {images: [ogImage.url]} : {}),
     },
   };
 }
