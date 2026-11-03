@@ -19,7 +19,15 @@ export function pickLocale<T extends Record<string, any>>(
   locale: string
 ): string {
   if (!obj) return '';
-  return obj[`${field}_${locale}`] || obj[`${field}_en`] || '';
+  const localized = obj[`${field}_${locale}`];
+  const fallback = obj[`${field}_en`] || '';
+  // 占位符是 truthy，`||` 不会回落。
+  // 事故现场：4 篇声屏障文章的 title_vi / content_vi 被写成了一个单引号 `'`，
+  // 于是 /vi/blog/xxx 的 H1 就是一个 `'`，整页没有正文，而代码里的
+  // `post.title_vi || post.title_en` 判断不出问题。
+  // 这里把「长度不足 2」等价于「没有翻译」，回落到英文。
+  if (typeof localized === 'string' && localized.trim().length >= 2) return localized;
+  return fallback;
 }
 
 /**

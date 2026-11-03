@@ -16,6 +16,7 @@ import { RelatedReading } from '@/components/noise-barrier/RelatedReading';
 import { NoiseBarrierClient } from '@/components/noise-barrier/NoiseBarrierClient';
 import { whatsappNumber, zaloId, lineId, facebookUrl } from '@/lib/channels';
 import { getNoiseBarrierFaqs } from '@/lib/noiseBarrierFaq';
+import { pickLocale } from '@/lib/i18n';
 
 // 页面级 revalidate：与 fetch 级的 REVALIDATE_SECONDS 保持一致。
 // stale-while-revalidate 的窗口在 next.config.ts 的 expireTime 里配
@@ -170,10 +171,9 @@ export default async function NoiseBarrierPage({
     'noise-barrier-insertion-loss-design',
     'noise-barrier-installation-guide',
   ];
-  const pickField = (post: any, key: string): string => {
-    const localized = post?.[`${key}_${locale}`];
-    return localized || post?.[`${key}_en`] || '';
-  };
+  // 走 pickLocale 而不是 `||` —— 4 篇文章的 title_vi / content_vi 在库里是一个
+  // 单引号占位符，`||` 判不出来，会把 `'` 当成标题渲染到区块里。
+  const pickField = (post: any, key: string): string => pickLocale(post, key, locale);
   const readingPosts = (blogPosts || [])
     .filter((p: any) => (p.category_slug || p.categorySlug) === 'noise-barrier')
     .sort((a: any, b: any) => {

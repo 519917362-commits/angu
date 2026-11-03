@@ -2,7 +2,7 @@ import type {Metadata} from 'next';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {getBlogPost, getBlogPosts, getCatalog} from '@/lib/api';
-import { tLabel } from '@/lib/i18n';
+import { tLabel, pickLocale } from '@/lib/i18n';
 import {generatePageMeta} from '@/lib/seo-utils';
 import {renderMarkdown, type ProductLinkContext} from '@/lib/markdown';
 import {availableBlogLocales, hasBlogTranslation} from '@/lib/blog-locales';
@@ -63,14 +63,15 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
   const {locale, slug} = await params;
   const post = await getBlogPost(slug);
   if (!post) return {title: tLabel('文章未找到', 'Post Not Found', locale)};
-  const title = locale === 'zh' ? post.title_zh : locale === 'vi' ? (post.title_vi || post.title_en) : locale === 'th' ? (post.title_th || post.title_en) : post.title_en;
-  const abstract = locale === 'zh' ? post.abstract_zh : locale === 'vi' ? (post.abstract_vi || post.abstract_en) : locale === 'th' ? (post.abstract_th || post.abstract_en) : post.abstract_en;
+  // pickLocale 会把「占位符级」的本地化值当成缺失、回落英文（见 lib/i18n.ts）
+  const title = pickLocale(post, 'title', locale);
+  const abstract = pickLocale(post, 'abstract', locale);
   const description = abstract
     ?.replace(/[#*`\[\]\|\-]/g, '')
     .replace(/\n+/g, ' ')
     .trim()
     .slice(0, 160) || 'Industry insights on wire mesh, gabion construction, and rockfall protection.';
-  const seoTitle = locale === 'zh' ? post.seo_title_zh : locale === 'vi' ? (post.seo_title_vi || post.seo_title_en) : locale === 'th' ? (post.seo_title_th || post.seo_title_en) : post.seo_title_en;
+  const seoTitle = pickLocale(post, 'seo_title', locale);
   // 后台标题可能自带品牌尾巴，先剥再拼，避免「… | Angu | Angu Wire Mesh」
   const cleanTitle = (seoTitle || title || 'Blog Post')
     .replace(/\s*[|｜]\s*(Angu(\s+Wire\s+Mesh)?|安固(丝网)?)\s*$/i, '')
@@ -111,14 +112,14 @@ export default async function BlogDetailPage({params}: Props) {
 
   if (!post) notFound();
 
-const title = locale === 'zh' ? post.title_zh : locale === 'vi' ? (post.title_vi || post.title_en) : locale === 'th' ? (post.title_th || post.title_en) : post.title_en;
-const content = locale === 'zh' ? post.content_zh : locale === 'vi' ? (post.content_vi || post.content_en) : locale === 'th' ? (post.content_th || post.content_en) : post.content_en;
-const abstract = locale === 'zh' ? post.abstract_zh : locale === 'vi' ? (post.abstract_vi || post.abstract_en) : locale === 'th' ? (post.abstract_th || post.abstract_en) : post.abstract_en;
+const title = pickLocale(post, 'title', locale);
+const content = pickLocale(post, 'content', locale);
+const abstract = pickLocale(post, 'abstract', locale);
   const publishDate = post.publish_time
     ? new Date(post.publish_time).toLocaleDateString(tLabel('zh-CN', 'en-US', locale), {year: 'numeric', month: 'long', day: 'numeric'})
     : '';
-  const seoTitle = locale === 'zh' ? post.seo_title_zh : locale === 'vi' ? (post.seo_title_vi || post.seo_title_en) : locale === 'th' ? (post.seo_title_th || post.seo_title_en) : post.seo_title_en;
-const seoDesc = locale === 'zh' ? post.seo_description_zh : locale === 'vi' ? (post.seo_description_vi || post.seo_description_en) : locale === 'th' ? (post.seo_description_th || post.seo_description_en) : post.seo_description_en;
+  const seoTitle = pickLocale(post, 'seo_title', locale);
+const seoDesc = pickLocale(post, 'seo_description', locale);
 const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (post.seo_keywords_vi || post.seo_keywords_en) : locale === 'th' ? (post.seo_keywords_th || post.seo_keywords_en) : post.seo_keywords_en;
   const canonicalUrl = `https://www.angumesh.com/${locale}/blog/${slug}`;
 
