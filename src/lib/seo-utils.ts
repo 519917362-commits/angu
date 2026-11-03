@@ -28,8 +28,8 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
  * 首屏就能按大图卡排版。仓库里的封面既有 1200×675 也有 800×533，
  * 写死一个数字反而会让平台按错误比例裁切，所以从文件头真实解析。
  *
- * 只处理站内 /images、/ 开头的静态资源；/uploads 由后端进程托管，这里拿不到文件，
- * 返回 null 让调用方省略尺寸字段。
+ * 只处理站内静态资源：/images、/ 走 public/；/uploads 由后端进程托管，
+ * 但同一个工程里就有 backend/uploads，可以直接读文件头，不必回源 HTTP。
  */
 const _sizeCache = new Map<string, {width: number; height: number} | null>();
 
@@ -37,9 +37,14 @@ function localImageSize(urlPath: string): {width: number; height: number} | null
   if (_sizeCache.has(urlPath)) return _sizeCache.get(urlPath)!;
   let out: {width: number; height: number} | null = null;
   try {
-    const clean = urlPath.split('?')[0];
-    const file = nodePath.join(process.cwd(), 'public', clean.replace(/^\//, ''));
-    if (fs.existsSync(file)) {
+    const clean = urlPath.split('?')[0].replace(/^\//, '');
+    if (!clean) return null;
+    // /uploads 的物理位置在 backend/uploads，其余在 public/
+    const candidates = clean.startsWith('uploads/')
+      ? [nodePath.join(process.cwd(), 'backend', clean)]
+      : [nodePath.join(process.cwd(), 'public', clean)];
+    const file = candidates.find((f) => fs.existsSync(f));
+    if (file) {
       const buf = fs.readFileSync(file);
       if (buf.length > 24 && buf.toString('ascii', 1, 4) === 'PNG') {
         out = {width: buf.readUInt32BE(16), height: buf.readUInt32BE(20)};
