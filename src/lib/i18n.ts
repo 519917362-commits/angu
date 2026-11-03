@@ -174,6 +174,26 @@ const LABEL_PARTIAL: Record<string, Record<string, string>> = {
 };
 
 /** Translate hardcoded UI labels across locales. Keys are Chinese strings. */
+/**
+ * 日期格式化用的 BCP-47 区域。
+ *
+ * 之前文章页写的是 tLabel('zh-CN', 'en-US', locale)，而 tLabel 只区分中英，
+ * 于是泰语页显示 "October 31, 2026"、越南语页同样显示英文月份 ——
+ * 本地化做了九成，最后一步漏在日期上。
+ */
+const DATE_LOCALE: Record<string, string> = {
+  en: 'en-US',
+  zh: 'zh-CN',
+  vi: 'vi-VN',
+  th: 'th-TH',
+  ms: 'ms-MY',
+  ar: 'ar-SA',
+};
+
+export function dateLocale(locale: string): string {
+  return DATE_LOCALE[locale] || 'en-US';
+}
+
 export function tLabel(zh: string, en: string, locale: string): string {
   const map: Record<string, Record<string, string>> = {
     '首页': { zh: '首页', en: 'Home', vi: 'Trang chủ', th: 'หน้าแรก' },

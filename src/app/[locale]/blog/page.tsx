@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {getBlogPosts, getSiteConfig} from '@/lib/api';
 import {generatePageMeta} from '@/lib/seo-utils';
-import { tLabel } from '@/lib/i18n';
+import { tLabel, dateLocale } from '@/lib/i18n';
 
 // 页面级 revalidate：与 fetch 级的 REVALIDATE_SECONDS 保持一致。
 // stale-while-revalidate 的窗口在 next.config.ts 的 expireTime 里配
@@ -206,7 +206,7 @@ export default async function BlogPage({params}: {params: Promise<{locale: strin
             {published.map((post, i) => {
               const title = locale === 'zh' ? post.title_zh : locale === 'vi' ? post.title_vi || post.title_en : locale === 'th' ? post.title_th || post.title_en : post.title_en;
               const abstract = locale === 'zh' ? post.abstract_zh : locale === 'vi' ? post.abstract_vi || post.abstract_en : locale === 'th' ? post.abstract_th || post.abstract_en : post.abstract_en;
-              const publishDate = post.publish_time ? new Date(post.publish_time).toLocaleDateString(tLabel('zh-CN', 'en-US', locale), {year: 'numeric', month: 'long', day: 'numeric'}) : '';
+              const publishDate = post.publish_time ? new Date(post.publish_time).toLocaleDateString(dateLocale(locale), {year: 'numeric', month: 'long', day: 'numeric'}) : '';
               const coverUrl = post.cover_image || '/images/products/gabion-box.jpg';
 
               return (

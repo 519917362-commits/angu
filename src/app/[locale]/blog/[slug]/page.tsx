@@ -2,7 +2,7 @@ import type {Metadata} from 'next';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {getBlogPost, getBlogPosts, getCatalog} from '@/lib/api';
-import { tLabel, pickLocale } from '@/lib/i18n';
+import { tLabel, pickLocale, dateLocale } from '@/lib/i18n';
 import {generatePageMeta} from '@/lib/seo-utils';
 import {renderMarkdown, type ProductLinkContext} from '@/lib/markdown';
 import {availableBlogLocales, hasBlogTranslation} from '@/lib/blog-locales';
@@ -116,7 +116,7 @@ const title = pickLocale(post, 'title', locale);
 const content = pickLocale(post, 'content', locale);
 const abstract = pickLocale(post, 'abstract', locale);
   const publishDate = post.publish_time
-    ? new Date(post.publish_time).toLocaleDateString(tLabel('zh-CN', 'en-US', locale), {year: 'numeric', month: 'long', day: 'numeric'})
+    ? new Date(post.publish_time).toLocaleDateString(dateLocale(locale), {year: 'numeric', month: 'long', day: 'numeric'})
     : '';
   const seoTitle = pickLocale(post, 'seo_title', locale);
 const seoDesc = pickLocale(post, 'seo_description', locale);
