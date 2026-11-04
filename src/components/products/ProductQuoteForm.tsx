@@ -25,7 +25,12 @@ interface Copy {
   sending: string;
   success: string;
   error: string;
-  points: string[];
+  cad: string;
+  /** {moq} 占位符由组件按产品实际起订量填入 */
+  moq: string;
+  moqGeneric: string;
+  warranty: string;
+  testReports: string;
 }
 
 const COPY: Record<string, Copy> = {
@@ -42,7 +47,11 @@ const COPY: Record<string, Copy> = {
     sending: 'Sending…',
     success: 'Sent! Redirecting…',
     error: 'Submission failed. Please retry or email us directly.',
-    points: ['Free CAD drawings & load calculation', 'MOQ from 50 m² for trial orders', '5-year warranty on hot-dip galvanizing'],
+    cad: 'Free CAD drawings & load calculation',
+    moq: 'MOQ: {moq}',
+    moqGeneric: 'MOQ quoted per specification',
+    warranty: '5-year galvanizing warranty, terms per sales contract',
+    testReports: 'Test reports available on request',
   },
   zh: {
     title: '获取此产品报价',
@@ -57,7 +66,11 @@ const COPY: Record<string, Copy> = {
     sending: '提交中…',
     success: '已提交，正在跳转…',
     error: '提交失败，请重试或直接发邮件给我们。',
-    points: ['免费提供 CAD 图纸与荷载计算', '试单 50 平方米起', '热镀锌层 5 年质保'],
+    cad: '免费提供 CAD 图纸与荷载计算',
+    moq: '起订量：{moq}',
+    moqGeneric: '起订量按规格单独报价',
+    warranty: '热镀锌层 5 年质保，具体条款以销售合同为准',
+    testReports: '检测报告可向销售经理索取',
   },
   vi: {
     title: 'Nhận báo giá cho sản phẩm này',
@@ -72,7 +85,11 @@ const COPY: Record<string, Copy> = {
     sending: 'Đang gửi…',
     success: 'Đã gửi! Đang chuyển trang…',
     error: 'Gửi thất bại. Vui lòng thử lại hoặc gửi email cho chúng tôi.',
-    points: ['Miễn phí bản vẽ CAD và tính toán tải trọng', 'MOQ từ 50 m² cho đơn thử', 'Bảo hành 5 năm cho lớp mạ kẽm nhúng nóng'],
+    cad: 'Miễn phí bản vẽ CAD và tính toán tải trọng',
+    moq: 'MOQ: {moq}',
+    moqGeneric: 'MOQ báo theo quy cách',
+    warranty: 'Bảo hành 5 năm lớp mạ kẽm, điều khoản theo hợp đồng',
+    testReports: 'Báo cáo thử nghiệm theo yêu cầu',
   },
   th: {
     title: 'ขอใบเสนอราคาสำหรับสินค้านี้',
@@ -87,7 +104,11 @@ const COPY: Record<string, Copy> = {
     sending: 'กำลังส่ง…',
     success: 'ส่งแล้ว! กำลังเปลี่ยนหน้า…',
     error: 'ส่งไม่สำเร็จ กรุณาลองใหม่หรืออีเมลหาเราโดยตรง',
-    points: ['แบบ CAD และการคำนวณน้ำหนักฟรี', 'สั่งขั้นต่ำ 50 ตร.ม. สำหรับทดลอง', 'รับประกัน 5 ปีสำหรับการชุบกัลวาไนซ์ร้อน'],
+    cad: 'แบบ CAD และการคำนวณน้ำหนักฟรี',
+    moq: 'สั่งขั้นต่ำ: {moq}',
+    moqGeneric: 'สั่งขั้นต่ำตามข้อกำหนด',
+    warranty: 'รับประกัน 5 ปีสำหรับการชุบกัลวาไนซ์ร้อน ตามเงื่อนไขในสัญญา',
+    testReports: 'รายงานผลทดสอบตามคำขอ',
   },
 };
 
@@ -109,15 +130,28 @@ export function ProductQuoteForm({
   productSlug,
   categorySlug,
   locale,
+  moqLabel,
 }: {
   productName: string;
   productSlug: string;
   categorySlug?: string;
   locale: string;
+  /** 该产品的实际起订量（含单位），由产品页从 DB 值算好后传入。
+   *  以前这里写死「试单 50 m² 起」，石笼网箱（按只）、护栏网（1000 m² 起）
+   *  页面也跟着显示 50 m²，和规格表自相矛盾。 */
+  moqLabel?: string;
 }) {
   const c = COPY[locale] || COPY.en;
   const router = useRouter();
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const points = [
+    c.cad,
+    moqLabel ? c.moq.replace('{moq}', moqLabel) : c.moqGeneric,
+    c.warranty,
+    // 检测报告只有声屏障 9 款有，别在石笼/护栏网页面上也承诺
+    ...(categorySlug === 'noise-barrier' ? [c.testReports] : []),
+  ];
 
   return (
     <section id="product-quote" className="mt-16 scroll-mt-24">
@@ -126,7 +160,7 @@ export function ProductQuoteForm({
           <h2 className="text-2xl font-bold text-slate-900">{c.title}</h2>
           <p className="mt-2 text-sm text-slate-500">{c.subtitle}</p>
           <ul className="mt-5 space-y-2.5">
-            {c.points.map((p) => (
+            {points.map((p) => (
               <li key={p} className="flex items-start gap-2 text-sm text-slate-600">
                 <span className="text-green-600 mt-0.5" aria-hidden="true">✓</span>
                 <span>{p}</span>

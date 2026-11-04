@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { categoryHref } from '@/lib/pillars';
 import type {Metadata} from 'next';
 import {getCatalog, getSiteConfig} from '@/lib/api';
@@ -21,6 +22,13 @@ import {
 // stale-while-revalidate 的窗口在 next.config.ts 的 expireTime 里配
 // （Next 16 已废弃路由级 expireTime，写在这里不生效）。
 export const revalidate = 300;
+
+/**
+ * 只有站内相对路径（/images、/uploads）才交给 next/image 处理：
+ * banner 与栏目图都可由后台配置成外链，next/image 遇到不在 remotePatterns
+ * 白名单里的域名会直接抛错并让整页 500，所以外链一律退回原生 <img>。
+ */
+const isLocalImage = (src?: string): boolean => !!src && src.startsWith('/');
 
 
 // ── Metadata ──
@@ -132,7 +140,7 @@ function HomeFaqLd({locale}: {locale: string}) {
     { q_en: 'What products does Angu Wire Mesh manufacture?', q_zh: '安固丝网生产哪些产品？', q_vi: 'Angu Wire Mesh sản xuất những sản phẩm nào?', q_th: 'Angu Wire Mesh ผลิตผลิตภัณฑ์ใดบ้าง?', a_en: 'Angu Wire Mesh manufactures 9 product categories: gabion boxes, rockfall protection nets, chain link fences, welded wire mesh, noise barriers, barbed/razor wire, blast barriers, stainless steel rope nets, and crowd barriers. All products are ISO 9001 certified, customizable to specifications.', a_zh: '安固丝网生产9大品类：石笼网箱、边坡防护网、勾花网围栏、电焊网、声屏障、刺绳/刀片刺绳、防爆护栏、不锈钢绳网、临时围栏。全品类通过ISO 9001认证，支持来图来样定制；落石防护网另持 CE 认证（ETAG 027）。', a_vi: 'Angu Wire Mesh sản xuất 9 danh mục sản phẩm: lưới đá gabion, lưới chống sạt lở, hàng rào xích liên kết, lưới hàn, rào chống tiếng ồn, dây gai/dây gai lưỡi dao, rào chống nổ, lưới dây thép không gỉ và rào tạm thời. Tất cả sản phẩm đạt chứng nhận ISO 9001, có thể tùy chỉnh theo yêu cầu.', a_th: 'Angu Wire Mesh ผลิตผลิตภัณฑ์ 9 หมวดหมู่: ตะกร้า gabion, ตาข่ายป้องกันหินไหล, รั้วลูกโซ่, ตาข่ายเชื่อม, แผ่นกันเสียง, ลวดหนาม/ลวดมีด, รั้วกันระเบิด, ตาข่ายเชือกสแตนเลส และรั้วชั่วคราว ผลิตภัณฑ์ทั้งหมดได้รับการรับรอง ISO 9001 สามารถปรับแต่งตามข้อกำหนด' },
     { q_en: 'Where is Angu Wire Mesh located?', q_zh: '安固丝网在哪里？', q_vi: 'Angu Wire Mesh nằm ở đâu?', q_th: 'Angu Wire Mesh ตั้งอยู่ที่ไหน?', a_en: 'Angu Wire Mesh is headquartered in Anping County, Hebei Province, China — the global Wire Mesh Capital. Factory is ~300 km from Tianjin Port for fast export shipping.', a_zh: '安固丝网位于中国河北省安平县——全球丝网之都。工厂距天津港约300公里，出口物流便捷。', a_vi: 'Angu Wire Mesh có trụ sở tại Anping County, tỉnh Hebei, Trung Quốc — thủ phủ lưới dây toàn cầu. Nhà máy cách Tianjin Port khoảng 300 km, thuận tiện cho xuất khẩu.', a_th: 'Angu Wire Mesh มีสำนักงานใหญ่ที่ Anping County มณฑล Hebei ประเทศจีน — เมืองหลวงตาข่ายโลก โรงงานอยู่ห่างจาก Tianjin Port ประมาณ 300 กม. ส่งออกสะดวกรวดเร็ว' },
     { q_en: 'Is Angu Wire Mesh certified?', q_zh: '安固丝网有哪些认证？', q_vi: 'Angu Wire Mesh có những chứng nhận gì?', q_th: 'Angu Wire Mesh มีการรับรองอะไรบ้าง?', a_en: 'Yes. ISO 9001:2015 quality management, CE product certification for rockfall nets (ETAG 027) European technical approval for rockfall protection nets. SGS/BV third-party inspection available upon request.', a_zh: '是的。我们拥有ISO 9001:2015质量管理体系认证；边坡防护网另持 CE 认证与 ETAG 027 欧洲技术认证。支持SGS/必维(BV)第三方检测。', a_vi: 'Có. Chứng nhận quản lý chất lượng ISO 9001:2015, chứng nhận sản phẩm CE và phê duyệt kỹ thuật châu Âu ETAG 027 cho lưới chống sạt lở. Có sẵn kiểm tra bên thứ ba SGS/BV theo yêu cầu.', a_th: 'ใช่ ได้รับการรับรองการจัดการคุณภาพ ISO 9001:2015 การรับรองผลิตภัณฑ์ CE และการอนุมัติทางเทคนิคยุโรป ETAG 027 สำหรับตาข่ายป้องกันหินไหล มีบริการตรวจสอบโดยบุคคลที่สาม SGS/BV ตามคำขอ' },
-    { q_en: 'What is the MOQ and how fast is delivery?', q_zh: '起订量多少？交货期多久？', q_vi: 'Số lượng đặt hàng tối thiểu là bao nhiêu? Thời gian giao hàng bao lâu?', q_th: 'ปริมาณสั่งซื้อขั้นต่ำเท่าไหร่? ส่งมอบกี่วัน?', a_en: 'MOQ is as low as 50 m² for trial orders. Standard delivery is 15-25 days. Rush orders can be negotiated. Samples available.', a_zh: '试单最低50㎡起。标准交货期15-25天，加急订单可协商。提供样品。', a_vi: 'Số lượng đặt hàng tối thiểu cho đơn thử thấp tới 50 m². Thời gian giao hàng tiêu chuẩn 15-25 ngày. Đơn gấp có thể thương lượng. Có sẵn mẫu.', a_th: 'ปริมาณสั่งขั้นต่ำสำหรับการสั่งทดลองต่ำเพียง 50 ตร.ม. การส่งมอบมาตรฐาน 15-25 วัน สามารถเจรจาคำสั่งด่วนได้ มีตัวอย่างให้' },
+    { q_en: 'What is the MOQ and how fast is delivery?', q_zh: '起订量多少？交货期多久？', q_vi: 'Số lượng đặt hàng tối thiểu là bao nhiêu? Thời gian giao hàng bao lâu?', q_th: 'ปริมาณสั่งซื้อขั้นต่ำเท่าไหร่? ส่งมอบกี่วัน?', a_en: 'MOQ is as low as 50 m² for trial orders. Standard catalogue specifications ship within 20 days of deposit receipt. Rush orders can be negotiated. Samples available.', a_zh: '试单最低50㎡起。标准目录规格自定金到账起 20 天内交货，加急订单可协商。提供样品。', a_vi: 'Số lượng đặt hàng tối thiểu cho đơn thử thấp tới 50 m². Quy cách chuẩn trong danh mục giao trong vòng 20 ngày kể từ ngày nhận tiền đặt cọc. Đơn gấp có thể thương lượng. Có sẵn mẫu.', a_th: 'ปริมาณสั่งขั้นต่ำสำหรับการสั่งทดลองต่ำเพียง 50 ตร.ม. ขนาดมาตรฐานตามแคตตาล็อกจัดส่งภายใน 20 วันนับจากวันที่ได้รับเงินมัดจำ สามารถเจรจาคำสั่งด่วนได้ มีตัวอย่างให้' },
     { q_en: 'Does Angu support OEM/ODM?', q_zh: '支持OEM/ODM定制吗？', q_vi: 'Angu có hỗ trợ OEM/ODM không?', q_th: 'Angu รองรับ OEM/ODM หรือไม่?', a_en: 'Yes. We accept drawing-to-sample OEM/ODM with custom dimensions, wire diameters, coatings, and packaging. Dedicated project managers handle the full process.', a_zh: '支持。接受来图来样OEM/ODM定制，可定制尺寸、丝径、涂层、包装。专属项目经理全程跟进。', a_vi: 'Có. Chúng tôi nhận OEM/ODM theo bản vẽ và mẫu với kích thước, đường kính dây, lớp phủ và đóng gói tùy chỉnh. Quản lý dự án chuyên trách phụ trách toàn bộ quy trình.', a_th: 'ใช่ เรารับ OEM/ODM ตามแบบและตัวอย่าง ปรับแต่งขนาด เส้นผ่านศูนย์กลางลวด การเคลือบ และบรรจุภัณฑ์ ผู้จัดการโครงการเฉพาะดูแลทั้งกระบวนการ' },
   ];
   const faqLd = HOME_FAQ_PARTIAL[locale]
@@ -353,14 +361,26 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
       {/* ─── Hero — Conclusion-First for AI Snippet Extraction ─── */}
       <section className="relative h-[580px] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-slate-900/40 z-10" />
-        <img
-          src={bannerImage}
-          alt="Gabion wire mesh products"
-          className="absolute inset-0 w-full h-full object-cover"
-          width={1920}
-          height={580}
-          fetchPriority="high"
-        />
+        {isLocalImage(bannerImage) ? (
+          <Image
+            src={bannerImage}
+            alt="Gabion wire mesh products"
+            className="absolute inset-0 w-full h-full object-cover"
+            width={1920}
+            height={580}
+            sizes="100vw"
+            preload
+          />
+        ) : (
+          <img
+            src={bannerImage}
+            alt="Gabion wire mesh products"
+            className="absolute inset-0 w-full h-full object-cover"
+            width={1920}
+            height={580}
+            fetchPriority="high"
+          />
+        )}
         <div className="relative z-20 flex items-center h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
             {/* Conclusion-first H1 — extractable value proposition */}
@@ -450,14 +470,26 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
           {/* Right: Visual */}
           <div className="relative">
             <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100 shadow-lg">
-              <img
-                src={aboutImage}
-                alt={locale === 'zh' ? '安固工厂车间' : locale === 'vi' ? 'Xưởng Angu' : locale === 'th' ? 'โรงงาน Angu' : locale === 'ms' ? 'Kilang Angu' : locale === 'ar' ? 'مصنع Angu' : 'Angu factory workshop'}
-                className="w-full h-full object-cover"
-                width={600}
-                height={450}
-                loading="lazy"
-              />
+              {isLocalImage(aboutImage) ? (
+                <Image
+                  src={aboutImage}
+                  alt={locale === 'zh' ? '安固工厂车间' : locale === 'vi' ? 'Xưởng Angu' : locale === 'th' ? 'โรงงาน Angu' : locale === 'ms' ? 'Kilang Angu' : locale === 'ar' ? 'مصنع Angu' : 'Angu factory workshop'}
+                  className="w-full h-full object-cover"
+                  width={600}
+                  height={450}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  loading="lazy"
+                />
+              ) : (
+                <img
+                  src={aboutImage}
+                  alt={locale === 'zh' ? '安固工厂车间' : locale === 'vi' ? 'Xưởng Angu' : locale === 'th' ? 'โรงงาน Angu' : locale === 'ms' ? 'Kilang Angu' : locale === 'ar' ? 'مصنع Angu' : 'Angu factory workshop'}
+                  className="w-full h-full object-cover"
+                  width={600}
+                  height={450}
+                  loading="lazy"
+                />
+              )}
             </div>
             {/* Floating stat card */}
             <div className="absolute -bottom-4 -start-4 bg-white rounded-xl shadow-xl p-4 border border-slate-100">
@@ -551,7 +583,17 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
             <Link key={cat.id} href={categoryHref(locale, cat.slug)}>
               <article className="group h-full bg-white rounded-xl overflow-hidden border border-slate-100 hover:border-blue-300 hover:shadow-lg transition-all duration-300">
                 <div className="aspect-[4/3] overflow-hidden bg-slate-100">
-                  {cat.image && (
+                  {isLocalImage(cat.image) ? (
+                    <Image
+                      src={cat.image as string}
+                      alt={cat.names[locale] || CATEGORY_NAME_PARTIAL[locale]?.[cat.slug] || cat.names.en || ''}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      width={400}
+                      height={300}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
+                      loading="lazy"
+                    />
+                  ) : cat.image ? (
                     <img
                       src={cat.image}
                       alt={cat.names[locale] || CATEGORY_NAME_PARTIAL[locale]?.[cat.slug] || cat.names.en || ''}
@@ -560,7 +602,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
                       height={300}
                       loading="lazy"
                     />
-                  )}
+                  ) : null}
                 </div>
                 <div className="p-4">
                   <h3 className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
@@ -570,7 +612,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
                     {pillarBlurb[cat.slug]?.[locale] || PILLAR_BLURB_PARTIAL[locale]?.[cat.slug] || pillarBlurb[cat.slug]?.en || ''}
                   </p>
                   {cat.productCount && (
-                    <p className="text-xs text-slate-400 mt-2">
+                    <p className="text-xs text-slate-600 mt-2">
                       {cat.productCount} {locale === 'zh' ? '款产品' : locale === 'vi' ? 'sản phẩm' : locale === 'th' ? 'สินค้า' : locale === 'ms' ? 'produk' : locale === 'ar' ? 'منتجًا' : 'products'}
                     </p>
                   )}
@@ -625,7 +667,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
             {q_en:'Where is Angu Wire Mesh located?', q_zh:'安固丝网在哪里？', q_vi:'Angu Wire Mesh nằm ở đâu?', q_th:'Angu Wire Mesh ตั้งอยู่ที่ไหน?', a_en:'Angu Wire Mesh is headquartered in Anping County, Hebei Province, China — the global Wire Mesh Capital. Our factory is ~300 km from Tianjin Port for fast export shipping.', a_zh:'安固丝网位于中国河北省安平县——全球丝网之都。工厂距天津港约300公里，出口物流便捷。', a_vi:'Angu Wire Mesh có trụ sở tại Anping County, tỉnh Hebei, Trung Quốc — thủ phủ lưới dây toàn cầu. Nhà máy của chúng tôi cách Tianjin Port khoảng 300 km, thuận tiện cho xuất khẩu.', a_th:'Angu Wire Mesh มีสำนักงานใหญ่ที่ Anping County มณฑล Hebei ประเทศจีน — เมืองหลวงตาข่ายโลก โรงงานของเราอยู่ห่างจาก Tianjin Port ประมาณ 300 กม. ส่งออกสะดวกรวดเร็ว'},
             {q_en:'Is Angu Wire Mesh certified?', q_zh:'安固丝网有哪些认证？', q_vi:'Angu Wire Mesh có những chứng nhận gì?', q_th:'Angu Wire Mesh มีการรับรองอะไรบ้าง?', a_en:'Yes. ISO 9001:2015 quality management, CE product certification for rockfall nets (ETAG 027) European technical approval for rockfall protection nets. SGS and Bureau Veritas (BV) third-party inspection available.', a_zh:'是的。ISO 9001:2015质量管理体系；边坡防护网持有 CE 认证与 ETAG 027 欧洲技术认证。支持SGS/必维(BV)第三方检测。', a_vi:'Có. Chứng nhận quản lý chất lượng ISO 9001:2015, chứng nhận sản phẩm CE và phê duyệt kỹ thuật châu Âu ETAG 027 cho lưới chống sạt lở. Có sẵn dịch vụ kiểm tra bên thứ ba SGS và Bureau Veritas (BV).', a_th:'ใช่ ได้รับการรับรองการจัดการคุณภาพ ISO 9001:2015 การรับรองผลิตภัณฑ์ CE และการอนุมัติทางเทคนิคยุโรป ETAG 027 สำหรับตาข่ายป้องกันหินไหล มีบริการตรวจสอบโดยบุคคลที่สาม SGS และ Bureau Veritas (BV)'},
             {q_en:'What is the minimum order quantity (MOQ)?', q_zh:'最低起订量是多少？', q_vi:'Số lượng đặt hàng tối thiểu (MOQ) là bao nhiêu?', q_th:'ปริมาณสั่งซื้อขั้นต่ำ (MOQ) คือเท่าไหร่?', a_en:'MOQ starts from as low as 50 m² for trial orders. Bulk orders welcome with volume discounts. Samples available upon request.', a_zh:'试单最低50㎡起。大批量订单享受阶梯折扣。可提供样品。', a_vi:'MOQ cho đơn thử thấp tới 50 m². Hoan nghênh đơn hàng số lượng lớn với chiết khấu theo khối lượng. Có sẵn mẫu theo yêu cầu.', a_th:'MOQ สำหรับการสั่งทดลองต่ำเพียง 50 ตร.ม. ยินดีรับคำสั่งจำนวนมากพร้อมส่วนลดตามปริมาณ มีตัวอย่างให้ตามคำขอ'},
-            {q_en:'How fast is delivery and shipping?', q_zh:'交货期和物流时效？', q_vi:'Thời gian giao hàng và vận chuyển mất bao lâu?', q_th:'การส่งมอบและขนส่งกี่วัน?', a_en:'Standard production takes 15-25 days. FOB Tianjin or CIF to your port. Sea freight to major ports worldwide (~15-40 days depending on destination). Rush orders negotiable.', a_zh:'标准生产周期15-25天。支持FOB天津或CIF到港。海运至全球主要港口（约15-40天，依目的地而定）。加急订单可协商。', a_vi:'Sản xuất tiêu chuẩn 15-25 ngày. Hỗ trợ FOB Tianjin hoặc CIF đến cảng của bạn. Vận chuyển đường biển đến các cảng lớn trên toàn cầu (~15-40 ngày tùy điểm đến). Đơn gấp có thể thương lượng.', a_th:'การผลิตมาตรฐาน 15-25 วัน รองรับ FOB Tianjin หรือ CIF ถึงท่าเรือของคุณ ขนส่งทางทะเลไปยังท่าเรือหลักทั่วโลก (ประมาณ 15-40 วัน ขึ้นอยู่กับจุดหมายปลายทาง) สามารถเจรจาคำสั่งด่วนได้'},
+            {q_en:'How fast is delivery and shipping?', q_zh:'交货期和物流时效？', q_vi:'Thời gian giao hàng và vận chuyển mất bao lâu?', q_th:'การส่งมอบและขนส่งกี่วัน?', a_en:'Standard catalogue specifications ship within 20 days of deposit receipt. FOB Tianjin or CIF to your port. Sea freight to major ports worldwide (~15-40 days depending on destination). Rush orders negotiable.', a_zh:'标准目录规格自定金到账起 20 天内交货。支持FOB天津或CIF到港。海运至全球主要港口（约15-40天，依目的地而定）。加急订单可协商。', a_vi:'Quy cách chuẩn trong danh mục giao trong vòng 20 ngày kể từ ngày nhận tiền đặt cọc. Hỗ trợ FOB Tianjin hoặc CIF đến cảng của bạn. Vận chuyển đường biển đến các cảng lớn trên toàn cầu (~15-40 ngày tùy điểm đến). Đơn gấp có thể thương lượng.', a_th:'ขนาดมาตรฐานตามแคตตาล็อกจัดส่งภายใน 20 วันนับจากวันที่ได้รับเงินมัดจำ รองรับ FOB Tianjin หรือ CIF ถึงท่าเรือของคุณ ขนส่งทางทะเลไปยังท่าเรือหลักทั่วโลก (ประมาณ 15-40 วัน ขึ้นอยู่กับจุดหมายปลายทาง) สามารถเจรจาคำสั่งด่วนได้'},
             {q_en:'Does Angu support OEM/ODM customization?', q_zh:'支持OEM/ODM定制吗？', q_vi:'Angu có hỗ trợ tùy chỉnh OEM/ODM không?', q_th:'Angu รองรับการปรับแต่ง OEM/ODM หรือไม่?', a_en:'Yes. We accept drawing-to-sample OEM/ODM with custom dimensions, wire diameters, coatings (PVC, galvanized, Galfan), and packaging. Dedicated project manager for each order.', a_zh:'支持。接受来图来样OEM/ODM定制，可定制尺寸、丝径、涂层（PVC/镀锌/Galfan）、包装。每单配备专属项目经理。', a_vi:'Có. Chúng tôi nhận OEM/ODM theo bản vẽ và mẫu với kích thước, đường kính dây, lớp phủ (PVC, mạ kẽm, Galfan) và đóng gói tùy chỉnh. Mỗi đơn hàng có quản lý dự án chuyên trách.', a_th:'ใช่ เรารับ OEM/ODM ตามแบบและตัวอย่าง ปรับแต่งขนาด เส้นผ่านศูนย์กลางลวด การเคลือบ (PVC, ชุบสังกะสี, Galfan) และบรรจุภัณฑ์ มีผู้จัดการโครงการเฉพาะสำหรับทุกคำสั่ง'},
           ].map((f) => ({q: pickLocale(f, 'q', locale), a: pickLocale(f, 'a', locale)}))).map((faq, i) => (
             <div key={i} className="bg-white rounded-xl p-5 border border-slate-100 shadow-sm hover:border-blue-200 transition-colors">
@@ -659,7 +701,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
               target="_blank"
               rel="noopener noreferrer"
             >
-              <button className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl font-bold text-base transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
+              <button className="bg-green-700 hover:bg-green-800 text-white px-8 py-4 rounded-xl font-bold text-base transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
                 <span aria-hidden="true">💬</span> {locale === 'zh' ? 'WhatsApp咨询' : locale === 'vi' ? 'Trò chuyện trên WhatsApp' : locale === 'th' ? 'แชทบน WhatsApp' : locale === 'ms' ? 'Sembang di WhatsApp' : locale === 'ar' ? 'تحدّث على واتساب' : 'Chat on WhatsApp'}
               </button>
             </a>
@@ -670,7 +712,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
       {/* Cross-links (GEO internal linking) */}
       <section className="bg-white border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <h3 className="text-center text-sm font-semibold text-slate-400 uppercase tracking-wider mb-5">
+          <h3 className="text-center text-sm font-semibold text-slate-600 uppercase tracking-wider mb-5">
             {crosslinksTitle}
           </h3>
           <div className="flex flex-wrap justify-center gap-3">

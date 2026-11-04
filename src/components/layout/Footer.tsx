@@ -72,6 +72,8 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
                   <img
                     src={logoUrl}
                     alt="Angu Wire Mesh"
+                    width={80}
+                    height={80}
                     className="h-6 w-auto object-contain"
                     onError={() => setLogoError(true)}
                   />
@@ -83,7 +85,7 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
               )}
               <div>
                 <div className="font-bold text-white leading-tight">{cfgVal(siteConfig, 'company_name_en', locale, 'Angu Wire Mesh')}</div>
-                <div className="text-xs text-slate-500 leading-tight">{tLabel('丝网类 · 护栏网 · 石笼网 · 防护网 · 声屏障', 'Wire Mesh · Fencing · Gabion · Protection · Noise Barrier', locale)}</div>
+                <div className="text-xs text-slate-400 leading-tight">{tLabel('丝网类 · 护栏网 · 石笼网 · 防护网 · 声屏障', 'Wire Mesh · Fencing · Gabion · Protection · Noise Barrier', locale)}</div>
               </div>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed mb-5">
@@ -168,8 +170,8 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-slate-500">{copyright}</p>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-slate-500">
+          <p className="text-sm text-slate-400">{copyright}</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-slate-400">
             <Link href={`/${locale}/download`} className="hover:text-white transition-colors">{tLabel('下载中心', 'Downloads', locale)}</Link>
             <span aria-hidden="true">|</span>
             <Link href={`/${locale}/service/faq`} className="hover:text-white transition-colors">{tLabel('常见问题', 'FAQ', locale)}</Link>

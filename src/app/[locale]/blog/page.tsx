@@ -4,6 +4,10 @@ import Image from 'next/image';
 import {getBlogPosts, getSiteConfig} from '@/lib/api';
 import {generatePageMeta} from '@/lib/seo-utils';
 import { tLabel, dateLocale } from '@/lib/i18n';
+// 法人名只允许从 company.ts 取：模板里硬编码出现了第二、第三个变体
+// （"An Gu Wire Mesh Products Co., Ltd." 缺 Anping County 和 Metal、Angu 被拆成 An Gu；
+//   author 里又写成 "Angu Wire Mesh"），等于在机器可读层把实体统一成果重新撕开。
+import { COMPANY } from '@/lib/company';
 
 // 页面级 revalidate：与 fetch 级的 REVALIDATE_SECONDS 保持一致。
 // stale-while-revalidate 的窗口在 next.config.ts 的 expireTime 里配
@@ -63,13 +67,15 @@ export default async function BlogPage({params}: {params: Promise<{locale: strin
     url: `https://www.angumesh.com/${locale}/blog`,
     author: {
       '@type': 'Organization',
-      name: 'An Gu Wire Mesh Products Co., Ltd.',
+      '@id': 'https://www.angumesh.com/#organization',
+      name: COMPANY.legalNameEn,
       url: 'https://www.angumesh.com',
       sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },
     publisher: {
       '@type': 'Organization',
-      name: 'An Gu Wire Mesh Products Co., Ltd.',
+      '@id': 'https://www.angumesh.com/#organization',
+      name: COMPANY.legalNameEn,
       logo: {
         '@type': 'ImageObject',
         // 112×112 是 Article/Blog 富结果对出版方 logo 的下限，public 里的 logo.png 只有 80×80
@@ -90,7 +96,8 @@ export default async function BlogPage({params}: {params: Promise<{locale: strin
         datePublished: post.publish_time || undefined,
         author: {
           '@type': 'Organization',
-          name: 'An Gu Wire Mesh Products Co., Ltd.',
+          '@id': 'https://www.angumesh.com/#organization',
+          name: COMPANY.legalNameEn,
           sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
         },
         ...(post.cover_image

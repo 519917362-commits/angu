@@ -60,11 +60,35 @@ export const QUOTE_NOTE_EN = `FOB Tianjin. Indicative price for reference only; 
 export const QUOTE_NOTE_ZH = `天津港 FOB 参考价，最终报价自出具之日起 ${QUOTE_VALID_DAYS} 天内有效。`;
 
 export const LEAD_TIME_NOTE_EN =
-  'Standard specifications: 15–25 working days; custom/OEM: 20–30 working days, counted from order confirmation and deposit receipt.';
+  'Lead time counts from the date the deposit is received. Custom specifications are quoted individually.';
 export const LEAD_TIME_NOTE_ZH =
-  '标准规格 15–25 个工作日；定制/OEM 20–30 个工作日，自订单确认并收到定金之日起计算。';
+  '交期自定金到账之日起算，定制规格单独报价。';
 
 export const MOQ_NOTE_EN =
-  'Trial orders from 50 m²; standard MOQ per specification is shown in the table below.';
+  'MOQ is stated per specification in the table above.';
 export const MOQ_NOTE_ZH =
-  '试单 50 m² 起；常规起订量见下方规格表。';
+  '起订量见上方规格表，按规格分档。';
+
+/** 试单口径只适用于声屏障板（9 款 MOQ 为 50 / 80 / 100 / 200 m²，最低 50）。
+ *  以前写成「试单 50 m² 起」全站通用，导致石笼网箱（按只计）、护栏网（1000 m² 起）
+ *  页面也显示 50 m²，与规格表自相矛盾。 */
+export const MOQ_TRIAL_NOTE_EN =
+  'Trial orders of 50 m² are accepted for noise barrier panels.';
+export const MOQ_TRIAL_NOTE_ZH =
+  '声屏障板可接受 50 平方米试单。';
+
+/** 质保：业务确认真实提供 5 年镀锌层质保，但截至 2026-11-04 仍无书面条款。
+ *  按 T/CGCC 119—2026 §5.2.3「对外承诺须有依据」，条款成文前统一追加限定语，
+ *  成文后改为链向 /warranty 政策页，不要在没有条款的情况下裸承诺。 */
+export const WARRANTY_YEARS = 5;
+export const WARRANTY_QUALIFIER_EN =
+  'subject to the written warranty terms in the sales contract';
+export const WARRANTY_QUALIFIER_ZH =
+  '具体条款以销售合同书面约定为准';
+
+/** 声屏障 9 款均有第三方检测报告（声学 / 力学），编号不对外公开，
+ *  由销售经理按询盘提供。禁止写成「证书编号可在线核验」这类可验证承诺。 */
+export const TEST_REPORT_NOTE_EN =
+  'Test reports available on request from our sales manager.';
+export const TEST_REPORT_NOTE_ZH =
+  '检测报告可向销售经理索取。';

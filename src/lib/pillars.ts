@@ -80,7 +80,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         },
         {
           q: 'What are the MOQ and lead time?',
-          a: 'MOQ is 100 m² for standard sizes. Production takes 15–25 working days, plus sea freight.',
+          a: 'MOQ is 100 m² for standard sizes. Lead time depends on specification — the exact figure is shown on each product page, counted from the date the deposit is received, plus sea freight.',
         },
       ],
     },
@@ -108,7 +108,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         },
         {
           q: '起订量和交期？',
-          a: '常规规格 100 平方米起订，生产 15–25 个工作日，另加海运时间。',
+          a: '常规规格 100 平方米起订。交期按规格不同，具体天数见各产品页，自定金到账之日起算，另加海运时间。',
         },
       ],
     },
@@ -136,7 +136,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         },
         {
           q: 'Số lượng tối thiểu và thời gian giao hàng?',
-          a: 'MOQ 100 m² cho kích thước tiêu chuẩn. Sản xuất 15–25 ngày làm việc, chưa tính thời gian vận chuyển biển.',
+          a: 'MOQ 100 m² cho kích thước tiêu chuẩn. Thời gian sản xuất tùy quy cách — số ngày cụ thể ghi trên từng trang sản phẩm, tính từ ngày nhận tiền đặt cọc, chưa gồm vận chuyển biển.',
         },
       ],
     },
@@ -164,7 +164,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         },
         {
           q: 'ยอดสั่งขั้นต่ำและระยะเวลาผลิต',
-          a: 'MOQ 100 ตร.ม. สำหรับขนาดมาตรฐาน ผลิต 15–25 วันทำการ ยังไม่รวมเวลาขนส่งทางเรือ',
+          a: 'MOQ 100 ตร.ม. สำหรับขนาดมาตรฐาน ระยะเวลาส่งมอบขึ้นอยู่กับข้อกำหนด — ระบุเป็นวันแน่นอนในแต่ละหน้าสินค้า นับจากวันที่ได้รับเงินมัดจำ ยังไม่รวมเวลาขนส่งทางเรือ',
         },
       ],
     },
@@ -195,7 +195,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         },
         {
           q: 'What are the MOQ and lead time?',
-          a: 'MOQ is 50 m² for trial orders and 500 m² for custom coating colours. Production takes 15–25 working days.',
+          a: 'MOQ is 50 m² for trial orders and 500 m² for custom coating colours. Lead time depends on specification — see each product page; counted from the date the deposit is received.',
         },
       ],
     },
@@ -223,7 +223,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         },
         {
           q: '起订量与交期？',
-          a: '试单 50 平方米起，定制覆塑颜色 500 平方米起；生产 15–25 个工作日。',
+          a: '试单 50 平方米起，定制覆塑颜色 500 平方米起；交期按规格不同，见各产品页，自定金到账之日起算。',
         },
       ],
     },
@@ -251,7 +251,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         },
         {
           q: 'MOQ và thời gian sản xuất?',
-          a: 'MOQ 50 m² cho đơn thử, 500 m² cho màu phủ tùy chỉnh. Sản xuất 15–25 ngày làm việc.',
+          a: 'MOQ 50 m² cho đơn thử, 500 m² cho màu phủ tùy chỉnh. Thời gian sản xuất tùy quy cách, xem từng trang sản phẩm, tính từ ngày nhận tiền đặt cọc.',
         },
       ],
     },
@@ -279,7 +279,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         },
         {
           q: 'MOQ และระยะเวลาผลิต',
-          a: 'MOQ 50 ตร.ม. สำหรับออร์เดอร์ทดลอง และ 500 ตร.ม. สำหรับสีเคลือบพิเศษ ผลิต 15–25 วันทำการ',
+          a: 'MOQ 50 ตร.ม. สำหรับออร์เดอร์ทดลอง และ 500 ตร.ม. สำหรับสีเคลือบพิเศษ ระยะเวลาส่งมอบขึ้นอยู่กับข้อกำหนด ดูแต่ละหน้าสินค้า นับจากวันที่ได้รับเงินมัดจำ',
         },
       ],
     },
@@ -310,7 +310,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         },
         {
           q: 'What are the MOQ and lead time?',
-          a: 'MOQ is 100 m² per specification. Different specifications can be consolidated into one container. Production 15–25 working days.',
+          a: 'MOQ is 100 m² per specification. Different specifications can be consolidated into one container. Lead time depends on specification — see each product page; counted from the date the deposit is received.',
         },
       ],
     },
@@ -338,7 +338,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         },
         {
           q: '起订量与交期？',
-          a: '每个规格 100 平方米起，不同规格可拼柜；生产 15–25 个工作日。',
+          a: '每个规格 100 平方米起，不同规格可拼柜；交期按规格不同，见各产品页，自定金到账之日起算。',
         },
       ],
     },
@@ -366,7 +366,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         },
         {
           q: 'MOQ và thời gian sản xuất?',
-          a: 'MOQ 100 m² mỗi quy cách; nhiều quy cách có thể ghép chung container. Sản xuất 15–25 ngày làm việc.',
+          a: 'MOQ 100 m² mỗi quy cách; nhiều quy cách có thể ghép chung container. Thời gian sản xuất tùy quy cách, xem từng trang sản phẩm, tính từ ngày nhận tiền đặt cọc.',
         },
       ],
     },
@@ -394,7 +394,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         },
         {
           q: 'MOQ และระยะเวลาผลิต',
-          a: 'MOQ 100 ตร.ม. ต่อสเปก รวมหลายสเปกในตู้เดียวได้ ผลิต 15–25 วันทำการ',
+          a: 'MOQ 100 ตร.ม. ต่อสเปก รวมหลายสเปกในตู้เดียวได้ ระยะเวลาส่งมอบขึ้นอยู่กับข้อกำหนด ดูแต่ละหน้าสินค้า นับจากวันที่ได้รับเงินมัดจำ',
         },
       ],
     },

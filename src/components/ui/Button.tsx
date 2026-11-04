@@ -19,7 +19,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             'bg-slate-800 text-white hover:bg-slate-900 focus-visible:ring-slate-800': variant === 'secondary',
             'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-400 focus-visible:ring-slate-400': variant === 'outline',
             'text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-slate-400': variant === 'ghost',
-            'bg-green-500 text-white hover:bg-green-600 focus-visible:ring-green-500': variant === 'whatsapp',
+            'bg-green-700 text-white hover:bg-green-800 focus-visible:ring-green-700': variant === 'whatsapp',
             'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-600': variant === 'danger',
           },
           {

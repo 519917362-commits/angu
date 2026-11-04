@@ -132,7 +132,7 @@ export function MobileNav({locale, whatsapp = '8618803189797'}: MobileNavProps) 
             href={`https://wa.me/${whatsapp}?text=Hello, I'm interested in your products.`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-semibold transition-colors"
+            className="flex items-center justify-center gap-2 w-full py-3 bg-green-700 hover:bg-green-800 text-white rounded-xl font-semibold transition-colors"
           >
             <MessageCircle className="w-5 h-5" />
             {locale === 'ms' ? 'WhatsApp Kami' : locale === 'ar' ? 'راسلنا على واتساب' : 'WhatsApp Us'}

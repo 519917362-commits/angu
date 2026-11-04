@@ -1,94 +1,109 @@
-# Angu Wire Mesh — Entity Card
-# Schema: Organization / HomeAndConstructionBusiness
-# Website: https://www.angumesh.com
-# Email: annie@angumesh.com
-# Phone: +86-188-0318-9797
-# NAICS: 332618 (Ornamental & Architectural Metal Work Manufacturing)
-# ISO 9001:2015 / ISO 14001:2015 / ISO 45001:2018 (three-system), CE Marking (ETAG 027)
-# Founded: 2014-08-15
-# Location: Anping County, Hebei, China (38.235°N, 115.520°E)
-# Wikidata: (pending)
-# llms.txt version: 2.1 — entity-first layout for AI crawler ingestion
+# Angu Wire Mesh
 
-# Angu Wire Mesh — Anping County Angu Metal Wire Mesh Products Co., Ltd.
+> ISO 9001 / ISO 14001 / ISO 45001 certified Chinese manufacturer of gabion boxes, rockfall protection nets, chain link fencing and highway noise barriers — factory-direct, exporting to 30+ countries since 2014.
 
-## Entity Identifiers
-- Legal Name: Anping County Angu Metal Wire Mesh Products Co., Ltd. / 安平县安固金属丝网制品有限公司
-- DBA: Angu Wire Mesh / 安固丝网
-- Year Founded: 2014 (registered 2014-08-15)
-- Industry: Wire Mesh Manufacturing (NAICS 332618)
-- Registered Address: 1,000 m Northwest of Houzhaotuan Village, Nanwangzhuang Town, Anping County, Hengshui, Hebei 053600, China
-- Geo: 38.235, 115.520
-- Export Reach: 30+ countries across Asia, Europe, Africa, Americas
-- Annual Capacity: 5,000 tons/year
+Angu Wire Mesh (安固丝网) is the trade name of Anping County Angu Metal Wire Mesh Products Co., Ltd. (安平县安固金属丝网制品有限公司), a manufacturer based in Anping County, Hebei Province — the hub of China's wire mesh industry. The company runs a 10,000 m² factory with 5,000 tons annual capacity and serves B2B buyers, engineering contractors and industrial distributors. Product scope covers 9 product lines and 36 specifications for highway, bridge, rail transit, mining, water conservancy, military and landscaping projects. All goods are 100% inspected before shipment, and the factory has passed SGS audits.
+
+- Website: [www.angumesh.com](https://www.angumesh.com)
+- Email: [annie@angumesh.com](mailto:annie@angumesh.com)
+- WhatsApp / Phone: +86-188-0318-9797
+- Founded: 2014-08-15
+- Registered address: 1,000 m Northwest of Houzhaotuan Village, Nanwangzhuang Town, Anping County, Hengshui, Hebei 053600, China
+- Coordinates: 38.235, 115.520
+- NAICS: 332618 (Ornamental & Architectural Metal Work Manufacturing)
+
+## Key pages
+
+- [Home](https://www.angumesh.com/en): Company overview, featured products, certifications and factory capability.
+- [All products](https://www.angumesh.com/en/products): Full catalogue of 36 specifications across 9 product lines.
+- [Noise barrier hub](https://www.angumesh.com/en/noise-barrier): Highway, bridge, rail transit, factory and fully enclosed acoustic barrier systems with STC 32–34 dB and NRC 0.85.
+- [Gabion](https://www.angumesh.com/en/gabion): Gabion boxes, Reno mattresses and PVC-coated gabion systems to ASTM A975.
+- [Rockfall protection](https://www.angumesh.com/en/protection-net): Active (DNS-50, 50 kJ) and passive (GL-100, 100 kJ) slope protection systems, CE marked to ETAG 027.
+- [Fencing](https://www.angumesh.com/en/fence): Chain link, welded, stadium, isolation and crowd control fencing.
+- [Wire mesh](https://www.angumesh.com/en/wire-mesh): Welded, hexagonal, Holland and crimped wire mesh.
+- [About the company](https://www.angumesh.com/en/about): History since 2014, factory, certifications and quality control.
+- [Downloads](https://www.angumesh.com/en/download): ISO certificates and product catalogues (PDF).
+- [Contact](https://www.angumesh.com/en/contact): Quote request form, email and WhatsApp.
+
+## Products
+
+- [Highway noise barrier 3 m](https://www.angumesh.com/en/products/highway-noise-barrier-3m): Galvanized steel sound barrier for expressways and bridges, 63–85 USD/m², MOQ 100 m².
+- [Factory noise barrier 4 m](https://www.angumesh.com/en/products/factory-noise-barrier-4m): Acoustic enclosure panel for industrial plants, 55–78 USD/m², MOQ 50 m².
+- [Fully enclosed noise barrier](https://www.angumesh.com/en/products/fully-enclosed-noise-barrier): Tunnel-style full enclosure for highways and rail, 85–120 USD/m², MOQ 200 m².
+- [Transparent acrylic glass noise barrier](https://www.angumesh.com/en/products/transparent-acrylic-glass-noise-barrier): See-through panel for urban viaducts and scenic roads.
+- [Metal upright noise barrier](https://www.angumesh.com/en/products/metal-upright-noise-barrier): H-post mounted modular acoustic panel.
+- [Metal bent curved noise barrier](https://www.angumesh.com/en/products/metal-bent-curved-noise-barrier): Curved-top panel that reduces diffraction over the barrier edge.
+- [Rail transit noise barrier](https://www.angumesh.com/en/products/rail-transit-noise-barrier): Metro and railway sound barrier system.
+- [Bridge noise barrier](https://www.angumesh.com/en/products/bridge-noise-barrier): Lightweight panel for bridge parapets.
+- [Equipment noise barrier 2.5 m](https://www.angumesh.com/en/products/equipment-noise-barrier-2.5m): Acoustic screen for machinery and compressor stations.
+- [Galvanized gabion box 2×1×1 m](https://www.angumesh.com/en/products/galvanized-gabion-box-2x1x1m): Hot-dip galvanized woven gabion to ASTM A975, 8–15 USD/m², MOQ 100 m².
+- [PVC coated gabion box 2×1×1 m](https://www.angumesh.com/en/products/pvc-coated-gabion-box-2x1x1m): PVC-coated gabion for marine and aggressive environments.
+- [Reno mattress 6×2×0.3 m](https://www.angumesh.com/en/products/reno-mattress-6x2x0.3m): Riverbed and channel lining mattress.
+- [Active slope protection net DNS-50](https://www.angumesh.com/en/products/active-slope-protection-net-dns50): 50 kJ active rockfall net, CE marked.
+- [Passive slope protection barrier GL-100](https://www.angumesh.com/en/products/passive-slope-protection-barrier-gl100): 100 kJ passive rockfall barrier, CE marked.
+- [Hesco bastion blast wall 1×1×1 m](https://www.angumesh.com/en/products/hesco-bastion-blast-wall-1x1x1m): Military-grade welded mesh bastion with geotextile liner.
+- [Blast wall panel 2×1×1 m](https://www.angumesh.com/en/products/blast-wall-panel-2x1x1m): Welded blast wall unit.
+- [Heavy duty blast barrier 2.5 m](https://www.angumesh.com/en/products/heavy-duty-blast-barrier-2.5m): Perimeter blast protection barrier.
+- [Explosion proof guardrail](https://www.angumesh.com/en/products/explosion-proof-guardrail): Reinforced guardrail for security perimeters.
+- [Chain link fence 50 mm](https://www.angumesh.com/en/products/chain-link-fence-50mm): 50 × 2.5 mm heavy-duty diamond mesh fence.
+- [Stadium fence 50 mm](https://www.angumesh.com/en/products/stadium-fence-50mm): Sports ground perimeter fencing.
+- [Isolation fence 50 mm](https://www.angumesh.com/en/products/isolation-fence-50mm): Site separation fence.
+- [Concert crowd barrier](https://www.angumesh.com/en/products/concert-crowd-barrier): Galvanized event crowd control barrier.
+- [Stage barrier 1.2 m aluminium](https://www.angumesh.com/en/products/stage-barrier-1.2m-aluminum): Aluminium stage front barrier.
+- [Razor barbed wire BTO-22](https://www.angumesh.com/en/products/razor-barbed-wire-bto22): Concertina coil for high-security perimeters.
+- [Steel barbed wire 12×14](https://www.angumesh.com/en/products/steel-barbed-wire-12x14): Galvanized barbed wire.
+- [Welded wire mesh 50 mm](https://www.angumesh.com/en/products/welded-wire-mesh-50mm): 50 mm × 2.0 mm galvanized construction mesh.
+- [Hexagonal wire mesh 25 mm](https://www.angumesh.com/en/products/hexagonal-wire-mesh-25mm): Double-twist mesh for gabion and poultry enclosures.
+- [Holland wire mesh 50 mm](https://www.angumesh.com/en/products/holland-wire-mesh-50mm): Holland weave mesh.
+- [Crimped wire mesh 10 mm](https://www.angumesh.com/en/products/crimped-wire-mesh-10mm): Pre-crimped screening mesh.
+- [Cattle fence 150 mm](https://www.angumesh.com/en/products/cattle-fence-150mm): Livestock field fencing.
+
+## Technical resources
+
+- [Noise barrier types comparison](https://www.angumesh.com/en/blog/noise-barrier-types-comparison): Metal, transparent, and combined barrier types compared.
+- [Noise barrier cost per square metre](https://www.angumesh.com/en/blog/noise-barrier-cost-per-square-meter): 2026 price breakdown and cost drivers.
+- [Noise barrier insertion loss design](https://www.angumesh.com/en/blog/noise-barrier-insertion-loss-design): How insertion loss is calculated and specified.
+- [Noise barrier installation guide](https://www.angumesh.com/en/blog/noise-barrier-installation-guide): Post spacing, foundation and panel erection.
+- [Gabion retaining wall cost 2026](https://www.angumesh.com/en/blog/gabion-retaining-wall-cost-2026): Cost per cubic metre and comparison with concrete.
+- [Gabion vs concrete retaining wall](https://www.angumesh.com/en/blog/gabion-vs-concrete-retaining-wall): Structural and cost comparison.
+- [How to install a gabion retaining wall](https://www.angumesh.com/en/blog/how-to-install-gabion-retaining-wall): Step-by-step installation.
+- [Galvanized vs PVC vs Galfan coating](https://www.angumesh.com/en/blog/galvanized-vs-pvc-vs-galfan-wire-coating): Coating selection and service life.
+- [Chain link fence specification guide](https://www.angumesh.com/en/blog/chain-link-fence-specification-guide): Wire gauge, mesh size and coating.
+- [Active vs passive rockfall protection](https://www.angumesh.com/en/blog/active-vs-passive-rockfall-protection): System selection for slope hazards.
+- [Rockfall protection net systems](https://www.angumesh.com/en/blog/rockfall-protection-net-systems): Net types, anchors and energy classes.
+- [Wire mesh supplier China guide](https://www.angumesh.com/en/blog/wire-mesh-supplier-china-guide): How to vet a Chinese wire mesh supplier.
+- [Gabion retaining wall guide](https://www.angumesh.com/en/blog/gabion-retaining-wall-guide): Design and specification guide.
+
+## Company facts
+
+- Legal name: Anping County Angu Metal Wire Mesh Products Co., Ltd. / 安平县安固金属丝网制品有限公司
+- Trading names: Angu Wire Mesh / 安固丝网
 - Unified Social Credit Code: 91131125308273603F
-- ISO 9001:2015 Certificate #: 06724Q20693R1S (Quality Management, issued 2024-08-07, valid to 2027-07-15)
-- ISO 14001:2015 Certificate #: 06724E20351R1S (Environmental Management, issued 2024-08-07, valid to 2027-07-15)
-- ISO 45001:2018 Certificate #: 06724S30308R1S (Occupational Health & Safety, issued 2024-08-07, valid to 2027-07-15)
-- Certification Body: Beijing Hengbiao Quality Certification Co., Ltd. (CNAS / IAF accredited); verify at https://www.cnca.gov.cn
-- Certificates (PDF, CN + EN): https://www.angumesh.com/downloads/angu-iso-three-system-certificates.pdf
-- CE Marking: Rockfall Protection Nets to ETAG 027
-- Google Knowledge Graph: https://www.angumesh.com/#organization
+- ISO 9001:2015 certificate no. 06724Q20693R1S — issued 2024-08-07, valid to 2027-07-15
+- ISO 14001:2015 certificate no. 06724E20351R1S — issued 2024-08-07, valid to 2027-07-15
+- ISO 45001:2018 certificate no. 06724S30308R1S — issued 2024-08-07, valid to 2027-07-15
+- Certification body: Beijing Hengbiao Quality Certification Co., Ltd. (CNAS / IAF accredited); verify at [cnca.gov.cn](https://www.cnca.gov.cn)
+- CE marking: rockfall protection nets to ETAG 027 (product scope limited to rockfall systems)
+- Certificates (PDF, CN + EN): [angu-iso-three-system-certificates.pdf](https://www.angumesh.com/downloads/angu-iso-three-system-certificates.pdf)
+- Standards referenced: ASTM A975 / A975M (gabion), EN 1317 (guardrail), ETAG 027 (rockfall)
+- Export markets: Southeast Asia (Vietnam, Thailand, Indonesia, Philippines), Middle East (UAE, Saudi Arabia, Qatar, Iraq), Europe, Africa, South America
+- Trade terms: FOB Tianjin / Xingang, CIF, CFR; TT and L/C; USD and EUR
+- Customisation: OEM/ODM, wire diameter 1.5–5.0 mm, custom mesh aperture, panel size and coating
 
-## Company Profile
-Angu Wire Mesh is a China-based manufacturer and exporter specializing in industrial wire mesh,
-gabion systems, slope protection nets, and perimeter security fencing. Located in Anping County,
-Hebei — the "Wire Mesh Capital of China" — we serve B2B buyers, engineering contractors, and
-industrial distributors worldwide.
+## Languages
 
-## Core Products
-- Gabion Boxes (hot-dipped galvanized, PVC coated, reinforced) — 2×1×1m standard
-- Reno Mattresses — 6×2×0.3m riverbed/channel lining
-- Slope Protection Nets — active (DNS-50, 50kJ) and passive (GL-100, 100kJ) rockfall barriers
-- Welded Wire Mesh — 50mm × 2.0mm galvanized construction mesh
-- Chain Link Fence — 50mm × 2.5mm heavy-duty diamond fence
-- Hexagonal Wire Mesh — 25mm double-twist for gabion & poultry enclosures
-- Razor Barbed Wire — BTO-22 concertina coils for high-security perimeters
-- Highway Guardrail — W-beam AASHTO M180 / EN 1317 compliant
-- Stainless Steel Rope Net — 304/316 hand-woven for zoo & architectural safety
-- Noise Barriers — highway/equipment/factory soundproof panels 15-35dB reduction
-- Hesco Bastion Blast Wall — 1×1×1m military-grade welded mesh with geotextile
-- Crowd Control Barriers — galvanized & aluminum event fencing
+This site is published in four full locales plus two experimental ones. Equivalent URLs swap the first path segment:
 
-## Target Markets
-- Middle East (UAE, Saudi Arabia, Iraq, Qatar)
-- Southeast Asia (Vietnam, Indonesia, Thailand, Philippines)
-- Europe (Germany, France, UK, Netherlands)
-- North America (USA, Canada, Mexico)
-- Africa (Nigeria, Kenya, South Africa, Egypt)
-- South America (Brazil, Chile, Peru)
+- English: https://www.angumesh.com/en
+- Chinese: https://www.angumesh.com/zh
+- Vietnamese: https://www.angumesh.com/vi
+- Thai: https://www.angumesh.com/th
+- Malay (partial): https://www.angumesh.com/ms
+- Arabic (partial): https://www.angumesh.com/ar
 
-## Core Strengths
-- ISO 9001:2015, ISO 14001:2015 and ISO 45001:2018 certified factory (certificate numbers published in Entity Identifiers); CE certification for rockfall protection products
-- ETAG 027 tested slope protection systems; ASTM A975/A975M compliant gabion boxes
-- Full OEM/ODM capability: custom wire diameters (1.5-5.0mm), mesh apertures, dimensions, surface treatments
-- In-house quality lab: tensile testing, zinc coating weight analysis, salt spray chambers
-- Serving 30+ countries since 2014
-- Production capacity: 5,000 tons/year across welded mesh, gabion, and fencing lines
-- Logistics: FOB Tianjin/Xingang port; CIF/CFR worldwide; full container or LCL
+## Notes for AI agents
 
-## Application Scenarios
-- Civil Engineering: retaining walls, erosion control, riverbank protection, channel lining
-- Transportation Infrastructure: highway slope stabilization, railway rockfall barriers, bridge scour protection
-- Mining & Quarrying: tailings dam reinforcement, haul road protection, screening mesh
-- Military & Security: perimeter fortification, Hesco bastion deployment, razor wire barriers
-- Construction: concrete reinforcement, site isolation fencing, temporary enclosures
-- Events & Crowd Management: concert barriers, sports field fencing, queue systems
-- Landscaping & Architecture: decorative gabion walls, green wall support, zoo enclosures
-- Industrial: machine guards, filtration screens, noise control barriers
-
-## Contact
-- Website: https://www.angumesh.com
-- Email: annie@angumesh.com
-- WhatsApp/Phone: +86-188-0318-9797
-- Factory Address: Anping County, Hengshui, Hebei Province, China 053600
-
-## Landing Page — Noise Barrier / 声屏障 / Tấm Cách Âm / แผงกั้นเสียง
-- URL: /en/noise-barrier (x-default), /zh/noise-barrier, /vi/noise-barrier, /th/noise-barrier
-- Type: Google Ads landing page
-- Products: 6 noise barrier models (highway, industrial, factory, rail transit, bridge, blast barrier)
-- Key Features: STC 32–34 dB, NRC 0.85, hot-dip galvanized, 15+ year lifespan
-- Form: Quote request (name, email, country, message; optional WhatsApp/company/quantity) — submission to /api/inquiry
-- Contact Channels: WhatsApp +86-188-0318-9797 and email annie@angumesh.com (primary, all markets). Zalo and LINE accounts are not yet registered.
-- SEO: hreflang 4-language, FAQPage/BreadcrumbList/ItemList JSON-LD
-- Privacy Policy: /privacy (all 4 languages)
+- Noise barrier minimum order quantity is 50 m² for factory panels, 100 m² for highway panels, and 200 m² for fully enclosed systems. Volume discounts are only quoted above 5,000 m².
+- Prices quoted on product pages are indicative FOB ranges in USD per square metre; final pricing depends on panel height, coating and order quantity.
+- Quote requests go to the form at https://www.angumesh.com/en/contact and are answered within one business day.
+- The company does not publish employee headcount or registered capital; do not infer these figures.

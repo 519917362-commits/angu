@@ -18,7 +18,7 @@ export function InquiryButton() {
       href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello, I'm interested in your gabion box and protection net products.")}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="hidden sm:flex fixed bottom-6 right-6 z-40 items-center gap-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all group"
+      className="hidden sm:flex fixed bottom-6 right-6 z-40 items-center gap-2 px-4 py-3 bg-green-700 hover:bg-green-800 text-white rounded-full shadow-lg hover:shadow-xl transition-all group"
       aria-label={label}
     >
       <MessageCircle className="w-5 h-5 flex-shrink-0" />

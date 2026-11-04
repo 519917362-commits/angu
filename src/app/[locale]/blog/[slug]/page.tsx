@@ -9,6 +9,8 @@ import {availableBlogLocales, hasBlogTranslation} from '@/lib/blog-locales';
 import {getBlogProductLinks, MAX_INLINE_PRODUCT_LINKS, RELATED_PRODUCTS_LABEL} from '@/lib/blog-product-links';
 import {localeHref} from '@/lib/routing';
 import type {Product} from '@/types/product';
+// 法人名统一从 company.ts 取，禁止在模板里再写一遍（详见 company.ts 文件头规则 1）。
+import { COMPANY } from '@/lib/company';
 
 // 页面级 revalidate：与 fetch 级的 REVALIDATE_SECONDS 保持一致。
 // stale-while-revalidate 的窗口在 next.config.ts 的 expireTime 里配
@@ -204,6 +206,8 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
     headline: seoTitle || title,
     description: seoDesc || abstract?.slice(0, 160) || '',
     url: canonicalUrl,
+    // BlogPosting 属 CreativeWork，inLanguage 是它的合法属性（Product / Organization 不是，别乱加）
+    inLanguage: locale,
     datePublished: toIsoUtc(post.publish_time),
     dateModified: toIsoUtc(post.updated_at) || toIsoUtc(post.publish_time),
     ...(post.cover_image
@@ -211,13 +215,15 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
       : {}),
     author: {
       '@type': 'Organization',
-      name: 'Angu Wire Mesh',
+      '@id': 'https://www.angumesh.com/#organization',
+      name: COMPANY.legalNameEn,
       url: 'https://www.angumesh.com',
       sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },
     publisher: {
       '@type': 'Organization',
-      name: 'An Gu Wire Mesh Products Co., Ltd.',
+      '@id': 'https://www.angumesh.com/#organization',
+      name: COMPANY.legalNameEn,
       logo: {
         '@type': 'ImageObject',
         // Google 要求出版方 logo 至少 112×112，公开目录里只有 80×80 的 favicon 尺寸版本，

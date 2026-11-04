@@ -14,11 +14,11 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
   en: [
     {
       q: 'What is the delivery time to Vietnam/Thailand?',
-      a: '10–15 days production + 7–14 days sea freight to Ho Chi Minh, Hai Phong, Bangkok, or Laem Chabang. Total lead time approximately 20–30 days from order confirmation.',
+      a: '10–20 days production + 7–14 days sea freight to Ho Chi Minh, Hai Phong, Bangkok, or Laem Chabang. Total lead time approximately 20–30 days counted from the date the deposit is received.',
     },
     {
       q: 'Do you provide CAD drawings and structural calculations?',
-      a: 'Yes. We provide free CAD drawings, wind load calculations, and structural analysis for your project. Just send us your project specifications.',
+      a: 'Yes. We provide free CAD drawings, wind load calculations, and structural analysis for your project. Acoustic test reports for our panels are available on request from our sales manager. Just send us your project specifications.',
     },
     {
       q: 'What does the quotation include?',
@@ -30,7 +30,7 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
     },
     {
       q: 'What is the warranty policy?',
-      a: '5-year warranty on hot-dip galvanizing against rust. Design service life 15+ years in tropical climate conditions.',
+      a: '5-year warranty on hot-dip galvanizing against rust, subject to the written warranty terms in the sales contract. Design service life 15+ years in tropical climate conditions.',
     },
     {
       q: 'Can I customize colors and dimensions?',
@@ -44,11 +44,11 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
   zh: [
     {
       q: '发货到越南/泰国需要多长时间？',
-      a: '生产 10–15 天 + 海运 7–14 天到胡志明、海防、曼谷或林查班港。从确认订单到收货约 20–30 天。',
+      a: '生产 10–20 天 + 海运 7–14 天到胡志明、海防、曼谷或林查班港。自定金到账起约 20–30 天到货。',
     },
     {
       q: '提供 CAD 图纸和结构计算吗？',
-      a: '提供。免费提供 CAD 图纸、抗风荷载计算和结构分析，只需发送项目参数即可。',
+      a: '提供。免费提供 CAD 图纸、抗风荷载计算和结构分析；面板的声学检测报告可向销售经理索取。只需发送项目参数即可。',
     },
     {
       q: '报价包含哪些内容？',
@@ -60,7 +60,7 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
     },
     {
       q: '保修政策是什么？',
-      a: '热镀锌防锈保修 5 年。热带气候条件下设计使用寿命 15+ 年。',
+      a: '热镀锌防锈保修 5 年，具体条款以销售合同书面约定为准。热带气候条件下设计使用寿命 15+ 年。',
     },
     {
       q: '可以定制颜色和尺寸吗？',
@@ -74,7 +74,7 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
   vi: [
     {
       q: 'Thời gian giao hàng tường chắn âm đến Việt Nam là bao lâu?',
-      a: 'Từ 10–15 ngày sản xuất + 7–14 ngày vận chuyển biển đến cảng Hồ Chí Minh hoặc Hải Phòng. Tổng thời gian thực tế khoảng 20–30 ngày kể từ khi xác nhận đơn hàng tường chắn âm.',
+      a: 'Từ 10–20 ngày sản xuất + 7–14 ngày vận chuyển biển đến cảng Hồ Chí Minh hoặc Hải Phòng. Tổng thời gian thực tế khoảng 20–30 ngày kể từ ngày nhận tiền đặt cọc.',
     },
     {
       // 越南买家确实分不清这两个词（tấm cách âm 在本地常指室内隔音板/棉），
@@ -84,7 +84,7 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
     },
     {
       q: 'Có hỗ trợ bản vẽ CAD và tính toán kết cấu không?',
-      a: 'Có. Chúng tôi cung cấp miễn phí bản vẽ CAD, tính toán tải trọng gió, và phân tích kết cấu cho tường chắn âm của dự án bạn. Chỉ cần gửi yêu cầu kèm thông số dự án.',
+      a: 'Có. Chúng tôi cung cấp miễn phí bản vẽ CAD, tính toán tải trọng gió, và phân tích kết cấu cho tường chắn âm của dự án bạn. Báo cáo thử nghiệm âm học của tấm panel có thể yêu cầu từ quản lý kinh doanh. Chỉ cần gửi yêu cầu kèm thông số dự án.',
     },
     {
       q: 'Báo giá bao gồm những gì?',
@@ -96,7 +96,7 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
     },
     {
       q: 'Chính sách bảo hành như thế nào?',
-      a: 'Bảo hành 5 năm cho lớp mạ kẽm nhúng nóng chống rỉ sét. Tuổi thọ thiết kế của tường chắn âm là 15+ năm trong điều kiện khí hậu nhiệt đới tại Việt Nam.',
+      a: 'Bảo hành 5 năm cho lớp mạ kẽm nhúng nóng chống rỉ sét, điều khoản cụ thể theo hợp đồng mua bán bằng văn bản. Tuổi thọ thiết kế của tường chắn âm là 15+ năm trong điều kiện khí hậu nhiệt đới tại Việt Nam.',
     },
     {
       q: 'Có thể tùy chỉnh màu sắc và kích thước tấm không?',
@@ -110,7 +110,7 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
   th: [
     {
       q: 'จัดส่งกำแพงกันเสียงถึงประเทศไทยใช้เวลานานเท่าไหร่?',
-      a: 'ผลิต 10–15 วัน + ขนส่งทางเรือ 7–14 วัน ถึงท่าเรือกรุงเทพฯ หรือแหลมฉบัง รวมประมาณ 20–30 วันนับจากยืนยันคำสั่งซื้อกำแพงกันเสียง',
+      a: 'ผลิต 10–20 วัน + ขนส่งทางเรือ 7–14 วัน ถึงท่าเรือกรุงเทพฯ หรือแหลมฉบัง รวมประมาณ 20–30 วันนับจากวันที่ได้รับเงินมัดจำ',
     },
     {
       // 泰语里 แผงกั้นเสียง（单块屏障板）与 กำแพงกันเสียง（整道隔音墙）是两个词，
@@ -120,7 +120,7 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
     },
     {
       q: 'มีบริการแบบ CAD และคำนวณโครงสร้างไหม?',
-      a: 'มี เราให้บริการแบบ CAD คำนวณแรงลม และวิเคราะห์โครงสร้างสำหรับกำแพงกันเสียงของโครงการฟรี เพียงส่งข้อมูลโครงการมาให้เรา',
+      a: 'มี เราให้บริการแบบ CAD คำนวณแรงลม และวิเคราะห์โครงสร้างสำหรับกำแพงกันเสียงของโครงการฟรี และรายงานผลทดสอบทางเสียงของแผงสามารถขอได้จากผู้จัดการฝ่ายขาย เพียงส่งข้อมูลโครงการมาให้เรา',
     },
     {
       q: 'ใบเสนอราคารวมอะไรบ้าง?',
@@ -132,7 +132,7 @@ export const noiseBarrierFaqs: Record<string, FaqItem[]> = {
     },
     {
       q: 'นโยบายรับประกันเป็นอย่างไร?',
-      a: 'รับประกัน 5 ปี สำหรับการชุบกัลวาไนซ์กันสนิม และอายุการใช้งานออกแบบของกำแพงกันเสียง 15+ ปี ในสภาพอากาศร้อนชื้นของไทย',
+      a: 'รับประกัน 5 ปี สำหรับการชุบกัลวาไนซ์กันสนิม ตามเงื่อนไขที่ระบุในสัญญาซื้อขาย และอายุการใช้งานออกแบบของกำแพงกันเสียง 15+ ปี ในสภาพอากาศร้อนชื้นของไทย',
     },
     {
       q: 'สามารถสั่งสีและขนาดแผงพิเศษได้ไหม?',

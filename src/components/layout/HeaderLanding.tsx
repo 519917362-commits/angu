@@ -34,7 +34,7 @@ export function HeaderLanding({ locale, logoUrl, email, phone, ctaText, socials 
           {/* Logo */}
           <Link href={`/${locale}`} className="flex items-center gap-2 flex-shrink-0">
             {logoUrl ? (
-              <img src={logoUrl} alt="Angu Wire Mesh" className="h-9 w-auto" />
+              <img src={logoUrl} alt="Angu Wire Mesh" width={80} height={80} className="h-9 w-auto" />
             ) : (
               <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">A</span>

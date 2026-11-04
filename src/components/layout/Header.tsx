@@ -120,7 +120,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
             className="flex items-center gap-2 flex-shrink-0"
           >
             {logoUrl ? (
-              <img src={logoUrl} alt="Angu Wire Mesh" className="h-10 w-auto" />
+              <img src={logoUrl} alt="Angu Wire Mesh" width={80} height={80} className="h-10 w-auto" />
             ) : (
               <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">A</span>
@@ -257,7 +257,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
               href={`https://wa.me/${waDigits}?text=${encodeURIComponent(locale === 'zh' ? '您好，我对贵司产品很感兴趣。' : "Hello, I'm interested in your products.")}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-medium rounded-lg transition-colors"
+              className="hidden sm:flex items-center gap-2 px-4 py-2 bg-green-700 hover:bg-green-800 text-white text-sm font-medium rounded-lg transition-colors"
             >
               <MessageCircle className="w-4 h-4" />
               <span>WhatsApp</span>

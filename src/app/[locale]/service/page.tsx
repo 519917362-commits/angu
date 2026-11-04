@@ -3,6 +3,7 @@ import Link from 'next/link';
 import {getSiteConfig} from '@/lib/api';
 import {generatePageMeta} from '@/lib/seo-utils';
 import { tLabel } from '@/lib/i18n';
+import { COMPANY } from '@/lib/company';
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
   const {locale} = await params;
@@ -93,25 +94,25 @@ export default async function ServicePage({params}: {params: Promise<{locale: st
 
   const faqs = locale === 'zh' ? [
     {q: '最小起订量（MOQ）是多少？', a: '不同产品MOQ不同。石笼网箱通常50件起订，防护网从100平方米起订。新客户可协商灵活安排。'},
-    {q: '典型交货期是多久？', a: '标准规格：15-25个工作日。定制/OEM订单：20-30个工作日，自订单确认并收到定金起算。加急订单可视排产协商。'},
+    {q: '典型交货期是多久？', a: '标准目录规格：自定金到账起 20 天内交货。定制或大型结构：20–45 天，按订单单独确认。加急订单视排产情况可协商，通常加收 10-20%。具体交期以报价单为准。'},
     {q: '你们提供免费样品吗？', a: '是的，大多数产品提供免费样品。客户承担运费。首次批量下单后可退还样品费。'},
     {q: '你们接受哪些付款方式？', a: '我们接受T/T（30%定金，70%发货前）、大额订单（2万美元以上）即期信用证、小额西联汇款，以及样品费PayPal。'},
     {q: '你们能做定制尺寸和规格吗？', a: '当然！我们的优势就是定制生产。提供图纸或规格，我们的工程团队将制定最佳方案。'},
   ] : locale === 'vi' ? [
     {q: 'Số lượng đặt hàng tối thiểu (MOQ) là bao nhiêu?', a: 'MOQ khác nhau tùy theo sản phẩm. Rọ đá thường 50 chiếc. Lưới bảo vệ từ 100 m². Có thể thảo luận linh hoạt cho khách hàng mới.'},
-    {q: 'Thời gian giao hàng điển hình là bao lâu?', a: 'Sản phẩm tiêu chuẩn: 7-15 ngày. Đơn hàng tùy chỉnh/OEM: 15-30 ngày tùy độ phức tạp và số lượng. Đơn gấp có thể thương lượng thêm phí.'},
+    {q: 'Thời gian giao hàng điển hình là bao lâu?', a: 'Quy cách chuẩn trong danh mục: giao trong vòng 20 ngày kể từ ngày nhận tiền đặt cọc. Kết cấu tùy chỉnh hoặc cỡ lớn: 20–45 ngày, xác nhận riêng cho từng đơn. Đơn gấp phụ thuộc lịch sản xuất, thường phụ phí 10–20%.'},
     {q: 'Bạn có cung cấp mẫu miễn phí không?', a: 'Có, chúng tôi cung cấp mẫu miễn phí cho hầu hết sản phẩm. Khách hàng chịu phí vận chuyển. Chi phí mẫu hoàn trả khi đặt đơn hàng lớn đầu tiên.'},
     {q: 'Bạn chấp nhận phương thức thanh toán nào?', a: 'Chấp nhận T/T (30% đặt cọc, 70% trước khi gửi), L/C trả tiền ngay cho đơn lớn (trên $20,000), Western Union cho số tiền nhỏ, PayPal cho phí mẫu.'},
     {q: 'Bạn có làm kích thước và thông số tùy chỉnh không?', a: 'Tuyệt đối! Thế mạnh của chúng tôi là sản xuất tùy chỉnh. Cung cấp bản vẽ hoặc thông số, đội ngũ kỹ thuật sẽ đưa ra giải pháp tốt nhất.'},
   ] : locale === 'th' ? [
     {q: 'จำนวนสั่งซื้อขั้นต่ำ (MOQ) คือเท่าไหร่?', a: 'MOQ แตกต่างกันตามสินค้า เกเบี้ยนมักที่ 50 ชิ้น ตะแกรงป้องกันตั้งแต่ 100 ตร.ม. สามารถหารือยืดหยุ่นสำหรับลูกค้าใหม่ได้'},
-    {q: 'ระยะเวลาส่งมอบโดยทั่วไปนานเท่าใด?', a: 'สินค้ามาตรฐาน: 7-15 วัน คำสั่งกำหนดเอง/OEM: 15-30 วัน ขึ้นอยู่กับความซับซ้อนและปริมาณ คำสั่งด่วนเพิ่มค่าใช้จ่ายเพิ่มเติม'},
+    {q: 'ระยะเวลาส่งมอบโดยทั่วไปนานเท่าใด?', a: 'ขนาดมาตรฐานตามแคตตาล็อก: จัดส่งภายใน 20 วันนับจากวันที่ได้รับเงินมัดจำ โครงสร้างสั่งทำพิเศษหรือขนาดใหญ่: 20–45 วัน ยืนยันเป็นรายออเดอร์ คำสั่งด่วนขึ้นอยู่กับตารางการผลิต โดยทั่วไปมีค่าใช้จ่ายเพิ่ม 10–20%'},
     {q: 'คุณให้ตัวอย่างฟรีหรือไม่?', a: 'ใช่ เราให้ตัวอย่างฟรีสำหรับสินค้าส่วนใหญ่ ลูกค้ารับผิดชอบค่าขนส่ง ค่าตัวอย่างคืนให้เมื่อสั่งจำนวนมากครั้งแรก'},
     {q: 'คุณรับวิธีการชำระเงินแบบใด?', a: 'รับ T/T (มัดจำ 30%, ชำระ 70% ก่อนส่ง), L/C สำหรับคำสั่งใหญ่ (มากกว่า $20,000), Western Union สำหรับจำนวนเงินน้อย, PayPal สำหรับค่าตัวอย่าง'},
     {q: 'คุณทำขนาดและข้อมูลจำเพาะแบบกำหนดเองได้หรือไม่?', a: 'แน่นอน! จุดแข็งของเราคือการผลิตแบบกำหนดเอง ส่งแบบร่างหรือข้อมูลจำเพาะให้เรา ทีมวิศวกรจะหาทางออกที่ดีที่สุดให้'},
   ] : [
     {q: 'What is the minimum order quantity (MOQ)?', a: 'MOQ varies by product. For gabion boxes, MOQ is typically 50 pieces. For protection nets, it starts from 100 m². We can discuss flexible arrangements for new clients.'},
-    {q: 'What is the typical lead time?', a: 'Standard products: 7-15 days. Custom/OEM orders: 15-30 days depending on complexity and quantity. Rush orders can be accommodated with an additional fee.'},
+    {q: 'What is the typical lead time?', a: 'Standard catalogue specifications ship within 20 days of deposit receipt. Custom or large structures take 20–45 days and are confirmed per order. Rush orders depend on the production schedule, usually with a 10–20% surcharge.'},
     {q: 'Do you provide free samples?', a: 'Yes, we offer free samples for most products. The client covers the shipping cost. Sample cost is refundable upon placing the first bulk order.'},
     {q: 'What payment terms do you accept?', a: 'We accept T/T (30% deposit, 70% before shipping), L/C at sight for large orders (above $20,000), Western Union for small amounts, and PayPal for sample fees.'},
     {q: 'Can you do custom sizes and specifications?', a: 'Absolutely! Our strength is custom manufacturing. Provide us with your drawings or specifications, and our engineering team will work out the best solution.'},
@@ -138,7 +139,8 @@ export default async function ServicePage({params}: {params: Promise<{locale: st
     position: i + 1,
     provider: {
       '@type': 'Organization',
-      name: 'An Gu Wire Mesh Products Co., Ltd.',
+      '@id': 'https://www.angumesh.com/#organization',
+      name: COMPANY.legalNameEn,
       url: 'https://www.angumesh.com',
       sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },
@@ -162,7 +164,8 @@ export default async function ServicePage({params}: {params: Promise<{locale: st
     name: t('安固丝网 — 一站式出口服务', 'Angu Wire Mesh — One-Stop Export Services', 'Angu Wire Mesh — Dịch vụ xuất khẩu một điểm đến', 'Angu Wire Mesh — บริการส่งออกแบบครบวงจร'),
     provider: {
       '@type': 'Organization',
-      name: 'An Gu Wire Mesh Products Co., Ltd.',
+      '@id': 'https://www.angumesh.com/#organization',
+      name: COMPANY.legalNameEn,
       url: 'https://www.angumesh.com',
       sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
     },

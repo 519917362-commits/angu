@@ -308,7 +308,7 @@ export default async function ThankYouPage({
               href={`https://wa.me/${whatsappDigits}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 bg-green-700 hover:bg-green-800 text-white font-semibold rounded-xl transition-colors"
             >
               <MessageCircle className="w-5 h-5" aria-hidden="true" />
               {c.whatsapp}

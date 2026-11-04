@@ -3,6 +3,7 @@ import Link from 'next/link';
 import {getSiteConfig} from '@/lib/api';
 import {generatePageMeta} from '@/lib/seo-utils';
 import { tLabel } from '@/lib/i18n';
+import { COMPANY } from '@/lib/company';
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
   const {locale} = await params;
@@ -60,7 +61,8 @@ export default async function ContactLayout({children, params}: {children: React
     url: `https://www.angumesh.com/${locale}/contact`,
     mainEntity: {
       '@type': 'Organization',
-      name: 'An Gu Wire Mesh Products Co., Ltd.',
+      '@id': 'https://www.angumesh.com/#organization',
+      name: COMPANY.legalNameEn,
       url: 'https://www.angumesh.com',
       sameAs: ['https://www.facebook.com/share/18mLHaLvMa/'],
       telephone: ldPhone,

@@ -12,7 +12,7 @@ export default async function FAQPage({params}: {params: Promise<{locale: string
   const {locale} = await params;
   const faqs = locale === 'zh' ? [
     {q: '最小起订量（MOQ）是多少？', a: '不同产品类型MOQ不同。石笼网箱通常50件起订，落石防护网视系统配置从200平方米起订。六角网和勾花网围栏首次订单可低至1卷。我们对新客户灵活处理，可协商试订单。'},
-    {q: '生产交货期是多久？', a: '标准规格：15-25个工作日。定制/OEM订单：20-30个工作日，自订单确认并收到定金之日起计算。加急订单视排产情况可协商，通常加收10-20%。报价单中会列明具体交期。'},
+    {q: '生产交货期是多久？', a: '标准目录规格：自定金到账起 20 天内交货。定制或大型结构（全封闭声屏障、防爆墙、桥梁段等）：20–45 天，按订单单独确认。加急订单视排产情况可协商，通常加收 10-20%。具体交期以报价单为准。'},
     {q: '你们提供免费样品吗？多久能收到？', a: '是的！我们大多数产品提供免费样品。客户承担快递运费（通常DHL/FedEx/UPS $30-80）。样品配送约5-10天。首次批量下单后样品费用全额退还。'},
     {q: '你们接受哪些付款方式？', a: '我们提供灵活的付款选择：\n• T/T（电汇）：30%定金，70%发货前——最常见\n• 即期信用证：订单金额超过$20,000\n• 西联汇款/PayPal：小额和样品费\n• 阿里巴巴信保：可提供额外保障'},
     {q: '你们能做定制尺寸和规格吗？', a: '当然！定制生产是我们的核心优势。我们的工程团队可以根据您的技术图纸或规格工作。我们支持定制丝径（2.0mm–4.5mm）、网孔尺寸、尺寸、表面处理（镀锌、PVC包塑、高尔凡）和包装。只需发送您的要求。'},
@@ -25,7 +25,7 @@ export default async function FAQPage({params}: {params: Promise<{locale: string
     {q: '你们的销售团队会说哪些语言？', a: '我们的国际销售团队英语流利。我们还有可以用中文、阿拉伯语、西班牙语、俄语和法语沟通的员工。对于其他语言，我们使用专业翻译服务以确保沟通清晰。WhatsApp和邮件是我们的主要沟通渠道，24/7可用。'},
   ] : locale === 'vi' ? [
     {q: 'Số lượng đặt hàng tối thiểu (MOQ) là bao nhiêu?', a: 'MOQ khác nhau tùy theo loại sản phẩm. Rọ đá thường bắt đầu từ 50 chiếc, lưới chống rơi đá từ 100 m². Lưới thép lục giác và hàng rào lưới mắt cáo có thể đặt thấp tới 1 cuộn cho đơn hàng đầu tiên. Chúng tôi linh hoạt với khách hàng mới và có thể thảo luận đơn hàng dùng thử.'},
-    {q: 'Thời gian sản xuất là bao lâu?', a: 'Quy cách tiêu chuẩn: 15-25 ngày làm việc. Đơn hàng tùy chỉnh/OEM: 20-30 ngày làm việc, tính từ khi xác nhận đơn hàng và nhận tiền đặt cọc. Đơn gấp có thể thương lượng tùy lịch sản xuất, thường phụ phí 10-20%. Thời gian giao hàng cụ thể được ghi trong báo giá.'},
+    {q: 'Thời gian sản xuất là bao lâu?', a: 'Quy cách tiêu chuẩn trong danh mục: giao trong vòng 20 ngày kể từ ngày nhận tiền đặt cọc. Kết cấu tùy chỉnh hoặc cỡ lớn — tường chắn âm kín hoàn toàn, tường chống nổ, đoạn cầu — mất 20–45 ngày và được xác nhận riêng cho từng đơn. Đơn gấp phụ thuộc lịch sản xuất, thường phụ phí 10–20%. Thời gian cụ thể được ghi trong báo giá.'},
     {q: 'Bạn có cung cấp mẫu miễn phí không? Mất bao lâu để nhận được?', a: 'Có! Chúng tôi cung cấp mẫu miễn phí cho hầu hết các dòng sản phẩm. Khách hàng chịu phí vận chuyển (thường $30-80 qua DHL/FedEx/UPS). Giao mẫu mất khoảng 5-10 ngày. Chi phí mẫu được hoàn trả khi bạn đặt đơn hàng số lượng lớn đầu tiên.'},
     {q: 'Bạn chấp nhận phương thức thanh toán nào?', a: 'Chúng tôi cung cấp các tùy chọn thanh toán linh hoạt:\n• T/T (Chuyển tiền điện): 30% đặt cọc, 70% trước khi gửi hàng — phổ biến nhất\n• L/C trả tiền ngay: Cho đơn hàng trên $20,000\n• Western Union / PayPal: Cho số tiền nhỏ và phí mẫu\n• Alibaba Trade Assurance: Có sẵn để bảo đảm thêm'},
     {q: 'Bạn có thể sản xuất kích thước và thông số tùy chỉnh không?', a: 'Tuyệt đối! Sản xuất tùy chỉnh là thế mạnh cốt lõi của chúng tôi. Đội ngũ kỹ thuật có thể làm việc theo bản vẽ hoặc thông số kỹ thuật của bạn. Chúng tôi hỗ trợ đường kính dây tùy chỉnh (2.0mm–4.5mm), kích thước mắt lưới, kích thước, xử lý bề mặt (mạ kẽm, phủ PVC, Galfan) và đóng gói. Chỉ cần gửi yêu cầu của bạn.'},
@@ -38,7 +38,7 @@ export default async function FAQPage({params}: {params: Promise<{locale: string
     {q: 'Đội ngũ kinh doanh của bạn nói ngôn ngữ nào?', a: 'Đội ngũ kinh doanh quốc tế của chúng tôi nói tiếng Anh lưu loát. Chúng tôi cũng có nhân viên có thể giao tiếp bằng tiếng Trung, tiếng Ả Rập, tiếng Tây Ban Nha, tiếng Nga và tiếng Pháp. Đối với các ngôn ngữ khác, chúng tôi sử dụng dịch vụ chuyên nghiệp để đảm bảo giao tiếp rõ ràng. WhatsApp và Email là kênh giao tiếp chính, có sẵn 24/7.'},
   ] : locale === 'th' ? [
     {q: 'จำนวนสั่งซื้อขั้นต่ำ (MOQ) คือเท่าไหร่?', a: 'MOQ แตกต่างกันตามประเภทสินค้า เกเบี้ยนมักเริ่มที่ 50 ชิ้น ตะแกรงป้องกันหินตกเริ่มที่ 100 ตร.ม. ตะแกรงลวดหกเหลี่ยมและรั้วตะแกรงถักสั่งได้ต่ำสุด 1 ม้วนสำหรับการสั่งซื้อครั้งแรก เรายืดหยุ่นกับลูกค้าใหม่และสามารถหารือเกี่ยวกับการสั่งซื้อทดลอง'},
-    {q: 'ระยะเวลาการผลิตนานเท่าใด?', a: 'ขนาดมาตรฐาน: 15-25 วันทำการ คำสั่งซื้อแบบกำหนดเอง/OEM: 20-30 วันทำการ นับจากยืนยันคำสั่งซื้อและได้รับเงินมัดจำ คำสั่งด่วนสามารถเจรจาตามตารางการผลิต โดยทั่วไปมีค่าใช้จ่ายเพิ่ม 10-20% ใบเสนอราคาจะระบุระยะเวลาที่ชัดเจน'},
+    {q: 'ระยะเวลาการผลิตนานเท่าใด?', a: 'ขนาดมาตรฐานตามแคตตาล็อก จัดส่งภายใน 20 วันนับจากวันที่ได้รับเงินมัดจำ โครงสร้างขนาดใหญ่หรือสั่งทำพิเศษ — กำแพงกันเสียงแบบปิดล้อม กำแพงกันระเบิด ช่วงสะพาน — ใช้เวลา 20–45 วัน และยืนยันเป็นรายออเดอร์ คำสั่งด่วนขึ้นอยู่กับตารางการผลิต โดยทั่วไปมีค่าใช้จ่ายเพิ่ม 10–20% ใบเสนอราคาจะระบุระยะเวลาที่ชัดเจน'},
     {q: 'คุณให้ตัวอย่างฟรีหรือไม่? ใช้เวลานานเท่าใดจึงจะได้รับ?', a: 'ใช่! เราให้ตัวอย่างฟรีสำหรับสินค้าส่วนใหญ่ ลูกค้ารับผิดชอบค่าขนส่ง (ปกติ $30-80 ผ่าน DHL/FedEx/UPS) การจัดส่งตัวอย่างใช้เวลาประมาณ 5-10 วัน ค่าตัวอย่างจะคืนให้เต็มจำนวนเมื่อสั่งซื้อจำนวนมากครั้งแรก'},
     {q: 'คุณรับวิธีการชำระเงินแบบใด?', a: 'เรามีตัวเลือกการชำระเงินที่ยืดหยุ่น:\n• T/T (โอนเงินทางโทรเลข): วางมัดจำ 30% ชำระ 70% ก่อนส่งสินค้า — ใช้บ่อยที่สุด\n• เลตเตอร์ออฟเครดิต (L/C) เพื่อการชำระทันที: สำหรับคำสั่งซื้อมากกว่า $20,000\n• Western Union / PayPal: สำหรับจำนวนเงินน้อยและค่าตัวอย่าง\n• Alibaba Trade Assurance: มีให้เพื่อความปลอดภัยเพิ่มเติม'},
     {q: 'คุณผลิตขนาดและข้อมูลจำเพาะแบบกำหนดเองได้หรือไม่?', a: 'แน่นอน! การผลิตแบบกำหนดเองคือจุดแข็งหลักของเรา ทีมวิศวกรของเราสามารถทำงานตามแบบร่างหรือข้อมูลจำเพาะของคุณ เรารองรับเส้นผ่านศูนย์กลางลวดแบบกำหนดเอง (2.0mm–4.5mm) ขนาดตาข่าย มิติ การเคลือบผิว (ชุบสังกะสี พัน PVC Galfan) และบรรจุภัณฑ์ เพียงส่งความต้องการของคุณมาให้เรา'},
@@ -51,7 +51,7 @@ export default async function FAQPage({params}: {params: Promise<{locale: string
     {q: 'ทีมขายของคุณพูดภาษาอะไรบ้าง?', a: 'ทีมขายต่างประเทศของเราพูดภาษาอังกฤษได้อย่างคล่องแคล่ว เรายังมีพนักงานที่สื่อสารเป็นภาษาจีน อาหรับ สเปน รัสเซีย และฝรั่งเศส สำหรับภาษาอื่น เราใช้บริการแปลอาชีพเพื่อให้การสื่อสารชัดเจน WhatsApp และอีเมลคือช่องทางสื่อสารหลัก พร้อมให้บริการ 24/7'},
   ] : [
     {q: 'What is the minimum order quantity (MOQ)?', a: 'MOQ varies by product type. For gabion boxes, the typical MOQ is 50 boxes. For rockfall protection nets, MOQ starts from 200 m² depending on the system. For hexagonal wire mesh and chain link fence, MOQ can be as low as 1 roll for first-time orders. We are flexible with new clients and can discuss trial orders.'},
-    {q: 'What is your production lead time?', a: 'Standard specifications: 15-25 working days. Custom/OEM orders: 20-30 working days, counted from order confirmation and deposit receipt. Rush orders are subject to production scheduling, usually with a 10-20% surcharge. The quotation states the exact lead time.'},
+    {q: 'What is your production lead time?', a: 'Standard catalogue specifications ship within 20 days of deposit receipt. Custom or large structures — fully enclosed barriers, blast walls, bridge sections — take 20–45 days and are confirmed per order. Rush orders depend on the production schedule, usually with a 10–20% surcharge. The exact lead time is stated in the quotation.'},
     {q: 'Do you provide free samples? How long does it take to get them?', a: 'Yes! We provide free samples for most of our product range. The client covers the courier shipping cost (usually $30-80 via DHL/FedEx/UPS). Sample delivery takes about 5-10 days. The sample cost is fully refundable when you place your first bulk order.'},
     {q: 'What payment terms do you accept?', a: 'We offer flexible payment options:\n• T/T (Telegraphic Transfer): 30% deposit, 70% before shipment — most common\n• L/C at sight: For orders above $20,000\n• Western Union / PayPal: For small amounts and sample fees\n• Alibaba Trade Assurance: Available for added security'},
     {q: 'Can you manufacture custom sizes and specifications?', a: 'Absolutely! Custom manufacturing is our core strength. Our engineering team can work with your technical drawings or specifications. We support custom wire diameter (2.0mm–4.5mm), mesh aperture sizes, dimensions, surface treatments (galvanized, PVC coated, Galfan), and packaging. Just send us your requirements.'},
@@ -129,7 +129,7 @@ export default async function FAQPage({params}: {params: Promise<{locale: string
               </button>
             </Link>
             <a href="https://wa.me/8618803189797" target="_blank" rel="noopener noreferrer">
-              <button className="bg-green-500 hover:bg-green-600 text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg flex items-center gap-2">
+              <button className="bg-green-700 hover:bg-green-800 text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg flex items-center gap-2">
                 💬 WhatsApp
               </button>
             </a>

@@ -14,7 +14,7 @@ import type {Product} from '@/types/product';
 import {tLabel} from '@/lib/i18n';
 import {renderMarkdown} from '@/lib/markdown';
 import {routing, locales as fullLocales} from '@/lib/routing';
-import {QUOTE_NOTE_EN, QUOTE_NOTE_ZH, LEAD_TIME_NOTE_EN, LEAD_TIME_NOTE_ZH, MOQ_NOTE_EN, MOQ_NOTE_ZH} from '@/lib/company';
+import {QUOTE_NOTE_EN, QUOTE_NOTE_ZH, LEAD_TIME_NOTE_EN, LEAD_TIME_NOTE_ZH, MOQ_NOTE_EN, MOQ_NOTE_ZH, MOQ_TRIAL_NOTE_EN, MOQ_TRIAL_NOTE_ZH, TEST_REPORT_NOTE_EN, TEST_REPORT_NOTE_ZH} from '@/lib/company';
 
 // 页面级 revalidate：与 fetch 级的 REVALIDATE_SECONDS 保持一致。
 // stale-while-revalidate 的窗口在 next.config.ts 的 expireTime 里配
@@ -669,9 +669,17 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
                 {product.priceRemark && (
                   <p className="text-xs text-slate-400 mt-2">{product.priceRemark}</p>
                 )}
-                {/* 交易条款统一口径：试单量、交期，避免各页各写一套 */}
-                <p className="text-xs text-slate-400 mt-1">{locale === 'zh' ? MOQ_NOTE_ZH : MOQ_NOTE_EN}</p>
-                <p className="text-xs text-slate-400 mt-1">{locale === 'zh' ? LEAD_TIME_NOTE_ZH : LEAD_TIME_NOTE_EN}</p>
+                {/* 交易条款统一口径：全部来自 company.ts，不在页面里写死数字。
+                    交期只固化「起算点」不固化天数——石笼 5-12 天与全封闭 30-45 天都是真实值，
+                    统一天数要么自废卖点、要么过度承诺。 */}
+                <p className="text-xs text-slate-500 mt-1">{locale === 'zh' ? MOQ_NOTE_ZH : MOQ_NOTE_EN}</p>
+                {product.categorySlug === 'noise-barrier' && (
+                  <p className="text-xs text-slate-500 mt-1">{locale === 'zh' ? MOQ_TRIAL_NOTE_ZH : MOQ_TRIAL_NOTE_EN}</p>
+                )}
+                <p className="text-xs text-slate-500 mt-1">{locale === 'zh' ? LEAD_TIME_NOTE_ZH : LEAD_TIME_NOTE_EN}</p>
+                {product.categorySlug === 'noise-barrier' && (
+                  <p className="text-xs text-slate-500 mt-1">{locale === 'zh' ? TEST_REPORT_NOTE_ZH : TEST_REPORT_NOTE_EN}</p>
+                )}
               </div>
 
               {/* Price */}
@@ -699,7 +707,7 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
                 href="https://wa.me/8618803189797"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl font-semibold transition-all"
+                className="flex items-center justify-center gap-2 w-full py-3 bg-green-700 hover:bg-green-800 text-white rounded-xl font-semibold transition-all"
               >
                 <span aria-hidden="true">💬</span> {locale === 'zh' ? 'WhatsApp咨询' : locale === 'vi' ? 'Trò chuyện trên WhatsApp' : locale === 'th' ? 'แชทบน WhatsApp' : 'Chat on WhatsApp'}
               </a>
@@ -769,6 +777,11 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
           productSlug={product.slug}
           categorySlug={product.categorySlug}
           locale={locale}
+          moqLabel={
+            product.moq
+              ? `${product.moq} ${priceUnit(product.priceRemark) || (locale === 'zh' ? '件' : 'units')}`
+              : undefined
+          }
         />
 
         {/* Related Products */}

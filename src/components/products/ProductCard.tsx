@@ -29,7 +29,7 @@ export function ProductCard({product, locale}: ProductCardProps) {
             </span>
           )}
           {product.isFeatured && (
-            <span className="absolute top-3 end-3 bg-yellow-500 text-white text-xs px-2 py-1 rounded-md">
+            <span className="absolute top-3 end-3 bg-yellow-500 text-slate-900 text-xs font-medium px-2 py-1 rounded-md">
               {tLabel('★ 精选', '★ Featured', locale)}
             </span>
           )}

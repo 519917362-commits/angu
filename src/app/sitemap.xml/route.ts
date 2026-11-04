@@ -44,8 +44,10 @@ function urlBlock(opts: {
   const loc = `${BASE_URL}/${opts.locale}${opts.path}`;
   lines.push(`    <loc>${loc}</loc>`);
   // hreflang: self + all other locales
+  // 自引用（hreflang 指向自己）是 Google 的硬性要求：缺自引用的 alternate 簇
+  // 会被整簇忽略，等于 hreflang 白写。之前这里有一句 `if (l === opts.locale) continue`，
+  // 和上一行注释正好相反，把自引用全跳过了。
   for (const l of altLocales) {
-    if (l === opts.locale) continue;
     lines.push(xhtmlLink('alternate', l, `${BASE_URL}/${l}${opts.path}`));
   }
   lines.push(xhtmlLink('alternate', 'x-default', `${BASE_URL}/en${opts.path}`));
