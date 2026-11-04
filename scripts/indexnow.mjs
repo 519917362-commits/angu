@@ -6,11 +6,15 @@
  * 新文章发出后，等搜索引擎按自己的节奏爬到，通常要几天到两周；推一次是分钟级。
  *
  * 用法：
- *   node scripts/indexnow.mjs                # 提交 lastmod >= 今天 的 URL
+ *   node scripts/indexnow.mjs                # 提交 lastmod 在最近 2 天内的 URL
  *   node scripts/indexnow.mjs 2026-11-01     # 提交指定日期之后的
  *   node scripts/indexnow.mjs --dry          # 只打印，不提交
  *
+ * 默认窗口取 2 天而不是「今天」：发版常在夜里跨零点，只取当天会漏掉昨天的改动。
+ * 重复提交同一 URL 不会受罚，但没必要，所以不设更大窗口。
+ *
  * 依赖 sitemap 的 lastmod 真实：本脚本不猜哪些页面改过，完全以 sitemap 为准。
+ * 已由 deploy.sh 第 6 步自动调用，正常发版无需手动执行。
  */
 const HOST = 'www.angumesh.com';
 const KEY = '0213841650b449e3acb0234ddce22b24';
@@ -19,7 +23,8 @@ const ENDPOINT = 'https://api.indexnow.org/indexnow';
 
 const args = process.argv.slice(2);
 const dry = args.includes('--dry');
-const since = args.find((a) => /^\d{4}-\d{2}-\d{2}$/.test(a)) || new Date().toISOString().slice(0, 10);
+const since = args.find((a) => /^\d{4}-\d{2}-\d{2}$/.test(a))
+  || new Date(Date.now() - 2 * 86400000).toISOString().slice(0, 10);
 
 const res = await fetch(`https://${HOST}/sitemap.xml`);
 if (!res.ok) {
