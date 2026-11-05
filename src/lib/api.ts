@@ -125,10 +125,17 @@ export interface SceneConfig {
 let lastGoodCatalog: { products: Product[]; categories: Category[] } | null = null;
 
 /** Get all published products + categories (homepage, product listing) */
-export async function getCatalog(): Promise<{ products: Product[]; categories: Category[] }> {
-  const data = await fetchAPI<{ products: Product[]; categories: Category[] }>('/api/catalog');
+export async function getCatalog(opts?: { light?: boolean }): Promise<{ products: Product[]; categories: Category[] }> {
+  // light=true 时后端不返回 fullDescriptions/specifications/faq/seo 等大字段，
+  // 供首页/列表这类只看 name/shortDesc/image/moq/price 的场景使用，
+  // 让移动端首屏不必为 75% 用不到的正文付费（全量接口 807KB）。
+  const light = opts?.light === true;
+  const path = light ? '/api/catalog?light=1' : '/api/catalog';
+  const data = await fetchAPI<{ products: Product[]; categories: Category[] }>(path);
   if (data && Array.isArray(data.products)) {
-    lastGoodCatalog = data;
+    // light 结果是残缺数据，不能写进 lastGoodCatalog 给后续全量调用当兜底，
+    // 否则详情页会读到没有 fullDescriptions 的产品。
+    if (!light) lastGoodCatalog = data;
     return data;
   }
   if (lastGoodCatalog) return lastGoodCatalog;

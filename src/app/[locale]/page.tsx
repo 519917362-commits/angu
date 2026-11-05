@@ -50,16 +50,16 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
       ? 'مصنّع شبكات معدنية وحواجز صوتية | Angu'
       : 'Wire Mesh & Noise Barrier Manufacturer | Angu',
     description: locale === 'zh'
-      ? 'ISO 9001 认证丝网制品厂家，主营声屏障、石笼网箱、边坡防护网、护栏网、电焊网。安平工厂直供，出口 30+ 国家，10–15 天交货。'
+      ? 'ISO 9001 认证丝网制品厂家，主营声屏障、石笼网箱、边坡防护网、护栏网、电焊网。安平工厂直供，出口 30+ 国家，自定金到账起 20 天内交货。'
       : locale === 'vi'
-      ? 'Nhà sản xuất ISO 9001: tấm chắn ồn, rọ đá, lưới chống rơi đá, hàng rào. Nhà máy Anping, xuất khẩu 30+ quốc gia, giao 10–15 ngày.'
+      ? 'Nhà sản xuất ISO 9001: tấm chắn ồn, rọ đá, lưới chống rơi đá, hàng rào. Nhà máy Anping, xuất khẩu 30+ quốc gia, giao trong 20 ngày kể từ khi nhận cọc.'
       : locale === 'th'
       ? 'ผู้ผลิตตะแกรงลวด ISO 9001: แผงกั้นเสียง ตะกร้าเกเบี้ยน ตาข่ายกันหินตก รั้ว ตะแกรงเชื่อม โรงงานตรงอันผิง ส่งออก 30+ ประเทศ ผลิต 10–15 วัน'
       : locale === 'ms'
-      ? 'Pengeluar ISO 9001: penghadang bunyi, kotak gabion, jaringan batu jatuh, pagar. Kilang Anping, eksport 30+ negara, pengeluaran 10–15 hari.'
+      ? 'Pengeluar ISO 9001: penghadang bunyi, kotak gabion, jaringan batu jatuh, pagar. Kilang Anping, eksport 30+ negara, penghantaran dalam 20 hari selepas deposit.'
       : locale === 'ar'
       ? 'مصنّع ISO 9001: حواجز صوتية، صناديق جابيون، شبكات حماية الصخور، سياجات. مصنع أنبينغ، تصدير 30+ دولة، إنتاج 10–15 يومًا.'
-      : 'ISO 9001 manufacturer of noise barriers, gabion, rockfall nets and fencing. Factory-direct from Anping, China. 30+ countries, 10–15 day production.',
+      : 'ISO 9001 manufacturer of noise barriers, gabion, rockfall nets and fencing. Factory-direct from Anping, China. 30+ countries, shipping within 20 days of deposit receipt.',
     // 不再输出 meta keywords：Google 自 2009 年起完全忽略，Bing 仅作作弊信号，
     // 唯一确定的效果是每页多几百字节。
     alternates: {
@@ -228,7 +228,9 @@ const HOME_PARTIAL: Record<string, Record<string, string>> = {
 
 export default async function HomePage({params}: {params: Promise<{locale: string}>}) {
   const {locale} = await params;
-  const {products, categories} = await getCatalog();
+  // 首页只渲染 8 个精选产品的 name/shortDesc/image/moq/price，用 light 请求，
+  // 不拉 fullDescriptions/specifications/faq/seo 等大字段（全量 807KB 里 75% 用不到）
+  const {products, categories} = await getCatalog({ light: true });
   // 试水语种：products 表没有 ms/ar 列，用覆盖层按 slug 补名称与短描述。
   // 浅拷贝，避免污染同一进程内其它语种的渲染结果。
   const productOverlay = PRODUCT_PARTIAL[locale];
@@ -366,8 +368,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
             src={bannerImage}
             alt="Gabion wire mesh products"
             className="absolute inset-0 w-full h-full object-cover"
-            width={1920}
-            height={580}
+            fill
             sizes="100vw"
             preload
           />

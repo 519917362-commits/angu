@@ -166,7 +166,8 @@ const keywords = locale === 'zh' ? post.seo_keywords_zh : locale === 'vi' ? (pos
   const {rules: productLinkRules, related: relatedProductSlugs} = getBlogProductLinks(slug);
   let catalogProducts: Product[] = [];
   try {
-    const {products} = await getCatalog();
+    // 文章页只用产品名/图做相关产品卡与正文内链，不读正文/规格大字段
+    const {products} = await getCatalog({ light: true });
     catalogProducts = products;
   } catch {
     // 目录接口异常不能连累文章页渲染，退化成「无相关产品」即可

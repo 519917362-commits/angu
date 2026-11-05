@@ -1,4 +1,6 @@
-import { IconWhatsApp } from '@/components/icons';
+import { IconWhatsApp, IconZalo } from '@/components/icons';
+import { zaloHref } from '@/lib/channels';
+import { ZALO_URL } from '@/lib/contact';
 export function CtaSection({
   locale,
   whatsapp,
@@ -16,6 +18,8 @@ export function CtaSection({
   const isTh = locale === 'th';
   const isMs = locale === 'ms';
   const isAr = locale === 'ar';
+  // 后台没填 zalo 时回落到名片短链：Zalo 是我们的常驻渠道，不该因为漏填而消失。
+  const zaloUrl = zaloHref(zalo) || ZALO_URL;
 
   return (
     <section className="py-16 sm:py-20 bg-gradient-to-br from-blue-600 to-blue-900 text-white">
@@ -77,9 +81,10 @@ export function CtaSection({
             {email}
           </a>
 
-          {isVi && zalo && (
-            <a href={`https://zalo.me/${zalo}`} target="_blank" rel="noopener noreferrer"
+          {isVi && zaloUrl && (
+            <a href={zaloUrl} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 hover:text-white underline underline-offset-4 decoration-blue-300/40 transition-colors">
+              <IconZalo className="w-4 h-4" />
               Zalo
             </a>
           )}

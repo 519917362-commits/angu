@@ -156,7 +156,8 @@ export default async function ProductsPage({
   const needle = searchQuery.toLowerCase();
 
   const [catalog, siteConfig] = await Promise.all([
-    getCatalog(),
+    // 列表页只渲染 name/shortDesc/image/moq/price 卡片，不读正文/FAQ/SEO 大字段
+    getCatalog({ light: true }),
     getSiteConfig(),
   ]);
 

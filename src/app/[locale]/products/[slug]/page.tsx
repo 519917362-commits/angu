@@ -309,7 +309,7 @@ interface ProductDetailPageProps {
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const catalog = await getCatalog();
+  const catalog = await getCatalog({ light: true });
   // 守卫：后端不可达时 getCatalog() 会静默返回空数组，过去会导致"构建成功但 0 个产品页"，
   // 部署后全站退化为按需渲染且无人察觉。这里改为显式失败，让部署脚本中止。
   // 确需无数据构建（如纯前端预览）时，设置 ALLOW_EMPTY_CATALOG=1。
@@ -390,8 +390,8 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
     ? product[appsLocale]
     : product.applications;
 
-  // Fetch related products from same category
-  const catalog = await getCatalog();
+  // Fetch related products from same category（只渲染 ProductCard，轻字段够用）
+  const catalog = await getCatalog({ light: true });
   const allProducts = catalog.products;
   const relatedProducts = allProducts
     .filter((p) => p.categorySlug === product.categorySlug && p.slug !== product.slug)

@@ -99,7 +99,7 @@ export default async function PillarPage({ params }: PageProps) {
   const copy = PILLARS[category as PillarSlug]?.[locale] ?? PILLARS[category as PillarSlug]?.en;
   if (!copy) notFound();
 
-  const { products } = await getCatalog();
+  const { products } = await getCatalog({ light: true });
   const list = products.filter((p) => p.categorySlug === category);
   const categoryName = CATEGORY_NAME[category]?.[locale] || CATEGORY_NAME[category]?.en || category;
   const others = PILLAR_SLUGS.filter((s) => s !== category);

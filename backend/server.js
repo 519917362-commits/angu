@@ -1435,42 +1435,58 @@ app.get('/api/health', (req, res) => {
 });
 
 // GET /api/catalog - products with bilingual fields + categories for frontend
+// ?light=1 只返回列表/首页需要的轻字段（name/shortDesc/image/moq/price/featured），
+// 不读 description_*/specifications_*/applications_*/faq_*/seo_* 等大字段。
+// 全量接口 807KB 里有 75% 是首页用不到的正文/FAQ，移动端首屏为此多付大量传输。
 app.get('/api/catalog', (req, res) => {
-  db.all("SELECT * FROM products WHERE status = 'published' ORDER BY sort_weight DESC, created_at DESC", [], (err, rows) => {
+  const light = req.query.light === '1' || req.query.light === 'true';
+
+  const COLUMNS = light
+    ? 'id, slug, category_slug, name_en, name_zh, name_vi, name_th, short_description_en, short_description_zh, short_description_vi, short_description_th, price, unit, moq, is_featured, images, sort_weight, created_at, updated_at'
+    : '*';
+
+  db.all(`SELECT ${COLUMNS} FROM products WHERE status = 'published' ORDER BY sort_weight DESC, created_at DESC`, [], (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
 
-    const products = rows.map(row => ({
-      id: String(row.id),
-      sku: row.slug,
-      slug: row.slug,
-      categorySlug: row.category_slug,
-      names: { en: row.name_en || '', zh: row.name_zh || '', vi: row.name_vi || '', th: row.name_th || '' },
-      shortDescriptions: { en: row.short_description_en || '', zh: row.short_description_zh || '', vi: row.short_description_vi || '', th: row.short_description_th || '' },
-      fullDescriptions: { en: row.description_en || '', zh: row.description_zh || '', vi: row.description_vi || '', th: row.description_th || '' },
-      images: safeJsonParse(row.images, []),
-      specifications: safeJsonParse(row.specifications_en, {}),
-      specifications_zh: safeJsonParse(row.specifications_zh, {}),
-      specifications_vi: safeJsonParse(row.specifications_vi, {}),
-      specifications_th: safeJsonParse(row.specifications_th, {}),
-      applications: safeJsonParse(row.applications_en, []),
-      applications_zh: safeJsonParse(row.applications_zh, []),
-      applications_vi: safeJsonParse(row.applications_vi, []),
-      applications_th: safeJsonParse(row.applications_th, []),
-      seoTitle: { en: row.seo_title_en || '', zh: row.seo_title_zh || '', vi: row.seo_title_vi || '', th: row.seo_title_th || '' },
-      seoKeywords: { en: row.seo_keywords_en || '', zh: row.seo_keywords_zh || '', vi: row.seo_keywords_vi || '', th: row.seo_keywords_th || '' },
-      seoDescription: { en: row.seo_description_en || '', zh: row.seo_description_zh || '', vi: row.seo_description_vi || '', th: row.seo_description_th || '' },
-      faq: { en: safeJsonParse(row.faq_en, []), zh: safeJsonParse(row.faq_zh, []), vi: safeJsonParse(row.faq_vi, []), th: safeJsonParse(row.faq_th, []) },
-      priceUsd: row.price || undefined,
-      priceRemark: row.unit || '',
-      moq: row.moq || 0,
-      isFeatured: row.is_featured === 1,
-      sortWeight: row.sort_weight || 0,
-      createdAt: row.created_at,
-      // sitemap 的 lastmod 依赖这个字段。此前只暴露 createdAt，
-      // 结果是「今天重写了 30 个产品的文案，sitemap 仍写着 6 月创建日」，
-      // 搜索引擎据此判断页面没变，改过的内容迟迟不进重抓队列。
-      updatedAt: row.updated_at || row.created_at,
-    }));
+    const products = rows.map(row => {
+      const base = {
+        id: String(row.id),
+        sku: row.slug,
+        slug: row.slug,
+        categorySlug: row.category_slug,
+        names: { en: row.name_en || '', zh: row.name_zh || '', vi: row.name_vi || '', th: row.name_th || '' },
+        shortDescriptions: { en: row.short_description_en || '', zh: row.short_description_zh || '', vi: row.short_description_vi || '', th: row.short_description_th || '' },
+        images: safeJsonParse(row.images, []),
+        priceUsd: row.price || undefined,
+        priceRemark: row.unit || '',
+        moq: row.moq || 0,
+        isFeatured: row.is_featured === 1,
+        sortWeight: row.sort_weight || 0,
+        createdAt: row.created_at,
+        // sitemap 的 lastmod 依赖这个字段。此前只暴露 createdAt，
+        // 结果是「今天重写了 30 个产品的文案，sitemap 仍写着 6 月创建日」，
+        // 搜索引擎据此判断页面没变，改过的内容迟迟不进重抓队列。
+        updatedAt: row.updated_at || row.created_at,
+      };
+      // light 模式到此为止，不再挂大字段
+      if (light) return base;
+      return {
+        ...base,
+        fullDescriptions: { en: row.description_en || '', zh: row.description_zh || '', vi: row.description_vi || '', th: row.description_th || '' },
+        specifications: safeJsonParse(row.specifications_en, {}),
+        specifications_zh: safeJsonParse(row.specifications_zh, {}),
+        specifications_vi: safeJsonParse(row.specifications_vi, {}),
+        specifications_th: safeJsonParse(row.specifications_th, {}),
+        applications: safeJsonParse(row.applications_en, []),
+        applications_zh: safeJsonParse(row.applications_zh, []),
+        applications_vi: safeJsonParse(row.applications_vi, []),
+        applications_th: safeJsonParse(row.applications_th, []),
+        seoTitle: { en: row.seo_title_en || '', zh: row.seo_title_zh || '', vi: row.seo_title_vi || '', th: row.seo_title_th || '' },
+        seoKeywords: { en: row.seo_keywords_en || '', zh: row.seo_keywords_zh || '', vi: row.seo_keywords_vi || '', th: row.seo_keywords_th || '' },
+        seoDescription: { en: row.seo_description_en || '', zh: row.seo_description_zh || '', vi: row.seo_description_vi || '', th: row.seo_description_th || '' },
+        faq: { en: safeJsonParse(row.faq_en, []), zh: safeJsonParse(row.faq_zh, []), vi: safeJsonParse(row.faq_vi, []), th: safeJsonParse(row.faq_th, []) },
+      };
+    });
 
     db.all("SELECT * FROM product_categories WHERE status = 'published' ORDER BY sort_weight", [], (err2, catRows) => {
       if (err2) return res.status(500).json({ error: err2.message });

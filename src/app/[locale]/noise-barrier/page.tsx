@@ -14,7 +14,7 @@ import { ProjectGallery } from '@/components/noise-barrier/ProjectGallery';
 import { QuoteForm } from '@/components/noise-barrier/QuoteForm';
 import { RelatedReading } from '@/components/noise-barrier/RelatedReading';
 import { NoiseBarrierClient } from '@/components/noise-barrier/NoiseBarrierClient';
-import { whatsappNumber, zaloId, lineId, facebookUrl } from '@/lib/channels';
+import { whatsappNumber, zaloHref, lineId, facebookUrl } from '@/lib/channels';
 import { getNoiseBarrierFaqs } from '@/lib/noiseBarrierFaq';
 import { pickLocale } from '@/lib/i18n';
 
@@ -142,7 +142,8 @@ export default async function NoiseBarrierPage({
 
   // Parallel data fetching
   const [catalog, siteConfig, nbData, blogPosts] = await Promise.all([
-    getCatalog(),
+    // 落地页只渲染产品名/图/短描述，不读正文/规格/FAQ 大字段
+    getCatalog({ light: true }),
     getSiteConfig(),
     getNoiseBarrierData(),
     // 技术文章：用于「技术资料」区块（此前落地页一条博客链接都没有）
@@ -227,7 +228,8 @@ export default async function NoiseBarrierPage({
     facebook: facebookUrl(getCfg('facebook')),
     // Zalo / LINE 不再回落到手机号：Zalo 只支持 +84，LINE ID 也必须有真实账号。
     // 后台没配就是空字符串，下游组件据此隐藏入口（见 src/lib/channels.ts）。
-    zalo: zaloId(getCfg('zalo')),
+    // 注意 Zalo 现在也接受名片短链（zaloapp.com/qr/p/xxx），见 zaloHref。
+    zalo: zaloHref(getCfg('zalo')),
     lineId: lineId(getCfg('line_id')),
     locale,
     qrWhatsApp: getCfg('qr_whatsapp') || '',

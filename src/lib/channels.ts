@@ -31,6 +31,21 @@ export function zaloId(raw?: string | null): string {
 }
 
 /**
+ * Zalo 的可点击地址：既接受 84 开头的手机号，也接受完整的 zalo.me / zaloapp.com 链接。
+ *
+ * 为什么要接受链接：Zalo 名片（尤其企业号）只给一条 `zaloapp.com/qr/p/xxxx` 短链，
+ * 拿不到可拼进 zalo.me 的手机号。后台 `zalo` 字段现在两种写法都能填。
+ * 返回空串表示「没有可用的 Zalo」，调用方据此不渲染入口。
+ */
+export function zaloHref(raw?: string | null): string {
+  const v = (raw || '').trim();
+  if (!v) return '';
+  if (/^https?:\/\/([a-z0-9-]+\.)?zalo(app)?\.(me|com)\//i.test(v)) return v;
+  const id = zaloId(v);
+  return id ? `https://zalo.me/${id}` : '';
+}
+
+/**
  * LINE ID：官方规则是 4–20 位、字母数字加 . _ -、且不能是纯数字。
  * 这里额外兼容后台被填成 https://line.me/ti/p/~xxx 的情况，自动抽出 ID。
  */

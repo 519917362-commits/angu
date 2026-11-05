@@ -285,7 +285,7 @@ export default async function SolutionsPage({params}: {params: Promise<{locale: 
   const t = (en: string, zh: string, vi: string, th: string) => locale === 'zh' ? zh : locale === 'vi' ? vi : locale === 'th' ? th : en;
   const siteConfig = await getSiteConfig();
   const config = siteConfig?.config;
-  const catalog = await getCatalog();
+  const catalog = await getCatalog({ light: true });
   const productNameMap = new Map<string, string>();
   for (const p of catalog?.products || []) {
     productNameMap.set(p.slug, p.names[locale] || p.names.en || p.slug);

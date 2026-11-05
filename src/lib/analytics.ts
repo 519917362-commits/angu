@@ -169,6 +169,8 @@ export function initContactTracking(): () => void {
     const href = el.getAttribute('href') || '';
     if (href.includes('wa.me/') || href.includes('api.whatsapp.com')) {
       trackLead({ source: 'contact_click', method: 'whatsapp' });
+    } else if (href.includes('zalo.me/') || href.includes('zaloapp.com/')) {
+      trackLead({ source: 'contact_click', method: 'zalo' });
     } else if (href.startsWith('tel:')) {
       trackLead({ source: 'contact_click', method: 'phone' });
     }

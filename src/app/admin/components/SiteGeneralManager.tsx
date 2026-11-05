@@ -24,7 +24,7 @@ const FIELDS: { key: string; label: string; hint?: string }[] = [
   { key: 'email', label: '邮箱 Email' },
   { key: 'address', label: '地址 Address' },
   { key: 'whatsapp', label: 'WhatsApp 号码', hint: '纯数字含国家码，如 8618803189797' },
-  { key: 'zalo', label: 'Zalo 号 / 链接', hint: '只支持越南号（84 开头）；留空则全站不显示 Zalo 入口' },
+  { key: 'zalo', label: 'Zalo 号 / 链接', hint: '越南号（84 开头）或名片短链 https://zaloapp.com/qr/p/xxx；留空则回落默认名片' },
   { key: 'line_id', label: 'LINE ID', hint: '留空则全站不显示 LINE 入口' },
   { key: 'facebook', label: 'Facebook 链接', hint: '完整 https 链接；留空则不显示 Facebook 入口' },
   { key: 'smtp_host', label: 'SMTP 主机 Host' },
