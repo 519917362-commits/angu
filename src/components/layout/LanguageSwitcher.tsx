@@ -1,6 +1,6 @@
 'use client';
 
-import {useState} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import {usePathname, useRouter} from 'next/navigation';
 
 interface LanguageSwitcherProps {
@@ -22,9 +22,29 @@ const TRANSLATED = ['', '/noise-barrier'];
 
 export function LanguageSwitcher({locale}: LanguageSwitcherProps) {
   const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
   const current = languages.find((l) => l.code === locale) || languages[0];
+
+  /**
+   * 点外部关闭。原来这里放的是一个 `fixed inset-0` 的透明层，
+   * 但它挂在 <header> 里，而 header 滚动后会加 backdrop-blur ——
+   * backdrop-filter 会成为 fixed 后代的包含块，那层透明层只剩 header 那么高，
+   * 点页面其他地方关不掉下拉。改成 document 级监听，不依赖布局。
+   */
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent | TouchEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('touchstart', onDown, {passive: true});
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('touchstart', onDown);
+    };
+  }, [open]);
 
   function switchLanguage(newLocale: string) {
     if (!pathname) return;
@@ -35,7 +55,7 @@ export function LanguageSwitcher({locale}: LanguageSwitcherProps) {
   }
 
   return (
-    <div className="relative">
+    <div className="relative" ref={wrapRef}>
       <button
         onClick={() => setOpen(!open)}
         className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-colors"
@@ -48,25 +68,22 @@ export function LanguageSwitcher({locale}: LanguageSwitcherProps) {
       </button>
 
       {open && (
-        <>
-          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute top-full end-0 mt-1 w-48 bg-white rounded-xl shadow-xl border border-slate-100 py-2 z-50 max-h-80 overflow-y-auto">
-            {languages.map((lang) => (
-              <button
-                key={lang.code}
-                onClick={() => switchLanguage(lang.code)}
-                className={`flex items-center gap-2 w-full px-4 py-2 text-sm transition-colors ${
-                  lang.code === locale
-                    ? 'bg-blue-50 text-blue-600 font-medium'
-                    : 'text-slate-600 hover:bg-slate-50'
-                }`}
-              >
-                <span className="text-base">{lang.flag}</span>
-                <span>{lang.label}</span>
-              </button>
-            ))}
-          </div>
-        </>
+        <div className="absolute top-full end-0 mt-1 w-48 bg-white rounded-xl shadow-xl border border-slate-100 py-2 z-50 max-h-80 overflow-y-auto">
+          {languages.map((lang) => (
+            <button
+              key={lang.code}
+              onClick={() => switchLanguage(lang.code)}
+              className={`flex items-center gap-2 w-full px-4 py-2 text-sm transition-colors ${
+                lang.code === locale
+                  ? 'bg-blue-50 text-blue-600 font-medium'
+                  : 'text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              <span className="text-base">{lang.flag}</span>
+              <span>{lang.label}</span>
+            </button>
+          ))}
+        </div>
       )}
     </div>
   );

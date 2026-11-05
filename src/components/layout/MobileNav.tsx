@@ -1,6 +1,7 @@
 'use client';
 
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import {createPortal} from 'react-dom';
 import Link from 'next/link';
 import {useRouter, usePathname} from 'next/navigation';
 import {X, Menu, MessageCircle, Globe} from 'lucide-react';
@@ -22,8 +23,22 @@ interface MobileNavProps {
 export function MobileNav({locale, whatsapp = '8618803189797'}: MobileNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+
+  // createPortal 只能在客户端用，SSR 阶段 document 还不存在
+  useEffect(() => setMounted(true), []);
+
+  // 抽屉打开时锁住背景滚动，否则手指一划页面在后面滑，看起来更像「没盖住」
+  useEffect(() => {
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isOpen]);
 
   const isZh = locale === 'zh';
 
@@ -46,28 +61,32 @@ export function MobileNav({locale, whatsapp = '8618803189797'}: MobileNavProps) 
     setIsOpen(false);
   }
 
-  return (
+  /**
+   * 遮罩与抽屉必须挂在 <body> 上，不能留在 <header> 里。
+   *
+   * header 滚动后会加 `backdrop-blur-md`（backdrop-filter），而带 filter /
+   * backdrop-filter / transform 的元素会成为 `position: fixed` 后代的**包含块**：
+   * 抽屉的 `h-full` 会变成 header 的高度（64px），全屏遮罩也会被裁成一条。
+   * 表现就是「点开菜单只有顶部一条白，后面整页露着」，看起来像菜单背景透明。
+   * 用 portal 挂到 body 就绕开了这个包含块。
+   *
+   * z-[60] 同时压过 header(40)、底部联系条(40)、桌面悬浮按钮(40)。
+   */
+  const overlay = (
     <>
-      {/* Hamburger Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="lg:hidden p-2 text-slate-700 hover:text-blue-600 transition-colors"
-        aria-label="Open menu"
-      >
-        <Menu className="w-6 h-6" />
-      </button>
-
-      {/* Overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-50 lg:hidden"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      {/* Drawer */}
       <div
-        className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-white z-50 shadow-2xl transform transition-transform duration-300 lg:hidden ${
+        className={`fixed inset-0 bg-black/50 z-[60] lg:hidden transition-opacity duration-300 ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setIsOpen(false)}
+        aria-hidden="true"
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu"
+        aria-hidden={!isOpen}
+        className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-white z-[60] shadow-2xl transform transition-transform duration-300 lg:hidden overflow-y-auto overscroll-contain ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -126,8 +145,8 @@ export function MobileNav({locale, whatsapp = '8618803189797'}: MobileNavProps) 
           ))}
         </nav>
 
-        {/* WhatsApp CTA */}
-        <div className="px-4 pt-4">
+        {/* WhatsApp CTA —— 抽屉比屏幕高时也要能滚到，底部留出安全区 */}
+        <div className="px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
           <a
             href={`https://wa.me/${whatsapp}?text=Hello, I'm interested in your products.`}
             target="_blank"
@@ -139,6 +158,22 @@ export function MobileNav({locale, whatsapp = '8618803189797'}: MobileNavProps) 
           </a>
         </div>
       </div>
+    </>
+  );
+
+  return (
+    <>
+      {/* Hamburger Button */}
+      <button
+        onClick={() => setIsOpen(true)}
+        className="lg:hidden p-2 text-slate-700 hover:text-blue-600 transition-colors"
+        aria-label="Open menu"
+      >
+        <Menu className="w-6 h-6" />
+      </button>
+
+      {/* 常驻挂载（关闭时平移出屏），这样开合都有过渡动画 */}
+      {mounted ? createPortal(overlay, document.body) : null}
     </>
   );
 }

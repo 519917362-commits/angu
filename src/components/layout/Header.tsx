@@ -11,7 +11,7 @@ import {HeaderLanding} from './HeaderLanding';
 import {MessageCircle} from 'lucide-react';
 import {useCategories, useSiteConfig, cfgVal} from '@/lib/hooks';
 import { tLabel } from '@/lib/i18n';
-import { whatsappNumber, zaloId, lineId, facebookUrl } from '@/lib/channels';
+import { whatsappNumber, zaloHref, lineId, facebookUrl } from '@/lib/channels';
 
 interface HeaderProps {
   locale: string;
@@ -52,7 +52,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
     // 每个渠道都先过 src/lib/channels.ts 的判定：没有真实账号就不渲染，
     // 避免越南语页面出现 zalo.me/<+86 手机号> 这种点开找不到人的死链。
     const waNum = waDigits;
-    const zaloNum = zaloId(cfgVal(siteConfig, 'zalo', locale, ''));
+    const zaloUrl = zaloHref(cfgVal(siteConfig, 'zalo', locale, ''));
     const liId = lineId(cfgVal(siteConfig, 'line_id', locale, ''));
     const fbUrl = facebookUrl(cfgVal(siteConfig, 'facebook', locale, ''));
     const qrWa = cfgVal(siteConfig, 'qr_whatsapp', locale, '');
@@ -65,8 +65,8 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
     }[] = [];
     if (waNum) socialChannels.push({ key: 'whatsapp', label: 'WhatsApp', color: '#25D366',
       href: `https://wa.me/${waNum}`, qrImg: qrWa, icon: <IconWhatsApp className="w-5 h-5" /> });
-    if (zaloNum) socialChannels.push({ key: 'zalo', label: 'Zalo', color: '#0068FF',
-      href: `https://zalo.me/${zaloNum}`, qrImg: qrZa, icon: <IconZalo className="w-5 h-5" /> });
+    if (zaloUrl) socialChannels.push({ key: 'zalo', label: 'Zalo', color: '#0068FF',
+      href: zaloUrl, qrImg: qrZa, icon: <IconZalo className="w-5 h-5" /> });
     if (liId) socialChannels.push({ key: 'line', label: 'LINE', color: '#06C755',
       href: `https://line.me/ti/p/~${liId}`, qrImg: qrLi, icon: <IconLINE className="w-5 h-5" /> });
     if (fbUrl) socialChannels.push({ key: 'facebook', label: 'Facebook', color: '#1877F2',
