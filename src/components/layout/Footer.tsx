@@ -111,11 +111,11 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Phone className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                <a href={`tel:${phone.replace(/[^0-9+]/g, '')}`} className="hover:text-white transition-colors">{phone}</a>
+                <a href={`tel:${phone.replace(/[^0-9+]/g, '')}`} className={`${LINK_HIT} hover:text-white`}>{phone}</a>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Mail className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                <a href={`mailto:${email}`} className="hover:text-white transition-colors">{email}</a>
+                <a href={`mailto:${email}`} className={`${LINK_HIT} hover:text-white`}>{email}</a>
               </div>
             </div>
           </div>
