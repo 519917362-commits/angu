@@ -151,7 +151,7 @@ export default function ContactPage({params}: {params: Promise<{locale: string}>
                       maxLength={80}
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                       placeholder={tLabel('张三', 'John Smith', locale)}
                     />
                   </div>
@@ -165,7 +165,7 @@ export default function ContactPage({params}: {params: Promise<{locale: string}>
                       maxLength={120}
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                       placeholder={tLabel('zhangsan@company.com', 'john@company.com', locale)}
                     />
                   </div>
@@ -179,7 +179,7 @@ export default function ContactPage({params}: {params: Promise<{locale: string}>
                       maxLength={30}
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                       placeholder={tLabel('+86 138 1234 5678', '+1 234 567 8900', locale)}
                     />
                   </div>
@@ -190,7 +190,7 @@ export default function ContactPage({params}: {params: Promise<{locale: string}>
                       maxLength={60}
                       value={formData.country}
                       onChange={(e) => setFormData({...formData, country: e.target.value})}
-                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                      className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                       placeholder={tLabel('中国', 'United States', locale)}
                     />
                   </div>
@@ -203,7 +203,7 @@ export default function ContactPage({params}: {params: Promise<{locale: string}>
                     maxLength={100}
                     value={formData.company}
                     onChange={(e) => setFormData({...formData, company: e.target.value})}
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                     placeholder={tLabel('某某建设有限公司', 'ABC Construction Ltd.', locale)}
                   />
                 </div>
@@ -214,7 +214,7 @@ export default function ContactPage({params}: {params: Promise<{locale: string}>
                   <select
                     value={formData.product_interest}
                     onChange={(e) => setFormData({...formData, product_interest: e.target.value})}
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white"
                   >
                     <option value="">{tLabel('请选择产品类别（可选）', 'Select a product category (optional)', locale)}</option>
                     <optgroup label={tLabel('石笼网系列', 'Gabion Series', locale)}>
@@ -249,7 +249,7 @@ export default function ContactPage({params}: {params: Promise<{locale: string}>
                     maxLength={2000}
                     value={formData.message}
                     onChange={(e) => setFormData({...formData, message: e.target.value})}
-                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
                     placeholder={tLabel('请描述您的项目、所需产品、规格、数量以及任何问题...', 'Please describe your project, required products, specifications, quantity, and any questions you have...', locale)}
                   />
                 </div>

@@ -21,7 +21,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={inputId}
           className={cn(
-            'w-full px-3 py-2 border rounded-lg text-sm text-slate-900 placeholder:text-slate-400',
+            // 移动端必须 16px：iOS Safari 对 <16px 的输入框会在聚焦时强制放大页面，
+            // 每点一个字段整页缩放一次，是移动端表单最伤转化的一处细节。
+            'w-full px-3 py-2 border rounded-lg text-base sm:text-sm text-slate-900 placeholder:text-slate-400',
             'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
             'transition-all duration-200',
             error

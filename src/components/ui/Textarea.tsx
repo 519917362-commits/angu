@@ -21,7 +21,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={inputId}
           className={cn(
-            'w-full px-3 py-2 border rounded-lg text-sm text-slate-900 placeholder:text-slate-400 resize-none',
+            // 同 Input：移动端 16px 起，避免 iOS 聚焦自动缩放
+            'w-full px-3 py-2 border rounded-lg text-base sm:text-sm text-slate-900 placeholder:text-slate-400 resize-none',
             'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
             'transition-all duration-200',
             error

@@ -4,7 +4,7 @@ import {useState, useEffect, useRef} from 'react';
 import {createPortal} from 'react-dom';
 import {X, MessageCircle} from 'lucide-react';
 import {cn} from '@/lib/utils';
-import {submitInquiryLead} from '@/lib/inquiry';
+import {submitInquiryLead, type InquiryLeadSource} from '@/lib/inquiry';
 import { tLabel } from '@/lib/i18n';
 
 interface InquiryModalProps {
@@ -14,9 +14,15 @@ interface InquiryModalProps {
   productSlug?: string;
   categorySlug?: string;
   locale: string;
+  /**
+   * 归因来源。默认 product_modal（产品页弹窗）。
+   * 落地页/底部条复用这个弹窗时必须显式传自己的 source，
+   * 否则广告归因会被写成产品页转化，分不清是哪个入口带来的。
+   */
+  source?: InquiryLeadSource;
 }
 
-export function InquiryModal({isOpen, onClose, productName, productSlug, categorySlug, locale}: InquiryModalProps) {
+export function InquiryModal({isOpen, onClose, productName, productSlug, categorySlug, locale, source = 'product_modal'}: InquiryModalProps) {
   const isZh = locale === 'zh';
   const [formData, setFormData] = useState({
     name: '',
@@ -72,7 +78,7 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
     try {
       const result = await submitInquiryLead(
         {...formData, productSlug, categorySlug},
-        {source: 'product_modal', productInterest: productSlug || categorySlug || undefined, locale}
+        {source: source, productInterest: productSlug || categorySlug || undefined, locale}
       );
       if (result.success) {
         setSubmitted(true);
@@ -107,16 +113,22 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" onClick={onClose}>
+    // 移动端从底部升起（单手更易够到），桌面居中。
+    // 面板必须有 max-h + 内部滚动：iOS 键盘弹起后视口只剩约 400px，
+    // 没有滚动容器的弹窗会把提交按钮顶出屏幕，用户填完却按不到提交。
+    <div className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center sm:p-4" onClick={onClose}>
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg z-[10000]" onClick={stopPropagation}>
+      <div
+        className="relative bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl w-full max-w-lg z-[10000] max-h-[92dvh] sm:max-h-[85dvh] flex flex-col"
+        onClick={stopPropagation}
+      >
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between rounded-t-2xl" style={{zIndex: 10}}>
-          <div>
-            <h2 className="text-xl font-bold text-slate-900">{t.quickInquiry}</h2>
+        <div className="shrink-0 bg-white border-b border-slate-100 px-5 sm:px-6 py-4 flex items-center justify-between rounded-t-2xl">
+          <div className="min-w-0">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900">{t.quickInquiry}</h2>
             {productName && <p className="text-sm text-slate-500 mt-0.5 line-clamp-1">{productName}</p>}
           </div>
           <button
@@ -129,7 +141,7 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="min-h-0 p-5 sm:p-6 space-y-4 overflow-y-auto overscroll-contain pb-[calc(1.25rem+env(safe-area-inset-bottom))] sm:pb-6">
           {submitted ? (
             <div className="text-center py-8">
               <div className="text-5xl mb-4" aria-hidden="true">✅</div>
@@ -155,7 +167,7 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
                     maxLength={80}
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                     placeholder={tLabel('张三', 'John Smith', locale)}
                   />
                 </div>
@@ -169,7 +181,7 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
                     maxLength={120}
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                     placeholder={tLabel('zhangsan@company.com', 'john@company.com', locale)}
                   />
                 </div>
@@ -185,7 +197,7 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
                     maxLength={30}
                     value={formData.phone}
                     onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                     placeholder={tLabel('+86 138 1234 5678', '+1 234 567 8900', locale)}
                   />
                 </div>
@@ -198,7 +210,7 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
                     maxLength={60}
                     value={formData.country}
                     onChange={(e) => setFormData({...formData, country: e.target.value})}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                     placeholder={tLabel('中国', 'United States', locale)}
                   />
                 </div>
@@ -213,7 +225,7 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
                   maxLength={100}
                   value={formData.company}
                   onChange={(e) => setFormData({...formData, company: e.target.value})}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                   placeholder={tLabel('某某建设有限公司', 'ABC Construction Ltd.', locale)}
                 />
               </div>
@@ -227,7 +239,7 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
                   maxLength={50}
                   value={formData.quantity}
                   onChange={(e) => setFormData({...formData, quantity: e.target.value})}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                   placeholder={tLabel('例如：500件，2000平方米', 'e.g. 500 pieces, 2000 m²', locale)}
                 />
               </div>
@@ -248,12 +260,12 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
                 </label>
                 <textarea
                   required
-                  rows={4}
+                  rows={3}
                   maxLength={2000}
                   value={formData.message}
                   onChange={(e) => setFormData({...formData, message: e.target.value})}
                   placeholder={t.messagePlaceholder}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
+                  className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-base sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
                 />
               </div>
 

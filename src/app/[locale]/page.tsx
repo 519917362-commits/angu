@@ -54,11 +54,11 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
       : locale === 'vi'
       ? 'Nhà sản xuất ISO 9001: tấm chắn ồn, rọ đá, lưới chống rơi đá, hàng rào. Nhà máy Anping, xuất khẩu 30+ quốc gia, giao trong 20 ngày kể từ khi nhận cọc.'
       : locale === 'th'
-      ? 'ผู้ผลิตตะแกรงลวด ISO 9001: แผงกั้นเสียง ตะกร้าเกเบี้ยน ตาข่ายกันหินตก รั้ว ตะแกรงเชื่อม โรงงานตรงอันผิง ส่งออก 30+ ประเทศ ผลิต 10–15 วัน'
+      ? 'ผู้ผลิตตะแกรงลวด ISO 9001: แผงกั้นเสียง ตะกร้าเกเบี้ยน ตาข่ายกันหินตก รั้ว ตะแกรงเชื่อม โรงงานตรงอันผิง ส่งออก 30+ ประเทศ ผลิตภายใน 20 วันหลังรับมัดจำ'
       : locale === 'ms'
       ? 'Pengeluar ISO 9001: penghadang bunyi, kotak gabion, jaringan batu jatuh, pagar. Kilang Anping, eksport 30+ negara, penghantaran dalam 20 hari selepas deposit.'
       : locale === 'ar'
-      ? 'مصنّع ISO 9001: حواجز صوتية، صناديق جابيون، شبكات حماية الصخور، سياجات. مصنع أنبينغ، تصدير 30+ دولة، إنتاج 10–15 يومًا.'
+      ? 'مصنّع ISO 9001: حواجز صوتية، صناديق جابيون، شبكات حماية الصخور، سياجات. مصنع أنبينغ، تصدير 30+ دولة، الإنتاج خلال 20 يومًا من استلام الدفعة المقدمة.'
       : 'ISO 9001 manufacturer of noise barriers, gabion, rockfall nets and fencing. Factory-direct from Anping, China. 30+ countries, shipping within 20 days of deposit receipt.',
     // 不再输出 meta keywords：Google 自 2009 年起完全忽略，Bing 仅作作弊信号，
     // 唯一确定的效果是每页多几百字节。
@@ -361,7 +361,13 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
       </section>
 
       {/* ─── Hero — Conclusion-First for AI Snippet Extraction ─── */}
-      <section className="relative h-[580px] overflow-hidden">
+      {/*
+        高度策略：桌面固定 580px（视觉节奏不变）；移动端改为内容自然撑高，
+        并用 pb 给底部 stats 留位。
+        原因：移动端三个 CTA 竖排 + 长文案语言（vi/th/ar）后内容高约 500px，
+        固定 580px 会让「声屏障专题」按钮被绝对定位的 stats 条整个盖住。
+      */}
+      <section className="relative overflow-hidden sm:h-[580px]">
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-slate-900/40 z-10" />
         {isLocalImage(bannerImage) ? (
           <Image
@@ -382,10 +388,10 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
             fetchPriority="high"
           />
         )}
-        <div className="relative z-20 flex items-center h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-20 flex items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:h-full sm:py-0">
           <div className="max-w-2xl">
             {/* Conclusion-first H1 — extractable value proposition */}
-            <h1 className="text-3xl md:text-4xl lg:text-[3rem] font-bold text-white leading-tight mb-4">
+            <h1 className="text-3xl md:text-4xl lg:text-[3rem] font-bold text-white leading-tight mb-3 sm:mb-4">
               {heroTitle}
             </h1>
             {/* Supporting identity paragraph */}
@@ -393,34 +399,42 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
               {heroSubtitle}
             </p>
             {/* Trust signal badge */}
-            <div className="inline-flex items-center gap-2 bg-green-600/80 text-white text-xs px-3 py-1.5 rounded-full mb-6 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 bg-green-600/80 text-white text-xs px-3 py-1.5 rounded-full mb-4 sm:mb-6 backdrop-blur-sm">
               <span className="w-2 h-2 bg-green-300 rounded-full animate-pulse" />
               {heroBadge}
             </div>
-            <div className="flex flex-wrap gap-4">
-              <Link href={localeHref(locale, '/contact')}>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-base transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+            {/* 移动端：主 CTA 独占一行，两个次要入口并排（省掉一整行 56px，
+                让「声屏障专题」和「浏览产品」不至于被挤到 stats 后面）。
+                桌面 sm:contents 还原成原来的三个并排按钮。 */}
+            <div className="flex flex-col gap-3 w-full sm:w-auto sm:flex-row sm:flex-wrap sm:gap-4">
+              <Link href={localeHref(locale, '/contact')} className="w-full sm:w-auto">
+                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-base transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
                   {bannerCta}
                 </button>
               </Link>
-              <Link href={localeHref(locale, '/noise-barrier')}>
-                <button className="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold text-base backdrop-blur-sm transition-all hover:-translate-y-0.5">
-                  {locale === 'zh' ? '声屏障专题' : locale === 'vi' ? 'Chuyên Đề Cách Âm' : locale === 'th' ? 'หน้าแผงกั้นเสียง' : locale === 'ms' ? 'Penghadang Bunyi' : locale === 'ar' ? 'الحواجز الصوتية' : 'Noise Barrier'}
-                </button>
-              </Link>
-              <Link href={localeHref(locale, '/products')}>
-                <button className="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-8 py-4 rounded-xl font-semibold text-base backdrop-blur-sm transition-all hover:-translate-y-0.5">
-                  {locale === 'zh' ? '浏览产品' : locale === 'vi' ? 'Xem sản phẩm' : locale === 'th' ? 'ดูสินค้า' : locale === 'ms' ? 'Lihat Produk' : locale === 'ar' ? 'عرض المنتجات' : 'View Products'}
-                </button>
-              </Link>
+              <div className="grid grid-cols-2 gap-3 w-full sm:contents">
+                <Link href={localeHref(locale, '/noise-barrier')}>
+                  <button className="w-full bg-white/10 hover:bg-white/20 text-white border border-white/30 px-4 sm:px-8 py-4 rounded-xl font-semibold text-sm sm:text-base backdrop-blur-sm transition-all hover:-translate-y-0.5">
+                    {locale === 'zh' ? '声屏障专题' : locale === 'vi' ? 'Chuyên Đề Cách Âm' : locale === 'th' ? 'หน้าแผงกั้นเสียง' : locale === 'ms' ? 'Penghadang Bunyi' : locale === 'ar' ? 'الحواجز الصوتية' : 'Noise Barrier'}
+                  </button>
+                </Link>
+                <Link href={localeHref(locale, '/products')}>
+                  <button className="w-full bg-white/10 hover:bg-white/20 text-white border border-white/30 px-4 sm:px-8 py-4 rounded-xl font-semibold text-sm sm:text-base backdrop-blur-sm transition-all hover:-translate-y-0.5">
+                    {locale === 'zh' ? '浏览产品' : locale === 'vi' ? 'Xem sản phẩm' : locale === 'th' ? 'ดูสินค้า' : locale === 'ms' ? 'Lihat Produk' : locale === 'ar' ? 'عرض المنتجات' : 'View Products'}
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Stats Bar */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-md border-t border-slate-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        {/* Stats Bar
+            移动端走普通文档流（relative），桌面才是压在 hero 底部的浮条。
+            原来两端都用 absolute：小屏（375×667）内容本身就有 470px 高，
+            stats 又被钉在 hero 底边，于是整条被底部联系条盖住 —— 看起来像坏图。 */}
+        <div className="relative sm:absolute sm:bottom-0 sm:left-0 sm:right-0 z-20 bg-white/95 backdrop-blur-md border-t border-slate-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-2 sm:gap-6 text-center">
               {[
                 {num: YEARS_LABEL, label: locale === 'zh' ? '年制造经验' : locale === 'vi' ? 'Năm hoạt động' : locale === 'th' ? 'ปีดำเนินธุรกิจ' : locale === 'ms' ? 'Tahun Beroperasi' : locale === 'ar' ? 'سنوات العمل' : 'Years in Business'},
                 {num: '30+', label: locale === 'zh' ? '出口国家' : locale === 'vi' ? 'Quốc gia xuất khẩu' : locale === 'th' ? 'ประเทศส่งออก' : locale === 'ms' ? 'Negara Eksport' : locale === 'ar' ? 'دولة تصدير' : 'Countries Exported'},

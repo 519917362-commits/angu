@@ -381,7 +381,7 @@ export default async function ProductsPage({
                   maxLength={80}
                   placeholder={tLabel('搜索产品名称或型号，如 gabion 2x1x1', 'Search by product name or model, e.g. gabion 2x1x1', locale)}
                   aria-label={tLabel('搜索产品', 'Search products', locale)}
-                  className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-base sm:text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                 />
               </div>
               <button

@@ -1,10 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import {usePathname} from 'next/navigation';
 import {useEffect, useRef, useState} from 'react';
 import {FileText} from 'lucide-react';
 import {IconWhatsApp, IconZalo, IconWeChat} from '@/components/icons';
+import {InquiryModal} from '@/components/inquiry/InquiryModal';
 import {WHATSAPP_NUMBER, ZALO_URL, WECHAT_ID, WECHAT_DISPLAY} from '@/lib/contact';
 import {trackLead} from '@/lib/analytics';
 
@@ -108,6 +108,8 @@ async function copyText(text: string): Promise<boolean> {
  * - Zalo：越南客户装机率最高，直接开名片短链（ZALO_URL）。
  * - WeChat：**没法用链接定位到人**，weixin:// 只能唤起 App 不能加好友，
  *   所以点击是「复制号码 + 提示去微信搜索」，比跳一个空白页有用。
+ * - 报价：在本页打开询盘弹窗，不跳转也不锚点。落地页的表单在第 12 屏，
+ *   锚过去等于让刚进来的访客凭空丢掉十几屏；/contact 又多一次页面跳转。
  * - 邮箱从这一行撤掉了：手机上 mailto 转化极低，四格里优先给能即时对话的渠道。
  *   邮箱仍在页脚和 /contact 页。
  *
@@ -118,6 +120,7 @@ export function MobileContactBar({locale}: {locale: string}) {
   const t = T[locale] || T.en;
   const pathname = usePathname();
   const [toast, setToast] = useState('');
+  const [quoteOpen, setQuoteOpen] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -141,10 +144,18 @@ export function MobileContactBar({locale}: {locale: string}) {
 
   // 营销页自己就有表单，直接滚到表单比跳去 /contact 少一步（少一步就少一次流失）
   const isLanding = pathname?.includes('/noise-barrier');
-  const quoteHref = isLanding ? '#quote-form' : `/${locale}/contact`;
   const waText = isLanding
     ? 'Hello, I would like a quotation for noise barriers.'
     : 'Hello, I would like a quotation for your wire mesh products.';
+
+  // 报价格直接开弹窗，不再跳转。
+  // 落地页的表单在 y≈10000（第 12 屏），锚点跳过去等于让用户凭空消失十几屏；
+  // /contact 则要多一次页面跳转。弹窗是当前页面内的最短路径。
+  const onQuote = () => {
+    trackLead({source: 'contact_click', method: 'mobile_bar_quote'});
+    setQuoteOpen(true);
+  };
+  const quoteSource = isLanding ? 'google_ads_noise_barrier' : 'mobile_contact_bar';
 
   const cell =
     'flex flex-col items-center justify-center gap-0.5 h-11 rounded-lg font-medium text-[11px] leading-none whitespace-nowrap';
@@ -192,14 +203,23 @@ export function MobileContactBar({locale}: {locale: string}) {
           {t.wechat}
         </button>
 
-        <Link
-          href={quoteHref}
+        <button
+          type="button"
+          onClick={onQuote}
           className={`${cell} bg-blue-600 text-white active:bg-blue-700`}
         >
           <FileText className="w-[18px] h-[18px] flex-shrink-0" />
           {t.quote}
-        </Link>
+        </button>
       </div>
+
+      <InquiryModal
+        isOpen={quoteOpen}
+        onClose={() => setQuoteOpen(false)}
+        locale={locale}
+        source={quoteSource}
+        categorySlug={isLanding ? 'noise-barrier' : undefined}
+      />
     </div>
   );
 }

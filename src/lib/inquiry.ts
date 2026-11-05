@@ -16,7 +16,9 @@ export type InquiryLeadSource =
   | 'product_page'
   | 'contact_page'
   | 'exit_popup'
-  | 'google_ads_noise_barrier';
+  | 'google_ads_noise_barrier'
+  /** 移动端底部联系条的「报价」入口（任意页面，打开弹窗） */
+  | 'mobile_contact_bar';
 
 interface SubmitOptions {
   /** 入口来源：进入后台线索数据 + Google Ads 转化分析 */

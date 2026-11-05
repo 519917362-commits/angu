@@ -344,13 +344,13 @@ export function ExitIntentPopup({ locale }: { locale: string }) {
                 required
                 autoComplete="email"
                 placeholder={c.email}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-base sm:text-sm focus:outline-none focus:border-blue-500"
               />
               <select
                 name="country"
                 defaultValue=""
                 aria-label={c.country}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-base sm:text-sm text-slate-700 focus:outline-none focus:border-blue-500"
               >
                 <option value="">{c.country}</option>
                 {COUNTRIES.map((n) => (

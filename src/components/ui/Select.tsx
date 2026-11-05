@@ -22,7 +22,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           ref={ref}
           id={selectId}
           className={cn(
-            'w-full px-3 py-2 border rounded-lg text-sm text-slate-900',
+            // 同 Input：移动端 16px 起，避免 iOS 聚焦自动缩放
+            'w-full px-3 py-2 border rounded-lg text-base sm:text-sm text-slate-900',
             'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
             'transition-all duration-200 appearance-none bg-white',
             'cursor-pointer',

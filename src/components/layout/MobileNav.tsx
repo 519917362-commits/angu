@@ -166,7 +166,7 @@ export function MobileNav({locale, whatsapp = '8618803189797'}: MobileNavProps) 
       {/* Hamburger Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="lg:hidden p-2 text-slate-700 hover:text-blue-600 transition-colors"
+        className="lg:hidden -me-1 p-2.5 text-slate-700 hover:text-blue-600 transition-colors"
         aria-label="Open menu"
       >
         <Menu className="w-6 h-6" />

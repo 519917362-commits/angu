@@ -511,8 +511,9 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
       },
       availability: 'https://schema.org/MadeToOrder',
       businessFunction: 'http://purl.org/goodrelations/v1#Sell',
-      // 交期是 B2B 询盘的第二高频问题，Offer 里显式给出 10–15 天
-      deliveryLeadTime: {'@type': 'QuantitativeValue', minValue: 10, maxValue: 15, unitCode: 'DAY'},
+      // 交期口径：自定金到账起 20 天内（与全站文案一致）。
+      // 这里会进 Google 的 Product 富媒体结果，写错等于对外承诺另一个交期。
+      deliveryLeadTime: {'@type': 'QuantitativeValue', minValue: 20, maxValue: 20, unitCode: 'DAY'},
       url: `${baseUrl}/${locale}/products/${product.slug}`,
       ...(product.moq
         ? {
@@ -563,17 +564,19 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
         dangerouslySetInnerHTML={{ __html: JSON.stringify(detailJsonLd) }}
       />
 
-      {/* Breadcrumb */}
+      {/* Breadcrumb
+          移动端只保留「分类 / 当前页」两级：完整四级在 390px 下会折成 3–4 行
+          （实测 85px 高），把首屏整块吃掉。桌面 sm 以上照旧全显。 */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <nav className="text-sm text-slate-500 flex items-center gap-2" aria-label="Breadcrumb">
-            <Link href={`/${locale}`} className="hover:text-blue-600 transition-colors">{locale === 'zh' ? '首页' : locale === 'vi' ? 'Trang chủ' : locale === 'th' ? 'หน้าแรก' : 'Home'}</Link>
-            <span>/</span>
-            <Link href={`/${locale}/products`} className="hover:text-blue-600 transition-colors">{locale === 'zh' ? '产品' : locale === 'vi' ? 'Sản phẩm' : locale === 'th' ? 'สินค้า' : 'Products'}</Link>
-            <span>/</span>
-            <Link href={categoryHref(locale, product.categorySlug)} className="hover:text-blue-600 transition-colors">{categoryName}</Link>
-            <span>/</span>
-            <span className="text-slate-900 truncate max-w-xs">{name}</span>
+          <nav className="text-sm text-slate-500 flex items-center gap-2 whitespace-nowrap min-w-0" aria-label="Breadcrumb">
+            <Link href={`/${locale}`} className="hidden sm:inline hover:text-blue-600 transition-colors">{locale === 'zh' ? '首页' : locale === 'vi' ? 'Trang chủ' : locale === 'th' ? 'หน้าแรก' : 'Home'}</Link>
+            <span className="hidden sm:inline">/</span>
+            <Link href={`/${locale}/products`} className="hidden sm:inline hover:text-blue-600 transition-colors">{locale === 'zh' ? '产品' : locale === 'vi' ? 'Sản phẩm' : locale === 'th' ? 'สินค้า' : 'Products'}</Link>
+            <span className="hidden sm:inline">/</span>
+            <Link href={categoryHref(locale, product.categorySlug)} className="shrink-0 hover:text-blue-600 transition-colors">{categoryName}</Link>
+            <span className="shrink-0">/</span>
+            <span className="text-slate-900 truncate min-w-0">{name}</span>
           </nav>
         </div>
       </div>

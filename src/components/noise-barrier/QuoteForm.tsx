@@ -157,7 +157,8 @@ const COUNTRIES = [
 ];
 
 const fieldCls =
-  'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-sm';
+  // text-base sm:text-sm：移动端 16px，阻断 iOS Safari 聚焦时的整页放大
+  'w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 transition-colors text-base sm:text-sm';
 
 export function QuoteForm({
   locale,
