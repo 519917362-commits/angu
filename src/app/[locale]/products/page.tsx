@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import type { Product, Category } from '@/types/product';
 import { ProductCard } from '@/components/products/ProductCard';
+import { MobileCategoryBar } from '@/components/products/MobileCategoryBar';
 import { tLabel } from '@/lib/i18n';
 import { YEARS_LABEL } from '@/lib/company';
 
@@ -98,46 +99,6 @@ function CategorySidebar({
         </ul>
       </div>
     </aside>
-  );
-}
-
-function MobileCategoryBar({
-  categories,
-  currentSlug,
-  locale,
-}: {
-  categories: Category[];
-  currentSlug: string | undefined;
-  locale: string;
-}) {
-  return (
-    <div className="lg:hidden mb-4 overflow-x-auto">
-      <div className="flex gap-2 pb-2">
-        <Link
-          href={`/${locale}/products`}
-          className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-            !currentSlug
-              ? 'bg-blue-600 text-white'
-              : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-          }`}
-        >
-          {tLabel('全部', 'All', locale)}
-        </Link>
-        {categories.map((cat) => (
-          <Link
-            key={cat.id}
-            href={categoryHref(locale, cat.slug)}
-            className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              currentSlug === cat.slug
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-            }`}
-          >
-            {cat.names[locale] || cat.names.en}
-          </Link>
-        ))}
-      </div>
-    </div>
   );
 }
 

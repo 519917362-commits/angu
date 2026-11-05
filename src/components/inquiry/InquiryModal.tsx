@@ -23,7 +23,21 @@ interface InquiryModalProps {
 }
 
 export function InquiryModal({isOpen, onClose, productName, productSlug, categorySlug, locale, source = 'product_modal'}: InquiryModalProps) {
-  const isZh = locale === 'zh';
+  // 预填的询盘正文。采购点开弹窗后通常直接改两行就提交，
+  // 越南/泰国客户看到一屏英文模板会觉得「这站没做本地化」，所以按语种写。
+  const productMessage = (name: string, sku: string): string => {
+    switch (locale) {
+      case 'zh':
+        return `我对以下产品感兴趣，请提供报价：\n产品名称：${name}\n产品型号：${sku}\n\n请提供详细规格、价格、交货期等信息。`;
+      case 'vi':
+        return `Tôi quan tâm đến sản phẩm sau, vui lòng báo giá:\nTên sản phẩm: ${name}\nMã sản phẩm: ${sku}\n\nVui lòng cung cấp thông số chi tiết, giá và thời gian giao hàng.`;
+      case 'th':
+        return `สนใจสินค้าดังต่อไปนี้ กรุณาเสนอราคา:\nชื่อสินค้า: ${name}\nรหัสสินค้า: ${sku}\n\nกรุณาให้ข้อมูลจำเพาะ ราคา และระยะเวลาจัดส่งโดยละเอียด`;
+      default:
+        return `I am interested in the following product. Please provide a quotation:\nProduct Name: ${name}\nProduct SKU: ${sku}\n\nPlease provide detailed specifications, pricing, and delivery time.`;
+    }
+  };
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -31,11 +45,7 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
     company: '',
     country: '',
     quantity: '',
-    message: productName
-      ? (isZh
-          ? `我对以下产品感兴趣，请提供报价：\n产品名称：${productName}\n产品型号：${productSlug || '-'}\n\n请提供详细规格、价格、交货期等信息。`
-          : `I am interested in the following product. Please provide a quotation:\nProduct Name: ${productName}\nProduct SKU: ${productSlug || '-'}\n\nPlease provide detailed specifications, pricing, and delivery time.`)
-      : '',
+    message: productName ? productMessage(productName, productSlug || '-') : '',
     website: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,6 +79,16 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
       document.body.style.overflow = '';
     };
   }, [isOpen]);
+
+  // Esc 关闭：桌面端用户习惯按 Esc，之前只能点黑边或叉号
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [isOpen, onClose]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -134,7 +154,7 @@ export function InquiryModal({isOpen, onClose, productName, productSlug, categor
           <button
             onClick={onClose}
             className="p-2 hover:bg-slate-100 rounded-full transition-colors flex-shrink-0"
-            aria-label="Close"
+            aria-label={tLabel('关闭', 'Close', locale)}
           >
             <X className="w-5 h-5 text-slate-500" />
           </button>
