@@ -14,6 +14,17 @@ interface FooterProps {
   logoUrl?: string;
 }
 
+/**
+ * 页脚链接的可点区域。
+ *
+ * 这些 <a> 只有文字高（14px 字号约 17px），移动端手指根本按不准；
+ * WCAG 2.5.8 要求最小 24×24，iOS HIG 建议 44×44。
+ * 上下各补 6px 内边距同时用同样的负外边距抵消，
+ * 视觉排布一模一样，实际命中区从 17px 涨到 29px，
+ * 也不会和相邻链接（间距 12px）的点击区重叠。
+ */
+const LINK_HIT = 'inline-block py-1.5 -my-1.5 transition-colors';
+
 export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
   const pathname = usePathname();
   const isLanding = pathname?.includes('/noise-barrier');
@@ -44,15 +55,15 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
           <div className="flex flex-wrap justify-center items-center gap-4 text-sm mb-4">
             <span>Angu Wire Mesh</span>
             <span className="text-slate-700">|</span>
-            <a href={`tel:${phone.replace(/[^0-9+]/g, '')}`} className="hover:text-white transition-colors">{phone}</a>
+            <a href={`tel:${phone.replace(/[^0-9+]/g, '')}`} className={`${LINK_HIT} hover:text-white`}>{phone}</a>
             <span className="text-slate-700">|</span>
-            <a href={`mailto:${email}`} className="hover:text-white transition-colors">{email}</a>
+            <a href={`mailto:${email}`} className={`${LINK_HIT} hover:text-white`}>{email}</a>
           </div>
           {/* 落地页也要能点到合规页：Google 审核和客户尽调都会看有没有隐私政策与服务条款 */}
           <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 text-xs text-slate-500 mb-3">
-            <Link href={`/${locale}/privacy`} className="hover:text-white transition-colors">{tLabel('隐私政策', 'Privacy Policy', locale)}</Link>
+            <Link href={`/${locale}/privacy`} className={`${LINK_HIT} hover:text-white`}>{tLabel('隐私政策', 'Privacy Policy', locale)}</Link>
             <span aria-hidden="true">|</span>
-            <Link href={`/${locale}/terms`} className="hover:text-white transition-colors">{tLabel('服务条款', 'Terms of Service', locale)}</Link>
+            <Link href={`/${locale}/terms`} className={`${LINK_HIT} hover:text-white`}>{tLabel('服务条款', 'Terms of Service', locale)}</Link>
           </div>
           <p className="text-xs text-slate-500">{copyright}</p>
         </div>
@@ -115,7 +126,7 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
             <ul className="space-y-3 text-sm">
               {categories.length > 0 ? categories.map((cat) => (
                 <li key={cat.slug}>
-                  <Link href={categoryHref(locale, cat.slug)} className="text-slate-400 hover:text-white transition-colors">
+                  <Link href={categoryHref(locale, cat.slug)} className={`${LINK_HIT} text-slate-400 hover:text-white`}>
                     {cat.names[locale as 'en'|'zh'] || cat.names.en}
                   </Link>
                 </li>
@@ -135,7 +146,7 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
                 {label: tLabel('联系我们', 'Contact Us', locale), href: `/${locale}/contact`},
               ].map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="text-slate-400 hover:text-white transition-colors">{item.label}</Link>
+                  <Link href={item.href} className={`${LINK_HIT} text-slate-400 hover:text-white`}>{item.label}</Link>
                 </li>
               ))}
             </ul>
@@ -172,13 +183,13 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-slate-400">{copyright}</p>
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-slate-400">
-            <Link href={`/${locale}/download`} className="hover:text-white transition-colors">{tLabel('下载中心', 'Downloads', locale)}</Link>
+            <Link href={`/${locale}/download`} className={`${LINK_HIT} hover:text-white`}>{tLabel('下载中心', 'Downloads', locale)}</Link>
             <span aria-hidden="true">|</span>
-            <Link href={`/${locale}/service/faq`} className="hover:text-white transition-colors">{tLabel('常见问题', 'FAQ', locale)}</Link>
+            <Link href={`/${locale}/service/faq`} className={`${LINK_HIT} hover:text-white`}>{tLabel('常见问题', 'FAQ', locale)}</Link>
             <span aria-hidden="true">|</span>
-            <Link href={`/${locale}/privacy`} className="hover:text-white transition-colors">{tLabel('隐私政策', 'Privacy Policy', locale)}</Link>
+            <Link href={`/${locale}/privacy`} className={`${LINK_HIT} hover:text-white`}>{tLabel('隐私政策', 'Privacy Policy', locale)}</Link>
             <span aria-hidden="true">|</span>
-            <Link href={`/${locale}/terms`} className="hover:text-white transition-colors">{tLabel('服务条款', 'Terms of Service', locale)}</Link>
+            <Link href={`/${locale}/terms`} className={`${LINK_HIT} hover:text-white`}>{tLabel('服务条款', 'Terms of Service', locale)}</Link>
           </div>
         </div>
       </div>

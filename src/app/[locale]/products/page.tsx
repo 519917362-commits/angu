@@ -1,47 +1,32 @@
 import { generatePageMeta } from '@/lib/seo-utils';
-import { categoryHref, PILLARS } from '@/lib/pillars';
+import { categoryHref } from '@/lib/pillars';
 import { getCatalog, getSiteConfig } from '@/lib/api';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import type { Product, Category } from '@/types/product';
-import { ProductCard } from '@/components/products/ProductCard';
+import { ProductExplorer } from '@/components/products/ProductExplorer';
 import { MobileCategoryBar } from '@/components/products/MobileCategoryBar';
 import { tLabel } from '@/lib/i18n';
 import { YEARS_LABEL } from '@/lib/company';
 
-export async function generateMetadata({ params, searchParams }: {
+/**
+ * 这个页面刻意不读 searchParams。
+ *
+ * 只要读了，Next 就把整条路由判成动态渲染，响应头变成
+ * `Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate`——
+ * 每次访问都要现场渲一遍，CDN 也缓存不了（实测冷 TTFB 3.3s）。
+ * 而列表内容对所有访客都一样，差别只在筛选条件，那属于浏览器该干的活，
+ * 交给 ProductExplorer 后这里就能命中 ISR 的 s-maxage=300。
+ *
+ * 代价是 `?category=` 不再能改变服务端输出的 canonical 与 noindex。
+ * 已确认站内没有链接指向 `?category=`（分类条与侧栏都指向品类支柱页），
+ * 这些参数只会从旧书签或外部链接进来，canonical 统一指向 /products 不会造成内容重复。
+ */
+export async function generateMetadata({ params }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const { category, search } = await searchParams;
-  const slug = typeof category === 'string' ? category : undefined;
-
-  // 注意 generatePageMeta 是 async 的：这里必须 await 再展开。
-  // 直接 {...generatePageMeta(...)} 展开的是 Promise（自身无可枚举属性），
-  // 结果只剩下面追加的 robots，title / description / canonical 全部消失。
-  const meta = await (async () => {
-    // /products?category=xx 只是筛选视图，没有独立内容，canonical 必须指向
-    // 对应的品类落地页（/en/gabion 等），否则它会和 /products 抢同一批词、
-    // 并且把「自己指向父页」的自我否决信号发给 Google。
-    // 这里刻意不用 301：广告最终到达网址可能带 gclid，重定向会丢掉归因参数。
-    if (slug) {
-      const landing = `/${locale}/${slug}`;
-      const pillar = (PILLARS as Record<string, Record<string, {metaTitle: string; metaDesc: string}>>)[slug]?.[locale]
-        ?? (PILLARS as Record<string, Record<string, {metaTitle: string; metaDesc: string}>>)[slug]?.en;
-      return generatePageMeta('products', locale, landing, pillar
-        ? { title: pillar.metaTitle, description: pillar.metaDesc }
-        : undefined);
-    }
-    return generatePageMeta('products', locale, `/${locale}/products`);
-  })();
-
-  // 站内搜索结果页不进索引：结果是查询串的函数，收录等于开放无限 URL 空间，
-  // 又会和产品详情页抢同一批关键词。canonical 已指向 /products，这里再补 noindex。
-  if (typeof search === 'string' && search.trim()) {
-    return {...meta, robots: {index: false, follow: true}};
-  }
-  return meta;
+  return generatePageMeta('products', locale, `/${locale}/products`);
 }
 
 function CategorySidebar({
@@ -104,17 +89,10 @@ function CategorySidebar({
 
 export default async function ProductsPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { locale } = await params;
-  const { category: categoryParam, search: searchParam } = await searchParams;
-  const categorySlug = typeof categoryParam === 'string' ? categoryParam : undefined;
-  // 搜索词来自 URL，长度先截断再匹配，避免超长参数拖慢全表过滤
-  const searchQuery = (typeof searchParam === 'string' ? searchParam : '').trim().slice(0, 80);
-  const needle = searchQuery.toLowerCase();
 
   const [catalog, siteConfig] = await Promise.all([
     // 列表页只渲染 name/shortDesc/image/moq/price 卡片，不读正文/FAQ/SEO 大字段
@@ -124,23 +102,6 @@ export default async function ProductsPage({
 
   const products = catalog?.products || [];
   const categories = catalog?.categories || [];
-
-  // 搜索匹配产品名、型号 slug、短描述与品类名——
-  // 采购常常直接搜型号（"2x1x1"）或材料（"galvanized"），只匹配标题会大量漏检。
-  const matchesSearch = (p: Product): boolean => {
-    if (!needle) return true;
-    const cat = categories.find((c) => c.slug === p.categorySlug);
-    const haystack = [
-      p.names?.[locale], p.names?.en, p.slug,
-      p.shortDescriptions?.[locale], p.shortDescriptions?.en,
-      cat?.names?.[locale], cat?.names?.en,
-    ];
-    return haystack.some((v) => String(v || '').toLowerCase().includes(needle));
-  };
-
-  const filteredProducts = products.filter(
-    (p) => (!categorySlug || p.categorySlug === categorySlug) && matchesSearch(p)
-  );
 
   // Sort categories by product count desc
   const sortedCategories = [...categories].sort((a, b) => (b.productCount || 0) - (a.productCount || 0));
@@ -315,44 +276,6 @@ export default async function ProductsPage({
               <p>{seoIntro}</p>
             </div>
 
-            {/* 站内搜索：首页 WebSite 结构化数据里声明了 SearchAction，目标就是
-                这个 ?search= 参数。之前参数没人读，搜索框提交后仍是全量列表，
-                等于对外承诺了一个不存在的功能。 */}
-            <form
-              action={`/${locale}/products`}
-              method="get"
-              role="search"
-              className="mt-5 flex gap-2 max-w-md"
-            >
-              {categorySlug && <input type="hidden" name="category" value={categorySlug} />}
-              <div className="relative flex-1">
-                <svg
-                  className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
-                </svg>
-                <input
-                  type="search"
-                  name="search"
-                  defaultValue={searchQuery}
-                  maxLength={80}
-                  placeholder={tLabel('搜索产品名称或型号，如 gabion 2x1x1', 'Search by product name or model, e.g. gabion 2x1x1', locale)}
-                  aria-label={tLabel('搜索产品', 'Search products', locale)}
-                  className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-base sm:text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                />
-              </div>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors flex-shrink-0"
-              >
-                {tLabel('搜索', 'Search', locale)}
-              </button>
-            </form>
-
             {/* Category quick-nav pills — 指向品类支柱页而不是 ?category= 参数页，
                 参数页 canonical 指向 /products，拿不到排名；支柱页才能承接品类词 */}
             <nav className="flex flex-wrap gap-2 mt-4" aria-label={tLabel('产品分类快速导航', 'Product category quick navigation', locale)}>
@@ -371,88 +294,28 @@ export default async function ProductsPage({
 
           {/* ========== Products Grid ========== */}
           <div className="flex gap-8 pt-2 pb-10">
+            {/* 当前分类在服务端已无从得知（页面不再读 searchParams），
+                侧栏只保留「全部产品」选中态；分类导航本身走上面的 pills 与支柱页 */}
             <CategorySidebar
               categories={sortedCategories}
               products={products}
-              currentSlug={categorySlug}
+              currentSlug={undefined}
               locale={locale}
             />
 
             <div className="flex-1 min-w-0">
               <MobileCategoryBar
                 categories={sortedCategories}
-                currentSlug={categorySlug}
+                currentSlug={undefined}
                 locale={locale}
               />
 
-              <div className="mb-6 flex items-center justify-between">
-                <p className="text-slate-600 text-sm">
-                  {locale === 'zh'
-                    ? `显示 ${filteredProducts.length} 个产品`
-                    : locale === 'vi'
-                    ? `Hiển thị ${filteredProducts.length} sản phẩm`
-                    : locale === 'th'
-                    ? `แสดง ${filteredProducts.length} สินค้า`
-                    : `Showing ${filteredProducts.length} products`}
-                  {categorySlug && (
-                    <span>
-                      {tLabel('，分类：', ' in ', locale)}
-                      <span className="font-semibold text-blue-600">
-                        {categories.find((c) => c.slug === categorySlug)?.names[locale] ||
-                          categories.find((c) => c.slug === categorySlug)?.names.en ||
-                          categorySlug}
-                      </span>
-                    </span>
-                  )}
-                  {searchQuery && (
-                    <span>
-                      {tLabel('，匹配：', ' matching ', locale)}
-                      <span className="font-semibold text-blue-600">“{searchQuery}”</span>
-                      {' · '}
-                      <Link href={`/${locale}/products`} className="text-blue-600 hover:underline">
-                        {tLabel('清除', 'Clear', locale)}
-                      </Link>
-                    </span>
-                  )}
-                </p>
-              </div>
-
-              {filteredProducts.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {filteredProducts.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      locale={locale}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-20 bg-white rounded-xl">
-                  <div className="text-5xl mb-4" aria-hidden="true">📦</div>
-                  <p className="text-lg font-semibold text-slate-900 mb-2">
-                    {tLabel('未找到产品', 'No products found', locale)}
-                  </p>
-                  <p className="text-slate-500 text-sm mb-6">
-                    {searchQuery
-                      ? tLabel(
-                          '换个更短的关键词试试，例如只输入 "gabion" 或 "2x1x1"。',
-                          'Try a shorter keyword — just "gabion" or "2x1x1" usually works.',
-                          locale
-                        )
-                      : tLabel(
-                          '尝试选择其他分类。',
-                          'Try selecting a different category.',
-                          locale
-                        )}
-                  </p>
-                  <Link href={`/${locale}/products`}>
-                    <button className="text-blue-600 font-medium hover:text-blue-700">
-                      ← {tLabel('查看全部产品', 'View all products', locale)}
-                    </button>
-                  </Link>
-                </div>
-              )}
+              {/* 搜索 + 计数 + 网格：客户端过滤，页面本体保持可缓存 */}
+              <ProductExplorer
+                products={products}
+                categories={sortedCategories}
+                locale={locale}
+              />
             </div>
           </div>
         </div>

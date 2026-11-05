@@ -8,21 +8,38 @@ interface ProductCardProps {
   locale: string;
 }
 
+/**
+ * 站内相对路径才能交给 next/image。后台允许把产品图填成外链，
+ * 域名不在 next.config 的 remotePatterns 白名单里会让优化器抛错、整页 500，
+ * 所以外链退回原生 <img>。
+ */
+const isLocalImage = (src?: string): boolean => !!src && src.startsWith('/');
+
 export function ProductCard({product, locale}: ProductCardProps) {
   const name = product.names[locale] || product.names.en || '';
   const shortDesc = product.shortDescriptions[locale] || product.shortDescriptions.en || '';
+  const cover = product.images?.[0];
 
   return (
     <Link href={`/${locale}/products/${product.slug}`}>
       <article className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-100 h-full flex flex-col isolate">
         <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 flex-shrink-0">
-          <Image
-            src={product.images[0]}
-            alt={name}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
-          />
+          {isLocalImage(cover) ? (
+            <Image
+              src={cover!}
+              alt={name}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : cover ? (
+            <img
+              src={cover}
+              alt={name}
+              loading="lazy"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : null}
           {product.moq && (
             <span className="absolute top-3 start-3 bg-blue-600 text-white text-xs px-2 py-1 rounded-md">
               {locale === 'zh' ? `起订量: ${product.moq}` : locale === 'vi' ? `SL tối thiểu: ${product.moq}` : locale === 'th' ? `ขั้นต่ำ: ${product.moq}` : locale === 'ms' ? `MOQ: ${product.moq}` : locale === 'ar' ? `الحد الأدنى: ${product.moq}` : `MOQ: ${product.moq}`}

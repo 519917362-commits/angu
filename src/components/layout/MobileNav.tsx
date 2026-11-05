@@ -91,13 +91,14 @@ export function MobileNav({locale, whatsapp = '8618803189797'}: MobileNavProps) 
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-4 border-b border-slate-100">
+        <div className="flex items-center justify-between ps-4 pe-2 py-3 border-b border-slate-100">
           <span className="font-bold text-lg text-slate-900">
             {locale === 'ms' ? 'Menu' : locale === 'ar' ? 'القائمة' : 'Menu'}
           </span>
+          {/* p-3 + 20px 图标 = 44px 命中区；header 的 py 相应从 4 收到 3，总高度不变 */}
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+            className="p-3 hover:bg-slate-100 rounded-full transition-colors"
             aria-label="Close menu"
           >
             <X className="w-5 h-5 text-slate-500" />
@@ -108,7 +109,7 @@ export function MobileNav({locale, whatsapp = '8618803189797'}: MobileNavProps) 
         <div className="px-4 py-3 border-b border-slate-100">
           <button
             onClick={() => setIsLangOpen(!isLangOpen)}
-            className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 transition-colors"
+            className="flex items-center gap-2 py-1.5 -my-1.5 text-sm text-slate-600 hover:text-blue-600 transition-colors"
           >
             <Globe className="w-4 h-4" />
             <span>{LANGUAGE_FLAGS[locale]?.flag} {LANGUAGE_FLAGS[locale]?.nativeName}</span>
