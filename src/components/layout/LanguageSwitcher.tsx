@@ -58,7 +58,7 @@ export function LanguageSwitcher({locale}: LanguageSwitcherProps) {
     <div className="relative" ref={wrapRef}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-colors"
+        className="flex items-center gap-1.5 px-2 sm:px-3 py-2.5 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 rounded-lg transition-colors"
       >
         <span className="text-base">{current.flag}</span>
         <span className="hidden sm:inline">{current.label}</span>
