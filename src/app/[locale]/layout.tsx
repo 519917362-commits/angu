@@ -178,45 +178,16 @@ export default async function LocaleLayout({
       'Stainless Steel Rope Net',
       'Crowd Barrier',
     ],
-    // Organization-level return policy (white paper §MerchantReturnPolicy)
-    // B2B custom-manufactured industrial goods — returns not accepted.
-    // Per spec: product-level policies override this; only add per-product
-    // overrides when a subset of products differ from this global policy.
-    hasMerchantReturnPolicy: [
-      {
-        '@type': 'MerchantReturnPolicy',
-        applicableCountry: 'US',
-        returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
-      },
-      {
-        '@type': 'MerchantReturnPolicy',
-        applicableCountry: 'GB',
-        returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
-      },
-      {
-        '@type': 'MerchantReturnPolicy',
-        applicableCountry: 'AE',
-        returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
-      },
-      {
-        '@type': 'MerchantReturnPolicy',
-        applicableCountry: 'AU',
-        returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
-      },
-    ],
-    // Organization-level shipping settings (white paper §OfferShippingDetails)
-    // FOB Tianjin: seller covers production → delivery to port.
-    // Ocean freight is arranged by buyer; handling time is shown here.
-    shippingDetails: [
-      {
-        '@type': 'OfferShippingDetails',
-        deliveryTime: {
-          '@type': 'ShippingDeliveryTime',
-          handlingTime: { '@type': 'QuantitativeValue', minValue: 7, maxValue: 15, unitCode: 'DAY' },
-          transitTime: { '@type': 'QuantitativeValue', minValue: 15, maxValue: 40, unitCode: 'DAY' },
-        },
-      },
-    ],
+    // LocalBusiness 富结果里 Google 一直提示「未填写 priceRange」（非严重）。
+    // 工厂直销按吨/按平米报价，给不出精确单价，用一个粗略价位段即可。
+    priceRange: '$$',
+    // 2026-11-11 移除 hasMerchantReturnPolicy / shippingDetails。
+    // 这两个属性在 schema.org 里的 domain 是 Offer / Product，挂在 Organization
+    // 上属于类型放错位置。Google 侧一直判「组织 / 本地商家 / 退货政策」有效
+    // （Rich Results Test 实测），但 Semrush 按 schema.org 严格校验，
+    // 每页各报 1~2 项，全站 224 页累计 174 条噪音，把真正的错误全淹了。
+    // 本站无在线下单流程，Merchant 的运费与退货数据没有落点，因此不搬到 Offer 上；
+    // 将来若接入商品级结构化数据，再挂到 Product.offers 里（那里才是合法位置）。
   };
 
   return (

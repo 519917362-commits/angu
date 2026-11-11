@@ -315,7 +315,11 @@ export default async function NoiseBarrierPage({
       '@type': 'CreativeWork',
       name: `${title} — ${location}`,
       description: spec,
-      about: { '@type': 'Product', name: 'Noise Barrier', category: 'Noise Barrier' },
+      // about 用 Thing，不要用 Product：Product 节点会被 Google 当「产品摘要」校验，
+      // 而它要求 offers / review / aggregateRating 三选一。案例库只有规格没有报价，
+      // 硬标 Product 就是 6 条「产品摘要无效」（Rich Results Test 实测确认）。
+      // 案例讲的是「某地交付了什么项目」，本来也不是商品，用 Thing 语义更准。
+      about: { '@type': 'Thing', name: 'Noise Barrier' },
       locationCreated: { '@type': 'Place', name: location },
       ...(img ? { image: `https://www.angumesh.com${img}` } : {}),
       publisher: { '@id': 'https://www.angumesh.com/#organization' },

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { routing } from '@/lib/routing';
+import { routing, locales } from '@/lib/routing';
 import { getCatalog } from '@/lib/api';
 import { ProductCard } from '@/components/products/ProductCard';
 import { PILLARS, PILLAR_SLUGS, PILLAR_OG_IMAGE, type PillarSlug } from '@/lib/pillars';
@@ -52,7 +52,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       canonical: `${BASE_URL}/${locale}/${category}`,
       languages: {
         'x-default': `${BASE_URL}/en/${category}`,
-        ...Object.fromEntries(routing.locales.map((l) => [l, `${BASE_URL}/${l}/${category}`])),
+        // 只能用 locales（4 个全量语种）——partialLocales（ms / ar）没有这四个品类页，
+        // /ms/fence 这类地址被 proxy.ts 308 回 /en。若把它们写进 hreflang，
+        // hreflang 指向重定向地址，Google 会整簇忽略（Semrush 记作 16 条 hreflang 错误）。
+        ...Object.fromEntries(locales.map((l) => [l, `${BASE_URL}/${l}/${category}`])),
       },
     },
     openGraph: {

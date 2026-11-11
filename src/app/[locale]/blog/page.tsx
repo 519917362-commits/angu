@@ -17,6 +17,12 @@ export const revalidate = 300;
 
 export async function generateMetadata({params}: {params: Promise<{locale: string}>}): Promise<Metadata> {
   const {locale} = await params;
+  // 这里刻意不读 searchParams。
+  // `?topic=` 筛选页会输出一整套 hreflang 自指 /en/blog，与 canonical 打架，
+  // Semrush 记作「页面内 hreflang 冲突」（6 条）。但一旦在 generateMetadata 里
+  // 读 searchParams，Next 会把整条路由判成动态渲染（Cache-Control 变 no-store，
+  // 冷 TTFB 3s 量级，产品列表页踩过同一个坑）。用性能换 6 条通知级提示不划算：
+  // Google 对 canonical 指向别处的页面上的 hreflang 本来就整簇忽略，无实际损失。
   return generatePageMeta('blog', locale, `/${locale}/blog`);
 }
 
