@@ -177,8 +177,8 @@ export async function generatePageMeta(
     image?: string;
     ogType?: 'website' | 'article';
     /**
-     * 覆盖 hreflang 列表。默认只声明四个全量翻译的语种；
-     * ms / ar 这类只做了部分页面的语种，由调用方显式传入 allLocales，
+     * 覆盖 hreflang 列表。默认声明四个全量翻译的语种；
+     * 博客长文这类只有部分译文的内容，由调用方传入真实译文语种，
      * 避免在没有对应译文的页面上互相声明 hreflang。
      */
     altLocales?: readonly string[];
@@ -235,7 +235,7 @@ export async function generatePageMeta(
       url: `${BASE_URL}${path}`,
       siteName: 'Angu Wire Mesh',
       locale:
-        {en: 'en_US', zh: 'zh_CN', vi: 'vi_VN', th: 'th_TH', ms: 'ms_MY', ar: 'ar_AE'}[locale] ||
+        {en: 'en_US', zh: 'zh_CN', vi: 'vi_VN', th: 'th_TH'}[locale] ||
         'en_US',
       type: overrides?.ogType || 'website',
       ...(ogImageUrl

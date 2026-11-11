@@ -71,8 +71,6 @@ export async function generateMetadata({params}: {params: Promise<{locale: strin
         zh: 'https://www.angumesh.com/zh',
         vi: 'https://www.angumesh.com/vi',
         th: 'https://www.angumesh.com/th',
-        ms: 'https://www.angumesh.com/ms',
-        ar: 'https://www.angumesh.com/ar',
       },
     },
     openGraph: {

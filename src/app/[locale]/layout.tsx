@@ -35,8 +35,6 @@ const HTML_LANG: Record<string, string> = {
   zh: 'zh-CN',
   vi: 'vi',
   th: 'th',
-  ms: 'ms',
-  ar: 'ar',
 };
 
 export const metadata: Metadata = {

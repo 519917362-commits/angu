@@ -1,6 +1,12 @@
 /**
  * ms / ar 试水语种 —— 内容覆盖层
  *
+ * ⚠️ ms / ar 已于 2026-11-11 下线，/ms 与 /ar 现在一律 308 到对应的 /en 路径
+ * （见 src/proxy.ts）。本文件不再有任何渲染入口，各调用点用 `[locale]` 取值，
+ * 四个正式语种取不到键会自动回落英文，属于无副作用的死数据。
+ * 如需彻底清理，删掉本文件并移除 4 处 import 即可：
+ * app/[locale]/page.tsx、ProjectGallery、CompanyStrength、ProductMatrix。
+ *
  * 背景：数据库里所有内容表（products / product_categories / application_scenarios /
  * why_choose_us / noise_barrier_projects / about_certifications / banners / site_config）
  * 只有 en / zh / vi / th 四套字段，没有 ms / ar 列。试水语种不打算为此改表结构

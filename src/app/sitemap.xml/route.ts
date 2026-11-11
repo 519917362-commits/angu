@@ -1,4 +1,4 @@
-import { locales as fullLocales, partialLocales, allLocales, translatedPaths } from '@/lib/routing';
+import { locales as fullLocales } from '@/lib/routing';
 import { availableBlogLocales } from '@/lib/blog-locales';
 import { REVALIDATE_SECONDS, SITE_DATA_TAG } from '@/lib/api';
 import { PILLAR_SLUGS } from '@/lib/pillars';
@@ -36,7 +36,7 @@ function urlBlock(opts: {
   changefreq: string;
   priority: string;
   lastmod?: string;
-  /** hreflang 互指范围，默认四个全量语种；ms/ar 只参与已翻译页面的互指 */
+  /** hreflang 互指范围，默认四个全量语种 */
   altLocales?: readonly string[];
 }): string {
   const altLocales = opts.altLocales ?? fullLocales;
@@ -116,9 +116,7 @@ export async function GET() {
   for (const locale of fullLocales) {
     // Static pages — all get site lastmod
     for (const [path, freq, pri] of pages) {
-      // 首页与声屏障落地页已有 ms/ar 译文，hreflang 扩到全部六语
-      const altLocales = translatedPaths.includes(path) ? allLocales : undefined;
-      urls.push(urlBlock({ locale, path, changefreq: freq, priority: pri, lastmod: SITE_LASTMOD, altLocales }));
+      urls.push(urlBlock({ locale, path, changefreq: freq, priority: pri, lastmod: SITE_LASTMOD }));
     }
     // Category filter pages (/products?category=xx) 不进 sitemap：
     // 这些页面的 canonical 指向 /products，提交它们与 canonical 自相矛盾且浪费抓取配额
@@ -146,20 +144,6 @@ export async function GET() {
         lastmod: fmtDate(post.updated_at || post.publish_time || post.created_at) || SITE_LASTMOD,
         // hreflang 同样只用真实译文，否则整簇互指会被 Google 忽略
         altLocales: translated,
-      }));
-    }
-  }
-
-  // partialLocales（ms / ar）：只提交真正翻译过的页面，其余路径由 proxy 308 回 /en
-  for (const locale of partialLocales) {
-    for (const path of translatedPaths) {
-      urls.push(urlBlock({
-        locale,
-        path,
-        changefreq: 'weekly',
-        priority: '0.8',
-        lastmod: SITE_LASTMOD,
-        altLocales: allLocales,
       }));
     }
   }

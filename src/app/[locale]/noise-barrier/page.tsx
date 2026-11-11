@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { routing, isPartialLocale } from '@/lib/routing';
+import { routing } from '@/lib/routing';
 import { getSiteConfig, getCatalog, getNoiseBarrierData, getBlogPosts } from '@/lib/api';
 import { HeroSection } from '@/components/noise-barrier/HeroSection';
 import { TrustBadges } from '@/components/noise-barrier/TrustBadges';
@@ -81,11 +81,8 @@ export async function generateMetadata({
       const v = cfg[key];
       if (!v) return undefined;
       const map = v as Record<string, string | undefined>;
-      // DB 只有 en / zh / vi / th 四列。ms / ar 取不到时**不能**回落 en，
-      // 否则马来语、阿拉伯语页面的 title 和 description 会变成英文，
-      // 与页面正文语言不符（Google 依据 title 判断页面主题与语种）。
-      // 这类语种留空，交给下面代码里的 seoContent[locale] 兜底。
-      const t = map[locale] || (isPartialLocale(locale) ? undefined : map.en);
+      // DB 只有 en / zh / vi / th 四列，与实际语种一一对应，取不到就回落英文
+      const t = map[locale] || map.en;
       const s = t ? String(t).trim() : '';
       return s.length >= 2 ? s : undefined;
     };
@@ -95,7 +92,7 @@ export async function generateMetadata({
   } catch { /* fallback to hardcoded */ }
 
   const ogLocaleMap: Record<string, string> = {
-    en: 'en_US', zh: 'zh_CN', vi: 'vi_VN', th: 'th_TH', ms: 'ms_MY', ar: 'ar_AE',
+    en: 'en_US', zh: 'zh_CN', vi: 'vi_VN', th: 'th_TH',
   };
   const ogLocale = ogLocaleMap[locale] || 'en_US';
   const altLocales = Object.entries(ogLocaleMap).filter(([l]) => l !== locale);

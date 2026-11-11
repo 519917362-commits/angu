@@ -2,7 +2,6 @@
 
 import {useState, useEffect, useRef} from 'react';
 import {usePathname, useRouter} from 'next/navigation';
-import {isPartialLocale, translatedPaths} from '@/lib/routing';
 
 interface LanguageSwitcherProps {
   locale: string;
@@ -13,8 +12,6 @@ const languages = [
   {code: 'zh', label: '中文', flag: '🇨🇳'},
   {code: 'vi', label: 'Tiếng Việt', flag: '🇻🇳'},
   {code: 'th', label: 'ไทย', flag: '🇹🇭'},
-  {code: 'ms', label: 'Bahasa Malaysia', flag: '🇲🇾'},
-  {code: 'ar', label: 'العربية', flag: '🇸🇦'},
 ];
 
 // 语种与路径白名单统一来自 lib/routing.ts，避免这里的常量与 proxy 的 308 规则漂移
@@ -47,9 +44,10 @@ export function LanguageSwitcher({locale}: LanguageSwitcherProps) {
 
   function switchLanguage(newLocale: string) {
     if (!pathname) return;
+    // 四个语种都有完整译文，去掉旧前缀后原路径直拼即可。
+    // 仍要剥掉已下线的 ms/ar 前缀：老链接进来时 pathname 可能带着它。
     const stripped = pathname.replace(/^\/(en|zh|vi|th|ms|ar)(?=\/|$)/, '').replace(/\/+$/, '');
-    const target = isPartialLocale(newLocale) && !(translatedPaths as readonly string[]).includes(stripped) ? '' : stripped;
-    router.replace(`/${newLocale}${target}`);
+    router.replace(`/${newLocale}${stripped}`);
     setOpen(false);
   }
 

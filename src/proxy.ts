@@ -1,29 +1,30 @@
 // Proxy (formerly middleware)
 // File renamed in Next.js 16: middleware.ts → proxy.ts
 //
-// 作用：partialLocales（ms / ar）目前只翻译了 translatedPaths 里的页面。
-// 其余路径若直接渲染，会用英文内容填一个 /ms/ 或 /ar/ 的 URL，属于典型的
-// 半翻译重复内容。这里统一 308 回退到对应的 /en 路径，让 Google 只收录
-// 真正翻译过的那两页。
+// 作用：ms / ar 两个试水语种已于 2026-11-11 下线。它们当时只翻译了首页与
+// 声屏障落地页，其余路径本来就要 308 回 /en，等于半翻译的重复内容。
+//
+// 现在这两个前缀一律 308 到对应的 /en 路径：
+// - /ms                → /en
+// - /ms/noise-barrier  → /en/noise-barrier
+// 用 308 而不是 404，是为了让外链、书签、GSC 里的历史索引都能落到有效页，
+// 把这两个语种累积的信号并回英文页。
 //
 // matcher 只覆盖 /ms 与 /ar，其余语种完全不走这一层，不影响现有站点性能。
 
 import {NextResponse} from 'next/server';
 import type {NextRequest} from 'next/server';
-import {isTranslatedPath} from '@/lib/routing';
+import {retiredLocales} from '@/lib/routing';
+
+const RETIRED_PREFIX = new RegExp(`^/(${retiredLocales.join('|')})(?=/|$)`);
 
 export function proxy(request: NextRequest) {
   const {pathname} = request.nextUrl;
-
-  if (!isTranslatedPath(pathname)) {
-    // /ms/products → /en/products；/ms → /en
-    const rest = pathname.replace(/^\/(ms|ar)(?=\/|$)/, '');
-    const url = request.nextUrl.clone();
-    url.pathname = `/en${rest}`;
-    return NextResponse.redirect(url, 308);
-  }
-
-  return NextResponse.next();
+  // 同时去掉尾斜杠：/ms/ 直接到 /en，不要先到 /en/ 再被 trailingSlash 规则跳一次
+  const rest = pathname.replace(RETIRED_PREFIX, '').replace(/\/+$/, '');
+  const url = request.nextUrl.clone();
+  url.pathname = `/en${rest}`;
+  return NextResponse.redirect(url, 308);
 }
 
 export const config = {
