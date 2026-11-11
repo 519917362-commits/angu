@@ -1,5 +1,6 @@
 'use client';
 import { IconEmail, IconPhone } from '../icons';
+import {localeHref} from '@/lib/routing';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -33,7 +34,7 @@ export function HeaderLanding({ locale, logoUrl, email, phone, ctaText, socials 
         <div className="flex items-center justify-between py-2 sm:py-2.5 gap-3 sm:gap-4">
           {/* Logo + 品牌信息（移动端补公司名与联系方式，原手机端这块是空的） */}
           <div className="flex items-center gap-2 min-w-0 md:shrink-0">
-            <Link href={`/${locale}`} className="flex-shrink-0" aria-label="Angu Wire Mesh">
+            <Link href={localeHref(locale, '')} className="flex-shrink-0" aria-label="Angu Wire Mesh">
               {logoUrl ? (
                 <img src={logoUrl} alt="Angu Wire Mesh" width={80} height={80} className="h-9 w-auto" />
               ) : (
@@ -44,7 +45,7 @@ export function HeaderLanding({ locale, logoUrl, email, phone, ctaText, socials 
             </Link>
             <div className="min-w-0">
               <Link
-                href={`/${locale}`}
+                href={localeHref(locale, '')}
                 className="block font-bold text-[13px] leading-[1.15] sm:text-base sm:leading-tight text-slate-900 truncate"
               >
                 Angu Wire Mesh

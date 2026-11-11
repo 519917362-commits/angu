@@ -1,6 +1,7 @@
 'use client';
 
 import {useState, useEffect} from 'react';
+import {localeHref} from '@/lib/routing';
 import {createPortal} from 'react-dom';
 import Link from 'next/link';
 import {useRouter, usePathname} from 'next/navigation';
@@ -43,13 +44,13 @@ export function MobileNav({locale, whatsapp = '8618803189797'}: MobileNavProps) 
   const isZh = locale === 'zh';
 
   const navItems = [
-    {key: 'home', href: `/${locale}`, label: tLabel('首页', 'Home', locale)},
-    {key: 'products', href: `/${locale}/products`, label: tLabel('产品', 'Products', locale)},
-    {key: 'solutions', href: `/${locale}/solutions`, label: tLabel('解决方案', 'Solutions', locale)},
-    {key: 'aboutUs', href: `/${locale}/about`, label: tLabel('关于我们', 'About Us', locale)},
-    {key: 'services', href: `/${locale}/service`, label: tLabel('服务', 'Services', locale)},
-    {key: 'blog', href: `/${locale}/blog`, label: tLabel('博客', 'Blog', locale)},
-    {key: 'contactUs', href: `/${locale}/contact`, label: tLabel('联系我们', 'Contact Us', locale)},
+    {key: 'home', href: localeHref(locale, ''), label: tLabel('首页', 'Home', locale)},
+    {key: 'products', href: localeHref(locale, '/products'), label: tLabel('产品', 'Products', locale)},
+    {key: 'solutions', href: localeHref(locale, '/solutions'), label: tLabel('解决方案', 'Solutions', locale)},
+    {key: 'aboutUs', href: localeHref(locale, '/about'), label: tLabel('关于我们', 'About Us', locale)},
+    {key: 'services', href: localeHref(locale, '/service'), label: tLabel('服务', 'Services', locale)},
+    {key: 'blog', href: localeHref(locale, '/blog'), label: tLabel('博客', 'Blog', locale)},
+    {key: 'contactUs', href: localeHref(locale, '/contact'), label: tLabel('联系我们', 'Contact Us', locale)},
   ];
 
   function handleLangSelect(newLocale: string) {

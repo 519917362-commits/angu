@@ -6,6 +6,8 @@
  * 商业搜索词最该命中的地方。noise-barrier 已有独立定制页，不在此列。
  */
 
+import {localeHref} from '@/lib/routing';
+
 export const PILLAR_SLUGS = ['gabion', 'fence', 'wire-mesh', 'protection-net'] as const;
 export type PillarSlug = (typeof PILLAR_SLUGS)[number];
 
@@ -30,7 +32,11 @@ export const CATEGORY_LANDING = {
 /** 品类链接：有落地页走落地页，没有则回落参数页（后端新增品类时不会 404）。 */
 export function categoryHref(locale: string, slug: string): string {
   const landing = (CATEGORY_LANDING as Record<string, string>)[slug];
-  return landing ? `/${locale}/${landing}` : `/${locale}/products?category=${slug}`;
+  // 统一走 localeHref：partialLocales（ms/ar）不能拿到的路径直接落 /en，
+  // 避免 /ms/fence 这类地址被 proxy 308 弹一次
+  return landing
+    ? localeHref(locale, `/${landing}`)
+    : localeHref(locale, `/products?category=${slug}`);
 }
 
 export interface PillarCopy {

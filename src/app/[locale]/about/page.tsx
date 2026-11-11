@@ -558,7 +558,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                         {person.phone}
                       </a>
                       {person.whatsapp && (
-                        <a href={`https://wa.me/${(person.whatsapp || '').replace(/[^0-9+]/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-green-600 hover:text-green-700 transition-colors">
+                        <a href={`https://wa.me/${(person.whatsapp || '').replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-green-600 hover:text-green-700 transition-colors">
                           <IconWhatsApp className="w-3.5 h-3.5 flex-shrink-0" />
                           WhatsApp
                         </a>

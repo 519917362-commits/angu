@@ -38,12 +38,15 @@ export const defaultLocale = 'en';
 
 /**
  * 生成站内链接。
- * partialLocales 只有个别页面有译文，其余路径会被 proxy 308 到 /en，
- * 因此这类语种的链接直接指向 /en，避免多一跳重定向。
+ *
+ * partialLocales 只有 translatedPaths 里的页面有译文：
+ * - 这些路径保留 /ms /ar 前缀（首页与声屏障落地页是真译文，跳到 /en 反而丢了译文）
+ * - 其余路径直接指向 /en，避免被 proxy 308 弹一次（用户少一跳、爬虫不浪费预算）
  */
 export function localeHref(locale: string, path: string): string {
-  const prefix = isPartialLocale(locale) ? defaultLocale : locale;
-  return `/${prefix}${path}`;
+  if (!isPartialLocale(locale)) return `/${locale}${path}`;
+  const rest = path.replace(/\/+$/, '');
+  return translatedPaths.includes(rest) ? `/${locale}${path}` : `/${defaultLocale}${path}`;
 }
 
 export const routing = {

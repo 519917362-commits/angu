@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { routing } from '@/lib/routing';
+import { routing, isPartialLocale } from '@/lib/routing';
 import { getSiteConfig, getCatalog, getNoiseBarrierData, getBlogPosts } from '@/lib/api';
 import { HeroSection } from '@/components/noise-barrier/HeroSection';
 import { TrustBadges } from '@/components/noise-barrier/TrustBadges';
@@ -80,8 +80,14 @@ export async function generateMetadata({
     const pick = (key: string): string | undefined => {
       const v = cfg[key];
       if (!v) return undefined;
-      const t = (v as Record<string, string | undefined>)[locale] || (v as Record<string, string | undefined>).en;
-      return t ? String(t) : undefined;
+      const map = v as Record<string, string | undefined>;
+      // DB 只有 en / zh / vi / th 四列。ms / ar 取不到时**不能**回落 en，
+      // 否则马来语、阿拉伯语页面的 title 和 description 会变成英文，
+      // 与页面正文语言不符（Google 依据 title 判断页面主题与语种）。
+      // 这类语种留空，交给下面代码里的 seoContent[locale] 兜底。
+      const t = map[locale] || (isPartialLocale(locale) ? undefined : map.en);
+      const s = t ? String(t).trim() : '';
+      return s.length >= 2 ? s : undefined;
     };
     title = pick('noise_barrier_seo_title') || seo.title;
     description = pick('noise_barrier_seo_description') || seo.description;

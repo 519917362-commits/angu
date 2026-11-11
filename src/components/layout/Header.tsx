@@ -1,5 +1,6 @@
 'use client';
 import { IconWhatsApp, IconZalo, IconLINE, IconFacebook, IconEmail, IconPhone } from '../icons';
+import {localeHref} from '@/lib/routing';
 
 import { categoryHref } from '@/lib/pillars';
 import {useState, useEffect} from 'react';
@@ -120,7 +121,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
               ≥640px 仍显示原来的公司名 + 业务副标题）。 */}
           <div className="flex items-center gap-2 min-w-0 lg:shrink-0">
             <Link
-              href={`/${locale}`}
+              href={localeHref(locale, '')}
               className="flex-shrink-0"
               aria-label="Angu Wire Mesh"
             >
@@ -134,7 +135,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
             </Link>
             <div className="min-w-0">
               <Link
-                href={`/${locale}`}
+                href={localeHref(locale, '')}
                 className="block font-bold text-[13px] leading-[1.15] sm:text-lg sm:leading-tight text-slate-900 truncate"
               >
                 Angu Wire Mesh
@@ -166,9 +167,9 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
           <nav className="hidden lg:flex items-center gap-1">
             {/* Home */}
             <Link
-              href={`/${locale}`}
+              href={localeHref(locale, '')}
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                pathname === `/${locale}` || pathname === `/${locale}/`
+                pathname === localeHref(locale, '') || pathname === localeHref(locale, '/')
                   ? 'text-blue-600 bg-blue-50'
                   : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50'
               }`}
@@ -183,7 +184,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
               onMouseLeave={() => setIsProductsOpen(false)}
             >
               <Link
-                href={`/${locale}/products`}
+                href={localeHref(locale, '/products')}
                 className={`flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                   pathname?.includes('/products')
                     ? 'text-blue-600 bg-blue-50'
@@ -208,7 +209,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
                     </Link>
                   ))}
                   <Link
-                    href={`/${locale}/products`}
+                    href={localeHref(locale, '/products')}
                     className="block px-4 py-2 text-sm text-blue-600 font-medium hover:bg-blue-50 transition-colors text-center"
                   >
                     {tLabel('查看全部产品 →', 'View All Products →', locale)}
@@ -219,7 +220,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
 
             {/* Solutions */}
             <Link
-              href={`/${locale}/solutions`}
+              href={localeHref(locale, '/solutions')}
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                 pathname?.includes('/solutions')
                   ? 'text-blue-600 bg-blue-50'
@@ -231,7 +232,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
 
             {/* About Us */}
             <Link
-              href={`/${locale}/about`}
+              href={localeHref(locale, '/about')}
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                 pathname?.includes('/about')
                   ? 'text-blue-600 bg-blue-50'
@@ -243,7 +244,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
 
             {/* Services */}
             <Link
-              href={`/${locale}/service`}
+              href={localeHref(locale, '/service')}
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                 pathname?.includes('/service')
                   ? 'text-blue-600 bg-blue-50'
@@ -255,7 +256,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
 
             {/* Blog */}
             <Link
-              href={`/${locale}/blog`}
+              href={localeHref(locale, '/blog')}
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                 pathname?.includes('/blog')
                   ? 'text-blue-600 bg-blue-50'
@@ -267,7 +268,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
 
             {/* Contact Us */}
             <Link
-              href={`/${locale}/contact`}
+              href={localeHref(locale, '/contact')}
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                 pathname?.includes('/contact')
                   ? 'text-blue-600 bg-blue-50'

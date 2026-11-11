@@ -1,6 +1,7 @@
 'use client';
 
 import {useState} from 'react';
+import {localeHref} from '@/lib/routing';
 import { categoryHref } from '@/lib/pillars';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
@@ -61,9 +62,9 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
           </div>
           {/* 落地页也要能点到合规页：Google 审核和客户尽调都会看有没有隐私政策与服务条款 */}
           <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 text-xs text-slate-500 mb-3">
-            <Link href={`/${locale}/privacy`} className={`${LINK_HIT} hover:text-white`}>{tLabel('隐私政策', 'Privacy Policy', locale)}</Link>
+            <Link href={localeHref(locale, '/privacy')} className={`${LINK_HIT} hover:text-white`}>{tLabel('隐私政策', 'Privacy Policy', locale)}</Link>
             <span aria-hidden="true">|</span>
-            <Link href={`/${locale}/terms`} className={`${LINK_HIT} hover:text-white`}>{tLabel('服务条款', 'Terms of Service', locale)}</Link>
+            <Link href={localeHref(locale, '/terms')} className={`${LINK_HIT} hover:text-white`}>{tLabel('服务条款', 'Terms of Service', locale)}</Link>
           </div>
           <p className="text-xs text-slate-500">{copyright}</p>
         </div>
@@ -139,11 +140,11 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
             <h3 className="text-white font-semibold mb-5">{tLabel('公司', 'Company', locale)}</h3>
             <ul className="space-y-3 text-sm">
               {[
-                {label: tLabel('关于我们', 'About Us', locale), href: `/${locale}/about`},
-                {label: tLabel('解决方案', 'Solutions', locale), href: `/${locale}/solutions`},
-                {label: tLabel('服务', 'Services', locale), href: `/${locale}/service`},
-                {label: tLabel('博客', 'Blog', locale), href: `/${locale}/blog`},
-                {label: tLabel('联系我们', 'Contact Us', locale), href: `/${locale}/contact`},
+                {label: tLabel('关于我们', 'About Us', locale), href: localeHref(locale, '/about')},
+                {label: tLabel('解决方案', 'Solutions', locale), href: localeHref(locale, '/solutions')},
+                {label: tLabel('服务', 'Services', locale), href: localeHref(locale, '/service')},
+                {label: tLabel('博客', 'Blog', locale), href: localeHref(locale, '/blog')},
+                {label: tLabel('联系我们', 'Contact Us', locale), href: localeHref(locale, '/contact')},
               ].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className={`${LINK_HIT} text-slate-400 hover:text-white`}>{item.label}</Link>
@@ -183,13 +184,13 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-slate-400">{copyright}</p>
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-slate-400">
-            <Link href={`/${locale}/download`} className={`${LINK_HIT} hover:text-white`}>{tLabel('下载中心', 'Downloads', locale)}</Link>
+            <Link href={localeHref(locale, '/download')} className={`${LINK_HIT} hover:text-white`}>{tLabel('下载中心', 'Downloads', locale)}</Link>
             <span aria-hidden="true">|</span>
-            <Link href={`/${locale}/service/faq`} className={`${LINK_HIT} hover:text-white`}>{tLabel('常见问题', 'FAQ', locale)}</Link>
+            <Link href={localeHref(locale, '/service/faq')} className={`${LINK_HIT} hover:text-white`}>{tLabel('常见问题', 'FAQ', locale)}</Link>
             <span aria-hidden="true">|</span>
-            <Link href={`/${locale}/privacy`} className={`${LINK_HIT} hover:text-white`}>{tLabel('隐私政策', 'Privacy Policy', locale)}</Link>
+            <Link href={localeHref(locale, '/privacy')} className={`${LINK_HIT} hover:text-white`}>{tLabel('隐私政策', 'Privacy Policy', locale)}</Link>
             <span aria-hidden="true">|</span>
-            <Link href={`/${locale}/terms`} className={`${LINK_HIT} hover:text-white`}>{tLabel('服务条款', 'Terms of Service', locale)}</Link>
+            <Link href={localeHref(locale, '/terms')} className={`${LINK_HIT} hover:text-white`}>{tLabel('服务条款', 'Terms of Service', locale)}</Link>
           </div>
         </div>
       </div>

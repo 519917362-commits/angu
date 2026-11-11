@@ -2,6 +2,7 @@
 
 import {useState, useEffect, useRef} from 'react';
 import {usePathname, useRouter} from 'next/navigation';
+import {isPartialLocale, translatedPaths} from '@/lib/routing';
 
 interface LanguageSwitcherProps {
   locale: string;
@@ -16,9 +17,7 @@ const languages = [
   {code: 'ar', label: 'العربية', flag: '🇸🇦'},
 ];
 
-// 只做了首页与声屏障落地页的语种：切过去时若当前路径没有译文，落到该语种首页
-const PARTIAL = ['ms', 'ar'];
-const TRANSLATED = ['', '/noise-barrier'];
+// 语种与路径白名单统一来自 lib/routing.ts，避免这里的常量与 proxy 的 308 规则漂移
 
 export function LanguageSwitcher({locale}: LanguageSwitcherProps) {
   const [open, setOpen] = useState(false);
@@ -49,7 +48,7 @@ export function LanguageSwitcher({locale}: LanguageSwitcherProps) {
   function switchLanguage(newLocale: string) {
     if (!pathname) return;
     const stripped = pathname.replace(/^\/(en|zh|vi|th|ms|ar)(?=\/|$)/, '').replace(/\/+$/, '');
-    const target = PARTIAL.includes(newLocale) && !TRANSLATED.includes(stripped) ? '' : stripped;
+    const target = isPartialLocale(newLocale) && !(translatedPaths as readonly string[]).includes(stripped) ? '' : stripped;
     router.replace(`/${newLocale}${target}`);
     setOpen(false);
   }
