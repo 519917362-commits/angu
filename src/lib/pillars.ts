@@ -185,17 +185,19 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
 
   fence: {
     en: {
-      metaTitle: 'Fencing Manufacturer — Chain Link, Cattle & Stadium | Angu',
+      metaTitle: 'Fencing Manufacturer — Chain Link, 358 & Temporary | Angu',
       metaDesc:
-        'Factory-direct fencing: chain link, cattle panels, stadium and crowd barriers, isolation fence. Galvanized or PVC coated, ISO 9001, MOQ from 50 m².',
+        'Factory-direct fencing: chain link, 358 anti-climb, 868 double wire, temporary fence, crowd barriers and airport perimeter. ISO 9001, MOQ from 50 m².',
       h1: 'Fencing for Farms, Stadiums and Industry',
       intro:
         'One factory for chain link, field fence, cattle panels, crowd barriers and site hoarding — we draw the wire and weld the panels ourselves. That means one specification standard across the whole project, instead of five suppliers with five different tolerances.',
       bullets: [
         'Chain link 50×50 mm, wire 2.0–4.0 mm, heights 1.0–4.0 m',
+        '358 anti-climb 76.2×12.7 mm and 868 double-wire 50×200 mm panels',
+        'Temporary fence in 6×10 ft North American and 2100×2400 mm AS 4687 sizes',
+        'Airport, prison and border perimeter on Y-posts, 3.0–4.2 m with barbed wire',
         'Cattle panels 4-gauge wire, 150×200 mm openings, tested against 2000 kg impact',
-        'Stadium and crowd barriers in 1.2 m and 2.0 m modules with interlocking feet',
-        'Hot-dip galvanized 240 g/m², PVC coated in any RAL colour',
+        'Hot-dip galvanized 240 g/m², PVC or polyester coated in any RAL colour',
       ],
       faq: [
         {
@@ -213,17 +215,19 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
       ],
     },
     zh: {
-      metaTitle: '围栏生产厂家 — 护栏网 / 牛栏网 / 体育场围网 | 安固丝网',
+      metaTitle: '围栏生产厂家 — 358 防攀爬 / 临时护栏 / 护栏网 | 安固丝网',
       metaDesc:
-        '工厂直供围栏：护栏网、牛栏网、体育场围网与人群隔离栏。热镀锌或 PVC 覆塑，ISO 9001 认证，50 平方米起订。',
+        '工厂直供围栏：护栏网、358 防攀爬、868 双丝、临时护栏、隔离护栏与人群围栏。热镀锌或 PVC 覆塑，ISO 9001，50 平方米起订。',
       h1: '牧场、场馆与工业围栏',
       intro:
         '护栏网、牛栏网、体育场围网、隔离栏、工地围挡，全部在同一家工厂完成拉丝与焊接。整项目只用一套规格标准，而不是五家供应商五种公差——这是围栏工程最容易出问题的地方。',
       bullets: [
         '护栏网 50×50 mm，丝径 2.0–4.0 mm，高度 1.0–4.0 m',
+        '358 防攀爬 76.2×12.7 mm 与 868 双丝 50×200 mm 网片',
+        '临时护栏：北美 6′×10′ 与澳洲 2100×2400 mm（AS 4687）',
+        '机场、监狱、边境隔离护栏，Y 型柱带刺绳，总高 3.0–4.2 m',
         '牛栏网 4 号丝，网孔 150×200 mm，通过 2000 kg 冲击测试',
-        '体育场围网与人群隔离栏 1.2 m / 2.0 m 模块，底部可互锁',
-        '热镀锌 240 g/m²，可按任意 RAL 色号 PVC 覆塑',
+        '热镀锌 240 g/m²，可按任意 RAL 色号 PVC 或聚酯覆塑',
       ],
       faq: [
         {
@@ -243,15 +247,17 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     vi: {
       metaTitle: 'Nhà sản xuất hàng rào — lưới B40, 358, sân vận động | Angu',
       metaDesc:
-        'Hàng rào giá xuất xưởng: lưới mắt cáo, tấm chuồng bò, hàng rào sân vận động và rào chắn đám đông. Mạ kẽm hoặc phủ PVC, ISO 9001, MOQ từ 50 m².',
+        'Hàng rào giá xuất xưởng: lưới mắt cáo, chống leo 358, lưới đôi 868, hàng rào tạm, rào chắn đám đông và vành đai sân bay. ISO 9001, MOQ từ 50 m².',
       h1: 'Hàng rào cho nông trại, sân vận động và công nghiệp',
       intro:
         'Một nhà máy duy nhất cho lưới mắt cáo, hàng rào đồng cỏ, tấm chuồng bò, rào chắn đám đông và rào công trường — chúng tôi tự kéo dây và hàn tấm. Cả dự án dùng một tiêu chuẩn kỹ thuật, thay vì năm nhà cung cấp với năm dung sai khác nhau.',
       bullets: [
         'Lưới mắt cáo 50×50 mm, dây 2,0–4,0 mm, cao 1,0–4,0 m',
+        'Chống leo 358 (76,2×12,7 mm) và lưới đôi 868 (50×200 mm)',
+        'Hàng rào tạm cỡ Bắc Mỹ 6×10 ft và cỡ Úc 2100×2400 mm (AS 4687)',
+        'Vành đai sân bay, nhà tù, biên giới trên cột chữ Y, cao 3,0–4,2 m có dây gai',
         'Tấm chuồng bò dây cỡ 4, ô 150×200 mm, chịu va đập 2000 kg',
-        'Rào chắn sân vận động module 1,2 m và 2,0 m, chân khóa liên kết',
-        'Mạ kẽm nhúng nóng 240 g/m², phủ PVC theo mọi mã RAL',
+        'Mạ kẽm nhúng nóng 240 g/m², phủ PVC hoặc polyester theo mọi mã RAL',
       ],
       faq: [
         {
@@ -269,17 +275,19 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
       ],
     },
     th: {
-      metaTitle: 'ผู้ผลิตวัสดุกั้น — ลวดตาข่าย รั้วปศุสัตว์ รั้วสนามกีฬา | Angu',
+      metaTitle: 'ผู้ผลิตวัสดุกั้น — ลวดตาข่าย 358 รั้วชั่วคราว | Angu',
       metaDesc:
-        'รั้วราคาโรงงาน: ลวดตาข่าย รั้วปศุสัตว์ รั้วสนามกีฬา และแผงกั้นฝูงชน ชุบกัลวาไนซ์หรือเคลือบ PVC ISO 9001 สั่งขั้นต่ำ 50 ตร.ม.',
+        'รั้วราคาโรงงาน: ลวดตาข่าย รั้วกันปีน 358 ลวดคู่ 868 รั้วชั่วคราว แผงกั้นฝูงชน และแนวเขตสนามบิน ISO 9001 สั่งขั้นต่ำ 50 ตร.ม.',
       h1: 'รั้วสำหรับฟาร์ม สนามกีฬา และอุตสาหกรรม',
       intro:
         'โรงงานเดียวสำหรับลวดตาข่าย รั้วทุ่ง แผงคอกวัว แผงกั้นฝูงชน และรั้วโครงการ — เราดึงลวดและเชื่อมแผงเอง ทั้งโครงการใช้มาตรฐานเดียว ไม่ใช่ห้าผู้ขายกับห้าค่าเผื่อที่ต่างกัน',
       bullets: [
         'ลวดตาข่าย 50×50 มม. ลวด 2.0–4.0 มม. สูง 1.0–4.0 ม.',
+        'แผงกันปีน 358 (76.2×12.7 มม.) และลวดคู่ 868 (50×200 มม.)',
+        'รั้วชั่วคราวขนาดอเมริกาเหนือ 6×10 ฟุต และออสเตรเลีย 2100×2400 มม. (AS 4687)',
+        'แนวเขตสนามบิน เรือนจำ ชายแดน บนเสาตัว Y สูง 3.0–4.2 ม. พร้อมลวดหนาม',
         'แผงคอกวัว ลวดเบอร์ 4 ช่อง 150×200 มม. ทดสอบรับแรงกระแทก 2000 กก.',
-        'แผงกั้นสนามกีฬาโมดูล 1.2 ม. และ 2.0 ม. ขาล็อกเชื่อมกัน',
-        'ชุบกัลวาไนซ์ร้อน 240 g/m² เคลือบ PVC ตามรหัส RAL',
+        'ชุบกัลวาไนซ์ร้อน 240 g/m² เคลือบ PVC หรือโพลีเอสเตอร์ตามรหัส RAL',
       ],
       faq: [
         {
