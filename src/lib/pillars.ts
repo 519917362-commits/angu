@@ -190,7 +190,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         'Factory-direct fencing: chain link, 358 anti-climb, 868 double wire, temporary fence, crowd barriers and airport perimeter. ISO 9001, MOQ from 50 m².',
       h1: 'Fencing for Farms, Stadiums and Industry',
       intro:
-        'One factory for chain link, field fence, cattle panels, crowd barriers and site hoarding — we draw the wire and weld the panels ourselves. That means one specification standard across the whole project, instead of five suppliers with five different tolerances.',
+        'One factory for chain link, 358 anti-climb and 868 double-wire panels, temporary fencing, crowd barriers and airport perimeter systems — we draw the wire and weld the panels ourselves. That means one specification standard across the whole project, instead of five suppliers with five different tolerances.',
       bullets: [
         'Chain link 50×50 mm, wire 2.0–4.0 mm, heights 1.0–4.0 m',
         '358 anti-climb 76.2×12.7 mm and 868 double-wire 50×200 mm panels',
@@ -220,7 +220,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         '工厂直供围栏：护栏网、358 防攀爬、868 双丝、临时护栏、隔离护栏与人群围栏。热镀锌或 PVC 覆塑，ISO 9001，50 平方米起订。',
       h1: '牧场、场馆与工业围栏',
       intro:
-        '护栏网、牛栏网、体育场围网、隔离栏、工地围挡，全部在同一家工厂完成拉丝与焊接。整项目只用一套规格标准，而不是五家供应商五种公差——这是围栏工程最容易出问题的地方。',
+        '护栏网、358 防攀爬与 868 双丝网片、临时护栏、人群隔离栏、机场周界系统，全部在同一家工厂完成拉丝与焊接。整项目只用一套规格标准，而不是五家供应商五种公差——这是围栏工程最容易出问题的地方。',
       bullets: [
         '护栏网 50×50 mm，丝径 2.0–4.0 mm，高度 1.0–4.0 m',
         '358 防攀爬 76.2×12.7 mm 与 868 双丝 50×200 mm 网片',
@@ -250,7 +250,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         'Hàng rào giá xuất xưởng: lưới mắt cáo, chống leo 358, lưới đôi 868, hàng rào tạm, rào chắn đám đông và vành đai sân bay. ISO 9001, MOQ từ 50 m².',
       h1: 'Hàng rào cho nông trại, sân vận động và công nghiệp',
       intro:
-        'Một nhà máy duy nhất cho lưới mắt cáo, hàng rào đồng cỏ, tấm chuồng bò, rào chắn đám đông và rào công trường — chúng tôi tự kéo dây và hàn tấm. Cả dự án dùng một tiêu chuẩn kỹ thuật, thay vì năm nhà cung cấp với năm dung sai khác nhau.',
+        'Một nhà máy duy nhất cho lưới mắt cáo, tấm chống leo 358 và lưới đôi 868, hàng rào tạm, rào chắn đám đông và hệ thống vành đai sân bay — chúng tôi tự kéo dây và hàn tấm. Cả dự án dùng một tiêu chuẩn kỹ thuật, thay vì năm nhà cung cấp với năm dung sai khác nhau.',
       bullets: [
         'Lưới mắt cáo 50×50 mm, dây 2,0–4,0 mm, cao 1,0–4,0 m',
         'Chống leo 358 (76,2×12,7 mm) và lưới đôi 868 (50×200 mm)',
@@ -280,7 +280,7 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         'รั้วราคาโรงงาน: ลวดตาข่าย รั้วกันปีน 358 ลวดคู่ 868 รั้วชั่วคราว แผงกั้นฝูงชน และแนวเขตสนามบิน ISO 9001 สั่งขั้นต่ำ 50 ตร.ม.',
       h1: 'รั้วสำหรับฟาร์ม สนามกีฬา และอุตสาหกรรม',
       intro:
-        'โรงงานเดียวสำหรับลวดตาข่าย รั้วทุ่ง แผงคอกวัว แผงกั้นฝูงชน และรั้วโครงการ — เราดึงลวดและเชื่อมแผงเอง ทั้งโครงการใช้มาตรฐานเดียว ไม่ใช่ห้าผู้ขายกับห้าค่าเผื่อที่ต่างกัน',
+        'โรงงานเดียวสำหรับลวดตาข่าย แผงกันปีน 358 และลวดคู่ 868 รั้วชั่วคราว แผงกั้นฝูงชน และระบบแนวเขตสนามบิน — เราดึงลวดและเชื่อมแผงเอง ทั้งโครงการใช้มาตรฐานเดียว ไม่ใช่ห้าผู้ขายกับห้าค่าเผื่อที่ต่างกัน',
       bullets: [
         'ลวดตาข่าย 50×50 มม. ลวด 2.0–4.0 มม. สูง 1.0–4.0 ม.',
         'แผงกันปีน 358 (76.2×12.7 มม.) และลวดคู่ 868 (50×200 มม.)',
