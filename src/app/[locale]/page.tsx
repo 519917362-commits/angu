@@ -123,11 +123,13 @@ function WebSiteLd({locale}: {locale: string}) {
       ? 'Angu Wire Mesh — ผู้ผลิตตะแกรงลวดโลหะ เชี่ยวชาญเกเบี้ยน ตะแกรงป้องกันหินตก รั้ว แผงกั้นเสียง ลวดหนาม รับรอง ISO 9001 จำหน่ายโรงงานตรง'
       : 'Angu Wire Mesh — metal wire mesh manufacturer specializing in gabion boxes, rockfall nets, fencing, noise barriers, and barbed wire. ISO 9001 certified, factory-direct.',
     inLanguage: locale,
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: { '@type': 'EntryPoint', urlTemplate: `https://www.angumesh.com/${locale}/products?search={search_term_string}` },
-      'query-input': 'required name=search_term_string',
-    },
+    // 刻意不声明 potentialAction / SearchAction。
+    // 那段标记的 urlTemplate 是 `/{locale}/products?search={search_term_string}`，
+    // 花括号是占位符，Google 会把它当真实网址去抓——GSC 索引报告里确实出现过
+    // `/th/products?search={search_term_string}` 这类字面量 URL（4 个语种各一条），
+    // 被归进「备用网页」，纯属浪费抓取预算。
+    // 另外 Google 已于 2024/11 下线 Sitelinks Searchbox，这段标记不再产生任何富结果，
+    // 留着只有坏处。站内搜索功能本身保留（ProductExplorer 仍读 ?search=）。
   };
   return <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(ld)}} />;
 }

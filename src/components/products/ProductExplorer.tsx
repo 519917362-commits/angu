@@ -89,8 +89,11 @@ export function ProductExplorer({
 
   return (
     <>
-      {/* 站内搜索：首页 WebSite 结构化数据里声明了 SearchAction，目标就是这个
-          ?search= 参数。form 的 action 保留，JS 未加载时仍能整页提交。 */}
+      {/* 站内搜索：读地址栏的 ?search= 做前端过滤，form 的 action 保留，
+          JS 未加载时仍能整页提交。
+          注意：首页 WebSite 结构化数据里**不再**声明 SearchAction——那段标记
+          会让 Google 把 `?search={search_term_string}` 这个占位符当成真实网址去抓，
+          GSC 索引报告里已经出现过 4 条这样的字面量 URL。 */}
       <form
         action={`/${locale}/products`}
         method="get"

@@ -29,6 +29,88 @@ export async function generateMetadata({ params }: {
   return generatePageMeta('products', locale, `/${locale}/products`);
 }
 
+/**
+ * 选型指南正文（GSC 诊断报告 2026-11-11 §7）。
+ *
+ * /products 此前只有产品卡片 + 常见问题，可排名的正文近乎为零——它拿到 259 次
+ * 展示、平均排名 30.6，靠标题已经救不动了。这段刻意写成代码常量而不是
+ * site_config：DB 里的 products_seo_intro 会随后台编辑被改写（现已被改成声屏障
+ * 口径、只有 40 词），选型段必须稳定输出。
+ *
+ * 事实口径：MOQ 与品类一一对应（声屏障 50/80/100/200 m²，主流 100；其余 50–500 m²），
+ * 交期 20 天——与产品页 FAQ 保持一致，改动前先核对。
+ */
+const SPEC_GUIDE: Record<string, { h2: string; items: { t: string; d: string }[] }> = {
+  en: {
+    h2: 'How to choose the right specification',
+    items: [
+      {
+        t: 'Start from what the product has to hold back',
+        d: 'Gabion boxes and reno mattresses retain earth and water — what decides their service life is stone size against mesh aperture and the zinc coating on the wire, not the price per square metre. Chain link, welded mesh and field fence control access, where the coating class decides how many years the fence lasts before it rusts through. Noise barriers, rockfall barriers and blast walls are engineered systems: the panel is one component, and the post, foundation and connection detail carry the load. Ask for the system drawing, not only the panel price.',
+      },
+      {
+        t: 'Three variables that move price by 30–40%',
+        d: 'Wire diameter, zinc coating mass (g/m²) and the edge wire decide whether two quotes for the same nominal mesh are actually the same product. A 2.7 mm wire with 60 g/m² coating and a 3.4 mm wire with 240 g/m² are both sold as "80×100 gabion mesh", and they will not last the same ten years on a coastal riverbank. Fix all three in writing before comparing prices, and ask which standard the coating is tested to — EN 10244-2 is the one that matters in export contracts.',
+      },
+      {
+        t: 'MOQ and lead time',
+        d: 'Noise barrier panels start at 50 m² per specification — 100 m² for mixed highway and rail profiles, 200 m² for fully enclosed tunnels. Gabion, fencing and wire mesh lines start between 50 and 500 m², depending on whether the mesh is woven to order or cut from stock. Catalogue specifications ship within 20 days of deposit; custom sizes, colours and coating classes are confirmed per order. Send the specification table or the drawing and we quote against it line by line.',
+      },
+    ],
+  },
+  zh: {
+    h2: '如何选对规格',
+    items: [
+      {
+        t: '先看它要挡住什么',
+        d: '石笼网箱和雷诺护垫挡土挡水，决定寿命的不是每平米报价，而是石料粒径与网孔是否匹配、钢丝镀层够不够。勾花网、电焊网、牧场围栏管的是通行边界，镀层等级直接决定能用几年。声屏障、被动防护网、防爆墙是成套工程件：屏体只是其中一件，立柱、基础与连接节点才承力——询价时要系统图，不能只要屏体单价。',
+      },
+      {
+        t: '三个变量能让报价差 30–40%',
+        d: '丝径、镀锌量（g/m²）、边丝这三项，是同名规格两张报价单差价的主要来源。2.7 mm 丝径配 60 g/m² 镀层，和 3.4 mm 配 240 g/m²，都叫「80×100 石笼网」，但在沿海河道上寿命完全不同。比价前先把这三项写进询价单，并注明镀层按哪个标准检测——出口合同里认的是 EN 10244-2。',
+      },
+      {
+        t: '起订量与交期',
+        d: '声屏障按规格 50 m² 起订：公路与轨交混排 100 m²，全封闭隧道 200 m²。石笼、围栏、丝网类视「按单织造」还是「现货裁切」在 50–500 m² 之间。目录标准规格自定金到账起 20 天内交货；定制尺寸、颜色与镀层等级按订单单独确认。把规格表或图纸发来，我们按行逐条报价。',
+      },
+    ],
+  },
+  vi: {
+    h2: 'Cách chọn đúng quy cách',
+    items: [
+      {
+        t: 'Bắt đầu từ việc sản phẩm phải giữ lại cái gì',
+        d: 'Rọ đá và nệm đá giữ đất và nước — tuổi thọ do cỡ đá so với mắt lưới và lớp mạ kẽm quyết định, không phải giá mỗi m². Lưới mắt cáo, lưới hàn và hàng rào chăn nuôi kiểm soát lối đi, cấp mạ quyết định dùng được bao nhiêu năm trước khi gỉ. Tấm chắn ồn, lưới chắn đá rơi và tường chống nổ là hệ kết cấu: tấm chỉ là một bộ phận, cột, móng và liên kết mới chịu lực. Hãy yêu cầu bản vẽ hệ thống, không chỉ giá tấm.',
+      },
+      {
+        t: 'Ba thông số làm giá chênh 30–40%',
+        d: 'Đường kính dây, khối lượng mạ kẽm (g/m²) và dây viền quyết định hai báo giá cùng tên quy cách có thực sự là cùng một sản phẩm hay không. Dây 2,7 mm mạ 60 g/m² và dây 3,4 mm mạ 240 g/m² đều được bán là "lưới rọ đá 80×100", nhưng tuổi thọ trên bờ biển hoàn toàn khác nhau. Ghi rõ cả ba trong yêu cầu báo giá trước khi so giá, và hỏi lớp mạ được kiểm theo tiêu chuẩn nào — EN 10244-2 là tiêu chuẩn dùng trong hợp đồng xuất khẩu.',
+      },
+      {
+        t: 'MOQ và thời gian giao hàng',
+        d: 'Tấm chắn ồn khởi điểm 50 m² mỗi quy cách — 100 m² cho hỗn hợp đường cao tốc và đường sắt, 200 m² cho hầm kín hoàn toàn. Rọ đá, hàng rào và lưới khởi điểm 50–500 m² tùy dệt theo đơn hay cắt từ kho. Quy cách catalogue giao trong 20 ngày kể từ khi nhận tiền đặt cọc; kích thước, màu và cấp mạ tùy chỉnh xác nhận theo từng đơn. Gửi bảng quy cách hoặc bản vẽ, chúng tôi báo giá theo từng dòng.',
+      },
+    ],
+  },
+  th: {
+    h2: 'เลือกสเปกให้ตรงงาน',
+    items: [
+      {
+        t: 'เริ่มจากสิ่งที่สินค้าต้องกั้น',
+        d: 'กล่องเกเบี้ยนและเรโนแมทเทรสกั้นดินและน้ำ อายุการใช้งานขึ้นกับขนาดหินเทียบช่องตะแกรงและปริมาณสังกะสีเคลือบ ไม่ใช่ราคาต่อ ตร.ม. รั้วลูกโซ่ ตะแกรงเชื่อม และรั้วเลี้ยงสัตว์ควบคุมการเข้าออก ชั้นเคลือบสังกะสีเป็นตัวกำหนดว่าใช้ได้กี่ปีก่อนเป็นสนิม แผงกั้นเสียง ตาข่ายกันหินตก และกำแพงกันระเบิดเป็นระบบวิศวกรรม: แผงเป็นเพียงชิ้นส่วนหนึ่ง เสา ฐานราก และจุดเชื่อมต่อเป็นตัวรับแรง ขอแบบระบบ ไม่ใช่แค่ราคาแผง',
+      },
+      {
+        t: 'สามตัวแปรที่ทำให้ราคาต่างกัน 30–40%',
+        d: 'เส้นผ่านศูนย์กลางลวด ปริมาณสังกะสี (กรัม/ตร.ม.) และลวดขอบ คือสิ่งที่ทำให้ใบเสนอราคาสองใบต่างกันทั้งที่เรียกชื่อสเปกเดียวกัน ลวด 2.7 มม. เคลือบ 60 กรัม กับลวด 3.4 มม. เคลือบ 240 กรัม ต่างขายในชื่อ "ตะแกรงเกเบี้ยน 80×100" เหมือนกัน แต่ใช้งานชายฝั่งได้อายุไม่เท่ากัน ระบุทั้งสามค่าลงในใบขอราคาก่อนเทียบราคา และถามว่าเคลือบตามมาตรฐานใด — EN 10244-2 คือมาตรฐานที่ใช้ในสัญญาส่งออก',
+      },
+      {
+        t: 'MOQ และระยะเวลาส่งมอบ',
+        d: 'แผงกั้นเสียงเริ่มที่ 50 ตร.ม. ต่อสเปก — 100 ตร.ม. สำหรับงานผสมทางหลวงและรถไฟ 200 ตร.ม. สำหรับอุโมงค์ปิดสนิท เกเบี้ยน รั้ว และตะแกรงลวดเริ่มที่ 50–500 ตร.ม. ขึ้นกับว่าทอตามสั่งหรือตัดจากสต็อก สเปกตามแคตตาล็อกส่งภายใน 20 วันนับจากได้รับเงินมัดจำ ขนาด สี และชั้นเคลือบสั่งทำยืนยันเป็นรายออเดอร์ ส่งตารางสเปกหรือแบบมา เราจะเสนอราคาเป็นรายบรรทัด',
+      },
+    ],
+  },
+};
+
 function CategorySidebar({
   categories,
   products,
@@ -125,6 +207,8 @@ export default async function ProductsPage({
   const faqTitle = v('products_faq_title', 'Frequently Asked Questions', '常见问题');
   const faqDesc = v('products_faq_desc', 'Common questions about Angu Wire Mesh products and procurement', '关于安固丝网产品和采购的常见疑问解答');
   const crosslinksTitle = v('products_crosslinks_title', 'Browse by Application', '按行业应用浏览');
+  // 选型指南走代码常量，不读 site_config，避免被后台改写后再次变成薄内容
+  const guide = SPEC_GUIDE[locale] || SPEC_GUIDE.en;
 
   const baseUrl = 'https://www.angumesh.com';
   const pagePath = `/${locale}/products`;
@@ -320,6 +404,23 @@ export default async function ProductsPage({
           </div>
         </div>
       </div>
+
+      {/* ========== 选型指南正文 ========== */}
+      <section className="bg-white border-t border-slate-200" aria-labelledby="spec-guide-heading">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+          <h2 id="spec-guide-heading" className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
+            {guide.h2}
+          </h2>
+          <div className="mt-8 space-y-8">
+            {guide.items.map((item) => (
+              <div key={item.t}>
+                <h3 className="text-base md:text-lg font-semibold text-slate-900 mb-2">{item.t}</h3>
+                <p className="text-slate-600 text-sm md:text-base leading-relaxed">{item.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ========== GEO: FAQ Section ========== */}
       <section className="bg-slate-50 border-t border-slate-200" aria-labelledby="faq-heading">

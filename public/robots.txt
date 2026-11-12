@@ -69,18 +69,27 @@ Disallow: /api/
 Allow: /
 
 # ─── Search Engines ───
+# `?search=` 是站内搜索的过滤参数，页面本身 canonical 指向 /products，
+# 没有任何独立检索价值。旧结构里首页 JSON-LD 的 SearchAction 把
+# `?search={search_term_string}` 这个占位符暴露出去，GSC 已抓到 4 条字面量 URL；
+# 标记已删除，这里再兜一层，防止外部链接继续把这类地址喂给爬虫。
+# 注意：不要 Disallow `?topic=`——博客标签页靠抓取才能读到 canonical，
+# 挡掉反而会让它们以「未知」状态堆积。
 User-agent: Googlebot
 Disallow: /admin/
 Disallow: /api/
+Disallow: /*?search=
 Allow: /
 
 User-agent: Bingbot
 Disallow: /admin/
 Disallow: /api/
+Disallow: /*?search=
 Allow: /
 
 User-agent: *
 Disallow: /admin/
 Disallow: /api/
+Disallow: /*?search=
 
 Sitemap: https://www.angumesh.com/sitemap.xml

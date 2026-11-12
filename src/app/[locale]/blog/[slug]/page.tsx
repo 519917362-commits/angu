@@ -61,18 +61,57 @@ function titleTokens(t: string): string[] {
   return [...out];
 }
 
+/**
+ * 生成 meta description。取值顺序：后台手写的 seo_description → 正文摘要 abstract。
+ *
+ * 旧实现有三个缺陷（GSC 诊断报告 2026-11-11 §7 点名的就是这条）：
+ * 1. 优先取 abstract。abstract 是给页面正文用的长摘要（`gabion-retaining-wall-cost-2026`
+ *    的那条有 244 字符），`slice(0,160)` 会停在句子中间，SERP 里是一条残句
+ *    （结尾停在 "with 2026 "）。
+ * 2. 清洗正则 `[#*`\[\]\|\-]` 把连字符也一起删了，`line-by-line` 被压成
+ *    `linebyline`，等于自己在描述里造了个错字。
+ * 3. 硬切 160 会把英文单词劈成两半。
+ *
+ * 现在只清 Markdown 标记、保留连字符，超长时先找句末、再退到词边界，绝不切断单词。
+ */
+function buildDescription(seoDesc: string, abstract: string): string {
+  const raw = (seoDesc || abstract || '').trim();
+  if (!raw) return 'Industry insights on wire mesh, gabion construction, and rockfall protection.';
+
+  const text = raw
+    .replace(/[#*`\[\]|]/g, '') // 只清 Markdown 标记，连字符（-）必须保留
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  // 158 是留出省略号后的安全上限，SERP 桌面端约 155–160 字符
+  if (text.length <= 158) return text;
+
+  const cut = text.slice(0, 158);
+  const sentenceEnd = Math.max(
+    cut.lastIndexOf('. '),
+    cut.lastIndexOf('。'),
+    cut.lastIndexOf('! '),
+    cut.lastIndexOf('? '),
+    cut.lastIndexOf('；'),
+    cut.lastIndexOf('; ')
+  );
+  // 句末落在前半段之后的才采用，否则宁可断在词边界
+  if (sentenceEnd >= 90) return cut.slice(0, sentenceEnd + 1).trim();
+  // 去掉尾部不完整单词与悬空标点后补省略号
+  const trimmed = cut.replace(/[\s,;:，、]+$/, '').replace(/\s+\S*$/, '');
+  return `${trimmed}…`;
+}
+
 export async function generateMetadata({params}: Props): Promise<Metadata> {
   const {locale, slug} = await params;
   const post = await getBlogPost(slug);
   if (!post) return {title: tLabel('文章未找到', 'Post Not Found', locale)};
   // pickLocale 会把「占位符级」的本地化值当成缺失、回落英文（见 lib/i18n.ts）
   const title = pickLocale(post, 'title', locale);
-  const abstract = pickLocale(post, 'abstract', locale);
-  const description = abstract
-    ?.replace(/[#*`\[\]\|\-]/g, '')
-    .replace(/\n+/g, ' ')
-    .trim()
-    .slice(0, 160) || 'Industry insights on wire mesh, gabion construction, and rockfall protection.';
+  const description = buildDescription(
+    pickLocale(post, 'seo_description', locale),
+    pickLocale(post, 'abstract', locale)
+  );
   const seoTitle = pickLocale(post, 'seo_title', locale);
   // 后台标题可能自带品牌尾巴，先剥再拼，避免「… | Angu | Angu Wire Mesh」
   const cleanTitle = (seoTitle || title || 'Blog Post')
