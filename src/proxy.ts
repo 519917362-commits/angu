@@ -14,6 +14,10 @@
 // 2) 2026-11-13 品类结构调整：protection-net 拆分并改名为 slope-protection
 //    （归入新建的 natural-disaster-protection 之下）。旧地址永久 301 到新地址，
 //    保住已收录页面的权重，不让它直接变成 404。
+//
+// 3) 2026-11-13 石笼网产品线收敛为 3 款（石笼箱 / 雷诺护垫 / Hesco 防爆墙）。
+//    PVC 涂塑箱改为石笼箱的一种防腐选项，防爆墙板并入 Hesco 单元。
+//    两个已下线的产品页 301 到承接页，同样是因为它们进过 sitemap 和外链。
 
 import {NextResponse} from 'next/server';
 import type {NextRequest} from 'next/server';
@@ -30,12 +34,40 @@ const RENAMED_CATEGORY: Record<string, string> = {
   'protection-net': 'slope-protection',
 };
 
+/**
+ * 已下线的产品页：旧 slug → 承接页 slug。
+ *
+ * 这两个页面上线期间进过 sitemap，也拿过外链和 GSC 索引，直接 404 会丢掉信号；
+ * 承接页必须真的覆盖旧页的内容，否则用户落地后找不到想问的东西：
+ * - PVC 涂塑箱 → 石笼箱：石笼箱页的 specification 里已写 PVC 覆塑选项，
+ *   seo keywords 也补了 pvc coated / marine gabion。
+ * - 防爆墙板（2×1×1 m）→ Hesco 单元（1×1×1 m）：同一套焊接石笼防爆结构，
+ *   Hesco 页的 FAQ 讲了 2×1×1 m 变体与填充料。
+ */
+const RETIRED_PRODUCT: Record<string, string> = {
+  'pvc-coated-gabion-box-2x1x1m': 'galvanized-gabion-box-2x1x1m',
+  'blast-wall-panel-2x1x1m': 'hesco-bastion-blast-wall-1x1x1m',
+};
+
 export function proxy(request: NextRequest) {
   const {pathname} = request.nextUrl;
 
+  // ── 产品下线 301 ──
+  // 命中 /en/products/pvc-coated-gabion-box-2x1x1m 等四语路径
+  const seg = pathname.split('/').filter(Boolean);
+  if (
+    seg.length === 3 &&
+    (locales as readonly string[]).includes(seg[0]) &&
+    seg[1] === 'products' &&
+    RETIRED_PRODUCT[seg[2]]
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${seg[0]}/products/${RETIRED_PRODUCT[seg[2]]}`;
+    return NextResponse.redirect(url, 301);
+  }
+
   // ── 品类改名 301 ──
   // 命中 /en/protection-net、/zh/protection-net/、/vi/protection-net/xxx
-  const seg = pathname.split('/').filter(Boolean);
   if (
     seg.length >= 2 &&
     (locales as readonly string[]).includes(seg[0]) &&
@@ -62,5 +94,12 @@ export function proxy(request: NextRequest) {
 export const config = {
   // 第二组用宽匹配收住所有语种下的 protection-net，语种合法性在函数里再判一次，
   // 避免把 /foo/protection-net 这类不存在的语种也重定向出去。
-  matcher: ['/ms/:path*', '/ar/:path*', '/:locale/protection-net/:path*', '/:locale/protection-net'],
+  // 产品页那条只匹配三层路径（/en/products/<slug>），列表页 /en/products 不进。
+  matcher: [
+    '/ms/:path*',
+    '/ar/:path*',
+    '/:locale/protection-net/:path*',
+    '/:locale/protection-net',
+    '/:locale/products/:slug',
+  ],
 };

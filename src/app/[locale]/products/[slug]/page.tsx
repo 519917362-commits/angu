@@ -257,6 +257,8 @@ const specLabels: Record<string, Record<string, string>> = {
   wireCoating: {zh: '丝材涂层', en: 'Wire Coating', vi: 'Lớp phủ dây', th: 'การเคลือบลวด'},
   wireTensileStrength: {zh: '丝材抗拉强度', en: 'Wire Tensile Strength', vi: 'Độ bền kéo của dây', th: 'แรงดึงของลวด'},
   zincCoating: {zh: '锌层重量', en: 'Zinc Coating', vi: 'Lớp mạ kẽm', th: 'การเคลือบสังกะสี'},
+  // 石笼网收敛为 3 款后，PVC 覆塑不再是独立产品，而是石笼箱规格里的一项可选表面处理
+  surfaceOptions: {zh: '表面处理选项', en: 'Surface Options', vi: 'Tùy chọn bề mặt', th: 'ตัวเลือกการเคลือบผิว'},
   // ── Chinese key aliases (direct mapping for zh-specs) ──
   '丝径': {zh: '丝径', en: 'Wire Diameter', vi: 'Đường kính dây', th: 'เส้นผ่านศูนย์กลางลวด'},
   '单丝断裂载荷': {zh: '单丝断裂载荷', en: 'Single Wire Breaking Load', vi: 'Tải trọng đứt dây đơn', th: 'แรงแตกหักของลวดเดี่ยว'},

@@ -30,8 +30,10 @@ export interface BlogProductLinks {
 /** 正文最多插入几个产品链接 */
 export const MAX_INLINE_PRODUCT_LINKS = 3;
 
+// 石笼网 2026-11-13 收敛为 3 款：石笼箱、雷诺护垫、Hesco 防爆墙。
+// PVC 涂塑箱的独立产品页已下线（301 到石笼箱），PVC 改为石笼箱的一种防腐选项，
+// 因此 PVC 相关关键词也指向石笼箱，不要再新建 PVC_GABION 常量。
 const GABION_BOX = 'galvanized-gabion-box-2x1x1m';
-const PVC_GABION = 'pvc-coated-gabion-box-2x1x1m';
 const RENO_MATTRESS = 'reno-mattress-6x2x0.3m';
 const CHAIN_LINK = 'chain-link-fence-50mm';
 const WELDED_MESH = 'welded-wire-mesh-50mm';
@@ -57,17 +59,17 @@ export const BLOG_PRODUCT_LINKS: Record<string, BlogProductLinks> = {
     rules: [
       {pattern: /\bgabion (?:box|boxes|basket|baskets)\b|石笼网箱|石笼箱/i, slug: GABION_BOX},
       {pattern: /\breno mattress(?:es)?\b|雷诺护垫|雷诺垫/i, slug: RENO_MATTRESS},
-      {pattern: /\bPVC[- ]coated gabion\b|包塑石笼/i, slug: PVC_GABION},
+      {pattern: /\bPVC[- ]coated gabion\b|包塑石笼/i, slug: GABION_BOX},
     ],
-    related: [GABION_BOX, RENO_MATTRESS, PVC_GABION],
+    related: [GABION_BOX, RENO_MATTRESS],
   },
   'gabion-vs-concrete-retaining-wall': {
     rules: [
       {pattern: /\bgabion (?:box|boxes|basket|baskets)\b|石笼网箱|石笼箱/i, slug: GABION_BOX},
       {pattern: /\breno mattress(?:es)?\b|雷诺护垫|雷诺垫/i, slug: RENO_MATTRESS},
-      {pattern: /\bPVC[- ]coated\b|包塑石笼/i, slug: PVC_GABION},
+      {pattern: /\bPVC[- ]coated\b|包塑石笼/i, slug: GABION_BOX},
     ],
-    related: [GABION_BOX, RENO_MATTRESS, PVC_GABION],
+    related: [GABION_BOX, RENO_MATTRESS],
   },
   'how-to-install-gabion-retaining-wall': {
     rules: [
@@ -81,7 +83,7 @@ export const BLOG_PRODUCT_LINKS: Record<string, BlogProductLinks> = {
       {pattern: /\bgabion (?:box|boxes|basket|baskets)\b|石笼网箱|石笼箱/i, slug: GABION_BOX},
       {pattern: /\breno mattress(?:es)?\b|雷诺护垫|雷诺垫/i, slug: RENO_MATTRESS},
     ],
-    related: [GABION_BOX, RENO_MATTRESS, PVC_GABION],
+    related: [GABION_BOX, RENO_MATTRESS],
   },
   'galvanized-vs-pvc-vs-galfan-wire-coating': {
     rules: [
@@ -89,7 +91,7 @@ export const BLOG_PRODUCT_LINKS: Record<string, BlogProductLinks> = {
       {pattern: /\bwelded wire mesh\b|电焊网|焊接网/i, slug: WELDED_MESH},
       {pattern: /\bhexagonal (?:wire )?mesh\b|六角网|拧花网/i, slug: HEX_MESH},
     ],
-    related: [CHAIN_LINK, WELDED_MESH, PVC_GABION],
+    related: [CHAIN_LINK, WELDED_MESH, GABION_BOX],
   },
   'chain-link-fence-specification-guide': {
     rules: [
