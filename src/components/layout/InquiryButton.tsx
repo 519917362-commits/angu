@@ -3,10 +3,11 @@
 import {usePathname} from 'next/navigation';
 import {MessageCircle} from 'lucide-react';
 import {WHATSAPP_NUMBER} from '@/lib/contact';
+import {isNoiseBarrierLanding} from '@/lib/routing';
 
 export function InquiryButton() {
   const pathname = usePathname();
-  const isLanding = pathname?.includes('/noise-barrier');
+  const isLanding = isNoiseBarrierLanding(pathname);
   const locale = pathname?.match(/^\/(en|zh|vi|th|ms|ar)(?=\/|$)/)?.[1] || 'en';
   const label = locale === 'zh' ? 'WhatsApp 咨询' : locale === 'vi' ? 'Trò chuyện trên WhatsApp' : locale === 'th' ? 'แชทบน WhatsApp' : locale === 'ms' ? 'Sembang di WhatsApp' : locale === 'ar' ? 'تحدّث على واتساب' : 'Chat on WhatsApp';
 

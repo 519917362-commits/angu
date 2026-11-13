@@ -1,6 +1,6 @@
 'use client';
 import { IconWhatsApp, IconZalo, IconLINE, IconFacebook, IconEmail, IconPhone } from '../icons';
-import {localeHref} from '@/lib/routing';
+import {localeHref, isNoiseBarrierLanding} from '@/lib/routing';
 
 import { categoryHref } from '@/lib/pillars';
 import {useState, useEffect} from 'react';
@@ -25,7 +25,7 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
   const categories = useCategories();
   const siteConfig = useSiteConfig();
   const pathname = usePathname();
-  const isLanding = pathname?.includes('/noise-barrier');
+  const isLanding = isNoiseBarrierLanding(pathname);
 
   const whatsapp = cfgVal(siteConfig, 'whatsapp', locale, '8618803189797');
   // 配置里的号码是给人看的（+86 188 0318 9797，带空格和加号），

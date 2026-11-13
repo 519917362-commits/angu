@@ -127,6 +127,22 @@ export function ProductMatrix({
             ))}
           </p>
         )}
+
+        {/* 分类页入口：/noise-barrier 是落地页，完整型号清单在分类页。
+            分类菜单已改指分类页，这里要给出反向入口，否则从落地页
+            想横向比较型号的访客无处可去。 */}
+        <div className="mt-8 text-center">
+          <Link
+            href={localeHref(locale, '/noise-barrier/products')}
+            className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-white border border-slate-300 hover:border-blue-500 hover:text-blue-600 text-slate-700 text-sm font-semibold rounded-lg transition-colors"
+          >
+            {locale === 'vi' ? 'Xem đủ 9 mẫu tường chắn âm'
+             : locale === 'th' ? 'ดูแผงกั้นเสียงทั้ง 9 รุ่น'
+             : locale === 'zh' ? '查看全部 9 款声屏障'
+             : 'See all 9 noise barrier models'}
+            <span aria-hidden="true">→</span>
+          </Link>
+        </div>
       </div>
     </section>
   );

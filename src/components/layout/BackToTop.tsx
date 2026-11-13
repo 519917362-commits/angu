@@ -3,11 +3,12 @@
 import {useEffect, useState} from 'react';
 import {usePathname} from 'next/navigation';
 import {ChevronUp} from 'lucide-react';
+import {isNoiseBarrierLanding} from '@/lib/routing';
 
 export function BackToTop() {
   const [visible, setVisible] = useState(false);
   const pathname = usePathname();
-  const isLanding = pathname?.includes('/noise-barrier');
+  const isLanding = isNoiseBarrierLanding(pathname);
 
   useEffect(() => {
     if (isLanding) return;

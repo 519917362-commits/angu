@@ -104,6 +104,9 @@ export async function GET() {
     ['/about', 'monthly', '0.7'],
     ['/contact', 'monthly', '0.7'],
     ['/noise-barrier', 'weekly', '0.9'],
+    // 声屏障的产品分类页：与落地页分工不同（分类页管选型，落地页管工厂与案例），
+    // 两张都要收录，否则从导航点进去的分类页永远进不了索引。
+    ['/noise-barrier/products', 'weekly', '0.9'],
     // 品类支柱页（/gabion、/fence、/wire-mesh、/slope-protection、/natural-disaster-protection）
     ...PILLAR_SLUGS.map((s) => [`/${s}`, 'weekly', '0.9'] as [string, string, string]),
     // /privacy 页面自身输出 noindex（法务页不需要排名），不应出现在 sitemap 里：

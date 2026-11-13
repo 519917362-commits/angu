@@ -1,7 +1,7 @@
 'use client';
 
 import {useState} from 'react';
-import {localeHref} from '@/lib/routing';
+import {localeHref, isNoiseBarrierLanding} from '@/lib/routing';
 import { categoryHref } from '@/lib/pillars';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
@@ -28,7 +28,7 @@ const LINK_HIT = 'inline-block py-1.5 -my-1.5 transition-colors';
 
 export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
   const pathname = usePathname();
-  const isLanding = pathname?.includes('/noise-barrier');
+  const isLanding = isNoiseBarrierLanding(pathname);
   const isZh = locale === 'zh';
   const categories = useCategories();
   const siteConfig = useSiteConfig();
@@ -154,6 +154,17 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
               {[
                 {label: tLabel('关于我们', 'About Us', locale), href: localeHref(locale, '/about')},
                 {label: tLabel('解决方案', 'Solutions', locale), href: localeHref(locale, '/solutions')},
+                // 声屏障落地页的固定入口。分类菜单已改指 /noise-barrier/products，
+                // 若不留这条，落地页在站内就只剩分类页一个入链。
+                {
+                  label: ({
+                    zh: '声屏障解决方案',
+                    en: 'Noise Barrier Solutions',
+                    vi: 'Giải pháp tường chắn âm',
+                    th: 'โซลูชันกำแพงกันเสียง',
+                  } as Record<string, string>)[locale] || 'Noise Barrier Solutions',
+                  href: localeHref(locale, '/noise-barrier'),
+                },
                 {label: tLabel('服务', 'Services', locale), href: localeHref(locale, '/service')},
                 {label: tLabel('博客', 'Blog', locale), href: localeHref(locale, '/blog')},
                 {label: tLabel('联系我们', 'Contact Us', locale), href: localeHref(locale, '/contact')},

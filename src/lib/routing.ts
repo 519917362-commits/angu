@@ -33,3 +33,15 @@ export const routing = {
   defaultLocale,
   localePrefix: 'always' as const,
 };
+
+/**
+ * 当前路径是不是声屏障「定制落地页」本身。
+ *
+ * 不能用 `includes('/noise-barrier')` —— 分类页 /en/noise-barrier/products
+ * 也含这段字符串，会被误判成落地页，套上那套极简页头页脚（无导航、无分类菜单）。
+ * 落地页只有 /{locale}/noise-barrier 一个地址，严格整串匹配。
+ */
+export function isNoiseBarrierLanding(pathname: string | null | undefined): boolean {
+  if (!pathname) return false;
+  return /^\/(en|zh|vi|th|ms|ar)\/noise-barrier\/?$/.test(pathname);
+}

@@ -24,6 +24,19 @@ export const PILLAR_SLUGS = [
 export type PillarSlug = (typeof PILLAR_SLUGS)[number];
 
 /**
+ * 声屏障不走 [category] 动态路由 —— 它在 app/[locale]/noise-barrier 有自己的
+ * 定制落地页（工厂实力、项目案例、报价表单等）。但「产品分类页」是另一件事：
+ * /noise-barrier/products 复用与其他品类完全相同的模板。
+ *
+ * 所以文案表 PILLARS 要把 noise-barrier 一起收进来（类型 CategoryCopySlug），
+ * 而 PILLAR_SLUGS 仍然只放「靠动态路由生成路径」的那 5 个，
+ * 否则 generateStaticParams 会去生成一个被静态页面遮蔽的 /noise-barrier。
+ */
+export const NOISE_BARRIER_SLUG = 'noise-barrier';
+export const CATEGORY_COPY_SLUGS = [...PILLAR_SLUGS, NOISE_BARRIER_SLUG] as const;
+export type CategoryCopySlug = (typeof CATEGORY_COPY_SLUGS)[number];
+
+/**
  * 品类层级表。键是子品类，值是其父品类。
  * 一级品类不出现在这里——判断一级用 `!CATEGORY_PARENT[slug]`。
  */
@@ -38,7 +51,7 @@ export const CATEGORY_CHILDREN: Record<string, string[]> = {
 };
 
 /** 顶部导航与「其他产品线」只列一级品类，避免同一分类在两个层级重复出现。 */
-export const TOP_LEVEL_PILLAR_SLUGS = PILLAR_SLUGS.filter((s) => !CATEGORY_PARENT[s]);
+export const TOP_LEVEL_PILLAR_SLUGS = CATEGORY_COPY_SLUGS.filter((s) => !CATEGORY_PARENT[s]);
 
 export function isParentCategory(slug: string): boolean {
   return Boolean(CATEGORY_CHILDREN[slug]?.length);
@@ -69,6 +82,10 @@ export function categoryMap(categories: Category[]): Record<string, Category> {
  * 站内所有「按品类浏览」的链接都必须走这里，指向静态落地页而不是
  * /products?category=xx —— 参数页的 canonical 只能指向 /products，
  * 自己拿不到排名，等于把品类词全部让掉。
+ *
+ * noise-barrier 是特例：分类入口指向它的**产品分类页** /noise-barrier/products
+ * （与其他品类同一套模板），落地页 /noise-barrier 是另一张页面，
+ * 由分类页与站内其它位置单独链接，两者不互相顶替。
  */
 export const CATEGORY_LANDING = {
   'natural-disaster-protection': 'natural-disaster-protection',
@@ -76,7 +93,7 @@ export const CATEGORY_LANDING = {
   gabion: 'gabion',
   fence: 'fence',
   'wire-mesh': 'wire-mesh',
-  'noise-barrier': 'noise-barrier',
+  'noise-barrier': 'noise-barrier/products',
 } as const;
 
 /** 品类链接：有落地页走落地页，没有则回落参数页（后端新增品类时不会 404）。 */
@@ -103,15 +120,16 @@ export interface PillarCopy {
  * 这四个页面是品类词的主要着陆点，此前 og:image 完全缺失，
  * 在 LinkedIn / WhatsApp 里转发只有纯文字，没有缩略图。
  */
-export const PILLAR_OG_IMAGE: Record<PillarSlug, string> = {
+export const PILLAR_OG_IMAGE: Record<CategoryCopySlug, string> = {
   'natural-disaster-protection': '/images/products/protection-net.jpg',
   'slope-protection': '/images/products/protection-net.jpg',
   gabion: '/images/products/gabion-box.jpg',
   fence: '/images/products/chain-link.jpg',
   'wire-mesh': '/images/products/welded-wire-mesh.jpg',
+  'noise-barrier': '/images/products/highway-noise-barrier.jpg',
 };
 
-export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
+export const PILLARS: Record<CategoryCopySlug, Record<string, PillarCopy>> = {
   gabion: {
     en: {
       metaTitle: 'Gabion Box Manufacturer — Galvanized & PVC Coated | Angu',
@@ -701,6 +719,143 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
         {
           q: 'MOQ และระยะเวลาผลิต',
           a: 'โครงการตั้งแต่ 200 ตร.ม. งานซ่อมเล็กสามารถรวมตู้ได้ ระบบพร้อมสมอผลิต 20–30 วันทำการ',
+        },
+      ],
+    },
+  },
+
+  /**
+   * 声屏障的产品分类页（/noise-barrier/products）。
+   * 与落地页 /noise-barrier 分工：这里解决「有哪些型号、参数多少、起订多少」，
+   * 落地页解决「这家厂靠不靠谱、做过什么项目」。文案刻意不复制落地页，
+   * 避免两个 URL 争同一批词。
+   */
+  'noise-barrier': {
+    en: {
+      metaTitle: 'Noise Barrier Panels — 9 Models, 2.0 to 4.0 m | Angu',
+      metaDesc:
+        'Nine noise barrier systems: highway, factory boundary, equipment enclosure, rail transit, bridge, upright, curved, transparent acrylic and fully enclosed tunnel. STC 32–34, NRC 0.85, hot-dip galvanised, MOQ from 50 m².',
+      h1: 'Noise Barrier Panels & Sound Walls',
+      intro:
+        'The panel decides how much noise you actually stop — not the post. Every system below is a 100 mm galvanised steel cassette with a mineral-wool core, built to the insertion loss your site has to meet. Choose the height and the face: perforated steel where the noise is broadband, transparent acrylic where the view has to stay open, a fully enclosed tunnel where the source has to disappear.',
+      bullets: [
+        'Panel heights 2.0–4.0 m, 0.5 m modules, 100 mm cassette thickness',
+        'STC 32–34, NRC 0.85, insertion loss 10–15 dB(A) to GB/T 19889 / ISO 717',
+        '0.8 mm perforated + 0.6 mm solid galvanised skins, 80 kg/m³ rock wool, A1 non-combustible',
+        'Transparent PC / acrylic option for bridges and viaducts',
+      ],
+      faq: [
+        {
+          q: 'Which model suits a highway project?',
+          a: 'The 3.0 m highway panel is the default for road and rail corridors: steel cassette, absorptive face, H-section posts at 2.0 m centres. On a viaduct use the bridge model — it is lighter and takes transparent panels where the road authority wants the view kept.',
+        },
+        {
+          q: 'What is the minimum order?',
+          a: '50 m² for equipment enclosures, 80 m² for transparent panels, 100 m² for the standard road and factory panels, 200 m² for a fully enclosed tunnel. Smaller trial runs can be combined with a container already going to your port.',
+        },
+        {
+          q: 'Can you meet a specified insertion loss?',
+          a: 'Yes. Send the target figure and the site conditions; we adjust panel thickness, core density and the absorptive face, then quote against the tested values. The standard build measures 10–15 dB(A).',
+        },
+        {
+          q: 'How are the panels packed?',
+          a: 'Panels are stacked and steel-banded on pallets, posts and fittings bundled separately. The loading plan is issued with the packing list before shipment, so you can plan the crane and the unloading crew.',
+        },
+      ],
+    },
+    zh: {
+      metaTitle: '声屏障产品 — 9 款型号，2.0 至 4.0 米 | 安固丝网',
+      metaDesc:
+        '9 款声屏障系统：公路、厂界、设备隔声罩、轨道交通、桥梁、直立式、弧形、透明亚克力与全封闭隧道。STC 32–34，NRC 0.85，热镀锌，50 m² 起订。',
+      h1: '声屏障板与隔音墙',
+      intro:
+        '决定降噪效果的是板，不是立柱。下面每一款都是 100 mm 厚的镀锌钢制盒式板，内填岩棉芯，按你现场需要达到的插入损失来做。选高度，再选面层：宽频噪声用穿孔钢板，需要保留视野用透明亚克力，声源必须彻底隔离就上全封闭隧道式。',
+      bullets: [
+        '板高 2.0–4.0 m，模数 0.5 m，板厚 100 mm',
+        'STC 32–34，NRC 0.85，插入损失 10–15 dB(A)，依 GB/T 19889 / ISO 717',
+        '0.8 mm 穿孔板 + 0.6 mm 实心板，80 kg/m³ 岩棉，A1 级不燃',
+        '桥梁与高架可选透明 PC / 亚克力板',
+      ],
+      faq: [
+        {
+          q: '公路项目该选哪一款？',
+          a: '3.0 m 公路声屏障是公路与轨道走廊的默认款：钢制盒式板、吸声面、H 型钢立柱间距 2.0 m。跨江跨线的高架段用桥梁款——自重更轻，且能按业主要求做透明板保留视野。',
+        },
+        {
+          q: '起订量是多少？',
+          a: '设备隔声罩 50 m²，透明板 80 m²，公路与工厂标准板 100 m²，全封闭式 200 m²。小批量试单可以并入已经发往你所在港口的柜子。',
+        },
+        {
+          q: '能按指定的插入损失做吗？',
+          a: '可以。把目标值和现场条件给我，我们调整板厚、芯材密度和吸声面，按实测数据报价。标准配置实测 10–15 dB(A)。',
+        },
+        {
+          q: '板子怎么包装？',
+          a: '板材叠放后用钢带捆在托盘上，立柱与配件单独打包。装柜图随装箱单一起发出，方便你提前安排吊车和卸货人手。',
+        },
+      ],
+    },
+    vi: {
+      metaTitle: 'Tấm chắn âm & tường chắn âm — 9 mẫu | Angu',
+      metaDesc:
+        '9 hệ tấm chắn âm: đường cao tốc, hàng rào nhà máy, vỏ bọc thiết bị, đường sắt, cầu, kiểu đứng, kiểu cong, acrylic trong và đường hầm kín. STC 32–34, NRC 0.85, mạ kẽm nhúng nóng, MOQ từ 50 m².',
+      h1: 'Tấm chắn âm và tường chắn âm',
+      intro:
+        'Tấm panel quyết định mức giảm ồn thực tế, không phải cột trụ. Mỗi hệ dưới đây là một hộp thép mạ kẽm dày 100 mm với lõi bông khoáng, chế tạo theo độ suy giảm mà công trình của bạn phải đạt. Chọn chiều cao rồi chọn bề mặt: thép đục lỗ cho tiếng ồn dải rộng, acrylic trong cho nơi phải giữ tầm nhìn, kiểu đường hầm kín khi nguồn ồn cần che hoàn toàn.',
+      bullets: [
+        'Chiều cao tấm 2,0–4,0 m, mô-đun 0,5 m, độ dày hộp 100 mm',
+        'STC 32–34, NRC 0,85, suy giảm 10–15 dB(A) theo GB/T 19889 / ISO 717',
+        'Mặt 0,8 mm đục lỗ + 0,6 mm đặc, bông khoáng 80 kg/m³, chống cháy cấp A1',
+        'Tùy chọn tấm PC / acrylic trong cho cầu và cầu vượt',
+      ],
+      faq: [
+        {
+          q: 'Công trình đường cao tốc nên chọn mẫu nào?',
+          a: 'Tấm 3,0 m là lựa chọn mặc định cho hành lang đường bộ và đường sắt: hộp thép, mặt hút âm, cột chữ H cách nhau 2,0 m. Trên cầu vượt dùng mẫu cầu — nhẹ hơn và nhận được tấm trong khi cơ quan quản lý muốn giữ tầm nhìn.',
+        },
+        {
+          q: 'Đặt hàng tối thiểu bao nhiêu?',
+          a: '50 m² cho vỏ bọc thiết bị, 80 m² cho tấm trong, 100 m² cho tấm đường và nhà máy tiêu chuẩn, 200 m² cho đường hầm kín. Đơn thử nhỏ có thể ghép vào container đang đi cảng của bạn.',
+        },
+        {
+          q: 'Có làm theo độ suy giảm chỉ định không?',
+          a: 'Có. Gửi giá trị mục tiêu và điều kiện hiện trường, chúng tôi điều chỉnh độ dày tấm, mật độ lõi và mặt hút âm rồi báo giá theo số liệu đã thử nghiệm. Cấu hình chuẩn đạt 10–15 dB(A).',
+        },
+        {
+          q: 'Tấm được đóng gói thế nào?',
+          a: 'Tấm xếp chồng, đai thép trên pallet; cột và phụ kiện đóng riêng. Sơ đồ xếp hàng gửi kèm phiếu đóng gói trước khi giao, để bạn bố trí cẩu và nhân công dỡ hàng.',
+        },
+      ],
+    },
+    th: {
+      metaTitle: 'แผงกั้นเสียง & กำแพงกันเสียง — 9 รุ่น | Angu',
+      metaDesc:
+        'แผงกั้นเสียง 9 ระบบ: ทางหลวง แนวเขตโรงงาน เปลือกหุ้มเครื่องจักร รถไฟฟ้า สะพาน ชนิดตั้งตรง ชนิดโค้ง อะคริลิกใส และอุโมงค์ปิดล้อม STC 32–34, NRC 0.85 ชุบกัลวาไนซ์ร้อน MOQ ตั้งแต่ 50 ตร.ม.',
+      h1: 'แผงกั้นเสียงและกำแพงกันเสียง',
+      intro:
+        'แผงเป็นตัวตัดสินว่าลดเสียงได้จริงแค่ไหน ไม่ใช่เสา ทุกระบบด้านล่างเป็นกล่องเหล็กชุบกัลวาไนซ์หนา 100 มม. ไส้ขนแร่ ผลิตตามค่าการลดเสียงที่หน้างานของคุณต้องทำให้ได้ เลือกความสูงแล้วเลือกผิวหน้า: เหล็กเจาะรูสำหรับเสียงย่านกว้าง อะคริลิกใสสำหรับจุดที่ต้องคงทัศนวิสัย และแบบอุโมงค์ปิดล้อมเมื่อต้องกลบแหล่งกำเนิดเสียงทั้งหมด',
+      bullets: [
+        'ความสูงแผง 2.0–4.0 ม. โมดูล 0.5 ม. ความหนา 100 มม.',
+        'STC 32–34, NRC 0.85 ลดเสียง 10–15 dB(A) ตาม GB/T 19889 / ISO 717',
+        'ผิว 0.8 มม. เจาะรู + 0.6 มม. ทึบ ไส้ขนหิน 80 กก./ลบ.ม. กันไฟระดับ A1',
+        'ตัวเลือกแผง PC / อะคริลิกใส สำหรับสะพานและทางยกระดับ',
+      ],
+      faq: [
+        {
+          q: 'งานทางหลวงควรเลือกรุ่นไหน',
+          a: 'แผง 3.0 ม. เป็นค่ามาตรฐานสำหรับแนวทางหลวงและทางรถไฟ: กล่องเหล็ก ผิวดูดเสียง เสา H ระยะ 2.0 ม. บนทางยกระดับใช้รุ่นสะพาน ซึ่งเบากว่าและรับแผงใสได้เมื่อหน่วยงานต้องการคงทัศนวิสัย',
+        },
+        {
+          q: 'สั่งขั้นต่ำเท่าไร',
+          a: '50 ตร.ม. สำหรับเปลือกหุ้มเครื่องจักร 80 ตร.ม. สำหรับแผงใส 100 ตร.ม. สำหรับแผงทางหลวงและโรงงานมาตรฐาน 200 ตร.ม. สำหรับอุโมงค์ปิดล้อม งานทดลองขนาดเล็กสามารถรวมตู้กับล็อตที่ไปท่าเรือของคุณได้',
+        },
+        {
+          q: 'ทำตามค่าการลดเสียงที่กำหนดได้ไหม',
+          a: 'ได้ ส่งค่าเป้าหมายและสภาพหน้างานมา เราปรับความหนาแผง ความหนาแน่นไส้ และผิวดูดเสียง แล้วเสนอราคาตามผลทดสอบ สเปกมาตรฐานวัดได้ 10–15 dB(A)',
+        },
+        {
+          q: 'บรรจุแผงอย่างไร',
+          a: 'แผงวางซ้อนรัดด้วยแถบเหล็กบนพาเลท เสาและอุปกรณ์แยกมัด แผนการจัดวางสินค้าส่งพร้อมใบแพ็คก่อนขนส่ง เพื่อให้คุณวางแผนรถเครนและทีมขนถ่ายได้',
         },
       ],
     },

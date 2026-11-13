@@ -7,6 +7,7 @@ import {IconWhatsApp, IconZalo, IconWeChat} from '@/components/icons';
 import {InquiryModal} from '@/components/inquiry/InquiryModal';
 import {WHATSAPP_NUMBER, ZALO_URL, WECHAT_ID, WECHAT_DISPLAY} from '@/lib/contact';
 import {trackLead} from '@/lib/analytics';
+import {isNoiseBarrierLanding} from '@/lib/routing';
 
 type Copy = {
   whatsapp: string;
@@ -143,7 +144,7 @@ export function MobileContactBar({locale}: {locale: string}) {
   };
 
   // 营销页自己就有表单，直接滚到表单比跳去 /contact 少一步（少一步就少一次流失）
-  const isLanding = pathname?.includes('/noise-barrier');
+  const isLanding = isNoiseBarrierLanding(pathname);
   const waText = isLanding
     ? 'Hello, I would like a quotation for noise barriers.'
     : 'Hello, I would like a quotation for your wire mesh products.';
