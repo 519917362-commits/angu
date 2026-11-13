@@ -52,6 +52,9 @@ const RETIRED_PRODUCT: Record<string, string> = {
   // isolation-fence-50mm 与澳洲款同为 2.1×2.4 m、AS 4687，属重复 SKU。
   'explosion-proof-guardrail': 'heavy-duty-blast-barrier-2.5m',
   'isolation-fence-50mm': 'temporary-fence-au-2100x2400',
+  // 2026-11-13 演唱会护栏收敛为一款：钢制 1.1×2.0m（300 kg/m）留下，
+  // 铝制 1.0m 款（150 kg/m，室内展览用）下线，属同用途轻量档重复 SKU。
+  'stage-barrier-1.2m-aluminum': 'concert-crowd-barrier',
 };
 
 export function proxy(request: NextRequest) {
