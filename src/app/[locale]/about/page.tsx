@@ -65,22 +65,32 @@ async function fetchAboutData(): Promise<AboutData> {
   }
 }
 
-async function fetchSiteConfig(): Promise<Record<string, { value_en: string; value_zh: string }>> {
+async function fetchSiteConfig(): Promise<Record<string, CfgEntry>> {
   try {
     const res = await fetch(`${API_BASE}/api/site-config`, {
       next: { revalidate: 300, tags: [SITE_DATA_TAG] },
     });
     if (!res.ok) return {};
     const data = await res.json();
-    return (data as { config: Record<string, { value_en: string; value_zh: string }> }).config || {};
+    return (data as { config: Record<string, CfgEntry> }).config || {};
   } catch { return {}; }
 }
 
-function t(cfg: Record<string, { value_en: string; value_zh: string; value_vi?: string; value_th?: string }>, key: string, locale: string): string {
+/**
+ * 站点配置项。两套接口的字段名不一样：
+ * - /api/site-config 返回 {en, zh, vi, th}
+ * - /api/about 的 config 返回 {value_en, value_zh, value_vi, value_th}
+ * 以前这里只认后一种，导致 /api/site-config 的值全部取不到、静默回落到硬编码：
+ * stats_products 一直在显示 30，后台把数字改成 41 也没有任何反应。
+ */
+type CfgEntry = Partial<Record<'en' | 'zh' | 'vi' | 'th', string>> &
+  Partial<Record<'value_en' | 'value_zh' | 'value_vi' | 'value_th', string>>;
+
+function t(cfg: Record<string, CfgEntry>, key: string, locale: string): string {
   const item = cfg[key];
   if (!item) return '';
-  const localeMap: Record<string, string> = { zh: item.value_zh || '', vi: item.value_vi || '', th: item.value_th || '' };
-  return localeMap[locale] || item.value_en || '';
+  const pick = (l: 'en' | 'zh' | 'vi' | 'th') => item[l] || item[`value_${l}`] || '';
+  return pick(locale as 'en' | 'zh' | 'vi' | 'th') || pick('en');
 }
 
 import { pickLocale, tLabel } from '@/lib/i18n';
