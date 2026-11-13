@@ -47,6 +47,11 @@ const RENAMED_CATEGORY: Record<string, string> = {
 const RETIRED_PRODUCT: Record<string, string> = {
   'pvc-coated-gabion-box-2x1x1m': 'galvanized-gabion-box-2x1x1m',
   'blast-wall-panel-2x1x1m': 'hesco-bastion-blast-wall-1x1x1m',
+  // 2026-11-13 护栏网素材收敛：防爆护栏只留 2.5 m 重型款，临时围栏只留北美与澳洲两款。
+  // 下线的 explosion-proof-guardrail 是同一个 358 防爆结构、矮一档（2.0 m / 4.0 mm）；
+  // isolation-fence-50mm 与澳洲款同为 2.1×2.4 m、AS 4687，属重复 SKU。
+  'explosion-proof-guardrail': 'heavy-duty-blast-barrier-2.5m',
+  'isolation-fence-50mm': 'temporary-fence-au-2100x2400',
 };
 
 export function proxy(request: NextRequest) {
