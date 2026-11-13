@@ -271,13 +271,14 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
     { en: `${statCountries}+ Countries Exported`, zh: `出口 ${statCountries}+ 国家`, vi: `Xuất Khẩu ${statCountries}+ Quốc Gia`, th: `ส่งออก ${statCountries}+ ประเทศ` },
   ];
 
-  // GEO: internal links to product categories
+  // GEO: internal links to product categories（按 2026-11-13 的两级品类排列）
   const geoCategories = [
-    { slug: 'wire-mesh', en: 'Welded Wire Mesh', zh: '电焊网', vi: 'Lưới Hàn', th: 'ตะแกรงเชื่อม' },
-    { slug: 'fence', en: 'Chain Link & Fencing', zh: '勾花网围栏', vi: 'Hàng Rào Link Chain', th: 'รั้วลวดโซ่' },
-    { slug: 'gabion', en: 'Gabion Boxes', zh: '石笼网箱', vi: 'Rọ Đá', th: 'กล่องเกเบี้ยน' },
-    { slug: 'protection-net', en: 'Protection Nets', zh: '边坡防护网', vi: 'Lưới Chống Trượt', th: 'ตาข่ายกันดินถล่ม' },
     { slug: 'noise-barrier', en: 'Noise Barriers', zh: '声屏障', vi: 'Rào Chống Tiếng Ồn', th: 'แผ่นกันเสียง' },
+    { slug: 'natural-disaster-protection', en: 'Natural Disaster Protection', zh: '自然灾害防护网', vi: 'Phòng Chống Thiên Tai', th: 'ป้องกันภัยพิบัติ' },
+    { slug: 'slope-protection', en: 'Slope Protection Nets', zh: '边坡防护网', vi: 'Lưới Bảo Vệ Mái Dốc', th: 'ตาข่ายป้องกันลาดชัน' },
+    { slug: 'gabion', en: 'Gabion Boxes', zh: '石笼网箱', vi: 'Rọ Đá', th: 'กล่องเกเบี้ยน' },
+    { slug: 'fence', en: 'Chain Link & Fencing', zh: '勾花网围栏', vi: 'Hàng Rào Lưới', th: 'รั้วลวดตาข่าย' },
+    { slug: 'wire-mesh', en: 'Welded Wire Mesh', zh: '电焊网', vi: 'Lưới Hàn', th: 'ตะแกรงเชื่อม' },
   ];
 
   // About FAQ for GEO

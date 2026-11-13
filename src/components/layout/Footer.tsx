@@ -130,6 +130,18 @@ export function Footer({locale, logoUrl: serverLogoUrl = ''}: FooterProps) {
                   <Link href={categoryHref(locale, cat.slug)} className={`${LINK_HIT} text-slate-400 hover:text-white`}>
                     {cat.names[locale as 'en'|'zh'] || cat.names.en}
                   </Link>
+                  {/* 二级品类在页脚里用小一号字缩进挂在父类下，层级一眼能读出来 */}
+                  {cat.children && cat.children.length > 0 && (
+                    <ul className="mt-1.5 ms-3 space-y-1.5 border-s border-slate-700 ps-3">
+                      {cat.children.map((kid) => (
+                        <li key={kid.slug}>
+                          <Link href={categoryHref(locale, kid.slug)} className={`${LINK_HIT} text-xs text-slate-500 hover:text-white`}>
+                            {kid.names[locale as 'en'|'zh'] || kid.names.en}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               )) : null}
             </ul>

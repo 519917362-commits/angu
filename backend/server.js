@@ -847,19 +847,25 @@ function initDatabase() {
   db.run("ALTER TABLE about_team ADD COLUMN facebook TEXT DEFAULT ''", () => {});
   db.run("ALTER TABLE products ADD COLUMN faq_en TEXT DEFAULT '[]'", () => {});
   db.run("ALTER TABLE products ADD COLUMN faq_zh TEXT DEFAULT '[]'", () => {});
+  // 两级品类：parent_slug 为空即一级品类，非空表示挂在某个一级品类下。
+  // 已有库跑这条会静默失败（列已存在），与新库结果一致。
+  db.run("ALTER TABLE product_categories ADD COLUMN parent_slug TEXT DEFAULT ''", () => {});
 
   // Insert default product categories (only if empty)
   db.get('SELECT COUNT(*) as cnt FROM product_categories', [], (err, row) => {
   if (!row || row.cnt === 0) {
   const defaultCategories = [
-    ['wire-mesh', 'Wire Mesh', '丝网类', 1],
-    ['fence', 'Fencing', '护栏网', 2],
-    ['gabion', 'Gabion', '石笼网', 3],
-    ['protection-net', 'Protection Net', '防护网', 4],
-    ['noise-barrier', 'Noise Barrier', '声屏障', 5]
+    // [slug, name_en, name_zh, sort, parent_slug]
+    // 两级结构：自然灾害防护网下挂边坡防护与石笼网，父类自身不挂产品
+    ['noise-barrier', 'Noise Barrier', '声屏障', 1, ''],
+    ['natural-disaster-protection', 'Natural Disaster Protection', '自然灾害防护网', 2, ''],
+    ['slope-protection', 'Slope Protection', '边坡防护', 1, 'natural-disaster-protection'],
+    ['gabion', 'Gabion', '石笼网', 2, 'natural-disaster-protection'],
+    ['fence', 'Fencing', '护栏网', 3, ''],
+    ['wire-mesh', 'Wire Mesh', '丝网类', 4, '']
   ];
-  defaultCategories.forEach(([slug, name_en, name_zh, sort]) => {
-    db.run(`INSERT INTO product_categories (slug, name_en, name_zh, name_vi, name_th, sort_weight, status) VALUES (?, ?, ?, ?, ?, ?, 'published')`, [slug, name_en, name_zh, '', '', sort]);
+  defaultCategories.forEach(([slug, name_en, name_zh, sort, parent]) => {
+    db.run(`INSERT INTO product_categories (slug, name_en, name_zh, name_vi, name_th, sort_weight, status, parent_slug) VALUES (?, ?, ?, ?, ?, ?, 'published', ?)`, [slug, name_en, name_zh, '', '', sort, parent]);
   });
   }
   });
@@ -1251,10 +1257,25 @@ app.put('/api/admin/product-categories/:id', authMiddleware, (req, res) => {
 });
 
 app.delete('/api/admin/product-categories/:id', authMiddleware, (req, res) => {
-  db.run('DELETE FROM product_categories WHERE id = ?', [req.params.id], function(err) {
-    if (err) return res.status(500).json({ error: err.message });
-    logOperation(req.user.userId, 'delete', 'product_category', req.params.id, {});
-    res.json({ message: 'Category deleted' });
+  // 两级品类下，删父类会把它下面的子类变成孤儿（parent_slug 指向不存在的 slug），
+  // 前台导航与 /api/catalog 的 children 组装都会静默丢一整支。
+  // 先查子类，有则拒绝并提示改挂或先删子类。
+  db.get('SELECT slug FROM product_categories WHERE id = ?', [req.params.id], (err0, row) => {
+    if (err0) return res.status(500).json({ error: err0.message });
+    if (!row) return res.status(404).json({ error: 'Category not found' });
+    db.all('SELECT slug FROM product_categories WHERE parent_slug = ?', [row.slug], (err1, kids) => {
+      if (err1) return res.status(500).json({ error: err1.message });
+      if (kids && kids.length) {
+        return res.status(400).json({
+          error: `该品类下还有 ${kids.length} 个子品类（${kids.map(k => k.slug).join(', ')}），请先删除或改挂子品类`,
+        });
+      }
+      db.run('DELETE FROM product_categories WHERE id = ?', [req.params.id], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        logOperation(req.user.userId, 'delete', 'product_category', req.params.id, {});
+        res.json({ message: 'Category deleted' });
+      });
+    });
   });
 });
 
@@ -1494,6 +1515,8 @@ app.get('/api/catalog', (req, res) => {
       const categories = catRows.map(row => ({
         id: String(row.id),
         slug: row.slug,
+        // 一级品类为空字符串，前端统一当 undefined 处理
+        parentSlug: row.parent_slug || undefined,
         names: { en: row.name_en || '', zh: row.name_zh || '', vi: row.name_vi || '', th: row.name_th || '' },
         descriptions: {},
         image: row.thumbnail || undefined,
@@ -1501,10 +1524,25 @@ app.get('/api/catalog', (req, res) => {
       }));
 
       for (const cat of categories) {
+        // 自身直挂产品数
         cat.productCount = products.filter((p) => p.categorySlug === cat.slug).length;
       }
 
-      res.json({ products, categories });
+      // 组装父子关系。父品类自身不挂产品，productCount 汇总子品类，
+      // 否则分类卡片会显示 0 款，看起来像空分类。
+      for (const cat of categories) {
+        const kids = categories.filter((c) => c.parentSlug === cat.slug);
+        if (kids.length) {
+          cat.children = kids;
+          cat.productCount = kids.reduce((n, k) => n + (k.productCount || 0), 0);
+        }
+      }
+
+      // 只把一级品类放回列表，子品类通过 children 访问——
+      // 前端任何「遍历 categories」的地方都不会重复渲染子品类。
+      const topLevel = categories.filter((c) => !c.parentSlug);
+
+      res.json({ products, categories: topLevel });
     });
   });
 });

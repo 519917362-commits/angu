@@ -200,13 +200,28 @@ export function Header({locale, logoUrl: serverLogoUrl = ''}: HeaderProps) {
               {isProductsOpen && (
                 <div className="absolute top-full start-0 mt-1 w-80 bg-white rounded-xl shadow-xl border border-slate-100 py-2 overflow-hidden max-h-[70vh] overflow-y-auto">
                   {categories.map((cat) => (
-                    <Link
-                      key={cat.slug}
-                      href={categoryHref(locale, cat.slug)}
-                      className="block px-4 py-2.5 text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-colors border-b border-slate-50 last:border-0"
-                    >
-                      {cat.names[locale] || cat.names.en}
-                    </Link>
+                    <div key={cat.id} className="border-b border-slate-50 last:border-0">
+                      <Link
+                        href={categoryHref(locale, cat.slug)}
+                        className="block px-4 py-2.5 text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                      >
+                        {cat.names[locale] || cat.names.en}
+                      </Link>
+                      {/* 二级品类缩进一层挂在父类下面：石笼网、边坡防护归自然灾害防护网 */}
+                      {cat.children && cat.children.length > 0 && (
+                        <div className="pb-1.5">
+                          {cat.children.map((kid) => (
+                            <Link
+                              key={kid.id}
+                              href={categoryHref(locale, kid.slug)}
+                              className="block ps-8 pe-4 py-1.5 text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                            >
+                              {kid.names[locale] || kid.names.en}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ))}
                   <Link
                     href={localeHref(locale, '/products')}

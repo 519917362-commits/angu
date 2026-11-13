@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { routing, locales } from '@/lib/routing';
 import { getCatalog } from '@/lib/api';
 import { ProductCard } from '@/components/products/ProductCard';
-import { PILLARS, PILLAR_SLUGS, PILLAR_OG_IMAGE, type PillarSlug } from '@/lib/pillars';
+import { PILLARS, PILLAR_SLUGS, PILLAR_OG_IMAGE, CATEGORY_PARENT, CATEGORY_CHILDREN, TOP_LEVEL_PILLAR_SLUGS, type PillarSlug } from '@/lib/pillars';
 import { ogImageEntry } from '@/lib/seo-utils';
 import { COMPANY } from '@/lib/company';
 
@@ -15,7 +15,11 @@ export const revalidate = 300;
 
 
 /**
- * 品类支柱页：/en/gabion、/en/fence、/en/wire-mesh、/en/protection-net（× 四语）。
+ * 品类支柱页：/en/gabion、/en/fence、/en/wire-mesh、/en/slope-protection、
+ * /en/natural-disaster-protection（× 四语）。
+ *
+ * 其中 natural-disaster-protection 是一级枢纽页，正文列子品类（边坡防护 / 石笼网），
+ * 产品按子类分组展示；其余为叶级页，直接列本类产品。
  *
  * 这四个品类此前只能通过 /products?category=xx 访问——参数页给不了独立标题、
  * 独立内链和稳定的排名信号。这里给每个品类一个可收录的落地页，
@@ -83,13 +87,17 @@ const LABEL = {
   viewAll: { en: 'View all products', zh: '查看全部产品', vi: 'Xem tất cả sản phẩm', th: 'ดูสินค้าทั้งหมด' },
   quote: { en: 'Request a Quote', zh: '获取报价', vi: 'Nhận báo giá', th: 'ขอใบเสนอราคา' },
   contact: { en: 'Talk to an engineer', zh: '联系工程师', vi: 'Liên hệ kỹ thuật', th: 'คุยกับวิศวกร' },
+  // 父级枢纽页专用
+  productTypes: { en: 'Product types', zh: '产品类型', vi: 'Loại sản phẩm', th: 'ประเภทสินค้า' },
+  viewType: { en: 'View products', zh: '查看该类产品', vi: 'Xem sản phẩm', th: 'ดูสินค้า' },
 } as const;
 
 const CATEGORY_NAME: Record<string, Record<string, string>> = {
-  gabion: { en: 'Gabion', zh: '石笼网箱', vi: 'Gabion', th: 'Gabion' },
-  fence: { en: 'Fencing', zh: '围栏', vi: 'Hàng rào', th: 'รั้ว' },
-  'wire-mesh': { en: 'Wire Mesh', zh: '丝网', vi: 'Lưới thép', th: 'ลวดตาข่าย' },
-  'protection-net': { en: 'Protection Net', zh: '防护网', vi: 'Lưới bảo vệ', th: 'ตาข่ายป้องกัน' },
+  'natural-disaster-protection': { en: 'Natural Disaster Protection', zh: '自然灾害防护网', vi: 'Phòng chống thiên tai', th: 'ป้องกันภัยพิบัติ' },
+  'slope-protection': { en: 'Slope Protection', zh: '边坡防护', vi: 'Bảo vệ mái dốc', th: 'การป้องกันลาดชัน' },
+  gabion: { en: 'Gabion', zh: '石笼网', vi: 'Rọ đá', th: 'เกเบี้ยน' },
+  fence: { en: 'Fencing', zh: '护栏网', vi: 'Hàng rào', th: 'รั้ว' },
+  'wire-mesh': { en: 'Wire Mesh', zh: '丝网类', vi: 'Lưới thép', th: 'ลวดตาข่าย' },
 };
 
 function t(key: keyof typeof LABEL, locale: string): string {
@@ -103,18 +111,43 @@ export default async function PillarPage({ params }: PageProps) {
   if (!copy) notFound();
 
   const { products } = await getCatalog({ light: true });
-  const list = products.filter((p) => p.categorySlug === category);
-  const categoryName = CATEGORY_NAME[category]?.[locale] || CATEGORY_NAME[category]?.en || category;
-  const others = PILLAR_SLUGS.filter((s) => s !== category);
+  const children = CATEGORY_CHILDREN[category] || [];
+  const isParent = children.length > 0;
+  const parentSlug = CATEGORY_PARENT[category];
+
+  // 父级枢纽页汇总全部子类的产品；叶级页只展示本类产品。
+  // 同一个产品在树上只有一条路径，父级页只是聚合视图，不产生第二个归属。
+  const list = isParent
+    ? products.filter((p) => children.includes(p.categorySlug))
+    : products.filter((p) => p.categorySlug === category);
+
+  const nameOf = (s: string) => CATEGORY_NAME[s]?.[locale] || CATEGORY_NAME[s]?.en || s;
+  const categoryName = nameOf(category);
+
+  // 关联区块：子页面先给同级兄弟，再给其余一级品类；一级页面只给其余一级品类。
+  // 父品类不出现在自己的子页面「其他产品线」里，避免层级表达前后矛盾。
+  const related: string[] = [
+    ...(parentSlug ? (CATEGORY_CHILDREN[parentSlug] || []).filter((s) => s !== category) : []),
+    ...TOP_LEVEL_PILLAR_SLUGS.filter((s) => s !== category && s !== parentSlug),
+  ];
+
+  // 面包屑层级：子类多一跳父级，Schema 与可见导航必须一致
+  const crumbs = [
+    { name: t('home', locale), item: `${BASE_URL}/${locale}` },
+    { name: t('products', locale), item: `${BASE_URL}/${locale}/products` },
+    ...(parentSlug ? [{ name: nameOf(parentSlug), item: `${BASE_URL}/${locale}/${parentSlug}` }] : []),
+    { name: categoryName, item: `${BASE_URL}/${locale}/${category}` },
+  ];
 
   const breadcrumbLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: t('home', locale), item: `${BASE_URL}/${locale}` },
-      { '@type': 'ListItem', position: 2, name: t('products', locale), item: `${BASE_URL}/${locale}/products` },
-      { '@type': 'ListItem', position: 3, name: categoryName, item: `${BASE_URL}/${locale}/${category}` },
-    ],
+    itemListElement: crumbs.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.name,
+      item: c.item,
+    })),
   };
 
   const faqLd = {
@@ -127,18 +160,33 @@ export default async function PillarPage({ params }: PageProps) {
     })),
   };
 
-  const itemListLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: copy.h1,
-    numberOfItems: list.length,
-    itemListElement: list.map((p, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      name: p.names[locale] || p.names.en,
-      url: `${BASE_URL}/${locale}/products/${p.slug}`,
-    })),
-  };
+  // 父级枢纽页列的是「产品类型」而不是产品，ItemList 跟着换成子品类——
+  // 否则父页把自己包装成一个产品列表，与两个子页争夺同一批关键词。
+  const itemListLd = isParent
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: copy.h1,
+        numberOfItems: children.length,
+        itemListElement: children.map((s, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: nameOf(s),
+          url: `${BASE_URL}/${locale}/${s}`,
+        })),
+      }
+    : {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: copy.h1,
+        numberOfItems: list.length,
+        itemListElement: list.map((p, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: p.names[locale] || p.names.en,
+          url: `${BASE_URL}/${locale}/products/${p.slug}`,
+        })),
+      };
 
   return (
     <div className="min-h-screen bg-white">
@@ -154,6 +202,12 @@ export default async function PillarPage({ params }: PageProps) {
             <span className="mx-2 text-slate-500" aria-hidden="true">/</span>
             <Link href={`/${locale}/products`} className="hover:text-white">{t('products', locale)}</Link>
             <span className="mx-2 text-slate-500" aria-hidden="true">/</span>
+            {parentSlug && (
+              <>
+                <Link href={`/${locale}/${parentSlug}`} className="hover:text-white">{nameOf(parentSlug)}</Link>
+                <span className="mx-2 text-slate-500" aria-hidden="true">/</span>
+              </>
+            )}
             <span className="text-white">{categoryName}</span>
           </nav>
 
@@ -182,17 +236,71 @@ export default async function PillarPage({ params }: PageProps) {
         </div>
       </section>
 
+      {/* 子品类入口：只在父级枢纽页出现，叶级页没有这一块 */}
+      {isParent && (
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14">
+          <h2 className="text-2xl font-bold text-slate-900 mb-6">{t('productTypes', locale)}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {children.map((s) => {
+              const sub = products.filter((p) => p.categorySlug === s);
+              const subCopy = PILLARS[s as PillarSlug]?.[locale] || PILLARS[s as PillarSlug]?.en;
+              return (
+                <Link
+                  key={s}
+                  href={`/${locale}/${s}`}
+                  className="group block p-6 bg-white border border-slate-200 rounded-2xl hover:border-blue-400 hover:shadow-md transition-all"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600">{nameOf(s)}</h3>
+                    <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full shrink-0">
+                      {sub.length}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm text-slate-600 leading-relaxed line-clamp-3">{subCopy?.intro}</p>
+                  <span className="mt-3 inline-block text-sm font-medium text-blue-600">
+                    {t('viewType', locale)} →
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       {/* Products in this category */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <div className="flex items-end justify-between gap-4 mb-7">
-          <h2 className="text-2xl font-bold text-slate-900">{categoryName}</h2>
+          <h2 className="text-2xl font-bold text-slate-900">{isParent ? t('products', locale) : categoryName}</h2>
           <Link href={`/${locale}/products`} className="text-sm text-blue-600 hover:underline whitespace-nowrap">
             {t('viewAll', locale)} →
           </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {list.map((p) => <ProductCard key={p.id} product={p} locale={locale} />)}
-        </div>
+
+        {isParent ? (
+          <div className="space-y-12">
+            {children.map((s) => {
+              const sub = products.filter((p) => p.categorySlug === s);
+              if (!sub.length) return null;
+              return (
+                <div key={s}>
+                  <div className="flex items-baseline gap-3 mb-4">
+                    <h3 className="text-lg font-semibold text-slate-900">{nameOf(s)}</h3>
+                    <Link href={`/${locale}/${s}`} className="text-xs text-blue-600 hover:underline">
+                      {t('viewType', locale)} →
+                    </Link>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {sub.map((p) => <ProductCard key={p.id} product={p} locale={locale} />)}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {list.map((p) => <ProductCard key={p.id} product={p} locale={locale} />)}
+          </div>
+        )}
       </section>
 
       {/* FAQ */}
@@ -220,14 +328,14 @@ export default async function PillarPage({ params }: PageProps) {
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         <h2 className="text-2xl font-bold text-slate-900 mb-6">{t('related', locale)}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {others.map((s) => (
+          {related.map((s) => (
             <Link key={s} href={`/${locale}/${s}`}
               className="group block p-5 bg-white border border-slate-200 rounded-xl hover:border-blue-400 hover:shadow-md transition-all">
               <div className="font-semibold text-slate-900 group-hover:text-blue-600">
-                {CATEGORY_NAME[s]?.[locale] || CATEGORY_NAME[s]?.en || s}
+                {nameOf(s)}
               </div>
               <div className="text-sm text-slate-500 mt-1 line-clamp-2">
-                {PILLARS[s][locale]?.h1 || PILLARS[s].en.h1}
+                {PILLARS[s as PillarSlug]?.[locale]?.h1 || PILLARS[s as PillarSlug]?.en.h1}
               </div>
             </Link>
           ))}

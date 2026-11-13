@@ -305,9 +305,9 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
 
   // ─── 品类入口卡（首页是这四个落地页唯一的高权重入口）───
   // 顺序固定：声屏障优先（转化主品类），其余按产品线铺开。
-  // 链接一律走 categoryHref() 指向静态落地页 /{locale}/{slug}：
-  // 参数页 /products?category=xx 的 canonical 只能指向 /products，拿不到品类词排名。
-  const PILLAR_ORDER = ['noise-barrier', 'gabion', 'fence', 'protection-net', 'wire-mesh'];
+  // 2026-11-13 品类改为两级后，首页只列一级品类——石笼网与边坡防护
+  // 收在「自然灾害防护网」卡片下，避免同一分类在首页出现两次。
+  const PILLAR_ORDER = ['noise-barrier', 'natural-disaster-protection', 'fence', 'wire-mesh'];
   const pillarCards = PILLAR_ORDER
     .map((slug) => categories.find((c: {slug: string}) => c.slug === slug))
     .filter((c): c is NonNullable<typeof c> => Boolean(c));
@@ -319,23 +319,17 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
       vi: 'Tường chắn ồn đường cao tốc, đường sắt, cầu và công nghiệp — kim loại, acrylic trong suốt, kín hoàn toàn.',
       th: 'กำแพงกันเสียงทางหลวง รถไฟ สะพาน และโรงงาน — โลหะ อะคริลิกใส และแบบปิดล้อม',
     },
-    gabion: {
-      en: 'Gabion boxes, reno mattresses and retaining walls. Wire 2.7–4.0 mm, zinc 240–275 g/m², mesh 80×100 mm.',
-      zh: '石笼网箱、雷诺护垫与挡土墙。钢丝 2.7–4.0 mm，锌层 240–275 g/m²，网孔 80×100 mm。',
-      vi: 'Rọ đá, nệm Reno và tường chắn đất. Dây 2.7–4.0 mm, kẽm 240–275 g/m², mắt lưới 80×100 mm.',
-      th: 'ตะกร้าเกเบี้ยน ฟูก Reno และกำแพงกันดิน ลวด 2.7–4.0 mm สังกะสี 240–275 g/m² ช่อง 80×100 mm',
+    'natural-disaster-protection': {
+      en: 'Two lines under one roof: active and passive slope protection nets, plus gabion boxes and reno mattresses for erosion control.',
+      zh: '一个品类覆盖两条产品线：主动/被动边坡防护网，以及用于护坡护岸的石笼网箱与雷诺护垫。',
+      vi: 'Một danh mục, hai dòng sản phẩm: lưới bảo vệ mái dốc chủ động và bị động, cùng rọ đá và nệm Reno chống xói lở.',
+      th: 'หมวดเดียวครอบสองสายสินค้า: ตาข่ายป้องกันลาดชันแบบแอคทีฟและพาสซีฟ พร้อมตะกร้าเกเบี้ยนและฟูก Reno สำหรับกันการกัดเซาะ',
     },
     fence: {
       en: '358 anti-climb, chain link, temporary and crowd barriers for perimeter security.',
       zh: '358 防攀爬、勾花网、临时围栏与人群隔离栏，用于周界安防。',
       vi: 'Rào 358 chống leo, lưới mắt cáo, rào tạm và rào chắn đám đông cho an ninh vành đai.',
       th: 'รั้ว 358 กันปีน ตะแกรงถัก รั้วชั่วคราว และแผงกั้นฝูงชน สำหรับความปลอดภัยรอบเขต',
-    },
-    'protection-net': {
-      en: 'Active drapery nets and passive ring-net barriers for rockfall and slope protection.',
-      zh: '主动覆盖网与被动环形网屏障，用于落石与边坡防护。',
-      vi: 'Lưới phủ chủ động và rào vòng thụ động cho chống rơi đá và bảo vệ taluy.',
-      th: 'ตาข่ายคลุมแบบแอคทีฟและแนวรั้ววงแหวนแบบพาสซีฟ สำหรับกันหินตกและป้องกันไหล่เขา',
     },
     'wire-mesh': {
       en: 'Welded, hexagonal and crimped mesh plus barbed wire, cut and packed to your specification.',

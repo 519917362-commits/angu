@@ -155,12 +155,36 @@ function CategorySidebar({
                 }`}
               >
                 <span>{cat.names[locale] || cat.names.en}</span>
-                {cat.productCount && (
+                {cat.productCount ? (
                   <span className="text-xs bg-slate-100 px-2 py-0.5 rounded-full">
                     {cat.productCount}
                   </span>
-                )}
+                ) : null}
               </Link>
+              {/* 二级品类缩进挂在父类下，不另起一个顶层条目 */}
+              {cat.children && cat.children.length > 0 && (
+                <ul className="mt-1 ms-3 ps-3 border-s border-slate-100 space-y-1">
+                  {cat.children.map((kid) => (
+                    <li key={kid.id}>
+                      <Link
+                        href={categoryHref(locale, kid.slug)}
+                        className={`flex items-center justify-between px-3 py-1.5 rounded-lg text-sm transition-colors ${
+                          currentSlug === kid.slug
+                            ? 'bg-blue-50 text-blue-600 font-semibold'
+                            : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                        }`}
+                      >
+                        <span>{kid.names[locale] || kid.names.en}</span>
+                        {kid.productCount ? (
+                          <span className="text-xs bg-slate-100 px-2 py-0.5 rounded-full">
+                            {kid.productCount}
+                          </span>
+                        ) : null}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>
@@ -183,10 +207,14 @@ export default async function ProductsPage({
   ]);
 
   const products = catalog?.products || [];
+  // 后端只返回一级品类，二级在 children 里（石笼网、边坡防护挂在自然灾害防护网下）
   const categories = catalog?.categories || [];
+  // 叶级品类 = 真正挂产品的分类；计数与「N 大品类」口径按叶级算，
+  // 否则父品类会既算一次自己又算一次子类，总数虚高。
+  const leafCategories = categories.flatMap((c) => (c.children && c.children.length ? c.children : [c]));
 
   // Sort categories by product count desc
-  const sortedCategories = [...categories].sort((a, b) => (b.productCount || 0) - (a.productCount || 0));
+  const sortedCategories = [...leafCategories].sort((a, b) => (b.productCount || 0) - (a.productCount || 0));
 
   const config = siteConfig?.config;
   const v = (key: string, fbEn: string, fbZh?: string) => {
@@ -269,28 +297,28 @@ export default async function ProductsPage({
 
   // ── JSON-LD: FAQPage (GEO) ──
   const faqItems = locale === 'zh' ? [
-    { q: '安固丝网主要生产哪些产品？', a: '安固丝网主要生产石笼网箱、勾花网围栏、双圈护栏网、刀片刺绳、六角网、电焊网、声屏障、防爆石笼网、不锈钢绳网等九大品类丝网产品，共28款系列产品，广泛应用于建筑、水利、公路、矿山、农牧等领域。' },
+    { q: '安固丝网主要生产哪些产品？', a: '安固丝网按四条产品线组织：声屏障；自然灾害防护网（下含边坡防护网与石笼网两个品类）；护栏网（358 防攀爬、868 双丝、临时护栏、机场周界隔离护栏）；丝网类（电焊网、六角网、轧花网、刺绳等）。五个品类共 41 款在架产品，广泛应用于建筑、水利、公路、矿山、农牧等领域。' },
     { q: '产品是否通过国际认证？', a: '是的。安固丝网通过ISO 9001质量管理体系认证，石笼网、边坡防护网等核心产品获得CE认证，符合EN 10223-3、ETAG 027等欧洲标准，可用于海外工程项目采购。' },
     { q: '最小起订量是多少？可以接受样品订单吗？', a: '常规产品起订量为100-500平方米，具体因产品类型和规格不同而异。我们支持样品订单和小批量试单，方便您检验产品质量后再决定大批量采购。' },
     { q: '产品如何包装和运输？出口到哪些国家？', a: '采用防潮托盘包装或木箱包装，支持海运、铁路及空运。产品已出口至东南亚、中东、非洲、欧洲、南美等30多个国家和地区，在中国主要港口（天津、青岛、上海）发货。' },
     { q: '可以提供定制服务吗？交期多久？', a: '完全支持定制生产，包括尺寸、丝径、镀层、颜色等规格参数。标准目录规格自定金到账起 20 天内交货；定制或大型结构按订单单独确认。欢迎联系我们获取详细报价和交期评估。' },
     { q: '如何获取产品报价？', a: '您可以通过网站联系表单、WhatsApp（+86 188 0318 9797）、邮件（annie@angumesh.com）或直接拨打销售热线联系我们。请在询盘中注明产品型号、规格需求、数量和目标港口，我们会在24小时内提供详细报价。' },
   ] : locale === 'vi' ? [
-    { q: 'Angu Wire Mesh sản xuất những sản phẩm gì?', a: 'Angu Wire Mesh sản xuất 9 danh mục sản phẩm: rọ đá, lưới chống rơi đá, hàng rào lưới mắt cáo, lưới thép hàn, lưới thép lục giác, dây kẻ gai, rào chắn nổ, lưới dây thừng thép không gỉ và rào tạm thời — 28 dòng sản phẩm, được sử dụng rộng rãi trong xây dựng, thủy lợi, đường cao tốc, khai thác mỏ, nông nghiệp và cảnh quan.' },
+    { q: 'Angu Wire Mesh sản xuất những sản phẩm gì?', a: 'Angu Wire Mesh tổ chức sản phẩm theo bốn dòng: tấm chắn tiếng ồn; lưới phòng chống thiên tai (gồm lưới bảo vệ mái dốc và rọ đá); hàng rào (358 chống leo, lưới đôi 868, rào tạm, rào cách ly vành đai sân bay); và lưới thép (lưới hàn, lục giác, dập sóng, dây gai). Tổng cộng 5 danh mục với 41 sản phẩm đang bán, dùng trong xây dựng, thủy lợi, đường cao tốc, khai thác mỏ và nông nghiệp.' },
     { q: 'Sản phẩm có chứng nhận quốc tế không?', a: 'Có. Angu Wire Mesh được chứng nhận ISO 9001, sản phẩm cốt lõi (rọ đá, lưới chống rơi đá) được chứng nhận CE, tuân thủ EN 10223-3, ETAG 027 và các tiêu chuẩn châu Âu khác, phù hợp cho mua sắm dự án quốc tế.' },
     { q: 'Số lượng đặt hàng tối thiểu (MOQ) là bao nhiêu? Có chấp nhận đơn hàng mẫu không?', a: 'MOQ tiêu chuẩn từ 100-500 m² tùy theo loại sản phẩm và thông số. Chúng tôi hoan nghênh đơn hàng mẫu và lô nhỏ để bạn đánh giá chất lượng trước khi mua số lượng lớn.' },
     { q: 'Sản phẩm được đóng gói và vận chuyển như thế nào? Xuất khẩu đến những quốc gia nào?', a: 'Sản phẩm được đóng gói bằng pallet chống ẩm hoặc thùng gỗ. Hỗ trợ vận tải biển, đường sắt và hàng không. Sản phẩm đã xuất khẩu đến hơn 30 quốc gia ở Đông Nam Á, Trung Đông, Châu Phi, Châu Âu và Nam Mỹ. Vận chuyển từ các cảng chính của Trung Quốc (Tianjin, Qingdao, Shanghai).' },
     { q: 'Có cung cấp dịch vụ sản xuất tùy chỉnh không? Thời gian giao hàng bao lâu?', a: 'Hoàn toàn hỗ trợ sản xuất tùy chỉnh bao gồm kích thước, đường kính dây, lớp phủ, màu sắc và các thông số khác. Quy cách chuẩn trong danh mục giao trong vòng 20 ngày kể từ ngày nhận tiền đặt cọc; kết cấu tùy chỉnh hoặc cỡ lớn được xác nhận riêng cho từng đơn. Liên hệ chúng tôi để báo giá chi tiết và đánh giá thời gian giao hàng.' },
     { q: 'Làm thế nào để nhận báo giá?', a: 'Bạn có thể liên hệ qua biểu mẫu trên website, WhatsApp (+86 188 0318 9797), email (annie@angumesh.com) hoặc gọi đường dây nóng. Vui lòng ghi rõ model sản phẩm, thông số, số lượng và cảng đích trong yêu cầu, chúng tôi sẽ báo giá chi tiết trong vòng 24 giờ.' },
   ] : locale === 'th' ? [
-    { q: 'Angu Wire Mesh ผลิตสินค้าอะไรบ้าง?', a: 'Angu Wire Mesh ผลิต 9 หมวดสินค้า: กล่องเกเบี้ยน ตะแกรงป้องกันหินตก รั้วตะแกรงถัก ตะแกรงลวดเชื่อม ตะแกรงลวดหกเหลี่ยม ลวดหนาม รั้วกันระเบิด ตะแกรงเชือกลวดสแตนเลส และรั้วชั่วคราว — 28 ซีรีส์สินค้า ใช้กันอย่างแพร่หลายในการก่อสร้าง ชลประทาน ทางหลวง เหมืองแร่ เกษตรกรรม และภูมิทัศน์' },
+    { q: 'Angu Wire Mesh ผลิตสินค้าอะไรบ้าง?', a: 'Angu Wire Mesh จัดกลุ่มสินค้าเป็นสี่สาย: แผงกั้นเสียง; ตาข่ายป้องกันภัยพิบัติ (ตาข่ายป้องกันลาดชันกับเกเบี้ยน); รั้ว (358 กันปีน ลวดคู่ 868 รั้วชั่วคราว และรั้วกั้นเขตสนามบิน); และลวดตาข่าย (ตะแกรงเชื่อม หกเหลี่ยม รีดลอน ลวดหนาม) รวม 5 หมวดสินค้า 41 รายการ ใช้ในงานก่อสร้าง ชลประทาน ทางหลวง เหมืองแร่ และเกษตรกรรม' },
     { q: 'สินค้าได้รับการรับรองระดับสากลหรือไม่?', a: 'ใช่ Angu Wire Mesh ได้รับการรับรอง ISO 9001 สินค้าหลัก (กล่องเกเบี้ยน ตะแกรงป้องกันหินตก) ได้รับการรับรอง CE เป็นไปตามมาตรฐาน EN 10223-3, ETAG 027 และมาตรฐานยุโรปอื่นๆ เหมาะสำหรับการจัดซื้อโครงการระดับสากล' },
     { q: 'จำนวนสั่งซื้อขั้นต่ำ (MOQ) คือเท่าไหร่? รับคำสั่งตัวอย่างหรือไม่?', a: 'MOQ มาตรฐานตั้งแต่ 100-500 ตร.ม. ขึ้นอยู่กับประเภทและข้อมูลจำเพาะของสินค้า เรายินดีรับคำสั่งตัวอย่างและล็อตเล็กเพื่อให้คุณประเมินคุณภาพก่อนสั่งจำนวนมาก' },
     { q: 'สินค้าถูกบรรจุและขนส่งอย่างไร? ส่งออกไปประเทศใดบ้าง?', a: 'สินค้าถูกบรรจุด้วยพาเลตกันความชื้นหรือลังไม้ รองรับการขนส่งทางเรือ ทางรถไฟ และทางอากาศ สินค้าส่งออกไปยังกว่า 30 ประเทศในเอเชียตะวันออกเฉียงใต้ ตะวันออกกลาง แอฟริกา ยุโรป และอเมริกาใต้ ส่งจากท่าเรือหลักของจีน (เทียนจิน ชิงเต่า เซี่ยงไฮ้)' },
     { q: 'มีบริการผลิตแบบกำหนดเองหรือไม่? ระยะเวลาส่งมอบนานเท่าใด?', a: 'รองรับการผลิตแบบกำหนดเองอย่างเต็มที่ รวมถึงขนาด เส้นผ่านศูนย์กลางลวด การเคลือบ สี และข้อมูลจำเพาะอื่นๆ ขนาดมาตรฐานตามแคตตาล็อกจัดส่งภายใน 20 วันนับจากวันที่ได้รับเงินมัดจำ โครงสร้างสั่งทำพิเศษหรือขนาดใหญ่ยืนยันเป็นรายออเดอร์ ติดต่อเราเพื่อรับใบเสนอราคาโดยละเอียดและการประเมินระยะเวลาส่งมอบ' },
     { q: 'จะขอรับใบเสนอราคาได้อย่างไร?', a: 'คุณสามารถติดต่อผ่านแบบฟอร์มบนเว็บไซต์ WhatsApp (+86 188 0318 9797) อีเมล (annie@angumesh.com) หรือโทรสายตรงได้โดยตรง โปรดระบุรุ่นสินค้า ข้อมูลจำเพาะ จำนวน และท่าเรือปลายทางในคำขอ เราจะให้ใบเสนอราคาโดยละเอียดภายใน 24 ชม.' },
   ] : [
-    { q: 'What products does Angu Wire Mesh manufacture?', a: 'Angu Wire Mesh manufactures 9 product categories: gabion boxes, chain link fence, double-loop fencing, razor barbed wire, hexagonal wire mesh, welded wire mesh, noise barriers, blast-proof gabions, and stainless steel rope nets — 28 product series in total, widely used in construction, water conservancy, highway, mining, agriculture, and landscaping projects.' },
+    { q: 'What products does Angu Wire Mesh manufacture?', a: 'Angu Wire Mesh organises its range into four product lines: noise barriers; natural disaster protection (slope protection nets, plus gabion boxes and reno mattresses); fencing (358 anti-climb, 868 double-wire, temporary fencing and airport-perimeter isolation fence); and wire mesh (welded, hexagonal, crimped and barbed wire). That is 5 product categories and 41 active products, used across construction, water conservancy, highways, mining and agriculture.' },
     { q: 'Are your products internationally certified?', a: 'Yes. Angu Wire Mesh is ISO 9001 certified, and our core products (gabion boxes, rockfall protection nets) are CE certified, compliant with EN 10223-3, ETAG 027, and other European standards, making them suitable for international project procurement.' },
     { q: 'What is the minimum order quantity (MOQ)? Do you accept sample orders?', a: 'Standard MOQ ranges from 100 to 500 sqm depending on the product type and specification. We welcome sample orders and small trial batches so you can evaluate product quality before committing to bulk purchases.' },
     { q: 'How are products packaged and shipped? Which countries do you export to?', a: 'Products are packed with moisture-proof pallets or wooden crates. We support sea freight, rail, and air shipping. Our products are exported to 30+ countries across Southeast Asia, the Middle East, Africa, Europe, and South America. We ship from major Chinese ports (Tianjin, Qingdao, Shanghai).' },
@@ -381,7 +409,7 @@ export default async function ProductsPage({
             {/* 当前分类在服务端已无从得知（页面不再读 searchParams），
                 侧栏只保留「全部产品」选中态；分类导航本身走上面的 pills 与支柱页 */}
             <CategorySidebar
-              categories={sortedCategories}
+              categories={categories}
               products={products}
               currentSlug={undefined}
               locale={locale}

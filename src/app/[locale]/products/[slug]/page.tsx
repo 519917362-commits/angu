@@ -1,5 +1,5 @@
 import type {Metadata} from 'next';
-import { categoryHref } from '@/lib/pillars';
+import { categoryHref, categoryMap, CATEGORY_PARENT } from '@/lib/pillars';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {getProduct, getCatalog, getBlogPosts} from '@/lib/api';
@@ -398,8 +398,17 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
     .slice(0, 4);
 
   // Find category name for breadcrumb
-  const category = catalog.categories.find(c => c.slug === product.categorySlug);
+  // 后端 categories 只返回一级品类，二级在 children 里，必须摊平后再查，
+  // 否则石笼网 / 边坡防护的产品页会拿不到品类名，面包屑直接掉一级。
+  const catMap = categoryMap(catalog.categories);
+  const category = catMap[product.categorySlug];
   const categoryName = category?.names[locale] || category?.names.en || product.categorySlug;
+
+  // 二级品类在面包屑里多一跳父级（产品 → 石笼网 → 自然灾害防护网）
+  const parentSlug = CATEGORY_PARENT[product.categorySlug];
+  const parentName = parentSlug
+    ? catMap[parentSlug]?.names[locale] || catMap[parentSlug]?.names.en || parentSlug
+    : '';
 
   // Product-specific FAQs — 数据源唯一：全部来自后台/数据库（36/36 产品已覆盖）
   const productFaqs = product.faq?.[locale] || product.faq?.en || [];
@@ -529,15 +538,18 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
   }
 
   // ── JSON-LD: BreadcrumbList (with product) ──
+  // 层级与可见面包屑严格一致：二级品类的产品多一跳父级
+  const crumbItems = [
+    { name: locale === 'zh' ? '首页' : locale === 'vi' ? 'Trang chủ' : locale === 'th' ? 'หน้าแรก' : 'Home', item: `${baseUrl}/${locale}` },
+    { name: locale === 'zh' ? '产品中心' : locale === 'vi' ? 'Sản phẩm' : locale === 'th' ? 'สินค้า' : 'Products', item: `${baseUrl}/${locale}/products` },
+    ...(parentSlug ? [{ name: parentName, item: `${baseUrl}/${locale}/${parentSlug}` }] : []),
+    { name: categoryName, item: `${baseUrl}` + categoryHref(locale, product.categorySlug) },
+    { name, item: `${baseUrl}/${locale}/products/${product.slug}` },
+  ];
   const breadcrumbLD = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: locale === 'zh' ? '首页' : locale === 'vi' ? 'Trang chủ' : locale === 'th' ? 'หน้าแรก' : 'Home', item: `${baseUrl}/${locale}` },
-      { '@type': 'ListItem', position: 2, name: locale === 'zh' ? '产品中心' : locale === 'vi' ? 'Sản phẩm' : locale === 'th' ? 'สินค้า' : 'Products', item: `${baseUrl}/${locale}/products` },
-      { '@type': 'ListItem', position: 3, name: categoryName, item: `${baseUrl}` + categoryHref(locale, product.categorySlug) },
-      { '@type': 'ListItem', position: 4, name, item: `${baseUrl}/${locale}/products/${product.slug}` },
-    ],
+    itemListElement: crumbItems.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: c.item })),
   };
 
   // ── JSON-LD: FAQPage (product-specific) ──
@@ -574,6 +586,13 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
             <span className="hidden sm:inline">/</span>
             <Link href={`/${locale}/products`} className="hidden sm:inline hover:text-blue-600 transition-colors">{locale === 'zh' ? '产品' : locale === 'vi' ? 'Sản phẩm' : locale === 'th' ? 'สินค้า' : 'Products'}</Link>
             <span className="hidden sm:inline">/</span>
+            {parentSlug && (
+              <>
+                {/* 父级同样只在桌面显示：移动端维持「分类 / 当前页」两级，避免折行吃首屏 */}
+                <Link href={`/${locale}/${parentSlug}`} className="hidden sm:inline hover:text-blue-600 transition-colors">{parentName}</Link>
+                <span className="hidden sm:inline">/</span>
+              </>
+            )}
             <Link href={categoryHref(locale, product.categorySlug)} className="shrink-0 hover:text-blue-600 transition-colors">{categoryName}</Link>
             <span className="shrink-0">/</span>
             <span className="text-slate-900 truncate min-w-0">{name}</span>

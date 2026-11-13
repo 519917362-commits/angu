@@ -1,15 +1,64 @@
 /**
- * 四个品类支柱页的内容源（gabion / fence / wire-mesh / protection-net）。
+ * 品类支柱页的内容源。
  *
- * 这四类产品此前只存在于 /products?category=xx 这种带参数的筛选页里，
+ * 这四个品类此前只存在于 /products?category=xx 这种带参数的筛选页里，
  * 没有独立的可收录落地页——而它们正是「gabion box manufacturer」这类
  * 商业搜索词最该命中的地方。noise-barrier 已有独立定制页，不在此列。
+ *
+ * 2026-11-13 起品类改为两级：
+ * - 一级：noise-barrier（独立页）/ natural-disaster-protection / fence / wire-mesh
+ * - 二级：natural-disaster-protection 下的 slope-protection 与 gabion
+ * 一级的 natural-disaster-protection 是枢纽页，只列子品类，不直接挂产品。
  */
 
 import {localeHref} from '@/lib/routing';
+import type {Category} from '@/types/product';
 
-export const PILLAR_SLUGS = ['gabion', 'fence', 'wire-mesh', 'protection-net'] as const;
+export const PILLAR_SLUGS = [
+  'natural-disaster-protection',
+  'slope-protection',
+  'gabion',
+  'fence',
+  'wire-mesh',
+] as const;
 export type PillarSlug = (typeof PILLAR_SLUGS)[number];
+
+/**
+ * 品类层级表。键是子品类，值是其父品类。
+ * 一级品类不出现在这里——判断一级用 `!CATEGORY_PARENT[slug]`。
+ */
+export const CATEGORY_PARENT: Record<string, string> = {
+  'slope-protection': 'natural-disaster-protection',
+  gabion: 'natural-disaster-protection',
+};
+
+/** 反向表：父品类 → 有序子品类。顺序即页面与导航里的展示顺序。 */
+export const CATEGORY_CHILDREN: Record<string, string[]> = {
+  'natural-disaster-protection': ['slope-protection', 'gabion'],
+};
+
+/** 顶部导航与「其他产品线」只列一级品类，避免同一分类在两个层级重复出现。 */
+export const TOP_LEVEL_PILLAR_SLUGS = PILLAR_SLUGS.filter((s) => !CATEGORY_PARENT[s]);
+
+export function isParentCategory(slug: string): boolean {
+  return Boolean(CATEGORY_CHILDREN[slug]?.length);
+}
+
+/**
+ * 把 /api/catalog 返回的一级品类树摊平成一张 slug → 品类 的映射。
+ *
+ * 后端为了不让前端重复渲染，categories 只返回一级品类，二级在 children 里。
+ * 但产品详情页按 product.categorySlug 反查品类名时必须能查到二级，
+ * 否则石笼网与边坡防护的产品页会丢掉面包屑上一级。
+ */
+export function categoryMap(categories: Category[]): Record<string, Category> {
+  const map: Record<string, Category> = {};
+  for (const cat of categories) {
+    map[cat.slug] = cat;
+    for (const kid of cat.children || []) map[kid.slug] = kid;
+  }
+  return map;
+}
 
 /**
  * 品类落地页路径表。
@@ -22,10 +71,11 @@ export type PillarSlug = (typeof PILLAR_SLUGS)[number];
  * 自己拿不到排名，等于把品类词全部让掉。
  */
 export const CATEGORY_LANDING = {
+  'natural-disaster-protection': 'natural-disaster-protection',
+  'slope-protection': 'slope-protection',
   gabion: 'gabion',
   fence: 'fence',
   'wire-mesh': 'wire-mesh',
-  'protection-net': 'protection-net',
   'noise-barrier': 'noise-barrier',
 } as const;
 
@@ -54,10 +104,11 @@ export interface PillarCopy {
  * 在 LinkedIn / WhatsApp 里转发只有纯文字，没有缩略图。
  */
 export const PILLAR_OG_IMAGE: Record<PillarSlug, string> = {
+  'natural-disaster-protection': '/images/products/protection-net.jpg',
+  'slope-protection': '/images/products/protection-net.jpg',
   gabion: '/images/products/gabion-box.jpg',
   fence: '/images/products/chain-link.jpg',
   'wire-mesh': '/images/products/welded-wire-mesh.jpg',
-  'protection-net': '/images/products/protection-net.jpg',
 };
 
 export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
@@ -421,7 +472,126 @@ export const PILLARS: Record<PillarSlug, Record<string, PillarCopy>> = {
     },
   },
 
-  'protection-net': {
+  // 一级枢纽品类：自然灾害防护网。自身不挂产品，只承载两个子品类，
+  // 所以 H1/正文写的是「两类系统怎么配合」，不是单个 SKU 的卖点。
+  'natural-disaster-protection': {
+    en: {
+      metaTitle: 'Natural Disaster Protection Net Systems — Slope & Gabion | Angu',
+      metaDesc:
+        'One supplier for two engineered lines: rockfall and slope protection nets up to 3000 kJ, and gabion boxes for bank and toe erosion. Factory-direct, ISO 9001.',
+      h1: 'Natural Disaster Protection Net Systems',
+      intro:
+        'Landslides, rockfall, flash flooding and bank erosion are the same problem in different clothes — water and gravity moving ground that people have built next to. We supply the two systems that hold it back: flexible slope protection nets that pin the surface, and gabion structures that weigh the toe down while letting water pass. Both are drawn, woven and galvanized in the same plant, so anchorage, wire diameter and coating class stay consistent across the whole scheme instead of being reconciled between two suppliers on site.',
+      bullets: [
+        'Slope protection: active drapery nets and passive rockfall barriers, 500–3000 kJ',
+        'Gabion: boxes, reno mattresses and reinforced walls for bank and toe protection',
+        'Hot-dip galvanized 240–275 g/m² to EN 10244-2 class A, 15+ year service life',
+        'Anchors, lacing rope and connection details sized to the same load case',
+      ],
+      faq: [
+        {
+          q: 'Which of the two systems does my site need?',
+          a: 'If the slope face is still intact and only shedding surface material, an active net pins it. If blocks are already falling, you need a passive barrier. If the failure is at the toe — undercut by a river or wave action — gabion is the cheaper fix. Most mountain roads end up using all three in different sections.',
+        },
+        {
+          q: 'Can both lines ship together?',
+          a: 'Yes, and it is usually cheaper. Nets and gabion share the same container, the same galvanizing batch and one set of export documents.',
+        },
+        {
+          q: 'Do you provide design support?',
+          a: 'Send slope height, angle, expected block size and design flood level. We return an anchorage layout for the nets and a gabion wall section with a stability check.',
+        },
+      ],
+    },
+    zh: {
+      metaTitle: '自然灾害防护网 — 边坡防护 + 石笼网 | 安固丝网',
+      metaDesc:
+        '一个供应商覆盖两类系统：边坡防护网与落石拦截（500–3000 kJ）、石笼网箱护坡护岸。热镀锌 240–275 g/m²，ISO 9001，工厂直供。',
+      h1: '自然灾害防护网',
+      intro:
+        '滑坡、落石、山洪与河岸冲刷，本质上是同一个问题：水和重力在搬动人的地基。我们供应两类把地面按住的东西——柔性边坡防护网贴住坡面，石笼结构压住坡脚同时让水通过。两条线在同一间厂里拉丝、织网、镀锌，锚固、丝径与镀层等级按同一套标准配套，而不是到工地再在两家供应商之间找平。',
+      bullets: [
+        '边坡防护：主动防护网与被动落石拦截，500–3000 kJ',
+        '石笼网：网箱、雷诺护垫与加筋挡墙，用于护坡护岸与坡脚防护',
+        '热镀锌 240–275 g/m²，符合 EN 10244-2 A 级，防腐 15 年以上',
+        '锚杆、缝合绳与连接件按同一受力工况配套',
+      ],
+      faq: [
+        {
+          q: '我的项目该用哪一类？',
+          a: '坡面还完整、只是表层掉渣，用主动网贴住；已经有岩块下落，用被动拦截；如果坡脚被河水或浪掏空，石笼更省钱。山区公路多数是三段路用三种做法，不是二选一。',
+        },
+        {
+          q: '两类能一起下单吗？',
+          a: '能，而且通常更便宜。网和石笼同柜、同批镀锌、一套出口单证。',
+        },
+        {
+          q: '能提供设计支持吗？',
+          a: '把坡高、坡角、预估落石块径和设计洪水位发来，我们返回锚杆布置图和带稳定验算的石笼墙断面。',
+        },
+      ],
+    },
+    vi: {
+      metaTitle: 'Hệ thống lưới phòng chống thiên tai — mái dốc & rọ đá | Angu',
+      metaDesc:
+        'Một nhà cung cấp cho hai dòng hệ thống: lưới bảo vệ mái dốc và chắn đá rơi tới 3000 kJ, rọ đá chống xói lở bờ và chân dốc. ISO 9001, giá xuất xưởng.',
+      h1: 'Hệ thống lưới phòng chống thiên tai',
+      intro:
+        'Sạt lở, đá rơi, lũ quét và xói lở bờ sông là cùng một vấn đề: nước và trọng lực đang dịch chuyển nền đất mà con người đã xây cạnh đó. Chúng tôi cung cấp hai hệ giữ lại — lưới bảo vệ mái dốc mềm ghim bề mặt, và kết cấu rọ đá đè chân dốc trong khi vẫn để nước thoát. Cả hai được kéo dây, dệt và mạ kẽm trong cùng một nhà máy, nên neo, đường kính dây và cấp mạ khớp nhau trong toàn bộ phương án thay vì phải cân lại giữa hai nhà cung cấp tại công trường.',
+      bullets: [
+        'Bảo vệ mái dốc: lưới chủ động và hàng rào chắn đá bị động, 500–3000 kJ',
+        'Rọ đá: hộp, nệm đá và tường chắn gia cường cho bờ sông và chân dốc',
+        'Mạ kẽm nhúng nóng 240–275 g/m² theo EN 10244-2 cấp A, tuổi thọ 15+ năm',
+        'Neo, dây khâu và chi tiết liên kết tính theo cùng một tổ hợp tải trọng',
+      ],
+      faq: [
+        {
+          q: 'Công trình của tôi cần hệ nào trong hai hệ?',
+          a: 'Mái dốc còn nguyên, chỉ bong tróc bề mặt thì dùng lưới chủ động. Đá đã rơi thì cần hệ bị động. Nếu chân dốc bị nước xói rỗng thì rọ đá rẻ hơn. Đường núi phần lớn dùng cả ba ở các đoạn khác nhau.',
+        },
+        {
+          q: 'Có đặt hai dòng cùng một đơn không?',
+          a: 'Được, và thường rẻ hơn. Lưới và rọ đá chung container, chung lô mạ kẽm, một bộ chứng từ xuất khẩu.',
+        },
+        {
+          q: 'Có hỗ trợ thiết kế không?',
+          a: 'Có. Gửi chiều cao dốc, góc dốc, kích thước khối đá dự kiến và mực nước lũ thiết kế, chúng tôi trả về sơ đồ bố trí neo và mặt cắt tường rọ đá kèm kiểm tra ổn định.',
+        },
+      ],
+    },
+    th: {
+      metaTitle: 'ระบบตาข่ายป้องกันภัยพิบัติ — ลาดชันและเกเบี้ยน | Angu',
+      metaDesc:
+        'ผู้ผลิตรายเดียวครอบสองระบบ: ตาข่ายป้องกันลาดชันและแผงกันหินตกถึง 3000 kJ กับเกเบี้ยนกันการกัดเซาะตลิ่ง ISO 9001 ราคาโรงงาน',
+      h1: 'ระบบตาข่ายป้องกันภัยพิบัติ',
+      intro:
+        'ดินถล่ม หินตก น้ำป่าไหลหลาก และการกัดเซาะตลิ่ง ล้วนเป็นปัญหาเดียวกัน: น้ำและแรงโน้มถ่วงกำลังเคลื่อนพื้นดินที่คนไปสร้างอาคารชิดไว้ เราเสนอสองระบบที่ยึดไว้ — ตาข่ายป้องกันลาดชันแบบยืดหยุ่นที่ตรึงผิวลาด และโครงสร้างเกเบี้ยนที่ถ่วงเชิงลาดไว้แต่น้ำยังระบายผ่านได้ ทั้งสองดึงลวด ทอ และชุบกัลวาไนซ์ในโรงงานเดียวกัน สมอ ลวดเย็บ และชั้นเคลือบจึงเข้าชุดกันทั้งโครงการ ไม่ต้องไปเทียบกันหน้างานระหว่างผู้ขายสองราย',
+      bullets: [
+        'ป้องกันลาดชัน: ตาข่ายเชิงรุกและแผงกันหินตกเชิงรับ 500–3000 kJ',
+        'เกเบี้ยน: กล่อง เรโนแมทเทรส และกำแพงกันดินเสริม สำหรับตลิ่งและเชิงลาด',
+        'ชุบกัลวาไนซ์ร้อน 240–275 กรัม/ตร.ม. ตาม EN 10244-2 คลาส A อายุ 15+ ปี',
+        'สมอ ลวดเย็บ และจุดเชื่อมต่อ คำนวณตามแรงชุดเดียวกัน',
+      ],
+      faq: [
+        {
+          q: 'โครงการของผมควรใช้ระบบไหน',
+          a: 'ถ้าผิวลาดยังอยู่ครบ แค่ลอกหลุด ใช้ตาข่ายเชิงรุก ถ้ามีก้อนหินตกลงมาแล้ว ต้องใช้ระบบเชิงรับ ถ้าเชิงลาดถูกน้ำกัดเป็นโพรง เกเบี้ยนประหยัดกว่า ทางภูเขาส่วนใหญ่ใช้ทั้งสามแบบในคนละช่วง',
+        },
+        {
+          q: 'สั่งสองสายรวมกันได้ไหม',
+          a: 'ได้ และมักถูกกว่า ตาข่ายกับเกเบี้ยนลงตู้เดียวกัน ชุบชุดเดียวกัน เอกสารส่งออกชุดเดียว',
+        },
+        {
+          q: 'ให้การสนับสนุนด้านออกแบบไหม',
+          a: 'ให้ แจ้งความสูงลาด มุมลาด ขนาดก้อนหินที่คาด และระดับน้ำหลากออกแบบ เราจะส่งผังสมอและหน้าตัดกำแพงเกเบี้ยนพร้อมการตรวจสอบเสถียรภาพกลับไป',
+        },
+      ],
+    },
+  },
+
+  // 边坡防护：原 protection-net 品类，2026-11-13 拆分后归入自然灾害防护网。
+  // 文案与 H1 保持「落石 + 边坡防护网」的原主词，/protection-net 301 过来时语义连续。
+  'slope-protection': {
     en: {
       metaTitle: 'Rockfall & Slope Protection Net Manufacturer | Angu',
       metaDesc:
