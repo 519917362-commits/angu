@@ -367,7 +367,11 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
         固定 580px 会让「声屏障专题」按钮被绝对定位的 stats 条整个盖住。
       */}
       <section className="relative overflow-hidden sm:h-[580px]">
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-slate-900/40 z-10" />
+        {/* 遮罩要跟着图走。2026-11-16 首屏换成色彩饱和的声屏障实拍后，
+            原 90/80/40 的均匀深色把整张图压成一片深灰，图等于白换。
+            现在按内容分区：左侧 92% 压住白字，中间降到 65%，右侧放到 10% 露出
+            蓝天与路面纵深。移动端文字占满宽度，仍用深遮罩（92/88/80）。 */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/92 via-slate-900/88 to-slate-900/80 sm:via-slate-900/65 sm:to-slate-900/10 z-10" />
         {isLocalImage(bannerImage) ? (
           <Image
             src={bannerImage}
