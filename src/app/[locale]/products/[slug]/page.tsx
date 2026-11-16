@@ -778,6 +778,13 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
                     </div>
                   )}
                 </dl>
+                {/* 装柜量是按产品尺寸与标准出口包装推算的，不是逐款实测过的装箱单。
+                    必须把口径写出来，否则买家会当实测值拿去算运费。 */}
+                <p className="text-xs text-slate-400 mt-3">
+                  {locale === 'zh'
+                    ? '装柜量为标准出口包装下的参考值，最终以报价时的装箱方案为准。'
+                    : 'Loading figures are typical for standard export packing; the final loading plan is confirmed with the quotation.'}
+                </p>
                 {product.categorySlug === 'noise-barrier' && (
                   <p className="text-xs text-slate-500 mt-3">{locale === 'zh' ? MOQ_TRIAL_NOTE_ZH : MOQ_TRIAL_NOTE_EN}</p>
                 )}
