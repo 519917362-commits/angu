@@ -520,7 +520,11 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
         unitText: unit,
         referenceQuantity: {'@type': 'QuantitativeValue', value: 1, unitText: unit},
       },
-      availability: 'https://schema.org/MadeToOrder',
+      // Google 只认固定枚举（InStock / BackOrder / PreOrder / OutOfStock 等），
+      // MadeToOrder 是 schema.org 枚举但不在 Google 映射表里，等于没写。
+      // 接单生产、20 天交期对应 BackOrder：可接受订购、非现货。
+      // 比 InStock 诚实，也不会让买家误以为立即发货。
+      availability: 'https://schema.org/BackOrder',
       businessFunction: 'http://purl.org/goodrelations/v1#Sell',
       // 交期口径：自定金到账起 20 天内（与全站文案一致）。
       // 这里会进 Google 的 Product 富媒体结果，写错等于对外承诺另一个交期。
