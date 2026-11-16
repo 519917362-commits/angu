@@ -294,6 +294,11 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
   const bannerCta = BANNER_CTA_PARTIAL[locale]
     || (bannerData?.ctaText as Record<string, string>)?.[locale] || bannerData?.ctaText?.en || 'Get a Quote';
   const bannerImage = (bannerData?.image as Record<string, string>)?.[locale] || bannerData?.image?.en || '/images/banners/banner1.jpg';
+  // alt 必须跟着图走：2026-11-16 首屏由石笼网远景换成高速公路声屏障，
+  // 旧 alt「Gabion wire mesh products」留在声屏障图上，既误导图片搜索也让读屏软件读错。
+  const heroImageAlt = locale === 'zh'
+    ? '高速公路声屏障 — 金属百叶板与透明板组合，立柱整齐排列'
+    : 'Highway noise barrier — metal louvre panels with transparent sections between steel posts';
 
   const sceneOverlay = APP_SCENE_PARTIAL[locale];
   const applicationFields = (siteConfig?.scenes || []).map((s: { icon: string; name: { en: string; zh: string }; description: { en: string; zh: string }; categorySlugs: string[] }) => ({
@@ -366,7 +371,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
         {isLocalImage(bannerImage) ? (
           <Image
             src={bannerImage}
-            alt="Gabion wire mesh products"
+            alt={heroImageAlt}
             className="absolute inset-0 w-full h-full object-cover"
             fill
             sizes="100vw"
@@ -375,7 +380,7 @@ export default async function HomePage({params}: {params: Promise<{locale: strin
         ) : (
           <img
             src={bannerImage}
-            alt="Gabion wire mesh products"
+            alt={heroImageAlt}
             className="absolute inset-0 w-full h-full object-cover"
             width={1920}
             height={580}
