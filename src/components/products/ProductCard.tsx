@@ -23,7 +23,8 @@ export function ProductCard({product, locale}: ProductCardProps) {
   return (
     <Link href={`/${locale}/products/${product.slug}`}>
       <article className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-100 h-full flex flex-col isolate">
-        <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 flex-shrink-0">
+        {/* 1:1 方图：与详情页主图同比例，网格里所有卡片等高，视觉更整齐 */}
+        <div className="relative aspect-square overflow-hidden bg-slate-100 flex-shrink-0">
           {isLocalImage(cover) ? (
             <Image
               src={cover!}

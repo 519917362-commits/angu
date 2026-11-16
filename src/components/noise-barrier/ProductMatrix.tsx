@@ -74,7 +74,7 @@ export function ProductMatrix({
               <Link key={p.slug} href={localeHref(locale, `/products/${p.slug}`)}
                 className="group bg-white rounded-2xl border border-slate-100 hover:border-blue-200 hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col">
                 {img && (
-                  <div className="relative aspect-[16/10] bg-slate-100 overflow-hidden">
+                  <div className="relative aspect-square bg-slate-100 overflow-hidden">
                     <Image
                       src={img}
                       alt={`${name} — Angu`}

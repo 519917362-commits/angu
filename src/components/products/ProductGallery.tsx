@@ -21,7 +21,7 @@ const isLocalImage = (src: string): boolean => src.startsWith('/');
  * - ≥lg 是 3 栏里的 2 栏（max-w-7xl = 1280px，扣除间距后约 640px 以内）
  * sizes 写大了浏览器会按声明值挑最大档位，白白多下 2–3 倍像素。
  */
-const MAIN_SIZES = '(max-width: 1024px) 100vw, 640px';
+const MAIN_SIZES = '(max-width: 1024px) 100vw, 800px';
 
 export default function ProductGallery({ images, name }: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -30,7 +30,7 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
   if (!images.length) {
     return (
       <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
-        <div className="aspect-[16/10] bg-slate-100 flex items-center justify-center">
+        <div className="aspect-square bg-slate-50 flex items-center justify-center">
           <span className="text-slate-400 text-sm">No image</span>
         </div>
       </div>
@@ -44,8 +44,9 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
     <>
       {/* Main gallery */}
       <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
-        {/* Main image */}
-        <div className="relative aspect-[16/10] bg-slate-100 overflow-hidden group">
+        {/* Main image —— 1:1 方图。产品图原始比例不一（1.66:1 横图到 0.67:1 竖图都有），
+            用 contain 保证整件产品完整可见，留白由浅灰底承接，不裁掉护栏两端或防爆墙层数 */}
+        <div className="relative aspect-square bg-slate-50 overflow-hidden group">
           {isLocalImage(images[activeIndex]) ? (
             // 这是产品页的 LCP 元素：主图此前是原生 <img> 直连 /uploads/*.png，
             // 800×800 的 PNG 单张 150–340KB，移动端首屏经常几秒还是一片灰。
@@ -56,17 +57,17 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
               fill
               sizes={MAIN_SIZES}
               preload
-              className="object-cover cursor-zoom-in"
+              className="object-contain cursor-zoom-in"
               onClick={() => setLightboxOpen(true)}
             />
           ) : (
             <img
               src={images[activeIndex]}
               alt={`${name} - ${activeIndex + 1}`}
-              className="w-full h-full object-cover cursor-zoom-in"
+              className="w-full h-full object-contain cursor-zoom-in"
               fetchPriority="high"
               width={800}
-              height={500}
+              height={800}
               onClick={() => setLightboxOpen(true)}
             />
           )}
@@ -113,7 +114,7 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
                 // 否则屏幕阅读器只会念出「按钮」，不知道是第几张图
                 aria-label={`Show image ${i + 1} of ${images.length}`}
                 aria-current={i === activeIndex ? 'true' : undefined}
-                className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 bg-slate-50 transition-all ${
                   i === activeIndex
                     ? 'border-blue-500 ring-1 ring-blue-200'
                     : 'border-transparent hover:border-slate-300 opacity-70 hover:opacity-100'
@@ -123,12 +124,12 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
                   <Image
                     src={img}
                     alt=""
-                    width={80}
+                    width={64}
                     height={64}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 ) : (
-                  <img src={img} alt="" className="w-full h-full object-cover" loading="lazy" />
+                  <img src={img} alt="" className="w-full h-full object-contain" loading="lazy" />
                 )}
               </button>
             ))}
