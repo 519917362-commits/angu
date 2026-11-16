@@ -14,7 +14,7 @@ import type {Product} from '@/types/product';
 import {tLabel} from '@/lib/i18n';
 import {renderMarkdown} from '@/lib/markdown';
 import {routing, locales as fullLocales} from '@/lib/routing';
-import {QUOTE_NOTE_EN, QUOTE_NOTE_ZH, LEAD_TIME_NOTE_EN, LEAD_TIME_NOTE_ZH, MOQ_NOTE_EN, MOQ_NOTE_ZH, MOQ_TRIAL_NOTE_EN, MOQ_TRIAL_NOTE_ZH, TEST_REPORT_NOTE_EN, TEST_REPORT_NOTE_ZH} from '@/lib/company';
+import {QUOTE_NOTE_EN, QUOTE_NOTE_ZH, MOQ_TRIAL_NOTE_EN, MOQ_TRIAL_NOTE_ZH, TEST_REPORT_NOTE_EN, TEST_REPORT_NOTE_ZH} from '@/lib/company';
 
 // 页面级 revalidate：与 fetch 级的 REVALIDATE_SECONDS 保持一致。
 // stale-while-revalidate 的窗口在 next.config.ts 的 expireTime 里配
@@ -87,6 +87,10 @@ const specLabels: Record<string, Record<string, string>> = {
   impactResistance: {zh: '抗冲击性', en: 'Impact Resistance', vi: 'Khả năng chống va đập', th: 'ความต้านทานแรงกระแทก'},
   standard: {zh: '标准', en: 'Standard', vi: 'Tiêu chuẩn', th: 'มาตรฐาน'},
   certifications: {zh: '认证', en: 'Certifications', vi: 'Chứng nhận', th: 'การรับรอง'},
+  // Ordering & logistics — 侧栏单独成块，不进技术规格表
+  leadTime: {zh: '交期', en: 'Lead Time', vi: 'Thời gian giao hàng', th: 'ระยะเวลาจัดส่ง'},
+  loadingQty: {zh: '装柜量', en: 'Loading Quantity', vi: 'Số lượng xếp container', th: 'ปริมาณบรรจุตู้'},
+  packaging: {zh: '包装方式', en: 'Packaging', vi: 'Đóng gói', th: 'การบรรจุ'},
   // Wire mesh specifics
   rollLength: {zh: '卷长', en: 'Roll Length', vi: 'Chiều dài cuộn', th: 'ความยาวม้วน'},
   weaveType: {zh: '编织方式', en: 'Weave Type', vi: 'Kiểu dệt', th: 'รูปแบบการทอ'},
@@ -276,6 +280,35 @@ const specLabels: Record<string, Record<string, string>> = {
   '面板强度': {zh: '面板强度', en: 'Panel Strength', vi: 'Độ bền tấm', th: 'ความแข็งแรงแผง'},
 };
 
+// 采购信息字段：不进技术规格表，改由侧栏 Ordering 区块单独呈现
+const ORDER_KEYS = ['leadTime', 'loadingQty', 'packaging'];
+
+// 应用场景导语：说清这类场地对产品的共同技术要求，
+// 否则「应用领域」只是一排地名标签，对选型没有帮助。
+// 只写中英两版，vi/th 回退英文——这几段是技术判断，翻译失准比不翻更糟。
+const applicationIntros: Record<string, Record<string, string>> = {
+  'noise-barrier': {
+    en: 'Every site listed here shares three constraints: continuous traffic or machine load, wind pressure set by local code, and an acoustic target the authority will measure after installation. Panels are selected by insertion loss, NRC and wind load rating — panel size alone tells you nothing about whether the wall will pass.',
+    zh: '以上场地的共同约束有三条：连续的交通或设备荷载、当地规范规定的风压、以及安装后主管部门会实测的降噪目标。选板看插入损失、吸声系数和风荷载等级——只看尺寸判断不了一堵墙能不能通过验收。',
+  },
+  fence: {
+    en: 'These sites are listed for one reason: someone will try to get through. Aperture size and wire diameter decide how long that takes; post spacing and coating class decide how long the fence survives the site. Both matter more than panel height.',
+    zh: '这些场地的共同点是：一定有人会试图翻越。网孔和丝径决定能挡住多久，立柱间距和镀层等级决定围栏能在现场撑多久。这两个数字比板高更重要。',
+  },
+  'wire-mesh': {
+    en: 'Wire mesh is bought by the roll and specified by three numbers: aperture, wire diameter and coating mass. Wrong coating fails in two years on a coastal site; wrong aperture fails inspection outright. Everything else is secondary.',
+    zh: '丝网按卷采购，选型只看三个数：网孔、丝径、镀层重量。镀层选错，沿海场地两年就锈穿；网孔选错，验收直接不过。其余参数都是次要的。',
+  },
+  gabion: {
+    en: 'Gabion structures are judged by what happens in year fifteen, not year one. Zinc coating mass, wire tensile strength and stone grading decide that. Two walls that look identical on day one can differ by twenty years of service life.',
+    zh: '石笼结构看的是第十五年，不是第一年。锌层重量、钢丝抗拉强度和填石级配决定这一点。外观一模一样的两道石笼墙，服役年限可能差二十年。',
+  },
+  'slope-protection': {
+    en: 'Rockfall systems are rated by energy capacity in kilojoules, not by mesh size. The rating has to match the block size and fall height on your slope; an undersized barrier deforms and never recovers, an oversized one wastes budget on anchors.',
+    zh: '落石防护系统按能量等级（千焦）选型，不看网面尺寸。等级必须匹配坡面的落石块径和跌落高度——选小了拦不住且不可恢复，选大了白花钱在锚杆上。',
+  },
+};
+
 // Normalize Chinese spec keys to English keys for label lookup
 const zhKeyToEnKey: Record<string, string> = {
   '丝径': 'wireDiameter',
@@ -391,6 +424,15 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
   const applications = (product[appsLocale] && product[appsLocale].length > 0)
     ? product[appsLocale]
     : product.applications;
+
+  // 采购信息从规格里拆出来单独成块：
+  // 技术规格回答「能不能用」，采购信息回答「怎么买、多久到、一个柜装多少」。
+  // 混在一张表里，采购要滚到第 15 行才看到 MOQ，装柜量更是没有位置放。
+  const specRecord = specs as Record<string, string>;
+  const techSpecs = Object.entries(specRecord).filter(([k]) => !ORDER_KEYS.includes(k));
+
+  const appIntro = applicationIntros[product.categorySlug];
+  const appIntroText = appIntro ? appIntro[locale] || appIntro.en : '';
 
   // Fetch related products from same category（只渲染 ProductCard，轻字段够用）
   const catalog = await getCatalog({ light: true });
@@ -638,7 +680,10 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
             {/* Applications */}
             {applications.length > 0 && (
               <div className="bg-white rounded-2xl p-6 shadow-sm">
-                <h2 className="text-xl font-bold text-slate-900 mb-4">{locale === 'zh' ? '应用领域' : locale === 'vi' ? 'Ứng dụng' : locale === 'th' ? 'การประยุกต์ใช้' : 'Applications'}</h2>
+                <h2 className="text-xl font-bold text-slate-900 mb-3">{locale === 'zh' ? '应用领域' : locale === 'vi' ? 'Ứng dụng' : locale === 'th' ? 'การประยุกต์ใช้' : 'Applications'}</h2>
+                {appIntroText && (
+                  <p className="text-sm text-slate-600 leading-relaxed mb-4">{appIntroText}</p>
+                )}
                 <div className="flex flex-wrap gap-2">
                   {applications.map((app, i) => (
                     <span
@@ -676,7 +721,7 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
                 <table className="w-full text-sm table-fixed">
                   <caption className="sr-only">{locale === 'zh' ? `${name} 技术规格参数表` : locale === 'vi' ? `${name} Bảng thông số kỹ thuật` : locale === 'th' ? `${name} ตารางข้อมูลจำเพาะทางเทคนิค` : `${name} Technical Specifications`}</caption>
                   <tbody>
-                    {Object.entries(specs).map(([key, value]) => (
+                    {techSpecs.map(([key, value]) => (
                       <tr key={key} className="border-b border-slate-50 last:border-0">
                         <th scope="row" className="py-2.5 font-medium text-slate-500 whitespace-nowrap text-left">
                           {specLabels[key]?.[locale] || specLabels[key]?.en || specLabels[zhKeyToEnKey[key]]?.[locale] || specLabels[zhKeyToEnKey[key]]?.en || key.replace(/([A-Z])/g, ' $1').replace(/^./, (s: string) => s.toUpperCase()).trim()}
@@ -684,27 +729,58 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
                         <td className="py-2.5 text-slate-900 text-end font-medium">{value}</td>
                       </tr>
                     ))}
-                    <tr className="border-b border-slate-50">
-                      <th scope="row" className="py-2.5 font-medium text-slate-500 text-left">{locale === 'zh' ? '起订量' : locale === 'vi' ? 'SL đặt tối thiểu' : locale === 'th' ? 'จำนวนสั่งขั้นต่ำ' : 'MOQ'}</th>
-                      <td className="py-2.5 text-slate-900 text-end font-medium">
-                        {product.moq
-                          ? `${product.moq} ${priceUnit(product.priceRemark) || (locale === 'zh' ? '件' : locale === 'vi' ? 'chiếc' : locale === 'th' ? 'ชิ้น' : 'pieces')}`
-                          : (locale === 'zh' ? '可协商' : locale === 'vi' ? 'Có thể thương lượng' : locale === 'th' ? 'ตกลงได้' : 'Negotiable')}
-                      </td>
-                    </tr>
                   </tbody>
                 </table>
                 {product.priceRemark && (
                   <p className="text-xs text-slate-400 mt-2">{product.priceRemark}</p>
                 )}
-                {/* 交易条款统一口径：全部来自 company.ts，不在页面里写死数字。
-                    交期只固化「起算点」不固化天数——石笼 5-12 天与全封闭 30-45 天都是真实值，
-                    统一天数要么自废卖点、要么过度承诺。 */}
-                <p className="text-xs text-slate-500 mt-1">{locale === 'zh' ? MOQ_NOTE_ZH : MOQ_NOTE_EN}</p>
+              </div>
+
+              {/* 采购信息：MOQ / 交期 / 装柜量 / 包装
+                  这四项是采购询价前必问的。原来只有 MOQ 一行 + 四条小字注释，
+                  装柜量根本没有位置放，采购要滚到规格表第 15 行才看到起订量。
+                  交期只固化「起算点」，天数按产品填 specs.leadTime —— 石笼 5-12 天
+                  与全封闭 30-45 天都是真实值，统一天数要么自废卖点、要么过度承诺。 */}
+              <div className="pt-5 border-t border-slate-100">
+                <h2 className="text-base font-semibold text-slate-900 mb-3">
+                  {locale === 'zh' ? '采购信息' : locale === 'vi' ? 'Thông tin đặt hàng' : locale === 'th' ? 'ข้อมูลการสั่งซื้อ' : 'Ordering'}
+                </h2>
+                <dl className="space-y-3 text-sm">
+                  <div className="flex items-start justify-between gap-3">
+                    <dt className="text-slate-500 shrink-0">{locale === 'zh' ? '起订量' : locale === 'vi' ? 'SL tối thiểu' : locale === 'th' ? 'จำนวนขั้นต่ำ' : 'MOQ'}</dt>
+                    <dd className="text-slate-900 font-medium text-right">
+                      {product.moq
+                        ? `${product.moq} ${priceUnit(product.priceRemark) || (locale === 'zh' ? '件' : 'units')}`
+                        : (locale === 'zh' ? '可协商' : 'Negotiable')}
+                    </dd>
+                  </div>
+                  {specRecord.leadTime && (
+                    <div className="flex items-start justify-between gap-3">
+                      <dt className="text-slate-500 shrink-0">{locale === 'zh' ? '交期' : locale === 'vi' ? 'Thời gian giao' : locale === 'th' ? 'ระยะเวลาส่ง' : 'Lead time'}</dt>
+                      <dd className="text-slate-900 font-medium text-right">
+                        {specRecord.leadTime}
+                        <span className="block text-xs font-normal text-slate-500 mt-0.5">
+                          {locale === 'zh' ? '自定金到账起算，定制规格单独报价' : 'From receipt of deposit; custom specs quoted separately'}
+                        </span>
+                      </dd>
+                    </div>
+                  )}
+                  {specRecord.loadingQty && (
+                    <div className="flex items-start justify-between gap-3">
+                      <dt className="text-slate-500 shrink-0">{locale === 'zh' ? '装柜量' : locale === 'vi' ? 'Xếp container' : locale === 'th' ? 'บรรจุตู้' : 'Loading'}</dt>
+                      <dd className="text-slate-900 font-medium text-right">{specRecord.loadingQty}</dd>
+                    </div>
+                  )}
+                  {specRecord.packaging && (
+                    <div className="flex items-start justify-between gap-3">
+                      <dt className="text-slate-500 shrink-0">{locale === 'zh' ? '包装' : locale === 'vi' ? 'Đóng gói' : locale === 'th' ? 'บรรจุภัณฑ์' : 'Packaging'}</dt>
+                      <dd className="text-slate-900 font-medium text-right">{specRecord.packaging}</dd>
+                    </div>
+                  )}
+                </dl>
                 {product.categorySlug === 'noise-barrier' && (
-                  <p className="text-xs text-slate-500 mt-1">{locale === 'zh' ? MOQ_TRIAL_NOTE_ZH : MOQ_TRIAL_NOTE_EN}</p>
+                  <p className="text-xs text-slate-500 mt-3">{locale === 'zh' ? MOQ_TRIAL_NOTE_ZH : MOQ_TRIAL_NOTE_EN}</p>
                 )}
-                <p className="text-xs text-slate-500 mt-1">{locale === 'zh' ? LEAD_TIME_NOTE_ZH : LEAD_TIME_NOTE_EN}</p>
                 {product.categorySlug === 'noise-barrier' && (
                   <p className="text-xs text-slate-500 mt-1">{locale === 'zh' ? TEST_REPORT_NOTE_ZH : TEST_REPORT_NOTE_EN}</p>
                 )}
